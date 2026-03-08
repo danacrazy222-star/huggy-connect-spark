@@ -161,6 +161,25 @@
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
+/* Room shimmer animation */
+@keyframes room-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.room-shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    hsl(0 0% 100% / 0.08) 45%,
+    hsl(0 0% 100% / 0.15) 50%,
+    hsl(0 0% 100% / 0.08) 55%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: room-shimmer 4s ease-in-out infinite;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 4px;

@@ -2,24 +2,26 @@ import { Home, ShoppingBag, MessageCircle, Crown, Sparkles, Gamepad2 } from "luc
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const tabs = [
-  { path: "/", icon: Home, label: "Home" },
-  { path: "/shop", icon: ShoppingBag, label: "Shop" },
-  { path: "/games", icon: Gamepad2, label: "Games" },
-  { path: "/chat", icon: MessageCircle, label: "Chat", badge: 3 },
-  { path: "/vip", icon: Crown, label: "Crown" },
-  { path: "/tarot", icon: Sparkles, label: "Cards" },
+  { path: "/", icon: Home, key: "home" as const },
+  { path: "/shop", icon: ShoppingBag, key: "shop" as const },
+  { path: "/games", icon: Gamepad2, key: "games" as const },
+  { path: "/chat", icon: MessageCircle, key: "chat" as const, badge: 3 },
+  { path: "/vip", icon: Crown, key: "crown" as const },
+  { path: "/tarot", icon: Sparkles, key: "cards" as const },
 ];
 
 export function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t, isRTL } = useTranslation();
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">
       <div className="mx-auto max-w-md">
-        <nav className="flex items-center justify-around bg-card/95 backdrop-blur-xl border-t border-border px-2 py-1">
+        <nav className={cn("flex items-center justify-around bg-card/95 backdrop-blur-xl border-t border-border px-2 py-1", isRTL && "flex-row-reverse")}>
           {tabs.map((tab) => {
             const isActive = location.pathname === tab.path;
             const Icon = tab.icon;
@@ -47,7 +49,7 @@ export function BottomNav() {
                     </span>
                   )}
                 </div>
-                <span className="text-[10px] font-medium relative z-10">{tab.label}</span>
+                <span className="text-[10px] font-medium relative z-10">{t(tab.key)}</span>
               </button>
             );
           })}

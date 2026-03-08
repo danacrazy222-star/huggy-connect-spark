@@ -9,6 +9,7 @@ import Shop from "./pages/Shop";
 import Chat from "./pages/Chat";
 import VIP from "./pages/VIP";
 import Tarot from "./pages/Tarot";
+import Games from "./pages/Games";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

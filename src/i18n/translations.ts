@@ -143,6 +143,11 @@ export type TranslationKeys = {
   // Profile
   loginToViewProfile: string;
   inventory: string;
+  settings: string;
+  clearData: string;
+  photoUpdated: string;
+  nameUpdated: string;
+  dataCleared: string;
   // Scratch Card
   scratchCard: string;
   scratchCardDesc: string;

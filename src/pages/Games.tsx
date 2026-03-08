@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { TopBar } from "@/components/TopBar";
 import { useGameStore } from "@/store/useGameStore";
 import { useTranslation } from "@/hooks/useTranslation";
-import { Gamepad2, Ticket, Users, Bot, Zap, Trophy, ArrowLeft, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6 } from "lucide-react";
+import { Gamepad2, Ticket, Users, Bot, Zap, Trophy, ArrowLeft, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Sparkles, Gift } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const BOARD_SIZE = 100;
 const SNAKES: Record<number, number> = { 99: 54, 95: 72, 92: 51, 83: 57, 64: 19, 48: 26, 16: 6 };
@@ -25,19 +26,22 @@ function getCellColor(num: number): string {
 
 type GamePhase = "lobby" | "searching" | "playing" | "finished";
 type Player = { name: string; pos: number; isBot: boolean; color: string };
+type ActiveGame = "none" | "snake" | "scratch";
 
 export default function Games() {
-  const [showGame, setShowGame] = useState(false);
-  if (showGame) return <SnakeAndLadder onBack={() => setShowGame(false)} />;
-  return <GamesList onPlaySnake={() => setShowGame(true)} />;
+  const [activeGame, setActiveGame] = useState<ActiveGame>("none");
+  if (activeGame === "snake") return <SnakeAndLadder onBack={() => setActiveGame("none")} />;
+  if (activeGame === "scratch") return <ScratchCard onBack={() => setActiveGame("none")} />;
+  return <GamesList onPlaySnake={() => setActiveGame("snake")} onPlayScratch={() => setActiveGame("scratch")} />;
 }
 
-function GamesList({ onPlaySnake }: { onPlaySnake: () => void }) {
+function GamesList({ onPlaySnake, onPlayScratch }: { onPlaySnake: () => void; onPlayScratch: () => void }) {
   const { gameTickets } = useGameStore();
   const { t, isRTL } = useTranslation();
 
   const games = [
     { name: t("snakeAndLadder"), desc: t("classicBoardGame"), icon: "🐍", color: "from-green-accent/30 to-green-accent/5", border: "border-green-accent/40", multiplayer: true, onClick: onPlaySnake },
+    { name: t("scratchCard"), desc: t("scratchCardDesc"), icon: "🎫", color: "from-primary/30 to-primary/5", border: "border-primary/40", multiplayer: false, onClick: onPlayScratch },
     { name: t("tapFrenzy"), desc: t("tapAsFast"), icon: "👆", color: "from-blue-accent/30 to-blue-accent/5", border: "border-blue-accent/40", multiplayer: false, onClick: () => {}, locked: true },
     { name: t("memoryMatch"), desc: t("matchHiddenCards"), icon: "🃏", color: "from-purple-glow/30 to-purple-glow/5", border: "border-purple-glow/40", multiplayer: false, onClick: () => {}, locked: true },
   ];
@@ -331,6 +335,255 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
               {t("backToGames")}
             </button>
           </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ========== SCRATCH CARD GAME ==========
+
+interface ScratchReward {
+  emoji: string;
+  label: string;
+  type: "points" | "xp" | "ticket" | "entry" | "none";
+  amount: number;
+}
+
+const SCRATCH_REWARDS: ScratchReward[] = [
+  { emoji: "💰", label: "+100 Points", type: "points", amount: 100 },
+  { emoji: "💎", label: "+50 Points", type: "points", amount: 50 },
+  { emoji: "⚡", label: "+20 XP", type: "xp", amount: 20 },
+  { emoji: "⚡", label: "+10 XP", type: "xp", amount: 10 },
+  { emoji: "🎫", label: "+1 Game Ticket", type: "ticket", amount: 1 },
+  { emoji: "🎟️", label: "+1 Draw Entry", type: "entry", amount: 1 },
+  { emoji: "❌", label: "", type: "none", amount: 0 },
+  { emoji: "❌", label: "", type: "none", amount: 0 },
+  { emoji: "❌", label: "", type: "none", amount: 0 },
+];
+
+function getRandomReward(): ScratchReward {
+  const rand = Math.random();
+  if (rand < 0.08) return SCRATCH_REWARDS[0]; // 100 pts (8%)
+  if (rand < 0.20) return SCRATCH_REWARDS[1]; // 50 pts (12%)
+  if (rand < 0.30) return SCRATCH_REWARDS[2]; // 20 XP (10%)
+  if (rand < 0.45) return SCRATCH_REWARDS[3]; // 10 XP (15%)
+  if (rand < 0.55) return SCRATCH_REWARDS[4]; // ticket (10%)
+  if (rand < 0.62) return SCRATCH_REWARDS[5]; // entry (7%)
+  return SCRATCH_REWARDS[6]; // none (38%)
+}
+
+function ScratchCard({ onBack }: { onBack: () => void }) {
+  const { gameTickets, addGameTicket, addXP, addPoints, addDrawEntry } = useGameStore();
+  const { t, isRTL } = useTranslation();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [phase, setPhase] = useState<"ready" | "scratching" | "revealed">("ready");
+  const [reward, setReward] = useState<ScratchReward | null>(null);
+  const [scratched, setScratched] = useState(0);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [claimed, setClaimed] = useState(false);
+
+  const startGame = useCallback(() => {
+    if (gameTickets <= 0) {
+      toast.error(t("noTickets"));
+      return;
+    }
+    addGameTicket(-1);
+    const r = getRandomReward();
+    setReward(r);
+    setPhase("scratching");
+    setScratched(0);
+    setClaimed(false);
+  }, [gameTickets, addGameTicket, t]);
+
+  // Initialize scratch canvas
+  useEffect(() => {
+    if (phase !== "scratching" || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = canvas.offsetWidth * 2;
+    canvas.height = canvas.offsetHeight * 2;
+    ctx.scale(2, 2);
+
+    // Gold gradient cover
+    const gradient = ctx.createLinearGradient(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+    gradient.addColorStop(0, "hsl(45, 100%, 50%)");
+    gradient.addColorStop(0.5, "hsl(35, 100%, 40%)");
+    gradient.addColorStop(1, "hsl(45, 100%, 60%)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+
+    // Add pattern
+    ctx.fillStyle = "rgba(255,255,255,0.15)";
+    ctx.font = "20px serif";
+    for (let x = 10; x < canvas.offsetWidth; x += 40) {
+      for (let y = 25; y < canvas.offsetHeight; y += 40) {
+        ctx.fillText("✨", x, y);
+      }
+    }
+
+    // Text
+    ctx.fillStyle = "rgba(0,0,0,0.5)";
+    ctx.font = "bold 16px Inter, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(t("scratchArea"), canvas.offsetWidth / 2, canvas.offsetHeight / 2 + 6);
+  }, [phase, t]);
+
+  const scratch = useCallback((clientX: number, clientY: number) => {
+    if (phase !== "scratching" || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = (clientX - rect.left);
+    const y = (clientY - rect.top);
+
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.beginPath();
+    ctx.arc(x, y, 20, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Calculate scratched percentage
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let transparent = 0;
+    for (let i = 3; i < imageData.data.length; i += 4) {
+      if (imageData.data[i] === 0) transparent++;
+    }
+    const pct = (transparent / (imageData.data.length / 4)) * 100;
+    setScratched(pct);
+
+    if (pct > 50) {
+      setPhase("revealed");
+    }
+  }, [phase]);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!isDrawing) return;
+    scratch(e.clientX, e.clientY);
+  }, [isDrawing, scratch]);
+
+  const claimReward = () => {
+    if (!reward || claimed) return;
+    setClaimed(true);
+    if (reward.type === "points") addPoints(reward.amount);
+    else if (reward.type === "xp") addXP(reward.amount);
+    else if (reward.type === "ticket") addGameTicket(reward.amount);
+    else if (reward.type === "entry") addDrawEntry(reward.amount);
+    toast.success(`${t("youRevealed")}: ${reward.emoji} ${reward.label}`);
+  };
+
+  return (
+    <div className="min-h-screen bg-premium-gradient stars-bg pb-20" dir={isRTL ? "rtl" : "ltr"}>
+      <div className={cn("flex items-center gap-3 px-4 py-3", isRTL && "flex-row-reverse")}>
+        <button onClick={onBack} className="text-muted-foreground hover:text-foreground">
+          <ArrowLeft className={cn("w-5 h-5", isRTL && "rotate-180")} />
+        </button>
+        <h1 className="font-display text-lg font-bold text-gold-gradient">{t("scratchCard")}</h1>
+      </div>
+
+      <div className="px-4 space-y-6">
+        {/* Ticket info */}
+        <div className={cn("flex items-center justify-between bg-card/80 border border-border rounded-xl px-4 py-3", isRTL && "flex-row-reverse")}>
+          <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
+            <Ticket className="w-5 h-5 text-primary" />
+            <span className="text-sm text-foreground">{t("gameTickets")}</span>
+          </div>
+          <span className="text-lg font-bold text-primary">{gameTickets}</span>
+        </div>
+
+        {phase === "ready" && (
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
+            <div className="text-center py-8">
+              <motion.span animate={{ rotate: [0, -10, 10, -10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-7xl inline-block">
+                🎫
+              </motion.span>
+              <h2 className="font-display text-xl text-foreground mt-4">{t("scratchCard")}</h2>
+              <p className="text-sm text-muted-foreground mt-2">{t("scratchToReveal")}</p>
+            </div>
+
+            <div className="bg-card/60 border border-border rounded-xl p-4 space-y-2">
+              <p className="text-xs text-muted-foreground">🎫 {t("scratchCardCost")}</p>
+              <p className="text-xs text-muted-foreground">💰 {t("winnerGets")}: Points, XP, Tickets</p>
+            </div>
+
+            <button onClick={startGame} disabled={gameTickets <= 0}
+              className="w-full py-3.5 rounded-xl font-display font-bold text-lg bg-gradient-to-r from-gold-dark via-primary to-gold-dark text-primary-foreground shadow-gold hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+              {gameTickets <= 0 ? t("noTickets") : `🎫 ${t("scratchCard")} — 1 ${t("ticket")}`}
+            </button>
+          </motion.div>
+        )}
+
+        {phase === "scratching" && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+            <p className="text-center text-sm text-muted-foreground">{t("scratchToReveal")}</p>
+
+            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border-2 border-primary/40 shadow-gold">
+              {/* Prize underneath */}
+              <div className="absolute inset-0 bg-card-gradient flex flex-col items-center justify-center gap-3">
+                <span className="text-6xl">{reward?.emoji}</span>
+                <p className="text-lg font-bold text-foreground">
+                  {reward?.type === "none" ? t("noReward") : reward?.label}
+                </p>
+                {reward?.type !== "none" && (
+                  <Sparkles className="w-6 h-6 text-primary animate-sparkle" />
+                )}
+              </div>
+
+              {/* Scratch overlay */}
+              <canvas
+                ref={canvasRef}
+                className="absolute inset-0 w-full h-full cursor-crosshair touch-none"
+                onPointerDown={(e) => { setIsDrawing(true); scratch(e.clientX, e.clientY); }}
+                onPointerMove={handlePointerMove}
+                onPointerUp={() => setIsDrawing(false)}
+                onPointerLeave={() => setIsDrawing(false)}
+              />
+            </div>
+
+            <div className="relative h-3 bg-muted rounded-full overflow-hidden border border-border">
+              <motion.div animate={{ width: `${Math.min(scratched * 2, 100)}%` }}
+                className="h-full bg-gradient-to-r from-gold-dark via-primary to-gold-light rounded-full" />
+            </div>
+          </motion.div>
+        )}
+
+        {phase === "revealed" && (
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6 text-center">
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", bounce: 0.5 }}>
+              {reward?.type !== "none" ? (
+                <>
+                  <span className="text-8xl inline-block">{reward?.emoji}</span>
+                  <Trophy className="w-10 h-10 text-primary mx-auto mt-3" />
+                </>
+              ) : (
+                <span className="text-8xl inline-block">😔</span>
+              )}
+            </motion.div>
+
+            <h3 className="font-display text-xl text-gold-gradient">
+              {reward?.type !== "none" ? `${t("youRevealed")}: ${reward?.label}` : t("noReward")}
+            </h3>
+
+            {reward?.type !== "none" && !claimed && (
+              <button onClick={claimReward}
+                className="w-full py-3 rounded-xl font-display font-bold bg-gradient-to-r from-green-accent/80 to-green-accent text-primary-foreground shadow-gold hover:brightness-110 transition-all">
+                {t("claimReward")}
+              </button>
+            )}
+
+            <button onClick={() => { setPhase("ready"); setReward(null); }}
+              className="w-full py-3 rounded-xl font-display font-bold bg-gradient-to-r from-gold-dark via-primary to-gold-dark text-primary-foreground shadow-gold hover:brightness-110 transition-all">
+              {t("tryAnotherCard")}
+            </button>
+
+            <button onClick={onBack}
+              className="w-full py-3 rounded-xl font-bold border border-border text-foreground hover:bg-muted/30 transition-all">
+              {t("backToGames")}
+            </button>
+          </motion.div>
         )}
       </div>
     </div>

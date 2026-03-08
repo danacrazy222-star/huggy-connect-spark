@@ -256,6 +256,7 @@ export const translations: Record<Language, TranslationKeys> = {
     drawWinner: "فائز السحب", wonPrize: "فاز بالجائزة", congratulations: "تهانينا",
     newDraw: "ابدأ سحباً جديداً", drawDescription: "اشترِ كتباً للدخول في سحب بطاقة هدية $500!", draw: "السحب",
     login: "تسجيل الدخول", signup: "إنشاء حساب", loginSubtitle: "مرحباً بعودتك إلى WINLINE", signupSubtitle: "أنشئ حسابك", displayName: "اسم العرض", email: "البريد الإلكتروني", password: "كلمة المرور", passwordMinLength: "كلمة المرور يجب أن تكون 6 أحرف على الأقل", welcomeBack: "مرحباً بعودتك!", accountCreated: "تم إنشاء الحساب بنجاح!", logout: "تسجيل الخروج",
+    scratchCard: "بطاقة الحك", scratchCardDesc: "احك لتكشف جائزتك!", scratchToReveal: "احك البطاقة لكشف مكافأتك", scratchArea: "احك هنا!", youRevealed: "كشفت", claimReward: "اطلب المكافأة", tryAnotherCard: "جرب بطاقة أخرى", noReward: "حظ أوفر المرة القادمة!", scratchCardCost: "تذكرة لعبة واحدة",
   },
   fr: {
     home: "Accueil", shop: "Boutique", games: "Jeux", chat: "Discussion", crown: "Couronne", cards: "Cartes",

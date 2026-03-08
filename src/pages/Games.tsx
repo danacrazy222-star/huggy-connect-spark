@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { TopBar } from "@/components/TopBar";
 import { useGameStore } from "@/store/useGameStore";
 import { useTranslation } from "@/hooks/useTranslation";
-import { Gamepad2, Ticket, Users, Bot, Zap, Trophy, ArrowLeft, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6 } from "lucide-react";
+import { Gamepad2, Ticket, Users, Bot, Zap, Trophy, ArrowLeft, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Sparkles, Gift } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const BOARD_SIZE = 100;
 const SNAKES: Record<number, number> = { 99: 54, 95: 72, 92: 51, 83: 57, 64: 19, 48: 26, 16: 6 };
@@ -25,11 +26,13 @@ function getCellColor(num: number): string {
 
 type GamePhase = "lobby" | "searching" | "playing" | "finished";
 type Player = { name: string; pos: number; isBot: boolean; color: string };
+type ActiveGame = "none" | "snake" | "scratch";
 
 export default function Games() {
-  const [showGame, setShowGame] = useState(false);
-  if (showGame) return <SnakeAndLadder onBack={() => setShowGame(false)} />;
-  return <GamesList onPlaySnake={() => setShowGame(true)} />;
+  const [activeGame, setActiveGame] = useState<ActiveGame>("none");
+  if (activeGame === "snake") return <SnakeAndLadder onBack={() => setActiveGame("none")} />;
+  if (activeGame === "scratch") return <ScratchCard onBack={() => setActiveGame("none")} />;
+  return <GamesList onPlaySnake={() => setActiveGame("snake")} onPlayScratch={() => setActiveGame("scratch")} />;
 }
 
 function GamesList({ onPlaySnake }: { onPlaySnake: () => void }) {

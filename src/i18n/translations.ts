@@ -173,6 +173,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "No tarot tickets available.",
     spinOrPurchase: "Spin the wheel or purchase a book to earn tickets!",
     card: "Card", language: "Language", selectLanguage: "Select Language",
+    drawProgress: "Draw Progress", drawActive: "Active", drawComplete: "Complete", towardsDraw: "towards the draw",
+    participants: "Participants", totalEntries: "Total Entries", prize: "Prize", howToEnter: "How to Enter",
+    buyBook: "Purchase any book package", autoEntered: "You're automatically entered in the draw",
+    moreBooks: "More purchases = more chances to win", winnerSelected: "Winner selected automatically at 100%",
+    recentEntries: "Recent Entries", pastWinners: "Past Winners", enterDraw: "ENTER THE DRAW",
+    drawWinner: "Draw Winner", wonPrize: "Won the prize", congratulations: "Congratulations",
+    newDraw: "START NEW DRAW", drawDescription: "Buy books to enter the $500 gift card draw!", draw: "Draw",
   },
   ar: {
     home: "الرئيسية", shop: "المتجر", games: "الألعاب", chat: "الدردشة", crown: "التاج", cards: "البطاقات",

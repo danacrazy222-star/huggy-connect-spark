@@ -224,6 +224,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "لا تذاكر تاروت متاحة.",
     spinOrPurchase: "لف الدولاب أو اشترِ كتاباً لكسب التذاكر!",
     card: "بطاقة", language: "اللغة", selectLanguage: "اختر اللغة",
+    drawProgress: "تقدم السحب", drawActive: "نشط", drawComplete: "مكتمل", towardsDraw: "نحو السحب",
+    participants: "المشاركون", totalEntries: "إجمالي الإدخالات", prize: "الجائزة", howToEnter: "كيف تشارك",
+    buyBook: "اشترِ أي باقة كتاب", autoEntered: "يتم إدخالك تلقائياً في السحب",
+    moreBooks: "مشتريات أكثر = فرص أكبر للفوز", winnerSelected: "يتم اختيار الفائز تلقائياً عند 100%",
+    recentEntries: "الإدخالات الأخيرة", pastWinners: "الفائزون السابقون", enterDraw: "ادخل السحب",
+    drawWinner: "فائز السحب", wonPrize: "فاز بالجائزة", congratulations: "تهانينا",
+    newDraw: "ابدأ سحباً جديداً", drawDescription: "اشترِ كتباً للدخول في سحب بطاقة هدية $500!", draw: "السحب",
   },
   fr: {
     home: "Accueil", shop: "Boutique", games: "Jeux", chat: "Discussion", crown: "Couronne", cards: "Cartes",

@@ -107,7 +107,7 @@ export type TranslationKeys = {
   selectLanguage: string;
 };
 
-const translations: Record<Language, TranslationKeys> = {
+export const translations: Record<Language, TranslationKeys> = {
   en: {
     home: "Home", shop: "Shop", games: "Games", chat: "Chat", crown: "Crown", cards: "Cards",
     giftCard: "$500 Gift Card", promotionalDraw: "PROMOTIONAL DRAW", dailySpin: "DAILY SPIN",

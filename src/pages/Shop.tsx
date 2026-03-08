@@ -84,7 +84,7 @@ export default function Shop() {
         else if (r.type === "tarotTicket") addTarotTicket(r.amount);
         else if (r.type === "drawEntry") {
           addDrawEntry(r.amount);
-          addEntry({ id: Date.now().toString(), name: "You", entries: r.amount, timestamp: Date.now() });
+          addPurchase("You", r.amount);
         }
       });
 

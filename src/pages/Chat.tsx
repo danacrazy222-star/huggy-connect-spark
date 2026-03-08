@@ -170,19 +170,45 @@ export default function Chat() {
   return (
     <div className="min-h-screen pb-20 flex flex-col relative" dir={isRTL ? "rtl" : "ltr"}>
       {/* Room background image */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.img
             key={activeRoom}
             src={currentRoom.image}
             alt={currentRoom.name}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6 }}
             className="w-full h-full object-cover"
           />
         </AnimatePresence>
+        {/* Animated shimmer overlay */}
+        <div className="absolute inset-0 room-shimmer pointer-events-none" />
+        {/* Floating sparkles */}
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(12)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 rounded-full bg-white"
+              style={{
+                left: `${10 + Math.random() * 80}%`,
+                top: `${5 + Math.random() * 60}%`,
+              }}
+              animate={{
+                opacity: [0, 0.8, 0],
+                scale: [0.5, 1.5, 0.5],
+                y: [0, -20, 0],
+              }}
+              transition={{
+                duration: 2 + Math.random() * 2,
+                repeat: Infinity,
+                delay: Math.random() * 3,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
       </div>
 

@@ -551,11 +551,13 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
               {/* Scratch overlay */}
               <canvas
                 ref={canvasRef}
-                className="absolute inset-0 w-full h-full cursor-crosshair touch-none"
-                onPointerDown={(e) => { setIsDrawing(true); scratch(e.clientX, e.clientY); }}
+                className="absolute inset-0 w-full h-full cursor-crosshair"
+                style={{ touchAction: "none" }}
+                onPointerDown={(e) => { e.preventDefault(); setIsDrawing(true); scratch(e.clientX, e.clientY); }}
                 onPointerMove={handlePointerMove}
                 onPointerUp={() => setIsDrawing(false)}
                 onPointerLeave={() => setIsDrawing(false)}
+                onPointerCancel={() => setIsDrawing(false)}
               />
             </div>
 

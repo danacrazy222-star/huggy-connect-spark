@@ -140,6 +140,9 @@ export type TranslationKeys = {
   welcomeBack: string;
   accountCreated: string;
   logout: string;
+  // Profile
+  loginToViewProfile: string;
+  inventory: string;
   // Scratch Card
   scratchCard: string;
   scratchCardDesc: string;

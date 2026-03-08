@@ -581,6 +581,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Нет билетов Таро.",
     spinOrPurchase: "Крутите колесо или купите книгу!",
     card: "Карта", language: "Язык", selectLanguage: "Выберите язык",
+    drawProgress: "Прогресс", drawActive: "Активен", drawComplete: "Завершен", towardsDraw: "к розыгрышу",
+    participants: "Участники", totalEntries: "Всего записей", prize: "Приз", howToEnter: "Как участвовать",
+    buyBook: "Купите любой пакет книг", autoEntered: "Вы автоматически участвуете",
+    moreBooks: "Больше покупок = больше шансов", winnerSelected: "Победитель выбирается при 100%",
+    recentEntries: "Последние записи", pastWinners: "Прошлые победители", enterDraw: "УЧАСТВОВАТЬ",
+    drawWinner: "Победитель", wonPrize: "Выиграл приз", congratulations: "Поздравляем",
+    newDraw: "НОВЫЙ РОЗЫГРЫШ", drawDescription: "Покупайте книги для розыгрыша $500!", draw: "Розыгрыш",
   },
   hi: {
     home: "होम", shop: "दुकान", games: "खेल", chat: "चैट", crown: "क्राउन", cards: "कार्ड्स",

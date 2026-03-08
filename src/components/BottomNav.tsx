@@ -47,10 +47,14 @@ export function BottomNav() {
                 )}
                 <div className="relative">
                   <Icon className={cn("w-5 h-5", isActive && "glow-gold")} />
-                  {tab.badge && (
-                    <span className="absolute -top-1.5 -right-2 bg-red-accent text-[10px] text-foreground font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                      {tab.badge}
-                    </span>
+                  {tab.dynamicBadge && unreadCount > 0 && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-1.5 -right-2 bg-red-accent text-[10px] text-foreground font-bold rounded-full min-w-4 h-4 px-1 flex items-center justify-center"
+                    >
+                      {unreadCount > 99 ? "99+" : unreadCount}
+                    </motion.span>
                   )}
                 </div>
                 <span className="text-[10px] font-medium relative z-10">{t(tab.key)}</span>

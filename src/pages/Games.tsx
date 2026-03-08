@@ -632,9 +632,16 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
             </div>
 
             <div className="relative h-3 bg-muted rounded-full overflow-hidden border border-border">
-              <motion.div animate={{ width: `${Math.min((scratched / 18) * 100, 100)}%` }}
+              <motion.div animate={{ width: `${Math.min(Math.max((scratched / 8) * 100, (scratchInteractions / 2) * 100), 100)}%` }}
                 className="h-full bg-gradient-to-r from-gold-dark via-primary to-gold-light rounded-full" />
             </div>
+
+            <button
+              onClick={() => setPhase("revealed")}
+              className="w-full py-2.5 rounded-xl font-bold bg-card/80 border border-border text-foreground hover:bg-muted/40 transition-all"
+            >
+              Reveal reward now
+            </button>
           </motion.div>
         )}
 

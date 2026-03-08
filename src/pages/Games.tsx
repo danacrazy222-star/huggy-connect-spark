@@ -380,6 +380,7 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
   const [phase, setPhase] = useState<"ready" | "scratching" | "revealed">("ready");
   const [reward, setReward] = useState<ScratchReward | null>(null);
   const [scratched, setScratched] = useState(0);
+  const [scratchInteractions, setScratchInteractions] = useState(0);
   const [claimed, setClaimed] = useState(false);
   const isDrawingRef = useRef(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
@@ -394,6 +395,7 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
     setReward(r);
     setPhase("scratching");
     setScratched(0);
+    setScratchInteractions(0);
     setClaimed(false);
     isDrawingRef.current = false;
     lastPointRef.current = null;

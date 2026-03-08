@@ -12,6 +12,7 @@ const tabs = [
   { path: "/chat", icon: MessageCircle, key: "chat" as const, badge: 3 },
   { path: "/vip", icon: Crown, key: "crown" as const },
   { path: "/tarot", icon: Sparkles, key: "cards" as const },
+  { path: "/profile", icon: User, key: "profile" as const },
 ];
 
 export function BottomNav() {

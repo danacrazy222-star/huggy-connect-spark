@@ -3,13 +3,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useChatStore } from "@/store/useChatStore";
 
 const tabs = [
   { path: "/", icon: Home, key: "home" as const },
   { path: "/shop", icon: ShoppingBag, key: "shop" as const },
   { path: "/draw", icon: Gift, key: "draw" as const },
   { path: "/games", icon: Gamepad2, key: "games" as const },
-  { path: "/chat", icon: MessageCircle, key: "chat" as const, badge: 3 },
+  { path: "/chat", icon: MessageCircle, key: "chat" as const, dynamicBadge: true },
   { path: "/vip", icon: Crown, key: "crown" as const },
   { path: "/tarot", icon: Sparkles, key: "cards" as const },
   { path: "/profile", icon: User, key: "profile" as const },
@@ -19,6 +20,7 @@ export function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
   const { t, isRTL } = useTranslation();
+  const unreadCount = useChatStore((s) => s.unreadCount);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">
@@ -45,10 +47,14 @@ export function BottomNav() {
                 )}
                 <div className="relative">
                   <Icon className={cn("w-5 h-5", isActive && "glow-gold")} />
-                  {tab.badge && (
-                    <span className="absolute -top-1.5 -right-2 bg-red-accent text-[10px] text-foreground font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                      {tab.badge}
-                    </span>
+                  {tab.dynamicBadge && unreadCount > 0 && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-1.5 -right-2 bg-red-accent text-[10px] text-foreground font-bold rounded-full min-w-4 h-4 px-1 flex items-center justify-center"
+                    >
+                      {unreadCount > 99 ? "99+" : unreadCount}
+                    </motion.span>
                   )}
                 </div>
                 <span className="text-[10px] font-medium relative z-10">{t(tab.key)}</span>

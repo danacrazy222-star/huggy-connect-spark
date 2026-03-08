@@ -296,6 +296,7 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "Entrées récentes", pastWinners: "Anciens gagnants", enterDraw: "PARTICIPER",
     drawWinner: "Gagnant", wonPrize: "A gagné le prix", congratulations: "Félicitations",
     newDraw: "NOUVEAU TIRAGE", drawDescription: "Achetez des livres pour le tirage de $500!", draw: "Tirage",
+    login: "Connexion", signup: "Inscription", loginSubtitle: "Bienvenue sur WINLINE", signupSubtitle: "Créez votre compte", displayName: "Nom d'affichage", email: "Email", password: "Mot de passe", passwordMinLength: "Le mot de passe doit contenir au moins 6 caractères", welcomeBack: "Bon retour !", accountCreated: "Compte créé avec succès !", logout: "Déconnexion",
   },
   es: {
     home: "Inicio", shop: "Tienda", games: "Juegos", chat: "Chat", crown: "Corona", cards: "Cartas",

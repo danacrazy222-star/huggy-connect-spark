@@ -316,6 +316,7 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "NOUVEAU TIRAGE", drawDescription: "Achetez des livres pour le tirage de $500!", draw: "Tirage",
     login: "Connexion", signup: "Inscription", loginSubtitle: "Bienvenue sur WINLINE", signupSubtitle: "Créez votre compte", displayName: "Nom d'affichage", email: "Email", password: "Mot de passe", passwordMinLength: "Le mot de passe doit contenir au moins 6 caractères", welcomeBack: "Bon retour !", accountCreated: "Compte créé avec succès !", logout: "Déconnexion",
     scratchCard: "Carte à gratter", scratchCardDesc: "Grattez pour révéler votre prix !", scratchToReveal: "Grattez la carte", scratchArea: "Grattez ici !", youRevealed: "Vous avez révélé", claimReward: "RÉCLAMER", tryAnotherCard: "AUTRE CARTE", noReward: "Plus de chance la prochaine fois !", scratchCardCost: "1 Ticket de jeu",
+    profile: "Profil", loginToViewProfile: "Connectez-vous pour voir votre profil", inventory: "Inventaire",
   },
   es: {
     home: "Inicio", shop: "Tienda", games: "Juegos", chat: "Chat", crown: "Corona", cards: "Cartas",

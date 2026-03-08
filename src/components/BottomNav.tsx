@@ -3,13 +3,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useChatStore } from "@/store/useChatStore";
 
 const tabs = [
   { path: "/", icon: Home, key: "home" as const },
   { path: "/shop", icon: ShoppingBag, key: "shop" as const },
   { path: "/draw", icon: Gift, key: "draw" as const },
   { path: "/games", icon: Gamepad2, key: "games" as const },
-  { path: "/chat", icon: MessageCircle, key: "chat" as const, badge: 3 },
+  { path: "/chat", icon: MessageCircle, key: "chat" as const, dynamicBadge: true },
   { path: "/vip", icon: Crown, key: "crown" as const },
   { path: "/tarot", icon: Sparkles, key: "cards" as const },
   { path: "/profile", icon: User, key: "profile" as const },

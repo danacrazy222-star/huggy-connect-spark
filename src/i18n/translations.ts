@@ -640,6 +640,7 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "НОВЫЙ РОЗЫГРЫШ", drawDescription: "Покупайте книги для розыгрыша $500!", draw: "Розыгрыш",
     login: "Войти", signup: "Регистрация", loginSubtitle: "Добро пожаловать в WINLINE", signupSubtitle: "Создайте аккаунт", displayName: "Имя", email: "Эл. почта", password: "Пароль", passwordMinLength: "Пароль должен быть не менее 6 символов", welcomeBack: "С возвращением!", accountCreated: "Аккаунт создан!", logout: "Выйти",
     scratchCard: "Скретч-карта", scratchCardDesc: "Сотрите, чтобы узнать приз!", scratchToReveal: "Сотрите карту", scratchArea: "Сотрите здесь!", youRevealed: "Вы открыли", claimReward: "ПОЛУЧИТЬ", tryAnotherCard: "ДРУГАЯ КАРТА", noReward: "Повезёт в следующий раз!", scratchCardCost: "1 Игровой билет",
+    profile: "Профиль", loginToViewProfile: "Войдите, чтобы увидеть профиль", inventory: "Инвентарь",
   },
   hi: {
     home: "होम", shop: "दुकान", games: "खेल", chat: "चैट", crown: "क्राउन", cards: "कार्ड्स",

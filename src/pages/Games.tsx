@@ -601,16 +601,20 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
                 ref={canvasRef}
                 className="absolute inset-0 w-full h-full cursor-crosshair"
                 style={{ touchAction: "none" }}
-                onPointerDown={(e) => { e.preventDefault(); setIsDrawing(true); scratch(e.clientX, e.clientY); }}
+                onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
-                onPointerUp={() => setIsDrawing(false)}
-                onPointerLeave={() => setIsDrawing(false)}
-                onPointerCancel={() => setIsDrawing(false)}
+                onPointerUp={stopDrawing}
+                onPointerLeave={stopDrawing}
+                onPointerCancel={stopDrawing}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={stopDrawing}
+                onTouchCancel={stopDrawing}
               />
             </div>
 
             <div className="relative h-3 bg-muted rounded-full overflow-hidden border border-border">
-              <motion.div animate={{ width: `${Math.min(scratched * 2, 100)}%` }}
+              <motion.div animate={{ width: `${Math.min((scratched / 18) * 100, 100)}%` }}
                 className="h-full bg-gradient-to-r from-gold-dark via-primary to-gold-light rounded-full" />
             </div>
           </motion.div>

@@ -660,5 +660,6 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "हाल की प्रविष्टियाँ", pastWinners: "पिछले विजेता", enterDraw: "ड्रॉ में भाग लें",
     drawWinner: "विजेता", wonPrize: "पुरस्कार जीता", congratulations: "बधाई",
     newDraw: "नया ड्रॉ", drawDescription: "$500 गिफ्ट कार्ड ड्रॉ के लिए पुस्तकें खरीदें!", draw: "ड्रॉ",
+    login: "लॉगिन", signup: "साइन अप", loginSubtitle: "WINLINE में आपका स्वागत है", signupSubtitle: "अपना खाता बनाएं", displayName: "प्रदर्शन नाम", email: "ईमेल", password: "पासवर्ड", passwordMinLength: "पासवर्ड कम से कम 6 अक्षर का होना चाहिए", welcomeBack: "वापस स्वागत है!", accountCreated: "खाता सफलतापूर्वक बनाया गया!", logout: "लॉगआउट",
   },
 };

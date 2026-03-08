@@ -479,6 +479,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Nessun biglietto tarocchi.",
     spinOrPurchase: "Gira la ruota o acquista un libro!",
     card: "Carta", language: "Lingua", selectLanguage: "Seleziona lingua",
+    drawProgress: "Progresso", drawActive: "Attivo", drawComplete: "Completato", towardsDraw: "verso l'estrazione",
+    participants: "Partecipanti", totalEntries: "Ingressi totali", prize: "Premio", howToEnter: "Come partecipare",
+    buyBook: "Acquista un pacchetto libro", autoEntered: "Sei automaticamente iscritto",
+    moreBooks: "Più acquisti = più possibilità", winnerSelected: "Vincitore selezionato al 100%",
+    recentEntries: "Ingressi recenti", pastWinners: "Vincitori passati", enterDraw: "PARTECIPA",
+    drawWinner: "Vincitore", wonPrize: "Ha vinto il premio", congratulations: "Congratulazioni",
+    newDraw: "NUOVA ESTRAZIONE", drawDescription: "Acquista libri per l'estrazione da $500!", draw: "Estrazione",
   },
   pt: {
     home: "Início", shop: "Loja", games: "Jogos", chat: "Chat", crown: "Coroa", cards: "Cartas",

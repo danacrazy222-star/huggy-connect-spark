@@ -13,6 +13,7 @@ import Tarot from "./pages/Tarot";
 import Games from "./pages/Games";
 import Draw from "./pages/Draw";
 import Auth from "./pages/Auth";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/games" element={<Games />} />
               <Route path="/draw" element={<Draw />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />

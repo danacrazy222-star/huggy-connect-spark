@@ -1,4 +1,4 @@
-import { Home, ShoppingBag, MessageCircle, Crown, Sparkles, Gamepad2, Gift } from "lucide-react";
+import { Home, ShoppingBag, MessageCircle, Crown, Sparkles, Gamepad2, Gift, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -12,6 +12,7 @@ const tabs = [
   { path: "/chat", icon: MessageCircle, key: "chat" as const, badge: 3 },
   { path: "/vip", icon: Crown, key: "crown" as const },
   { path: "/tarot", icon: Sparkles, key: "cards" as const },
+  { path: "/profile", icon: User, key: "profile" as const },
 ];
 
 export function BottomNav() {

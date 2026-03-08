@@ -478,6 +478,7 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "NEUE ZIEHUNG", drawDescription: "Kaufen Sie Bücher für die $500 Geschenkkarte!", draw: "Ziehung",
     login: "Anmelden", signup: "Registrieren", loginSubtitle: "Willkommen bei WINLINE", signupSubtitle: "Erstellen Sie Ihr Konto", displayName: "Anzeigename", email: "E-Mail", password: "Passwort", passwordMinLength: "Passwort muss mindestens 6 Zeichen haben", welcomeBack: "Willkommen zurück!", accountCreated: "Konto erfolgreich erstellt!", logout: "Abmelden",
     scratchCard: "Rubbelkarte", scratchCardDesc: "Rubbeln Sie Ihren Preis frei!", scratchToReveal: "Rubbeln Sie die Karte", scratchArea: "Hier rubbeln!", youRevealed: "Sie haben enthüllt", claimReward: "EINLÖSEN", tryAnotherCard: "NEUE KARTE", noReward: "Nächstes Mal mehr Glück!", scratchCardCost: "1 Spielticket",
+    profile: "Profil", loginToViewProfile: "Melden Sie sich an, um Ihr Profil zu sehen", inventory: "Inventar",
   },
   it: {
     home: "Home", shop: "Negozio", games: "Giochi", chat: "Chat", crown: "Corona", cards: "Carte",

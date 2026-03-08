@@ -403,23 +403,25 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    canvas.width = canvas.offsetWidth * 2;
-    canvas.height = canvas.offsetHeight * 2;
-    ctx.scale(2, 2);
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
 
     // Gold gradient cover
-    const gradient = ctx.createLinearGradient(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+    const gradient = ctx.createLinearGradient(0, 0, rect.width, rect.height);
     gradient.addColorStop(0, "hsl(45, 100%, 50%)");
     gradient.addColorStop(0.5, "hsl(35, 100%, 40%)");
     gradient.addColorStop(1, "hsl(45, 100%, 60%)");
     ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+    ctx.fillRect(0, 0, rect.width, rect.height);
 
     // Add pattern
     ctx.fillStyle = "rgba(255,255,255,0.15)";
     ctx.font = "20px serif";
-    for (let x = 10; x < canvas.offsetWidth; x += 40) {
-      for (let y = 25; y < canvas.offsetHeight; y += 40) {
+    for (let x = 10; x < rect.width; x += 40) {
+      for (let y = 25; y < rect.height; y += 40) {
         ctx.fillText("✨", x, y);
       }
     }
@@ -428,7 +430,7 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
     ctx.fillStyle = "rgba(0,0,0,0.5)";
     ctx.font = "bold 16px Inter, sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText(t("scratchArea"), canvas.offsetWidth / 2, canvas.offsetHeight / 2 + 6);
+    ctx.fillText(t("scratchArea"), rect.width / 2, rect.height / 2 + 6);
   }, [phase, t]);
 
   const scratch = useCallback((clientX: number, clientY: number) => {
@@ -438,31 +440,45 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
     if (!ctx) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = (clientX - rect.left);
-    const y = (clientY - rect.top);
+    const dpr = window.devicePixelRatio || 1;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
 
+    ctx.save();
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.globalCompositeOperation = "destination-out";
     ctx.beginPath();
-    ctx.arc(x, y, 20, 0, Math.PI * 2);
+    ctx.arc(x, y, 25, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
 
-    // Calculate scratched percentage
+    // Calculate scratched percentage (sample for performance)
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let transparent = 0;
-    for (let i = 3; i < imageData.data.length; i += 4) {
+    let total = 0;
+    for (let i = 3; i < imageData.data.length; i += 16) {
+      total++;
       if (imageData.data[i] === 0) transparent++;
     }
-    const pct = (transparent / (imageData.data.length / 4)) * 100;
+    const pct = (transparent / total) * 100;
     setScratched(pct);
 
-    if (pct > 50) {
+    if (pct > 45) {
       setPhase("revealed");
     }
   }, [phase]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (!isDrawing) return;
+    e.preventDefault();
     scratch(e.clientX, e.clientY);
+  }, [isDrawing, scratch]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isDrawing) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    if (touch) scratch(touch.clientX, touch.clientY);
   }, [isDrawing, scratch]);
 
   const claimReward = () => {

@@ -632,5 +632,12 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "कोई टैरो टिकट उपलब्ध नहीं।",
     spinOrPurchase: "व्हील घुमाएं या टिकट कमाने के लिए पुस्तक खरीदें!",
     card: "कार्ड", language: "भाषा", selectLanguage: "भाषा चुनें",
+    drawProgress: "ड्रॉ प्रगति", drawActive: "सक्रिय", drawComplete: "पूर्ण", towardsDraw: "ड्रॉ की ओर",
+    participants: "प्रतिभागी", totalEntries: "कुल प्रविष्टियाँ", prize: "पुरस्कार", howToEnter: "कैसे भाग लें",
+    buyBook: "कोई भी पुस्तक पैकेज खरीदें", autoEntered: "आप स्वचालित रूप से दर्ज हो जाते हैं",
+    moreBooks: "अधिक खरीद = अधिक मौके", winnerSelected: "100% पर विजेता चुना जाता है",
+    recentEntries: "हाल की प्रविष्टियाँ", pastWinners: "पिछले विजेता", enterDraw: "ड्रॉ में भाग लें",
+    drawWinner: "विजेता", wonPrize: "पुरस्कार जीता", congratulations: "बधाई",
+    newDraw: "नया ड्रॉ", drawDescription: "$500 गिफ्ट कार्ड ड्रॉ के लिए पुस्तकें खरीदें!", draw: "ड्रॉ",
   },
 };

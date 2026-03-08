@@ -99,9 +99,12 @@ function PickWinnerGame({ onEnd }: { onEnd: (won: boolean) => void }) {
   );
 }
 
+type ChatMessage = { user: string; avatar: string; message: string; crown: boolean };
+
 export default function Chat() {
   const [activeRoom, setActiveRoom] = useState(0);
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<ChatMessage[]>(mockMessages);
   const [challengeState, setChallengeState] = useState<ChallengeState>("idle");
   const [countdown, setCountdown] = useState(60);
   const [opponent, setOpponent] = useState<string | null>(null);
@@ -144,6 +147,13 @@ export default function Chat() {
     const t = setTimeout(() => setChallengeState("pickWinner"), 1500);
     return () => clearTimeout(t);
   }, [challengeState]);
+
+  const sendMessage = useCallback(() => {
+    const trimmed = message.trim();
+    if (!trimmed) return;
+    setMessages((prev) => [...prev, { user: "You", avatar: "Y", message: trimmed, crown: false }]);
+    setMessage("");
+  }, [message]);
 
   const startChallenge = useCallback(() => {
     setChallengeState("waiting");
@@ -269,8 +279,8 @@ export default function Chat() {
             </AnimatePresence>
 
             {/* Chat messages area */}
-            <div className="flex-1 flex flex-col justify-end space-y-3 mb-3 min-h-[200px]">
-              {mockMessages.map((msg, i) => (
+            <div className="flex-1 flex flex-col justify-end space-y-3 mb-3 min-h-[200px] overflow-y-auto max-h-[50vh]">
+              {messages.map((msg, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.15 }}
                   className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}>
                   <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 flex items-center justify-center text-sm font-bold text-foreground shrink-0">
@@ -309,9 +319,10 @@ export default function Chat() {
               {/* Message input */}
               <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
                 <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}
+                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   className={cn("flex-1 bg-transparent text-sm text-foreground placeholder:text-white/40 outline-none", isRTL && "text-right")} />
                 <button className="text-primary/70 hover:text-primary transition-colors"><Smile className="w-5 h-5" /></button>
-                <button className="text-primary hover:text-primary/80 transition-colors"><Send className="w-5 h-5" /></button>
+                <button onClick={sendMessage} className="text-primary hover:text-primary/80 transition-colors"><Send className="w-5 h-5" /></button>
               </div>
             </div>
           </div>

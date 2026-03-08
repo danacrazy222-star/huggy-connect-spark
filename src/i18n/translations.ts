@@ -549,15 +549,3 @@ const translations: Record<Language, TranslationKeys> = {
     card: "कार्ड", language: "भाषा", selectLanguage: "भाषा चुनें",
   },
 };
-
-export function useTranslation() {
-  const { useLanguageStore } = require('@/store/useLanguageStore');
-  const language = useLanguageStore((s: any) => s.language);
-  const isRTL = useLanguageStore((s: any) => s.isRTL)();
-
-  const t = (key: keyof TranslationKeys): string => {
-    return translations[language as Language]?.[key] ?? translations.en[key] ?? key;
-  };
-
-  return { t, isRTL, language };
-}

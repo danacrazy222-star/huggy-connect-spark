@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
-import { motion } from "framer-motion";
-import { Send, Smile, Lock, Crown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, Smile, Lock, Crown, Gamepad2, Timer, Trophy, X, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGameStore } from "@/store/useGameStore";
 
+import roomBronze from "@/assets/room-bronze.jpg";
+import roomSilver from "@/assets/room-silver.jpg";
+import roomGold from "@/assets/room-gold.jpg";
+import roomDiamond from "@/assets/room-diamond.jpg";
+
 const rooms = [
-  { name: "Bronze", level: 1, color: "from-amber-700/40 to-amber-900/20", borderColor: "border-amber-600/50", icon: "🔮", bgAccent: "bg-blue-accent/10" },
-  { name: "Silver", level: 5, color: "from-slate-400/30 to-slate-600/20", borderColor: "border-slate-400/50", icon: "🔮", bgAccent: "bg-purple-glow/10" },
-  { name: "Gold", level: 10, color: "from-primary/30 to-gold-dark/20", borderColor: "border-primary/50", icon: "💎", bgAccent: "bg-accent/10" },
-  { name: "Diamond", level: 15, color: "from-purple-glow/30 to-accent/20", borderColor: "border-accent/50", icon: "🔥", bgAccent: "bg-primary/10" },
+  { name: "Bronze", level: 1, image: roomBronze, accent: "from-blue-500/60", border: "border-blue-400/50" },
+  { name: "Silver", level: 5, image: roomSilver, accent: "from-pink-500/60", border: "border-pink-400/50" },
+  { name: "Gold", level: 10, image: roomGold, accent: "from-purple-500/60", border: "border-purple-400/50" },
+  { name: "Diamond", level: 15, image: roomDiamond, accent: "from-amber-500/60", border: "border-amber-400/50" },
 ];
 
 const mockMessages = [
@@ -19,73 +24,295 @@ const mockMessages = [
   { user: "Alex", avatar: "A", message: "Good luck all! 🍀🔥", crown: false },
 ];
 
+type ChallengeState = "idle" | "waiting" | "playing" | "pickWinner" | "result";
+
+// Simple "Pick the Winner" mini-game
+function PickWinnerGame({ onEnd }: { onEnd: (won: boolean) => void }) {
+  const [picked, setPicked] = useState<number | null>(null);
+  const [winner, setWinner] = useState<number | null>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  const players = [
+    { name: "Player A", emoji: "🔴", color: "bg-red-500/30 border-red-400/60" },
+    { name: "Player B", emoji: "🔵", color: "bg-blue-500/30 border-blue-400/60" },
+  ];
+
+  const reveal = (choice: number) => {
+    if (picked !== null) return;
+    setPicked(choice);
+    const w = Math.random() > 0.5 ? 0 : 1;
+    setWinner(w);
+    setTimeout(() => setRevealed(true), 1500);
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-3 p-4">
+      <div className="flex items-center gap-2 text-primary">
+        <Trophy className="w-5 h-5" />
+        <span className="font-bold text-sm">اختر الرابح!</span>
+      </div>
+
+      <div className="flex gap-4">
+        {players.map((p, i) => (
+          <motion.button
+            key={i}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => reveal(i)}
+            className={cn(
+              "w-24 h-28 rounded-2xl border-2 flex flex-col items-center justify-center gap-2 transition-all",
+              p.color,
+              picked === i && "ring-2 ring-primary scale-105",
+              picked !== null && picked !== i && "opacity-40"
+            )}
+          >
+            <span className="text-3xl">{p.emoji}</span>
+            <span className="text-xs font-medium text-foreground">{p.name}</span>
+          </motion.button>
+        ))}
+      </div>
+
+      {picked !== null && !revealed && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-muted-foreground">
+          <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          <span className="text-xs">جاري الكشف...</span>
+        </motion.div>
+      )}
+
+      {revealed && winner !== null && (
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-center space-y-2">
+          <p className="text-lg font-bold">
+            {picked === winner ? (
+              <span className="text-green-400">🎉 ربحت! +40 XP</span>
+            ) : (
+              <span className="text-red-400">😔 خسرت! +5 XP</span>
+            )}
+          </p>
+          <button
+            onClick={() => onEnd(picked === winner)}
+            className="px-4 py-2 bg-primary/20 border border-primary/40 rounded-xl text-sm text-primary font-medium"
+          >
+            رجوع للشات
+          </button>
+        </motion.div>
+      )}
+    </div>
+  );
+}
+
 export default function Chat() {
   const [activeRoom, setActiveRoom] = useState(0);
   const [message, setMessage] = useState("");
+  const [challengeState, setChallengeState] = useState<ChallengeState>("idle");
+  const [countdown, setCountdown] = useState(60);
+  const [opponent, setOpponent] = useState<string | null>(null);
   const level = useGameStore((s) => s.level);
+  const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
 
   const currentRoom = rooms[activeRoom];
   const canAccess = level >= currentRoom.level;
 
-  return (
-    <div className="min-h-screen bg-premium-gradient stars-bg pb-20 flex flex-col" dir={isRTL ? "rtl" : "ltr"}>
-      <TopBar title={t("chat")} />
+  // Waiting room countdown
+  useEffect(() => {
+    if (challengeState !== "waiting") return;
+    const timer = setInterval(() => {
+      setCountdown((c) => {
+        if (c <= 1) {
+          clearInterval(timer);
+          setOpponent("Bot 🤖");
+          setChallengeState("playing");
+          return 60;
+        }
+        // Random chance opponent joins
+        if (c === 50 || c === 40 || c === 30) {
+          if (Math.random() > 0.6) {
+            clearInterval(timer);
+            setOpponent("Player_" + Math.floor(Math.random() * 999));
+            setChallengeState("playing");
+            return 60;
+          }
+        }
+        return c - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [challengeState]);
 
-      <div className={cn("flex gap-2 px-4 mb-3 overflow-x-auto pb-1", isRTL && "flex-row-reverse")}>
-        {rooms.map((room, i) => {
-          const locked = level < room.level;
-          return (
-            <button key={room.name} onClick={() => setActiveRoom(i)}
-              className={cn(
-                "flex items-center gap-1.5 px-3 py-2 rounded-xl border text-sm font-medium whitespace-nowrap transition-all",
-                activeRoom === i ? `bg-gradient-to-r ${room.color} ${room.borderColor} text-foreground` : "bg-muted/30 border-border text-muted-foreground",
-                locked && "opacity-60"
-              )}>
-              {locked ? <Lock className="w-3 h-3" /> : <span>{room.icon}</span>}
-              <span>{room.name}</span>
-              <span className="text-[10px] text-muted-foreground">Lv.{room.level}</span>
-            </button>
-          );
-        })}
+  // Start playing after 3s countdown
+  useEffect(() => {
+    if (challengeState !== "playing") return;
+    const t = setTimeout(() => setChallengeState("pickWinner"), 1500);
+    return () => clearTimeout(t);
+  }, [challengeState]);
+
+  const startChallenge = useCallback(() => {
+    setChallengeState("waiting");
+    setCountdown(60);
+    setOpponent(null);
+  }, []);
+
+  const handleGameEnd = useCallback((won: boolean) => {
+    addXP(won ? 40 : 5);
+    setChallengeState("idle");
+    setOpponent(null);
+  }, [addXP]);
+
+  return (
+    <div className="min-h-screen pb-20 flex flex-col relative" dir={isRTL ? "rtl" : "ltr"}>
+      {/* Room background image */}
+      <div className="absolute inset-0 z-0">
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={activeRoom}
+            src={currentRoom.image}
+            alt={currentRoom.name}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full h-full object-cover"
+          />
+        </AnimatePresence>
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
       </div>
 
-      <div className="flex-1 px-4">
+      <div className="relative z-10 flex flex-col flex-1">
+        <TopBar title={t("chat")} />
+
+        {/* Room tabs */}
+        <div className={cn("flex gap-2 px-4 mb-2 overflow-x-auto pb-1", isRTL && "flex-row-reverse")}>
+          {rooms.map((room, i) => {
+            const locked = level < room.level;
+            return (
+              <button key={room.name} onClick={() => !locked && setActiveRoom(i)}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium whitespace-nowrap transition-all backdrop-blur-md",
+                  activeRoom === i ? `bg-white/20 ${room.border} text-foreground shadow-lg` : "bg-black/30 border-white/10 text-white/70",
+                  locked && "opacity-40 cursor-not-allowed"
+                )}>
+                {locked ? <Lock className="w-3 h-3" /> : <span className="w-2 h-2 rounded-full bg-green-400" />}
+                <span>{room.name}</span>
+              </button>
+            );
+          })}
+        </div>
+
         {!canAccess ? (
-          <div className="flex flex-col items-center justify-center h-64 gap-3">
+          <div className="flex-1 flex flex-col items-center justify-center gap-3 px-4">
             <Lock className="w-12 h-12 text-muted-foreground" />
             <p className="text-muted-foreground text-center">
               {t("reachLevel")} <span className="text-primary font-bold">{t("level")} {currentRoom.level}</span> {t("toUnlockRoom")}
             </p>
-            <p className="text-xs text-muted-foreground">{t("yourCurrentLevel")}: {level}</p>
           </div>
         ) : (
-          <div className={`rounded-2xl border ${currentRoom.borderColor} ${currentRoom.bgAccent} p-4 min-h-[300px] flex flex-col`}>
-            <div className="text-center mb-4">
-              <span className="text-4xl">{currentRoom.icon}</span>
-              <p className="text-sm text-muted-foreground mt-1">{currentRoom.name} {t("room")}</p>
-            </div>
-            <div className="flex-1 space-y-3 mb-4">
+          <div className="flex-1 flex flex-col px-4">
+            {/* Challenge / Game area (top half when active) */}
+            <AnimatePresence>
+              {challengeState !== "idle" && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="mb-3 rounded-2xl border border-primary/30 bg-black/60 backdrop-blur-xl overflow-hidden"
+                >
+                  <div className="flex items-center justify-between px-3 py-2 border-b border-white/10">
+                    <div className="flex items-center gap-2 text-xs text-primary font-medium">
+                      <Gamepad2 className="w-4 h-4" />
+                      <span>تحدي 1v1</span>
+                    </div>
+                    <button onClick={() => { setChallengeState("idle"); setOpponent(null); }}>
+                      <X className="w-4 h-4 text-muted-foreground" />
+                    </button>
+                  </div>
+
+                  {challengeState === "waiting" && (
+                    <div className="p-6 flex flex-col items-center gap-4">
+                      <div className="relative">
+                        <div className="w-16 h-16 rounded-full border-2 border-primary/50 flex items-center justify-center">
+                          <Users className="w-8 h-8 text-primary animate-pulse" />
+                        </div>
+                        <div className="absolute -bottom-1 -right-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                          {countdown}
+                        </div>
+                      </div>
+                      <p className="text-sm text-foreground/80">بانتظار لاعب...</p>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Timer className="w-3 h-3" />
+                        <span>بوت بيدخل بعد {countdown} ثانية</span>
+                      </div>
+                      <div className="w-full bg-white/10 rounded-full h-1.5">
+                        <motion.div
+                          className="h-full bg-primary rounded-full"
+                          initial={{ width: "100%" }}
+                          animate={{ width: "0%" }}
+                          transition={{ duration: 60, ease: "linear" }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {challengeState === "playing" && opponent && (
+                    <div className="p-4 flex flex-col items-center gap-3">
+                      <p className="text-sm text-foreground">
+                        ⚔️ ضد <span className="text-primary font-bold">{opponent}</span>
+                      </p>
+                      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                      <p className="text-xs text-muted-foreground">جاري التحضير...</p>
+                    </div>
+                  )}
+
+                  {challengeState === "pickWinner" && (
+                    <PickWinnerGame onEnd={handleGameEnd} />
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Chat messages area */}
+            <div className="flex-1 flex flex-col justify-end space-y-3 mb-3 min-h-[200px]">
               {mockMessages.map((msg, i) => (
-                <motion.div key={i} initial={{ opacity: 0, x: isRTL ? 20 : -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.15 }}
+                <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.15 }}
                   className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}>
-                  <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-sm font-bold text-foreground">{msg.avatar}</div>
-                  <div className={isRTL ? "text-right" : ""}>
-                    <div className={cn("flex items-center gap-1", isRTL && "flex-row-reverse")}>
-                      <span className="text-sm font-medium text-foreground">{msg.user}</span>
+                  <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 flex items-center justify-center text-sm font-bold text-foreground shrink-0">
+                    {msg.avatar}
+                  </div>
+                  <div className={cn("max-w-[75%]", isRTL ? "text-right" : "")}>
+                    <div className={cn("flex items-center gap-1 mb-0.5", isRTL && "flex-row-reverse")}>
+                      <span className="text-xs font-medium text-foreground">{msg.user}</span>
                       {msg.crown && <Crown className="w-3 h-3 text-primary" />}
                     </div>
-                    <p className="text-sm text-foreground/80">{msg.message}</p>
+                    <div className="bg-black/40 backdrop-blur-md rounded-2xl rounded-tl-sm px-3 py-1.5 border border-white/10">
+                      <p className="text-sm text-foreground/90">{msg.message}</p>
+                    </div>
                   </div>
                 </motion.div>
               ))}
             </div>
-            <div className={cn("flex items-center gap-2 bg-muted/50 rounded-full px-3 py-2", isRTL && "flex-row-reverse")}>
-              <button className="text-muted-foreground"><Lock className="w-4 h-4" /></button>
-              <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}
-                className={cn("flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none", isRTL && "text-right")} />
-              <button className="text-primary"><Smile className="w-5 h-5" /></button>
-              <button className="text-primary"><Send className="w-5 h-5" /></button>
+
+            {/* Input bar + challenge button */}
+            <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
+              {/* Challenge button */}
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={startChallenge}
+                disabled={challengeState !== "idle"}
+                className={cn(
+                  "shrink-0 w-10 h-10 rounded-full flex items-center justify-center border transition-all",
+                  challengeState === "idle"
+                    ? "bg-primary/20 border-primary/40 text-primary"
+                    : "bg-muted/30 border-border text-muted-foreground opacity-50"
+                )}
+              >
+                <Gamepad2 className="w-5 h-5" />
+              </motion.button>
+
+              {/* Message input */}
+              <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
+                <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}
+                  className={cn("flex-1 bg-transparent text-sm text-foreground placeholder:text-white/40 outline-none", isRTL && "text-right")} />
+                <button className="text-primary/70 hover:text-primary transition-colors"><Smile className="w-5 h-5" /></button>
+                <button className="text-primary hover:text-primary/80 transition-colors"><Send className="w-5 h-5" /></button>
+              </div>
             </div>
           </div>
         )}

@@ -380,8 +380,9 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
   const [phase, setPhase] = useState<"ready" | "scratching" | "revealed">("ready");
   const [reward, setReward] = useState<ScratchReward | null>(null);
   const [scratched, setScratched] = useState(0);
-  const [isDrawing, setIsDrawing] = useState(false);
   const [claimed, setClaimed] = useState(false);
+  const isDrawingRef = useRef(false);
+  const lastPointRef = useRef<{ x: number; y: number } | null>(null);
 
   const startGame = useCallback(() => {
     if (gameTickets <= 0) {
@@ -394,6 +395,8 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
     setPhase("scratching");
     setScratched(0);
     setClaimed(false);
+    isDrawingRef.current = false;
+    lastPointRef.current = null;
   }, [gameTickets, addGameTicket, t]);
 
   // Initialize scratch canvas
@@ -407,7 +410,7 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
     const rect = canvas.getBoundingClientRect();
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     // Gold gradient cover
     const gradient = ctx.createLinearGradient(0, 0, rect.width, rect.height);
@@ -447,39 +450,84 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
     ctx.save();
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.globalCompositeOperation = "destination-out";
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = "rgba(0,0,0,1)";
+    ctx.lineWidth = 56;
+
+    const lastPoint = lastPointRef.current;
+    if (lastPoint) {
+      ctx.beginPath();
+      ctx.moveTo(lastPoint.x, lastPoint.y);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+
     ctx.beginPath();
-    ctx.arc(x, y, 25, 0, Math.PI * 2);
+    ctx.arc(x, y, 28, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 
-    // Calculate scratched percentage (sample for performance)
+    lastPointRef.current = { x, y };
+
+    // Calculate scratched percentage (sampled for performance)
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let transparent = 0;
     let total = 0;
-    for (let i = 3; i < imageData.data.length; i += 16) {
+    for (let i = 3; i < imageData.data.length; i += 32) {
       total++;
-      if (imageData.data[i] === 0) transparent++;
+      if (imageData.data[i] < 40) transparent++;
     }
+
     const pct = (transparent / total) * 100;
     setScratched(pct);
 
-    if (pct > 45) {
+    if (pct >= 18) {
+      isDrawingRef.current = false;
+      lastPointRef.current = null;
       setPhase("revealed");
     }
   }, [phase]);
 
-  const handlePointerMove = useCallback((e: React.PointerEvent) => {
-    if (!isDrawing) return;
+  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    isDrawingRef.current = true;
+    lastPointRef.current = null;
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // no-op for browsers that don't support capture
+    }
+    scratch(e.clientX, e.clientY);
+  }, [scratch]);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!isDrawingRef.current) return;
     e.preventDefault();
     scratch(e.clientX, e.clientY);
-  }, [isDrawing, scratch]);
+  }, [scratch]);
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!isDrawing) return;
+  const stopDrawing = useCallback(() => {
+    isDrawingRef.current = false;
+    lastPointRef.current = null;
+  }, []);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent<HTMLCanvasElement>) => {
+    if (typeof window !== "undefined" && "PointerEvent" in window) return;
+    e.preventDefault();
+    isDrawingRef.current = true;
+    lastPointRef.current = null;
+    const touch = e.touches[0];
+    if (touch) scratch(touch.clientX, touch.clientY);
+  }, [scratch]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLCanvasElement>) => {
+    if (typeof window !== "undefined" && "PointerEvent" in window) return;
+    if (!isDrawingRef.current) return;
     e.preventDefault();
     const touch = e.touches[0];
     if (touch) scratch(touch.clientX, touch.clientY);
-  }, [isDrawing, scratch]);
+  }, [scratch]);
 
   const claimReward = () => {
     if (!reward || claimed) return;
@@ -553,16 +601,20 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
                 ref={canvasRef}
                 className="absolute inset-0 w-full h-full cursor-crosshair"
                 style={{ touchAction: "none" }}
-                onPointerDown={(e) => { e.preventDefault(); setIsDrawing(true); scratch(e.clientX, e.clientY); }}
+                onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
-                onPointerUp={() => setIsDrawing(false)}
-                onPointerLeave={() => setIsDrawing(false)}
-                onPointerCancel={() => setIsDrawing(false)}
+                onPointerUp={stopDrawing}
+                onPointerLeave={stopDrawing}
+                onPointerCancel={stopDrawing}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={stopDrawing}
+                onTouchCancel={stopDrawing}
               />
             </div>
 
             <div className="relative h-3 bg-muted rounded-full overflow-hidden border border-border">
-              <motion.div animate={{ width: `${Math.min(scratched * 2, 100)}%` }}
+              <motion.div animate={{ width: `${Math.min((scratched / 18) * 100, 100)}%` }}
                 className="h-full bg-gradient-to-r from-gold-dark via-primary to-gold-light rounded-full" />
             </div>
           </motion.div>

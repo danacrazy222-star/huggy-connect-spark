@@ -380,6 +380,7 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
   const [phase, setPhase] = useState<"ready" | "scratching" | "revealed">("ready");
   const [reward, setReward] = useState<ScratchReward | null>(null);
   const [scratched, setScratched] = useState(0);
+  const [scratchInteractions, setScratchInteractions] = useState(0);
   const [claimed, setClaimed] = useState(false);
   const isDrawingRef = useRef(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
@@ -394,6 +395,7 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
     setReward(r);
     setPhase("scratching");
     setScratched(0);
+    setScratchInteractions(0);
     setClaimed(false);
     isDrawingRef.current = false;
     lastPointRef.current = null;
@@ -482,12 +484,24 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
     const pct = (transparent / total) * 100;
     setScratched(pct);
 
-    if (pct >= 18) {
+    if (pct >= 8) {
       isDrawingRef.current = false;
       lastPointRef.current = null;
       setPhase("revealed");
     }
   }, [phase]);
+
+  const registerScratchInteraction = useCallback(() => {
+    setScratchInteractions((prev) => {
+      const next = prev + 1;
+      if (next >= 2) {
+        isDrawingRef.current = false;
+        lastPointRef.current = null;
+        setPhase("revealed");
+      }
+      return next;
+    });
+  }, []);
 
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLCanvasElement>) => {
     e.preventDefault();
@@ -499,7 +513,8 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
       // no-op for browsers that don't support capture
     }
     scratch(e.clientX, e.clientY);
-  }, [scratch]);
+    registerScratchInteraction();
+  }, [scratch, registerScratchInteraction]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isDrawingRef.current) return;
@@ -518,8 +533,11 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
     isDrawingRef.current = true;
     lastPointRef.current = null;
     const touch = e.touches[0];
-    if (touch) scratch(touch.clientX, touch.clientY);
-  }, [scratch]);
+    if (touch) {
+      scratch(touch.clientX, touch.clientY);
+      registerScratchInteraction();
+    }
+  }, [scratch, registerScratchInteraction]);
 
   const handleTouchMove = useCallback((e: React.TouchEvent<HTMLCanvasElement>) => {
     if (typeof window !== "undefined" && "PointerEvent" in window) return;
@@ -614,9 +632,16 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
             </div>
 
             <div className="relative h-3 bg-muted rounded-full overflow-hidden border border-border">
-              <motion.div animate={{ width: `${Math.min((scratched / 18) * 100, 100)}%` }}
+              <motion.div animate={{ width: `${Math.min(Math.max((scratched / 8) * 100, (scratchInteractions / 2) * 100), 100)}%` }}
                 className="h-full bg-gradient-to-r from-gold-dark via-primary to-gold-light rounded-full" />
             </div>
+
+            <button
+              onClick={() => setPhase("revealed")}
+              className="w-full py-2.5 rounded-xl font-bold bg-card/80 border border-border text-foreground hover:bg-muted/40 transition-all"
+            >
+              Reveal reward now
+            </button>
           </motion.div>
         )}
 

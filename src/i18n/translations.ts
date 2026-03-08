@@ -203,6 +203,7 @@ export const translations: Record<Language, TranslationKeys> = {
     drawWinner: "Draw Winner", wonPrize: "Won the prize", congratulations: "Congratulations",
     newDraw: "START NEW DRAW", drawDescription: "Buy books to enter the $500 gift card draw!", draw: "Draw",
     login: "Login", signup: "Sign Up", loginSubtitle: "Welcome back to WINLINE", signupSubtitle: "Create your account", displayName: "Display Name", email: "Email", password: "Password", passwordMinLength: "Password must be at least 6 characters", welcomeBack: "Welcome back!", accountCreated: "Account created successfully!", logout: "Logout",
+    scratchCard: "Scratch Card", scratchCardDesc: "Scratch to reveal your prize!", scratchToReveal: "Scratch the card to reveal your reward", scratchArea: "Scratch here!", youRevealed: "You revealed", claimReward: "CLAIM REWARD", tryAnotherCard: "TRY ANOTHER CARD", noReward: "Better luck next time!", scratchCardCost: "1 Game Ticket",
   },
   ar: {
     home: "الرئيسية", shop: "المتجر", games: "الألعاب", chat: "الدردشة", crown: "التاج", cards: "البطاقات",

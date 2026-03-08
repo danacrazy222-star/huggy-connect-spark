@@ -326,6 +326,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Sin boletos de tarot.",
     spinOrPurchase: "¡Gira la rueda o compra un libro!",
     card: "Carta", language: "Idioma", selectLanguage: "Seleccionar idioma",
+    drawProgress: "Progreso", drawActive: "Activo", drawComplete: "Completo", towardsDraw: "hacia el sorteo",
+    participants: "Participantes", totalEntries: "Entradas totales", prize: "Premio", howToEnter: "Cómo participar",
+    buyBook: "Compra cualquier libro", autoEntered: "Entras automáticamente",
+    moreBooks: "Más compras = más oportunidades", winnerSelected: "Ganador seleccionado al 100%",
+    recentEntries: "Entradas recientes", pastWinners: "Ganadores anteriores", enterDraw: "PARTICIPAR",
+    drawWinner: "Ganador", wonPrize: "Ganó el premio", congratulations: "Felicidades",
+    newDraw: "NUEVO SORTEO", drawDescription: "¡Compra libros para el sorteo de $500!", draw: "Sorteo",
   },
   tr: {
     home: "Ana Sayfa", shop: "Mağaza", games: "Oyunlar", chat: "Sohbet", crown: "Taç", cards: "Kartlar",

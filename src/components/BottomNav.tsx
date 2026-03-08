@@ -1,4 +1,4 @@
-import { Home, ShoppingBag, MessageCircle, Crown, Sparkles, Gamepad2 } from "lucide-react";
+import { Home, ShoppingBag, MessageCircle, Crown, Sparkles, Gamepad2, Gift } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -7,6 +7,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 const tabs = [
   { path: "/", icon: Home, key: "home" as const },
   { path: "/shop", icon: ShoppingBag, key: "shop" as const },
+  { path: "/draw", icon: Gift, key: "draw" as const },
   { path: "/games", icon: Gamepad2, key: "games" as const },
   { path: "/chat", icon: MessageCircle, key: "chat" as const, badge: 3 },
   { path: "/vip", icon: Crown, key: "crown" as const },

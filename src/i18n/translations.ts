@@ -105,6 +105,28 @@ export type TranslationKeys = {
   // Language
   language: string;
   selectLanguage: string;
+  // Draw
+  drawProgress: string;
+  drawActive: string;
+  drawComplete: string;
+  towardsDraw: string;
+  participants: string;
+  totalEntries: string;
+  prize: string;
+  howToEnter: string;
+  buyBook: string;
+  autoEntered: string;
+  moreBooks: string;
+  winnerSelected: string;
+  recentEntries: string;
+  pastWinners: string;
+  enterDraw: string;
+  drawWinner: string;
+  wonPrize: string;
+  congratulations: string;
+  newDraw: string;
+  drawDescription: string;
+  draw: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -151,6 +173,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "No tarot tickets available.",
     spinOrPurchase: "Spin the wheel or purchase a book to earn tickets!",
     card: "Card", language: "Language", selectLanguage: "Select Language",
+    drawProgress: "Draw Progress", drawActive: "Active", drawComplete: "Complete", towardsDraw: "towards the draw",
+    participants: "Participants", totalEntries: "Total Entries", prize: "Prize", howToEnter: "How to Enter",
+    buyBook: "Purchase any book package", autoEntered: "You're automatically entered in the draw",
+    moreBooks: "More purchases = more chances to win", winnerSelected: "Winner selected automatically at 100%",
+    recentEntries: "Recent Entries", pastWinners: "Past Winners", enterDraw: "ENTER THE DRAW",
+    drawWinner: "Draw Winner", wonPrize: "Won the prize", congratulations: "Congratulations",
+    newDraw: "START NEW DRAW", drawDescription: "Buy books to enter the $500 gift card draw!", draw: "Draw",
   },
   ar: {
     home: "الرئيسية", shop: "المتجر", games: "الألعاب", chat: "الدردشة", crown: "التاج", cards: "البطاقات",
@@ -195,6 +224,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "لا تذاكر تاروت متاحة.",
     spinOrPurchase: "لف الدولاب أو اشترِ كتاباً لكسب التذاكر!",
     card: "بطاقة", language: "اللغة", selectLanguage: "اختر اللغة",
+    drawProgress: "تقدم السحب", drawActive: "نشط", drawComplete: "مكتمل", towardsDraw: "نحو السحب",
+    participants: "المشاركون", totalEntries: "إجمالي الإدخالات", prize: "الجائزة", howToEnter: "كيف تشارك",
+    buyBook: "اشترِ أي باقة كتاب", autoEntered: "يتم إدخالك تلقائياً في السحب",
+    moreBooks: "مشتريات أكثر = فرص أكبر للفوز", winnerSelected: "يتم اختيار الفائز تلقائياً عند 100%",
+    recentEntries: "الإدخالات الأخيرة", pastWinners: "الفائزون السابقون", enterDraw: "ادخل السحب",
+    drawWinner: "فائز السحب", wonPrize: "فاز بالجائزة", congratulations: "تهانينا",
+    newDraw: "ابدأ سحباً جديداً", drawDescription: "اشترِ كتباً للدخول في سحب بطاقة هدية $500!", draw: "السحب",
   },
   fr: {
     home: "Accueil", shop: "Boutique", games: "Jeux", chat: "Discussion", crown: "Couronne", cards: "Cartes",
@@ -239,6 +275,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Aucun ticket tarot disponible.",
     spinOrPurchase: "Tournez la roue ou achetez un livre !",
     card: "Carte", language: "Langue", selectLanguage: "Choisir la langue",
+    drawProgress: "Progression", drawActive: "Actif", drawComplete: "Terminé", towardsDraw: "vers le tirage",
+    participants: "Participants", totalEntries: "Entrées totales", prize: "Prix", howToEnter: "Comment participer",
+    buyBook: "Achetez un livre", autoEntered: "Vous êtes automatiquement inscrit",
+    moreBooks: "Plus d'achats = plus de chances", winnerSelected: "Gagnant sélectionné à 100%",
+    recentEntries: "Entrées récentes", pastWinners: "Anciens gagnants", enterDraw: "PARTICIPER",
+    drawWinner: "Gagnant", wonPrize: "A gagné le prix", congratulations: "Félicitations",
+    newDraw: "NOUVEAU TIRAGE", drawDescription: "Achetez des livres pour le tirage de $500!", draw: "Tirage",
   },
   es: {
     home: "Inicio", shop: "Tienda", games: "Juegos", chat: "Chat", crown: "Corona", cards: "Cartas",
@@ -283,6 +326,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Sin boletos de tarot.",
     spinOrPurchase: "¡Gira la rueda o compra un libro!",
     card: "Carta", language: "Idioma", selectLanguage: "Seleccionar idioma",
+    drawProgress: "Progreso", drawActive: "Activo", drawComplete: "Completo", towardsDraw: "hacia el sorteo",
+    participants: "Participantes", totalEntries: "Entradas totales", prize: "Premio", howToEnter: "Cómo participar",
+    buyBook: "Compra cualquier libro", autoEntered: "Entras automáticamente",
+    moreBooks: "Más compras = más oportunidades", winnerSelected: "Ganador seleccionado al 100%",
+    recentEntries: "Entradas recientes", pastWinners: "Ganadores anteriores", enterDraw: "PARTICIPAR",
+    drawWinner: "Ganador", wonPrize: "Ganó el premio", congratulations: "Felicidades",
+    newDraw: "NUEVO SORTEO", drawDescription: "¡Compra libros para el sorteo de $500!", draw: "Sorteo",
   },
   tr: {
     home: "Ana Sayfa", shop: "Mağaza", games: "Oyunlar", chat: "Sohbet", crown: "Taç", cards: "Kartlar",
@@ -327,6 +377,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Tarot bileti yok.",
     spinOrPurchase: "Çarkı çevirin veya bilet kazanmak için kitap satın alın!",
     card: "Kart", language: "Dil", selectLanguage: "Dil Seçin",
+    drawProgress: "Çekiliş İlerlemesi", drawActive: "Aktif", drawComplete: "Tamamlandı", towardsDraw: "çekilişe doğru",
+    participants: "Katılımcılar", totalEntries: "Toplam Giriş", prize: "Ödül", howToEnter: "Nasıl Katılınır",
+    buyBook: "Herhangi bir kitap paketi satın alın", autoEntered: "Otomatik olarak kaydedilirsiniz",
+    moreBooks: "Daha fazla alım = daha fazla şans", winnerSelected: "%100'de kazanan seçilir",
+    recentEntries: "Son Girişler", pastWinners: "Geçmiş Kazananlar", enterDraw: "ÇEKİLİŞE KATIL",
+    drawWinner: "Kazanan", wonPrize: "Ödülü kazandı", congratulations: "Tebrikler",
+    newDraw: "YENİ ÇEKİLİŞ", drawDescription: "$500 hediye kartı çekilişi için kitap satın alın!", draw: "Çekiliş",
   },
   de: {
     home: "Startseite", shop: "Shop", games: "Spiele", chat: "Chat", crown: "Krone", cards: "Karten",
@@ -371,6 +428,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Keine Tarot-Tickets verfügbar.",
     spinOrPurchase: "Drehen Sie das Rad oder kaufen Sie ein Buch!",
     card: "Karte", language: "Sprache", selectLanguage: "Sprache wählen",
+    drawProgress: "Fortschritt", drawActive: "Aktiv", drawComplete: "Abgeschlossen", towardsDraw: "zur Ziehung",
+    participants: "Teilnehmer", totalEntries: "Gesamteinträge", prize: "Preis", howToEnter: "Wie teilnehmen",
+    buyBook: "Kaufen Sie ein Buchpaket", autoEntered: "Sie werden automatisch eingetragen",
+    moreBooks: "Mehr Käufe = mehr Chancen", winnerSelected: "Gewinner wird bei 100% ausgewählt",
+    recentEntries: "Letzte Einträge", pastWinners: "Frühere Gewinner", enterDraw: "TEILNEHMEN",
+    drawWinner: "Gewinner", wonPrize: "Hat gewonnen", congratulations: "Herzlichen Glückwunsch",
+    newDraw: "NEUE ZIEHUNG", drawDescription: "Kaufen Sie Bücher für die $500 Geschenkkarte!", draw: "Ziehung",
   },
   it: {
     home: "Home", shop: "Negozio", games: "Giochi", chat: "Chat", crown: "Corona", cards: "Carte",
@@ -415,6 +479,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Nessun biglietto tarocchi.",
     spinOrPurchase: "Gira la ruota o acquista un libro!",
     card: "Carta", language: "Lingua", selectLanguage: "Seleziona lingua",
+    drawProgress: "Progresso", drawActive: "Attivo", drawComplete: "Completato", towardsDraw: "verso l'estrazione",
+    participants: "Partecipanti", totalEntries: "Ingressi totali", prize: "Premio", howToEnter: "Come partecipare",
+    buyBook: "Acquista un pacchetto libro", autoEntered: "Sei automaticamente iscritto",
+    moreBooks: "Più acquisti = più possibilità", winnerSelected: "Vincitore selezionato al 100%",
+    recentEntries: "Ingressi recenti", pastWinners: "Vincitori passati", enterDraw: "PARTECIPA",
+    drawWinner: "Vincitore", wonPrize: "Ha vinto il premio", congratulations: "Congratulazioni",
+    newDraw: "NUOVA ESTRAZIONE", drawDescription: "Acquista libri per l'estrazione da $500!", draw: "Estrazione",
   },
   pt: {
     home: "Início", shop: "Loja", games: "Jogos", chat: "Chat", crown: "Coroa", cards: "Cartas",
@@ -459,6 +530,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Sem ingressos de tarot.",
     spinOrPurchase: "Gire a roda ou compre um livro!",
     card: "Carta", language: "Idioma", selectLanguage: "Selecionar idioma",
+    drawProgress: "Progresso", drawActive: "Ativo", drawComplete: "Completo", towardsDraw: "para o sorteio",
+    participants: "Participantes", totalEntries: "Total de entradas", prize: "Prêmio", howToEnter: "Como participar",
+    buyBook: "Compre qualquer pacote de livro", autoEntered: "Você é inscrito automaticamente",
+    moreBooks: "Mais compras = mais chances", winnerSelected: "Vencedor selecionado em 100%",
+    recentEntries: "Entradas recentes", pastWinners: "Vencedores anteriores", enterDraw: "PARTICIPAR",
+    drawWinner: "Vencedor", wonPrize: "Ganhou o prêmio", congratulations: "Parabéns",
+    newDraw: "NOVO SORTEIO", drawDescription: "Compre livros para o sorteio de $500!", draw: "Sorteio",
   },
   ru: {
     home: "Главная", shop: "Магазин", games: "Игры", chat: "Чат", crown: "Корона", cards: "Карты",
@@ -503,6 +581,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Нет билетов Таро.",
     spinOrPurchase: "Крутите колесо или купите книгу!",
     card: "Карта", language: "Язык", selectLanguage: "Выберите язык",
+    drawProgress: "Прогресс", drawActive: "Активен", drawComplete: "Завершен", towardsDraw: "к розыгрышу",
+    participants: "Участники", totalEntries: "Всего записей", prize: "Приз", howToEnter: "Как участвовать",
+    buyBook: "Купите любой пакет книг", autoEntered: "Вы автоматически участвуете",
+    moreBooks: "Больше покупок = больше шансов", winnerSelected: "Победитель выбирается при 100%",
+    recentEntries: "Последние записи", pastWinners: "Прошлые победители", enterDraw: "УЧАСТВОВАТЬ",
+    drawWinner: "Победитель", wonPrize: "Выиграл приз", congratulations: "Поздравляем",
+    newDraw: "НОВЫЙ РОЗЫГРЫШ", drawDescription: "Покупайте книги для розыгрыша $500!", draw: "Розыгрыш",
   },
   hi: {
     home: "होम", shop: "दुकान", games: "खेल", chat: "चैट", crown: "क्राउन", cards: "कार्ड्स",
@@ -547,5 +632,12 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "कोई टैरो टिकट उपलब्ध नहीं।",
     spinOrPurchase: "व्हील घुमाएं या टिकट कमाने के लिए पुस्तक खरीदें!",
     card: "कार्ड", language: "भाषा", selectLanguage: "भाषा चुनें",
+    drawProgress: "ड्रॉ प्रगति", drawActive: "सक्रिय", drawComplete: "पूर्ण", towardsDraw: "ड्रॉ की ओर",
+    participants: "प्रतिभागी", totalEntries: "कुल प्रविष्टियाँ", prize: "पुरस्कार", howToEnter: "कैसे भाग लें",
+    buyBook: "कोई भी पुस्तक पैकेज खरीदें", autoEntered: "आप स्वचालित रूप से दर्ज हो जाते हैं",
+    moreBooks: "अधिक खरीद = अधिक मौके", winnerSelected: "100% पर विजेता चुना जाता है",
+    recentEntries: "हाल की प्रविष्टियाँ", pastWinners: "पिछले विजेता", enterDraw: "ड्रॉ में भाग लें",
+    drawWinner: "विजेता", wonPrize: "पुरस्कार जीता", congratulations: "बधाई",
+    newDraw: "नया ड्रॉ", drawDescription: "$500 गिफ्ट कार्ड ड्रॉ के लिए पुस्तकें खरीदें!", draw: "ड्रॉ",
   },
 };

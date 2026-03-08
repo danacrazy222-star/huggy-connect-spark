@@ -377,6 +377,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Tarot bileti yok.",
     spinOrPurchase: "Çarkı çevirin veya bilet kazanmak için kitap satın alın!",
     card: "Kart", language: "Dil", selectLanguage: "Dil Seçin",
+    drawProgress: "Çekiliş İlerlemesi", drawActive: "Aktif", drawComplete: "Tamamlandı", towardsDraw: "çekilişe doğru",
+    participants: "Katılımcılar", totalEntries: "Toplam Giriş", prize: "Ödül", howToEnter: "Nasıl Katılınır",
+    buyBook: "Herhangi bir kitap paketi satın alın", autoEntered: "Otomatik olarak kaydedilirsiniz",
+    moreBooks: "Daha fazla alım = daha fazla şans", winnerSelected: "%100'de kazanan seçilir",
+    recentEntries: "Son Girişler", pastWinners: "Geçmiş Kazananlar", enterDraw: "ÇEKİLİŞE KATIL",
+    drawWinner: "Kazanan", wonPrize: "Ödülü kazandı", congratulations: "Tebrikler",
+    newDraw: "YENİ ÇEKİLİŞ", drawDescription: "$500 hediye kartı çekilişi için kitap satın alın!", draw: "Çekiliş",
   },
   de: {
     home: "Startseite", shop: "Shop", games: "Spiele", chat: "Chat", crown: "Krone", cards: "Karten",

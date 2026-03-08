@@ -3,16 +3,20 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useGameStore } from "@/store/useGameStore";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useLanguageStore, LANGUAGES, type Language } from "@/store/useLanguageStore";
+import { toast } from "sonner";
 import {
-  Diamond, Coins, Gamepad2, Ticket, Sparkles, Gift,
-  LogIn, LogOut, Settings, Trophy, Star, TrendingUp,
+  Diamond, Coins, Gamepad2, Sparkles, Gift,
+  LogIn, LogOut, Star, TrendingUp, Camera,
+  Globe, Trash2, ChevronRight, Edit3, Check, X,
+  Settings, RefreshCw,
 } from "lucide-react";
 
 export default function Profile() {
@@ -21,6 +25,12 @@ export default function Profile() {
   const { points, xp, level, gameTickets, tarotTickets, drawEntries } = useGameStore();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+  const [editingName, setEditingName] = useState(false);
+  const [nameInput, setNameInput] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [showLangPicker, setShowLangPicker] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { language, setLanguage } = useLanguageStore();
 
   useEffect(() => {
     if (!user) return;
@@ -52,6 +62,65 @@ export default function Profile() {
   const handleLogout = async () => {
     await signOut();
     navigate("/");
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split(".").pop();
+      const filePath = `${user.id}/avatar.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("avatars")
+        .getPublicUrl(filePath);
+
+      const avatarUrl = `${publicUrl}?t=${Date.now()}`;
+
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ avatar_url: avatarUrl })
+        .eq("user_id", user.id);
+
+      if (updateError) throw updateError;
+
+      setProfile((prev) => prev ? { ...prev, avatar_url: avatarUrl } : prev);
+      toast.success(t("photoUpdated"));
+    } catch (err: any) {
+      toast.error(err.message || "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSaveName = async () => {
+    if (!user || !nameInput.trim()) return;
+    const { error } = await supabase
+      .from("profiles")
+      .update({ display_name: nameInput.trim() })
+      .eq("user_id", user.id);
+
+    if (error) {
+      toast.error(error.message);
+    } else {
+      setProfile((prev) => prev ? { ...prev, display_name: nameInput.trim() } : prev);
+      toast.success(t("nameUpdated"));
+    }
+    setEditingName(false);
+  };
+
+  const handleClearData = () => {
+    localStorage.clear();
+    toast.success(t("dataCleared"));
+    setTimeout(() => window.location.reload(), 500);
   };
 
   if (authLoading) {
@@ -93,18 +162,59 @@ export default function Profile() {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col items-center gap-3 pt-2"
         >
+          {/* Avatar with upload */}
           <div className="relative">
-            <Avatar className="w-20 h-20 border-2 border-primary shadow-gold">
+            <Avatar className="w-24 h-24 border-2 border-primary shadow-gold">
               <AvatarImage src={profile?.avatar_url || undefined} />
-              <AvatarFallback className="bg-muted text-foreground text-xl font-bold">{initials}</AvatarFallback>
+              <AvatarFallback className="bg-muted text-foreground text-2xl font-bold">{initials}</AvatarFallback>
             </Avatar>
-            <div className="absolute -bottom-1 -right-1 bg-primary text-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center border-2 border-background shadow-lg"
+            >
+              {uploading ? (
+                <RefreshCw className="w-4 h-4 animate-spin" />
+              ) : (
+                <Camera className="w-4 h-4" />
+              )}
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleAvatarUpload}
+            />
+            <div className="absolute -bottom-1 -left-1 bg-primary text-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full">
               Lv.{level}
             </div>
           </div>
+
+          {/* Editable Name */}
           <div className="text-center">
-            <h2 className="text-lg font-display font-bold text-foreground">{displayName}</h2>
-            <p className="text-xs text-muted-foreground">{user.email}</p>
+            {editingName ? (
+              <div className="flex items-center gap-2">
+                <input
+                  value={nameInput}
+                  onChange={(e) => setNameInput(e.target.value)}
+                  className="bg-muted/50 border border-border rounded-lg px-3 py-1.5 text-foreground text-sm text-center outline-none focus:border-primary"
+                  autoFocus
+                  onKeyDown={(e) => e.key === "Enter" && handleSaveName()}
+                />
+                <button onClick={handleSaveName} className="text-green-accent"><Check className="w-5 h-5" /></button>
+                <button onClick={() => setEditingName(false)} className="text-destructive"><X className="w-5 h-5" /></button>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setNameInput(displayName); setEditingName(true); }}
+                className="flex items-center gap-1.5 group"
+              >
+                <h2 className="text-lg font-display font-bold text-foreground">{displayName}</h2>
+                <Edit3 className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+              </button>
+            )}
+            <p className="text-xs text-muted-foreground mt-0.5">{user.email}</p>
           </div>
         </motion.div>
 
@@ -141,8 +251,75 @@ export default function Profile() {
           </Card>
         </motion.div>
 
-        {/* VIP Level Progress */}
+        {/* Settings Section */}
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+          <h3 className="text-sm font-bold text-foreground mb-2 flex items-center gap-1.5">
+            <Settings className="w-4 h-4" /> {t("settings")}
+          </h3>
+          <Card className="bg-card/80 border-border">
+            <CardContent className="p-0 divide-y divide-border">
+              {/* Language */}
+              <button
+                onClick={() => setShowLangPicker(!showLangPicker)}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}
+              >
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <Globe className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">{t("language")}</span>
+                </div>
+                <div className={cn("flex items-center gap-1.5", isRTL && "flex-row-reverse")}>
+                  <span className="text-xs text-muted-foreground">
+                    {LANGUAGES.find(l => l.code === language)?.nativeName}
+                  </span>
+                  <ChevronRight className={cn("w-4 h-4 text-muted-foreground transition-transform", showLangPicker && "rotate-90")} />
+                </div>
+              </button>
+
+              <AnimatePresence>
+                {showLangPicker && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="grid grid-cols-2 gap-1.5 p-3">
+                      {LANGUAGES.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => { setLanguage(lang.code); setShowLangPicker(false); toast.success(`${lang.nativeName} ✓`); }}
+                          className={cn(
+                            "px-3 py-2 rounded-lg text-xs font-medium transition-all border",
+                            language === lang.code
+                              ? "bg-primary/20 border-primary/50 text-primary"
+                              : "bg-muted/30 border-border text-foreground hover:bg-muted/50"
+                          )}
+                        >
+                          {lang.nativeName}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Clear Data */}
+              <button
+                onClick={handleClearData}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-destructive/10 transition-colors", isRTL && "flex-row-reverse")}
+              >
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <Trash2 className="w-4 h-4 text-destructive" />
+                  <span className="text-sm text-destructive">{t("clearData")}</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* VIP Level Progress */}
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
           <h3 className="text-sm font-bold text-foreground mb-2">VIP</h3>
           <Card className="bg-card/80 border-border">
             <CardContent className="p-3">
@@ -166,7 +343,7 @@ export default function Profile() {
         </motion.div>
 
         {/* Logout */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
           <Button
             onClick={handleLogout}
             variant="outline"

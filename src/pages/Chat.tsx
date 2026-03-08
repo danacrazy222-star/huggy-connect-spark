@@ -209,6 +209,48 @@ export default function Chat() {
             />
           ))}
         </div>
+        {/* Rotating center orb overlay */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ top: "-10%" }}>
+          <motion.div
+            key={`orb-${activeRoom}`}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+            className="relative"
+            style={{ width: 120, height: 120 }}
+          >
+            {/* Outer glow ring */}
+            <div
+              className="absolute inset-0 rounded-full opacity-40 blur-md"
+              style={{ boxShadow: `0 0 40px 15px ${currentRoom.glow}, 0 0 80px 30px ${currentRoom.glow}` }}
+            />
+            {/* Inner rotating shape */}
+            <div
+              className={cn(
+                "absolute inset-2 border-2 opacity-30",
+                currentRoom.shape === "diamond" ? "rotate-45 rounded-lg" : "rounded-full"
+              )}
+              style={{ borderColor: currentRoom.glow }}
+            />
+            <div
+              className={cn(
+                "absolute inset-5 border opacity-50",
+                currentRoom.shape === "diamond" ? "rotate-45 rounded-md" : "rounded-full"
+              )}
+              style={{ borderColor: currentRoom.glow }}
+            />
+          </motion.div>
+          {/* Pulsing glow behind */}
+          <motion.div
+            className="absolute rounded-full blur-2xl"
+            style={{
+              width: 80,
+              height: 80,
+              background: `radial-gradient(circle, ${currentRoom.glow} 0%, transparent 70%)`,
+            }}
+            animate={{ opacity: [0.2, 0.5, 0.2], scale: [0.9, 1.2, 0.9] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
       </div>
 

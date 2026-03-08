@@ -279,8 +279,8 @@ export default function Chat() {
             </AnimatePresence>
 
             {/* Chat messages area */}
-            <div className="flex-1 flex flex-col justify-end space-y-3 mb-3 min-h-[200px]">
-              {mockMessages.map((msg, i) => (
+            <div className="flex-1 flex flex-col justify-end space-y-3 mb-3 min-h-[200px] overflow-y-auto max-h-[50vh]">
+              {messages.map((msg, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.15 }}
                   className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}>
                   <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 flex items-center justify-center text-sm font-bold text-foreground shrink-0">

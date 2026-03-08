@@ -1,15 +1,19 @@
-import { Diamond, Coins, Globe } from "lucide-react";
+import { Diamond, Coins, Globe, LogIn, LogOut } from "lucide-react";
 import { useGameStore } from "@/store/useGameStore";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useState } from "react";
 import { LANGUAGES, useLanguageStore } from "@/store/useLanguageStore";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function TopBar({ title = "WINLINE" }: { title?: string }) {
   const { points, xp } = useGameStore();
   const { isRTL } = useTranslation();
   const [showLangPicker, setShowLangPicker] = useState(false);
   const { language, setLanguage } = useLanguageStore();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -25,6 +29,15 @@ export function TopBar({ title = "WINLINE" }: { title?: string }) {
           <button onClick={() => setShowLangPicker(!showLangPicker)} className="text-muted-foreground hover:text-foreground">
             <Globe className="w-4 h-4" />
           </button>
+          {user ? (
+            <button onClick={() => signOut()} className="text-muted-foreground hover:text-destructive">
+              <LogOut className="w-4 h-4" />
+            </button>
+          ) : (
+            <button onClick={() => navigate('/auth')} className="text-muted-foreground hover:text-primary">
+              <LogIn className="w-4 h-4" />
+            </button>
+          )}
         </div>
         
         <div className={cn("flex items-center gap-2 bg-muted/50 rounded-full px-3 py-1.5", isRTL && "flex-row-reverse")}>

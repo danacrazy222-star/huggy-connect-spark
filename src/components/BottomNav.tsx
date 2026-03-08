@@ -20,6 +20,7 @@ export function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
   const { t, isRTL } = useTranslation();
+  const unreadCount = useChatStore((s) => s.unreadCount);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">

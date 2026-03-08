@@ -112,9 +112,31 @@ export default function Chat() {
   const level = useGameStore((s) => s.level);
   const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
+  const { notify, clearUnread } = useChatNotification();
 
   const currentRoom = rooms[activeRoom];
   const canAccess = level >= currentRoom.level;
+
+  // Clear unread when entering chat
+  useEffect(() => {
+    clearUnread();
+  }, [clearUnread]);
+
+  // Simulate incoming messages with notification sound
+  useEffect(() => {
+    if (!canAccess) return;
+    const fakeMessages = [
+      { user: "Sara", avatar: "S", message: "مرحبا! 👋", crown: false },
+      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮", crown: true },
+      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false },
+    ];
+    const interval = setInterval(() => {
+      const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];
+      setMessages((prev) => [...prev, msg]);
+      notify();
+    }, 15000 + Math.random() * 10000);
+    return () => clearInterval(interval);
+  }, [canAccess, notify]);
 
   // Waiting room countdown
   useEffect(() => {

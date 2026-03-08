@@ -105,6 +105,28 @@ export type TranslationKeys = {
   // Language
   language: string;
   selectLanguage: string;
+  // Draw
+  drawProgress: string;
+  drawActive: string;
+  drawComplete: string;
+  towardsDraw: string;
+  participants: string;
+  totalEntries: string;
+  prize: string;
+  howToEnter: string;
+  buyBook: string;
+  autoEntered: string;
+  moreBooks: string;
+  winnerSelected: string;
+  recentEntries: string;
+  pastWinners: string;
+  enterDraw: string;
+  drawWinner: string;
+  wonPrize: string;
+  congratulations: string;
+  newDraw: string;
+  drawDescription: string;
+  draw: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

@@ -591,7 +591,7 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "NOVO SORTEIO", drawDescription: "Compre livros para o sorteio de $500!", draw: "Sorteio",
     login: "Entrar", signup: "Cadastrar", loginSubtitle: "Bem-vindo ao WINLINE", signupSubtitle: "Crie sua conta", displayName: "Nome de exibição", email: "Email", password: "Senha", passwordMinLength: "A senha deve ter pelo menos 6 caracteres", welcomeBack: "Bem-vindo de volta!", accountCreated: "Conta criada com sucesso!", logout: "Sair",
     scratchCard: "Raspadinha", scratchCardDesc: "Raspe para revelar seu prêmio!", scratchToReveal: "Raspe o cartão", scratchArea: "Raspe aqui!", youRevealed: "Você revelou", claimReward: "RESGATAR", tryAnotherCard: "OUTRO CARTÃO", noReward: "Mais sorte na próxima!", scratchCardCost: "1 Ingresso de jogo",
-    profile: "Perfil", loginToViewProfile: "Entre para ver seu perfil", inventory: "Inventário",
+    profile: "Perfil", loginToViewProfile: "Entre para ver seu perfil", inventory: "Inventário", settings: "Configurações", clearData: "Limpar dados", photoUpdated: "Foto atualizada!", nameUpdated: "Nome atualizado!", dataCleared: "Dados limpos!"
   },
   ru: {
     home: "Главная", shop: "Магазин", games: "Игры", chat: "Чат", crown: "Корона", cards: "Карты",

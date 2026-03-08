@@ -127,6 +127,18 @@ export type TranslationKeys = {
   newDraw: string;
   drawDescription: string;
   draw: string;
+  // Auth
+  login: string;
+  signup: string;
+  loginSubtitle: string;
+  signupSubtitle: string;
+  displayName: string;
+  email: string;
+  password: string;
+  passwordMinLength: string;
+  welcomeBack: string;
+  accountCreated: string;
+  logout: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

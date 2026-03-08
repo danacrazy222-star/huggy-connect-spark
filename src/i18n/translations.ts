@@ -532,6 +532,7 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "NUOVA ESTRAZIONE", drawDescription: "Acquista libri per l'estrazione da $500!", draw: "Estrazione",
     login: "Accedi", signup: "Registrati", loginSubtitle: "Bentornato su WINLINE", signupSubtitle: "Crea il tuo account", displayName: "Nome visualizzato", email: "Email", password: "Password", passwordMinLength: "La password deve avere almeno 6 caratteri", welcomeBack: "Bentornato!", accountCreated: "Account creato con successo!", logout: "Esci",
     scratchCard: "Gratta e Vinci", scratchCardDesc: "Gratta per rivelare il premio!", scratchToReveal: "Gratta la carta", scratchArea: "Gratta qui!", youRevealed: "Hai rivelato", claimReward: "RISCUOTI", tryAnotherCard: "ALTRA CARTA", noReward: "Più fortuna la prossima volta!", scratchCardCost: "1 Biglietto gioco",
+    profile: "Profilo", loginToViewProfile: "Accedi per vedere il tuo profilo", inventory: "Inventario",
   },
   pt: {
     home: "Início", shop: "Loja", games: "Jogos", chat: "Chat", crown: "Coroa", cards: "Cartas",

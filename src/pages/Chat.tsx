@@ -99,9 +99,12 @@ function PickWinnerGame({ onEnd }: { onEnd: (won: boolean) => void }) {
   );
 }
 
+type ChatMessage = { user: string; avatar: string; message: string; crown: boolean };
+
 export default function Chat() {
   const [activeRoom, setActiveRoom] = useState(0);
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<ChatMessage[]>(mockMessages);
   const [challengeState, setChallengeState] = useState<ChallengeState>("idle");
   const [countdown, setCountdown] = useState(60);
   const [opponent, setOpponent] = useState<string | null>(null);

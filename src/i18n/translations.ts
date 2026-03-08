@@ -275,6 +275,13 @@ export const translations: Record<Language, TranslationKeys> = {
     noTarotTickets: "Aucun ticket tarot disponible.",
     spinOrPurchase: "Tournez la roue ou achetez un livre !",
     card: "Carte", language: "Langue", selectLanguage: "Choisir la langue",
+    drawProgress: "Progression", drawActive: "Actif", drawComplete: "Terminé", towardsDraw: "vers le tirage",
+    participants: "Participants", totalEntries: "Entrées totales", prize: "Prix", howToEnter: "Comment participer",
+    buyBook: "Achetez un livre", autoEntered: "Vous êtes automatiquement inscrit",
+    moreBooks: "Plus d'achats = plus de chances", winnerSelected: "Gagnant sélectionné à 100%",
+    recentEntries: "Entrées récentes", pastWinners: "Anciens gagnants", enterDraw: "PARTICIPER",
+    drawWinner: "Gagnant", wonPrize: "A gagné le prix", congratulations: "Félicitations",
+    newDraw: "NOUVEAU TIRAGE", drawDescription: "Achetez des livres pour le tirage de $500!", draw: "Tirage",
   },
   es: {
     home: "Inicio", shop: "Tienda", games: "Juegos", chat: "Chat", crown: "Corona", cards: "Cartas",

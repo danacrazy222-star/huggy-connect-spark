@@ -375,7 +375,7 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "NUEVO SORTEO", drawDescription: "¡Compra libros para el sorteo de $500!", draw: "Sorteo",
     login: "Iniciar sesión", signup: "Registrarse", loginSubtitle: "Bienvenido a WINLINE", signupSubtitle: "Crea tu cuenta", displayName: "Nombre", email: "Correo", password: "Contraseña", passwordMinLength: "La contraseña debe tener al menos 6 caracteres", welcomeBack: "¡Bienvenido de vuelta!", accountCreated: "¡Cuenta creada!", logout: "Cerrar sesión",
     scratchCard: "Rasca y Gana", scratchCardDesc: "¡Rasca para revelar tu premio!", scratchToReveal: "Rasca la tarjeta", scratchArea: "¡Rasca aquí!", youRevealed: "Revelaste", claimReward: "RECLAMAR", tryAnotherCard: "OTRA TARJETA", noReward: "¡Mejor suerte la próxima!", scratchCardCost: "1 Boleto de juego",
-    profile: "Perfil", loginToViewProfile: "Inicia sesión para ver tu perfil", inventory: "Inventario",
+    profile: "Perfil", loginToViewProfile: "Inicia sesión para ver tu perfil", inventory: "Inventario", settings: "Ajustes", clearData: "Borrar datos", photoUpdated: "¡Foto actualizada!", nameUpdated: "¡Nombre actualizado!", dataCleared: "¡Datos borrados!"
   },
   tr: {
     home: "Ana Sayfa", shop: "Mağaza", games: "Oyunlar", chat: "Sohbet", crown: "Taç", cards: "Kartlar",

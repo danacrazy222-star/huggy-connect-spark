@@ -9,6 +9,7 @@ import Shop from "./pages/Shop";
 import Chat from "./pages/Chat";
 import VIP from "./pages/VIP";
 import Tarot from "./pages/Tarot";
+import Games from "./pages/Games";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/chat" element={<Chat />} />
             <Route path="/vip" element={<VIP />} />
             <Route path="/tarot" element={<Tarot />} />
+            <Route path="/games" element={<Games />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <BottomNav />

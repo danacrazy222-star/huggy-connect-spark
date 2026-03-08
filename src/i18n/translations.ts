@@ -2,6 +2,7 @@ import type { Language } from '@/store/useLanguageStore';
 
 export type TranslationKeys = {
   // Navigation
+  profile: string;
   home: string;
   shop: string;
   games: string;

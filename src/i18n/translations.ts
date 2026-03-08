@@ -1,6 +1,6 @@
 import type { Language } from '@/store/useLanguageStore';
 
-type TranslationKeys = {
+export type TranslationKeys = {
   // Navigation
   home: string;
   shop: string;

@@ -127,6 +127,18 @@ export type TranslationKeys = {
   newDraw: string;
   drawDescription: string;
   draw: string;
+  // Auth
+  login: string;
+  signup: string;
+  loginSubtitle: string;
+  signupSubtitle: string;
+  displayName: string;
+  email: string;
+  password: string;
+  passwordMinLength: string;
+  welcomeBack: string;
+  accountCreated: string;
+  logout: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -180,6 +192,7 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "Recent Entries", pastWinners: "Past Winners", enterDraw: "ENTER THE DRAW",
     drawWinner: "Draw Winner", wonPrize: "Won the prize", congratulations: "Congratulations",
     newDraw: "START NEW DRAW", drawDescription: "Buy books to enter the $500 gift card draw!", draw: "Draw",
+    login: "Login", signup: "Sign Up", loginSubtitle: "Welcome back to WINLINE", signupSubtitle: "Create your account", displayName: "Display Name", email: "Email", password: "Password", passwordMinLength: "Password must be at least 6 characters", welcomeBack: "Welcome back!", accountCreated: "Account created successfully!", logout: "Logout",
   },
   ar: {
     home: "الرئيسية", shop: "المتجر", games: "الألعاب", chat: "الدردشة", crown: "التاج", cards: "البطاقات",
@@ -231,6 +244,7 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "الإدخالات الأخيرة", pastWinners: "الفائزون السابقون", enterDraw: "ادخل السحب",
     drawWinner: "فائز السحب", wonPrize: "فاز بالجائزة", congratulations: "تهانينا",
     newDraw: "ابدأ سحباً جديداً", drawDescription: "اشترِ كتباً للدخول في سحب بطاقة هدية $500!", draw: "السحب",
+    login: "تسجيل الدخول", signup: "إنشاء حساب", loginSubtitle: "مرحباً بعودتك إلى WINLINE", signupSubtitle: "أنشئ حسابك", displayName: "اسم العرض", email: "البريد الإلكتروني", password: "كلمة المرور", passwordMinLength: "كلمة المرور يجب أن تكون 6 أحرف على الأقل", welcomeBack: "مرحباً بعودتك!", accountCreated: "تم إنشاء الحساب بنجاح!", logout: "تسجيل الخروج",
   },
   fr: {
     home: "Accueil", shop: "Boutique", games: "Jeux", chat: "Discussion", crown: "Couronne", cards: "Cartes",
@@ -282,6 +296,7 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "Entrées récentes", pastWinners: "Anciens gagnants", enterDraw: "PARTICIPER",
     drawWinner: "Gagnant", wonPrize: "A gagné le prix", congratulations: "Félicitations",
     newDraw: "NOUVEAU TIRAGE", drawDescription: "Achetez des livres pour le tirage de $500!", draw: "Tirage",
+    login: "Connexion", signup: "Inscription", loginSubtitle: "Bienvenue sur WINLINE", signupSubtitle: "Créez votre compte", displayName: "Nom d'affichage", email: "Email", password: "Mot de passe", passwordMinLength: "Le mot de passe doit contenir au moins 6 caractères", welcomeBack: "Bon retour !", accountCreated: "Compte créé avec succès !", logout: "Déconnexion",
   },
   es: {
     home: "Inicio", shop: "Tienda", games: "Juegos", chat: "Chat", crown: "Corona", cards: "Cartas",
@@ -333,6 +348,7 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "Entradas recientes", pastWinners: "Ganadores anteriores", enterDraw: "PARTICIPAR",
     drawWinner: "Ganador", wonPrize: "Ganó el premio", congratulations: "Felicidades",
     newDraw: "NUEVO SORTEO", drawDescription: "¡Compra libros para el sorteo de $500!", draw: "Sorteo",
+    login: "Iniciar sesión", signup: "Registrarse", loginSubtitle: "Bienvenido a WINLINE", signupSubtitle: "Crea tu cuenta", displayName: "Nombre", email: "Correo", password: "Contraseña", passwordMinLength: "La contraseña debe tener al menos 6 caracteres", welcomeBack: "¡Bienvenido de vuelta!", accountCreated: "¡Cuenta creada!", logout: "Cerrar sesión",
   },
   tr: {
     home: "Ana Sayfa", shop: "Mağaza", games: "Oyunlar", chat: "Sohbet", crown: "Taç", cards: "Kartlar",
@@ -384,6 +400,7 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "Son Girişler", pastWinners: "Geçmiş Kazananlar", enterDraw: "ÇEKİLİŞE KATIL",
     drawWinner: "Kazanan", wonPrize: "Ödülü kazandı", congratulations: "Tebrikler",
     newDraw: "YENİ ÇEKİLİŞ", drawDescription: "$500 hediye kartı çekilişi için kitap satın alın!", draw: "Çekiliş",
+    login: "Giriş Yap", signup: "Kayıt Ol", loginSubtitle: "WINLINE'a hoş geldiniz", signupSubtitle: "Hesabınızı oluşturun", displayName: "Görünen Ad", email: "E-posta", password: "Şifre", passwordMinLength: "Şifre en az 6 karakter olmalıdır", welcomeBack: "Tekrar hoş geldiniz!", accountCreated: "Hesap başarıyla oluşturuldu!", logout: "Çıkış",
   },
   de: {
     home: "Startseite", shop: "Shop", games: "Spiele", chat: "Chat", crown: "Krone", cards: "Karten",
@@ -435,6 +452,7 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "Letzte Einträge", pastWinners: "Frühere Gewinner", enterDraw: "TEILNEHMEN",
     drawWinner: "Gewinner", wonPrize: "Hat gewonnen", congratulations: "Herzlichen Glückwunsch",
     newDraw: "NEUE ZIEHUNG", drawDescription: "Kaufen Sie Bücher für die $500 Geschenkkarte!", draw: "Ziehung",
+    login: "Anmelden", signup: "Registrieren", loginSubtitle: "Willkommen bei WINLINE", signupSubtitle: "Erstellen Sie Ihr Konto", displayName: "Anzeigename", email: "E-Mail", password: "Passwort", passwordMinLength: "Passwort muss mindestens 6 Zeichen haben", welcomeBack: "Willkommen zurück!", accountCreated: "Konto erfolgreich erstellt!", logout: "Abmelden",
   },
   it: {
     home: "Home", shop: "Negozio", games: "Giochi", chat: "Chat", crown: "Corona", cards: "Carte",
@@ -486,6 +504,7 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "Ingressi recenti", pastWinners: "Vincitori passati", enterDraw: "PARTECIPA",
     drawWinner: "Vincitore", wonPrize: "Ha vinto il premio", congratulations: "Congratulazioni",
     newDraw: "NUOVA ESTRAZIONE", drawDescription: "Acquista libri per l'estrazione da $500!", draw: "Estrazione",
+    login: "Accedi", signup: "Registrati", loginSubtitle: "Bentornato su WINLINE", signupSubtitle: "Crea il tuo account", displayName: "Nome visualizzato", email: "Email", password: "Password", passwordMinLength: "La password deve avere almeno 6 caratteri", welcomeBack: "Bentornato!", accountCreated: "Account creato con successo!", logout: "Esci",
   },
   pt: {
     home: "Início", shop: "Loja", games: "Jogos", chat: "Chat", crown: "Coroa", cards: "Cartas",
@@ -537,6 +556,7 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "Entradas recentes", pastWinners: "Vencedores anteriores", enterDraw: "PARTICIPAR",
     drawWinner: "Vencedor", wonPrize: "Ganhou o prêmio", congratulations: "Parabéns",
     newDraw: "NOVO SORTEIO", drawDescription: "Compre livros para o sorteio de $500!", draw: "Sorteio",
+    login: "Entrar", signup: "Cadastrar", loginSubtitle: "Bem-vindo ao WINLINE", signupSubtitle: "Crie sua conta", displayName: "Nome de exibição", email: "Email", password: "Senha", passwordMinLength: "A senha deve ter pelo menos 6 caracteres", welcomeBack: "Bem-vindo de volta!", accountCreated: "Conta criada com sucesso!", logout: "Sair",
   },
   ru: {
     home: "Главная", shop: "Магазин", games: "Игры", chat: "Чат", crown: "Корона", cards: "Карты",
@@ -588,6 +608,7 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "Последние записи", pastWinners: "Прошлые победители", enterDraw: "УЧАСТВОВАТЬ",
     drawWinner: "Победитель", wonPrize: "Выиграл приз", congratulations: "Поздравляем",
     newDraw: "НОВЫЙ РОЗЫГРЫШ", drawDescription: "Покупайте книги для розыгрыша $500!", draw: "Розыгрыш",
+    login: "Войти", signup: "Регистрация", loginSubtitle: "Добро пожаловать в WINLINE", signupSubtitle: "Создайте аккаунт", displayName: "Имя", email: "Эл. почта", password: "Пароль", passwordMinLength: "Пароль должен быть не менее 6 символов", welcomeBack: "С возвращением!", accountCreated: "Аккаунт создан!", logout: "Выйти",
   },
   hi: {
     home: "होम", shop: "दुकान", games: "खेल", chat: "चैट", crown: "क्राउन", cards: "कार्ड्स",
@@ -639,5 +660,6 @@ export const translations: Record<Language, TranslationKeys> = {
     recentEntries: "हाल की प्रविष्टियाँ", pastWinners: "पिछले विजेता", enterDraw: "ड्रॉ में भाग लें",
     drawWinner: "विजेता", wonPrize: "पुरस्कार जीता", congratulations: "बधाई",
     newDraw: "नया ड्रॉ", drawDescription: "$500 गिफ्ट कार्ड ड्रॉ के लिए पुस्तकें खरीदें!", draw: "ड्रॉ",
+    login: "लॉगिन", signup: "साइन अप", loginSubtitle: "WINLINE में आपका स्वागत है", signupSubtitle: "अपना खाता बनाएं", displayName: "प्रदर्शन नाम", email: "ईमेल", password: "पासवर्ड", passwordMinLength: "पासवर्ड कम से कम 6 अक्षर का होना चाहिए", welcomeBack: "वापस स्वागत है!", accountCreated: "खाता सफलतापूर्वक बनाया गया!", logout: "लॉगआउट",
   },
 };

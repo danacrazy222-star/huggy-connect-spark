@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Smile, Lock, Crown, Gamepad2, Timer, Trophy, X, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGameStore } from "@/store/useGameStore";
+import { useChatNotification } from "@/hooks/useChatNotification";
 
 import roomBronze from "@/assets/room-bronze.jpg";
 import roomSilver from "@/assets/room-silver.jpg";

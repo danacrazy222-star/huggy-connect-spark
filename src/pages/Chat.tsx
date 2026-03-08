@@ -279,7 +279,8 @@ export default function Chat() {
             </AnimatePresence>
 
             {/* Chat messages area */}
-            <div className="flex-1 flex flex-col justify-end space-y-3 mb-3 min-h-[200px] overflow-y-auto max-h-[50vh]">
+            <div className="flex-1" />
+            <div className="space-y-2 mb-3 overflow-y-auto max-h-[35vh]">
               {messages.map((msg, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.15 }}
                   className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}>

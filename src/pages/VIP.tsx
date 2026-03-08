@@ -9,12 +9,12 @@ export default function VIP() {
   const { xp, level } = useGameStore();
   const { t, isRTL } = useTranslation();
 
-  const levels = [
+  const levels: { name: string; xpNeeded: number; stars?: number; icon?: "diamond" | "flame" }[] = [
     { name: `${t("level")} 1`, xpNeeded: 0, stars: 1 },
     { name: `${t("level")} 5`, xpNeeded: 1500, stars: 2 },
     { name: `${t("level")} 10`, xpNeeded: 5500, stars: 3 },
-    { name: t("elite"), xpNeeded: 12000, icon: "diamond" as const },
-    { name: t("legend"), xpNeeded: 19000, icon: "flame" as const },
+    { name: t("elite"), xpNeeded: 12000, icon: "diamond" },
+    { name: t("legend"), xpNeeded: 19000, icon: "flame" },
   ];
 
   const chests = [

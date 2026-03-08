@@ -424,6 +424,7 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "YENİ ÇEKİLİŞ", drawDescription: "$500 hediye kartı çekilişi için kitap satın alın!", draw: "Çekiliş",
     login: "Giriş Yap", signup: "Kayıt Ol", loginSubtitle: "WINLINE'a hoş geldiniz", signupSubtitle: "Hesabınızı oluşturun", displayName: "Görünen Ad", email: "E-posta", password: "Şifre", passwordMinLength: "Şifre en az 6 karakter olmalıdır", welcomeBack: "Tekrar hoş geldiniz!", accountCreated: "Hesap başarıyla oluşturuldu!", logout: "Çıkış",
     scratchCard: "Kazı Kazan", scratchCardDesc: "Ödülünüzü kazıyarak öğrenin!", scratchToReveal: "Kartı kazıyın", scratchArea: "Burayı kazıyın!", youRevealed: "Ortaya çıkardınız", claimReward: "ÖDÜLÜ AL", tryAnotherCard: "BAŞKA KART", noReward: "Bir dahaki sefere!", scratchCardCost: "1 Oyun Bileti",
+    profile: "Profil", loginToViewProfile: "Profilinizi görmek için giriş yapın", inventory: "Envanter",
   },
   de: {
     home: "Startseite", shop: "Shop", games: "Spiele", chat: "Chat", crown: "Krone", cards: "Karten",

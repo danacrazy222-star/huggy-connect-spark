@@ -694,5 +694,6 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "नया ड्रॉ", drawDescription: "$500 गिफ्ट कार्ड ड्रॉ के लिए पुस्तकें खरीदें!", draw: "ड्रॉ",
     login: "लॉगिन", signup: "साइन अप", loginSubtitle: "WINLINE में आपका स्वागत है", signupSubtitle: "अपना खाता बनाएं", displayName: "प्रदर्शन नाम", email: "ईमेल", password: "पासवर्ड", passwordMinLength: "पासवर्ड कम से कम 6 अक्षर का होना चाहिए", welcomeBack: "वापस स्वागत है!", accountCreated: "खाता सफलतापूर्वक बनाया गया!", logout: "लॉगआउट",
     scratchCard: "स्क्रैच कार्ड", scratchCardDesc: "इनाम जानने के लिए खरोंचें!", scratchToReveal: "कार्ड खरोंचें", scratchArea: "यहाँ खरोंचें!", youRevealed: "आपने पाया", claimReward: "इनाम लें", tryAnotherCard: "दूसरा कार्ड", noReward: "अगली बार किस्मत आज़माएं!", scratchCardCost: "1 गेम टिकट",
+    profile: "प्रोफ़ाइल", loginToViewProfile: "अपना प्रोफ़ाइल देखने के लिए लॉगिन करें", inventory: "सामग्री",
   },
 };

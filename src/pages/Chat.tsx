@@ -148,6 +148,13 @@ export default function Chat() {
     return () => clearTimeout(t);
   }, [challengeState]);
 
+  const sendMessage = useCallback(() => {
+    const trimmed = message.trim();
+    if (!trimmed) return;
+    setMessages((prev) => [...prev, { user: "You", avatar: "Y", message: trimmed, crown: false }]);
+    setMessage("");
+  }, [message]);
+
   const startChallenge = useCallback(() => {
     setChallengeState("waiting");
     setCountdown(60);

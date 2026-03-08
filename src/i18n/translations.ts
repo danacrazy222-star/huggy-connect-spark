@@ -139,6 +139,16 @@ export type TranslationKeys = {
   welcomeBack: string;
   accountCreated: string;
   logout: string;
+  // Scratch Card
+  scratchCard: string;
+  scratchCardDesc: string;
+  scratchToReveal: string;
+  scratchArea: string;
+  youRevealed: string;
+  claimReward: string;
+  tryAnotherCard: string;
+  noReward: string;
+  scratchCardCost: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

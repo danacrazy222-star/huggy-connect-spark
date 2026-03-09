@@ -35,6 +35,13 @@ export function ShopBookCard({ pkg, index, image, isSelected, onSelect, isRTL }:
         </div>
       )}
 
+      {/* Value Tag - above number badge */}
+      {pkg.valueTag && (
+        <div className="bg-gradient-to-r from-gold-dark via-primary to-gold-dark rounded-lg px-2 py-0.5 mb-1 mt-1">
+          <span className="text-[9px] font-bold text-primary-foreground">{pkg.valueTag}</span>
+        </div>
+      )}
+
       {/* Number badge */}
       <div className="flex justify-center mb-1 mt-1">
         <div className={cn("w-7 h-7 rounded-full border-2 flex items-center justify-center", pkg.borderColor)}>
@@ -45,7 +52,7 @@ export function ShopBookCard({ pkg, index, image, isSelected, onSelect, isRTL }:
       {/* Name */}
       <h4 className="font-display text-xs font-bold text-foreground mb-2">{pkg.name}</h4>
 
-      {/* Book Image - Large and clear */}
+      {/* Book Image */}
       <div className="w-20 h-28 mx-auto mb-2 flex items-center justify-center">
         <img
           src={image}
@@ -64,9 +71,9 @@ export function ShopBookCard({ pkg, index, image, isSelected, onSelect, isRTL }:
         ))}
       </div>
 
-      {/* Entry price */}
+      {/* Entry price - consistent style */}
       <div className="bg-primary/20 border border-primary/30 rounded-lg py-1.5">
-        <span className="text-[10px] font-bold text-primary">{pkg.entry}</span>
+        <span className="text-xs font-display font-bold text-primary">{pkg.entry}</span>
       </div>
     </motion.button>
   );

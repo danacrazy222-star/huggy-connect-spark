@@ -81,7 +81,8 @@ export default function Shop() {
         { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: t("drawEntry"), type: "drawEntry", amount: 1 },
       ],
       tag: t("mostPopular"),
-      entry: `300% ${t("value")}`,
+      entry: `$3 ${t("entry")}`,
+      valueTag: `300% ${t("value")}`,
     },
   ];
 

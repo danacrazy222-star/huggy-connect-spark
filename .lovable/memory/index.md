@@ -21,8 +21,8 @@
 ## Economy
 - Spin: 1x per 24h, rewards: XP/Points/Tickets/Entries
 - Books: Basic($1)=1500XP+entry, Plus($2)=3500XP+ticket+entry, Premium($3)=6000XP+tickets+entry
-- Games: 1 ticket entry, bet with points only, 1 game per 24h
-- Game XP by room: R1(Lv1-5)=600W/250P, R2(Lv6-10)=1200W/400P, R3(Lv11-15)=2000W/700P, R4(Lv16-20)=3000W/1000P
-- Loss gives 0 XP
+- Snake & Ladder: 1 ticket entry, Win=120XP, Lose=20XP, bet with points
+- Scratch Card rewards: 20XP, 50XP, 100XP, Game Ticket, Points, Empty
+- Draw: hidden $ tracking, users see % only, prize×2 = required sales
 
-## Future: 10 languages, RTL Arabic, Snake&Ladder multiplayer, gift card draw ($1000 pool → $500 prize)
+## Future: 10 languages, RTL Arabic, Snake&Ladder multiplayer

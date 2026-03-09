@@ -150,11 +150,7 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
   }, []);
 
   const getGameXPReward = useCallback(() => {
-    const { level } = useGameStore.getState();
-    if (level >= 16) return { win: 3000, predict: 1000 };
-    if (level >= 11) return { win: 2000, predict: 700 };
-    if (level >= 6) return { win: 1200, predict: 400 };
-    return { win: 600, predict: 250 };
+    return { win: 120, lose: 20 };
   }, []);
 
   useEffect(() => {
@@ -164,7 +160,7 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
       setPhase("finished");
       const rewards = getGameXPReward();
       if (!w.isBot) { addXP(rewards.win); addPoints(betAmount * 2); }
-      // Loss gives 0 XP
+      else { addXP(rewards.lose); } // Loser gets 20 XP
     }
   }, [players, phase, addXP, addPoints, betAmount, getGameXPReward]);
 
@@ -362,26 +358,22 @@ interface ScratchReward {
 }
 
 const SCRATCH_REWARDS: ScratchReward[] = [
-  { emoji: "💰", label: "+100 Points", type: "points", amount: 100 },
-  { emoji: "💎", label: "+50 Points", type: "points", amount: 50 },
+  { emoji: "⚡", label: "+100 XP", type: "xp", amount: 100 },
+  { emoji: "⚡", label: "+50 XP", type: "xp", amount: 50 },
   { emoji: "⚡", label: "+20 XP", type: "xp", amount: 20 },
-  { emoji: "⚡", label: "+10 XP", type: "xp", amount: 10 },
   { emoji: "🎫", label: "+1 Game Ticket", type: "ticket", amount: 1 },
-  { emoji: "🎟️", label: "+1 Draw Entry", type: "entry", amount: 1 },
-  { emoji: "❌", label: "", type: "none", amount: 0 },
-  { emoji: "❌", label: "", type: "none", amount: 0 },
+  { emoji: "💰", label: "+50 Points", type: "points", amount: 50 },
   { emoji: "❌", label: "", type: "none", amount: 0 },
 ];
 
 function getRandomReward(): ScratchReward {
   const rand = Math.random();
-  if (rand < 0.08) return SCRATCH_REWARDS[0]; // 100 pts (8%)
-  if (rand < 0.20) return SCRATCH_REWARDS[1]; // 50 pts (12%)
-  if (rand < 0.30) return SCRATCH_REWARDS[2]; // 20 XP (10%)
-  if (rand < 0.45) return SCRATCH_REWARDS[3]; // 10 XP (15%)
-  if (rand < 0.55) return SCRATCH_REWARDS[4]; // ticket (10%)
-  if (rand < 0.62) return SCRATCH_REWARDS[5]; // entry (7%)
-  return SCRATCH_REWARDS[6]; // none (38%)
+  if (rand < 0.05) return SCRATCH_REWARDS[0]; // 100 XP (5%)
+  if (rand < 0.15) return SCRATCH_REWARDS[1]; // 50 XP (10%)
+  if (rand < 0.30) return SCRATCH_REWARDS[2]; // 20 XP (15%)
+  if (rand < 0.42) return SCRATCH_REWARDS[3]; // ticket (12%)
+  if (rand < 0.58) return SCRATCH_REWARDS[4]; // 50 points (16%)
+  return SCRATCH_REWARDS[5]; // none (42%)
 }
 
 function ScratchCard({ onBack }: { onBack: () => void }) {

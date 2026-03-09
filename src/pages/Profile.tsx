@@ -83,7 +83,7 @@ export default function Profile() {
         .from("avatars")
         .getPublicUrl(filePath);
 
-      const avatarUrl = `${publicUrl}?t=${Date.now()}`;
+      const avatarUrl = `${publicUrl}?v=${Date.now()}`;
 
       const { error: updateError } = await supabase
         .from("profiles")

@@ -46,7 +46,7 @@ export default function Draw() {
                 <p className="text-xl font-bold text-foreground">{currentWinner}</p>
               </div>
               <p className="text-sm text-foreground mb-1">{t("wonPrize")}</p>
-              <p className="text-2xl font-display font-bold text-gold-gradient">$500 {t("giftCard")}</p>
+              <p className="text-2xl font-display font-bold text-gold-gradient">${prizeAmount} {t("giftCard")}</p>
               <div className="flex items-center justify-center gap-2 mt-3 text-xs text-muted-foreground">
                 <PartyPopper className="w-4 h-4 text-primary" />
                 <span>{t("congratulations")}!</span>

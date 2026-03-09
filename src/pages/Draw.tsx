@@ -83,7 +83,7 @@ export default function Draw() {
             <motion.div key={brand.name} whileHover={{ scale: 1.05 }}
               className={`bg-card/80 border ${brand.color} rounded-xl px-4 py-3 text-center min-w-[90px]`}>
               <p className="text-xs font-bold text-foreground">{brand.name}</p>
-              <p className="text-lg font-bold text-primary">$500</p>
+              <p className="text-lg font-bold text-primary">${prizeAmount}</p>
             </motion.div>
           ))}
         </div>

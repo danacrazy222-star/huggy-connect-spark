@@ -94,38 +94,6 @@ export default function Chat() {
     return () => clearInterval(interval);
   }, [canAccess, activeRoom, addMessage, addUnread]);
 
-  // Waiting room countdown
-  useEffect(() => {
-    if (challengeState !== "waiting") return;
-    const timer = setInterval(() => {
-      setCountdown((c) => {
-        if (c <= 1) {
-          clearInterval(timer);
-          setOpponent("Bot 🤖");
-          setChallengeState("playing");
-          return 60;
-        }
-        // Random chance opponent joins
-        if (c === 50 || c === 40 || c === 30) {
-          if (Math.random() > 0.6) {
-            clearInterval(timer);
-            setOpponent("Player_" + Math.floor(Math.random() * 999));
-            setChallengeState("playing");
-            return 60;
-          }
-        }
-        return c - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [challengeState]);
-
-  // Start playing after 3s countdown
-  useEffect(() => {
-    if (challengeState !== "playing") return;
-    const t = setTimeout(() => setChallengeState("pickWinner"), 1500);
-    return () => clearTimeout(t);
-  }, [challengeState]);
 
   const sendMessage = useCallback(() => {
     const trimmed = message.trim();

@@ -164,68 +164,6 @@ export default function Chat() {
           </div>
         ) : (
           <div className="flex-1 flex flex-col px-4">
-            {/* Challenge / Game area (top half when active) */}
-            <AnimatePresence>
-              {challengeState !== "idle" && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="mb-3 rounded-2xl border border-primary/30 bg-black/60 backdrop-blur-xl overflow-hidden"
-                >
-                  <div className="flex items-center justify-between px-3 py-2 border-b border-white/10">
-                    <div className="flex items-center gap-2 text-xs text-primary font-medium">
-                      <Gamepad2 className="w-4 h-4" />
-                      <span>تحدي 1v1</span>
-                    </div>
-                    <button onClick={() => { setChallengeState("idle"); setOpponent(null); }}>
-                      <X className="w-4 h-4 text-muted-foreground" />
-                    </button>
-                  </div>
-
-                  {challengeState === "waiting" && (
-                    <div className="p-6 flex flex-col items-center gap-4">
-                      <div className="relative">
-                        <div className="w-16 h-16 rounded-full border-2 border-primary/50 flex items-center justify-center">
-                          <Users className="w-8 h-8 text-primary animate-pulse" />
-                        </div>
-                        <div className="absolute -bottom-1 -right-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-full w-6 h-6 flex items-center justify-center">
-                          {countdown}
-                        </div>
-                      </div>
-                      <p className="text-sm text-foreground/80">بانتظار لاعب...</p>
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Timer className="w-3 h-3" />
-                        <span>بوت بيدخل بعد {countdown} ثانية</span>
-                      </div>
-                      <div className="w-full bg-white/10 rounded-full h-1.5">
-                        <motion.div
-                          className="h-full bg-primary rounded-full"
-                          initial={{ width: "100%" }}
-                          animate={{ width: "0%" }}
-                          transition={{ duration: 60, ease: "linear" }}
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {challengeState === "playing" && opponent && (
-                    <div className="p-4 flex flex-col items-center gap-3">
-                      <p className="text-sm text-foreground">
-                        ⚔️ ضد <span className="text-primary font-bold">{opponent}</span>
-                      </p>
-                      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                      <p className="text-xs text-muted-foreground">جاري التحضير...</p>
-                    </div>
-                  )}
-
-                  {challengeState === "pickWinner" && (
-                    <PickWinnerGame onEnd={handleGameEnd} />
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-
             {/* Chat messages area */}
             <div className="flex-1" />
             <div className="space-y-3 mb-3 overflow-y-auto max-h-[35vh]">
@@ -242,21 +180,21 @@ export default function Chat() {
               ))}
             </div>
 
-            {/* Input bar + challenge button */}
+            {/* Input bar + duel button */}
             <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
-              {/* Challenge button */}
+              {/* Daily Duel button */}
               <motion.button
                 whileTap={{ scale: 0.9 }}
-                onClick={startChallenge}
-                disabled={challengeState !== "idle"}
+                onClick={() => setShowDuel(true)}
+                disabled={showDuel}
                 className={cn(
                   "shrink-0 w-10 h-10 rounded-full flex items-center justify-center border transition-all",
-                  challengeState === "idle"
+                  !showDuel
                     ? "bg-primary/20 border-primary/40 text-primary"
                     : "bg-muted/30 border-border text-muted-foreground opacity-50"
                 )}
               >
-                <Gamepad2 className="w-5 h-5" />
+                <Swords className="w-5 h-5" />
               </motion.button>
 
               {/* Message input */}
@@ -268,6 +206,18 @@ export default function Chat() {
                 <button onClick={sendMessage} className="text-primary hover:text-primary/80 transition-colors"><Send className="w-5 h-5" /></button>
               </div>
             </div>
+
+            {/* Anime Duel Arena overlay */}
+            <AnimatePresence>
+              {showDuel && (
+                <AnimeDuelArena
+                  playerName={user?.email?.split("@")[0] || "You"}
+                  onEnd={handleDuelEnd}
+                  onClose={() => setShowDuel(false)}
+                />
+              )}
+            </AnimatePresence>
+          </div>
           </div>
         )}
       </div>

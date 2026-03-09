@@ -23,10 +23,10 @@ const rooms = [
   { name: "Diamond", level: 15, image: roomDiamond, accent: "from-amber-500/60", border: "border-amber-400/50", glow: "hsl(35 100% 55%)", shape: "flame" as const },
 ];
 
-const mockMessages = [
-  { user: "Michael", avatar: "M", message: "Wow, this room is amazing! 🤩", crown: false },
-  { user: "Luna", avatar: "L", message: "Let's go! 🤗", crown: true },
-  { user: "Alex", avatar: "A", message: "Good luck all! 🍀🔥", crown: false },
+const mockMessages: ChatMsg[] = [
+  { user: "Michael", avatar: "M", message: "Wow, this room is amazing! 🤩", crown: false, gender: "male" },
+  { user: "Luna", avatar: "L", message: "Let's go! 🤗", crown: true, gender: "female" },
+  { user: "Alex", avatar: "A", message: "Good luck all! 🍀🔥", crown: false, gender: "male" },
 ];
 
 type ChallengeState = "idle" | "waiting" | "playing" | "pickWinner" | "result";

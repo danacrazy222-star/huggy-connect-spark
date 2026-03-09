@@ -27,6 +27,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash-lite",
+        stream: false,
         messages: [
           { role: "system", content: `You are a translator. Translate the following text to ${langName}. Return ONLY the translated text, nothing else.` },
           { role: "user", content: text },
@@ -35,8 +36,29 @@ serve(async (req) => {
       }),
     });
 
-    const data = await res.json();
-    const translated = data.choices?.[0]?.message?.content?.trim() || text;
+    const rawText = await res.text();
+    
+    // Handle SSE streaming response
+    let translated = text;
+    if (rawText.startsWith("data:")) {
+      const lines = rawText.split("\n").filter(l => l.startsWith("data:") && !l.includes("[DONE]"));
+      const parts: string[] = [];
+      for (const line of lines) {
+        try {
+          const json = JSON.parse(line.slice(5).trim());
+          const content = json.choices?.[0]?.delta?.content || json.choices?.[0]?.message?.content || "";
+          if (content) parts.push(content);
+        } catch { /* skip unparseable lines */ }
+      }
+      translated = parts.join("") || text;
+    } else {
+      try {
+        const data = JSON.parse(rawText);
+        translated = data.choices?.[0]?.message?.content?.trim() || text;
+      } catch {
+        translated = text;
+      }
+    }
 
     return new Response(JSON.stringify({ translated }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

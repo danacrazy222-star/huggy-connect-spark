@@ -218,7 +218,6 @@ export default function Chat() {
               )}
             </AnimatePresence>
           </div>
-          </div>
         )}
       </div>
     </div>

@@ -98,17 +98,18 @@ export default function Draw() {
             </span>
           </div>
 
-          {/* Percentage Display */}
-          <div className="text-center">
+          {/* Sales Progress Display */}
+          <div className="text-center space-y-1">
             <motion.p
-              key={percent}
+              key={poolAmount}
               initial={{ scale: 1.3, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="text-5xl font-display font-bold text-gold-gradient"
+              className="text-4xl font-display font-bold text-gold-gradient"
             >
-              {percent}%
+              ${poolAmount}
             </motion.p>
-            <p className="text-xs text-muted-foreground mt-1">{t("towardsDraw")}</p>
+            <p className="text-sm text-muted-foreground">/ ${targetAmount}</p>
+            <p className="text-xs text-muted-foreground">{percent}% — {remaining > 0 ? `$${remaining} ${t("remaining")}` : t("drawComplete")}</p>
           </div>
 
           {/* Progress Bar */}

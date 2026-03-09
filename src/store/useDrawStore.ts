@@ -9,8 +9,9 @@ interface DrawEntry {
 }
 
 interface DrawState {
-  poolAmount: number; // internal $ amount
+  poolAmount: number;
   targetAmount: number;
+  prizeAmount: number;
   entries: DrawEntry[];
   currentWinner: string | null;
   winnerAnnouncedAt: number | null;
@@ -39,6 +40,7 @@ export const useDrawStore = create<DrawState>()(
     (set, get) => ({
       poolAmount: 680,
       targetAmount: 1000,
+      prizeAmount: 500,
       entries: DEMO_ENTRIES,
       currentWinner: null,
       winnerAnnouncedAt: null,
@@ -59,9 +61,7 @@ export const useDrawStore = create<DrawState>()(
         };
 
         if (newPool >= state.targetAmount) {
-          // Draw complete! Pick random winner
           const allEntries = [...state.entries, newEntry];
-          // Weight by amount (more $ = more entries)
           const weightedEntries: string[] = [];
           allEntries.forEach((e) => {
             for (let i = 0; i < e.amount; i++) {
@@ -78,7 +78,7 @@ export const useDrawStore = create<DrawState>()(
             winnerAnnouncedAt: Date.now(),
             isDrawActive: false,
             drawHistory: [
-              { winner, date: Date.now(), prize: "$500 Gift Card" },
+              { winner, date: Date.now(), prize: `$${state.prizeAmount} Gift Card` },
               ...state.drawHistory,
             ],
           });

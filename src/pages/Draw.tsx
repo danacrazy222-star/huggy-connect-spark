@@ -8,9 +8,10 @@ import { cn } from "@/lib/utils";
 
 export default function Draw() {
   const { t, isRTL } = useTranslation();
-  const { poolAmount, targetAmount, entries, currentWinner, winnerAnnouncedAt, drawHistory, isDrawActive, getProgressPercent, addPurchase, resetDraw } = useDrawStore();
+  const { poolAmount, targetAmount, prizeAmount, entries, currentWinner, winnerAnnouncedAt, drawHistory, isDrawActive, getProgressPercent, addPurchase, resetDraw } = useDrawStore();
   const [showWinnerPopup, setShowWinnerPopup] = useState(!!currentWinner);
   const percent = getProgressPercent();
+  const remaining = Math.max(targetAmount - poolAmount, 0);
 
   const recentEntries = [...entries].sort((a, b) => b.timestamp - a.timestamp).slice(0, 10);
   const totalParticipants = new Set(entries.map(e => e.username)).size;
@@ -45,7 +46,7 @@ export default function Draw() {
                 <p className="text-xl font-bold text-foreground">{currentWinner}</p>
               </div>
               <p className="text-sm text-foreground mb-1">{t("wonPrize")}</p>
-              <p className="text-2xl font-display font-bold text-gold-gradient">$500 {t("giftCard")}</p>
+              <p className="text-2xl font-display font-bold text-gold-gradient">${prizeAmount} {t("giftCard")}</p>
               <div className="flex items-center justify-center gap-2 mt-3 text-xs text-muted-foreground">
                 <PartyPopper className="w-4 h-4 text-primary" />
                 <span>{t("congratulations")}!</span>
@@ -82,7 +83,7 @@ export default function Draw() {
             <motion.div key={brand.name} whileHover={{ scale: 1.05 }}
               className={`bg-card/80 border ${brand.color} rounded-xl px-4 py-3 text-center min-w-[90px]`}>
               <p className="text-xs font-bold text-foreground">{brand.name}</p>
-              <p className="text-lg font-bold text-primary">$500</p>
+              <p className="text-lg font-bold text-primary">${prizeAmount}</p>
             </motion.div>
           ))}
         </div>
@@ -97,17 +98,18 @@ export default function Draw() {
             </span>
           </div>
 
-          {/* Percentage Display */}
-          <div className="text-center">
+          {/* Sales Progress Display */}
+          <div className="text-center space-y-1">
             <motion.p
-              key={percent}
+              key={poolAmount}
               initial={{ scale: 1.3, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="text-5xl font-display font-bold text-gold-gradient"
+              className="text-4xl font-display font-bold text-gold-gradient"
             >
-              {percent}%
+              ${poolAmount}
             </motion.p>
-            <p className="text-xs text-muted-foreground mt-1">{t("towardsDraw")}</p>
+            <p className="text-sm text-muted-foreground">/ ${targetAmount}</p>
+            <p className="text-xs text-muted-foreground">{percent}% — {remaining > 0 ? `$${remaining} ${t("remaining")}` : t("drawComplete")}</p>
           </div>
 
           {/* Progress Bar */}
@@ -156,7 +158,7 @@ export default function Draw() {
             </div>
             <div className="bg-muted/40 rounded-xl p-2.5 text-center">
               <Trophy className="w-4 h-4 text-gold mx-auto mb-1" />
-              <p className="text-lg font-bold text-primary">$500</p>
+              <p className="text-lg font-bold text-primary">${prizeAmount}</p>
               <p className="text-[9px] text-muted-foreground">{t("prize")}</p>
             </div>
           </div>

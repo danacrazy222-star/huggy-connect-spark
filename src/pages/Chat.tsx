@@ -175,7 +175,8 @@ export default function Chat() {
   const sendMessage = useCallback(() => {
     const trimmed = message.trim();
     if (!trimmed) return;
-    setMessages((prev) => [...prev, { user: "You", avatar: "Y", message: trimmed, crown: false }]);
+    const filtered = containsProfanity(trimmed) ? censorMessage(trimmed) : trimmed;
+    setMessages((prev) => [...prev, { user: "You", avatar: "Y", message: filtered, crown: false }]);
     setMessage("");
   }, [message]);
 

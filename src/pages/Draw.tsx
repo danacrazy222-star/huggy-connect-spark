@@ -8,9 +8,10 @@ import { cn } from "@/lib/utils";
 
 export default function Draw() {
   const { t, isRTL } = useTranslation();
-  const { poolAmount, targetAmount, entries, currentWinner, winnerAnnouncedAt, drawHistory, isDrawActive, getProgressPercent, addPurchase, resetDraw } = useDrawStore();
+  const { poolAmount, targetAmount, prizeAmount, entries, currentWinner, winnerAnnouncedAt, drawHistory, isDrawActive, getProgressPercent, addPurchase, resetDraw } = useDrawStore();
   const [showWinnerPopup, setShowWinnerPopup] = useState(!!currentWinner);
   const percent = getProgressPercent();
+  const remaining = Math.max(targetAmount - poolAmount, 0);
 
   const recentEntries = [...entries].sort((a, b) => b.timestamp - a.timestamp).slice(0, 10);
   const totalParticipants = new Set(entries.map(e => e.username)).size;

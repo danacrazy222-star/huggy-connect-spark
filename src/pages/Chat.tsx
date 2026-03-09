@@ -102,7 +102,7 @@ function PickWinnerGame({ onEnd }: { onEnd: (won: boolean) => void }) {
   );
 }
 
-type ChatMessage = { user: string; avatar: string; message: string; crown: boolean };
+type ChatMessage = ChatMsg;
 
 export default function Chat() {
   const [activeRoom, setActiveRoom] = useState(0);

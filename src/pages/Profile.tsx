@@ -215,6 +215,40 @@ export default function Profile() {
               </button>
             )}
             <p className="text-xs text-muted-foreground mt-0.5">{user.email}</p>
+
+            {/* Gender Selection */}
+            <div className="flex items-center gap-2 mt-2">
+              <button
+                onClick={async () => {
+                  const newGender = profile?.gender === "male" ? null : "male";
+                  await supabase.from("profiles").update({ gender: newGender } as any).eq("user_id", user.id);
+                  setProfile((prev) => prev ? { ...prev, gender: newGender } : prev);
+                }}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all",
+                  profile?.gender === "male"
+                    ? "bg-blue-500/20 border-blue-500/50 text-blue-400"
+                    : "bg-muted/30 border-border text-muted-foreground hover:text-foreground"
+                )}
+              >
+                ♂ {t("male") !== "male" ? t("male") : "ذكر"}
+              </button>
+              <button
+                onClick={async () => {
+                  const newGender = profile?.gender === "female" ? null : "female";
+                  await supabase.from("profiles").update({ gender: newGender } as any).eq("user_id", user.id);
+                  setProfile((prev) => prev ? { ...prev, gender: newGender } : prev);
+                }}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all",
+                  profile?.gender === "female"
+                    ? "bg-pink-500/20 border-pink-500/50 text-pink-400"
+                    : "bg-muted/30 border-border text-muted-foreground hover:text-foreground"
+                )}
+              >
+                ♀ {t("female") !== "female" ? t("female") : "أنثى"}
+              </button>
+            </div>
           </div>
         </motion.div>
 

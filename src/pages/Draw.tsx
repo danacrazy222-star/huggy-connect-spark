@@ -159,6 +159,7 @@ export default function Draw() {
             <div className="bg-muted/40 rounded-xl p-2.5 text-center">
               <Trophy className="w-4 h-4 text-gold mx-auto mb-1" />
               <p className="text-lg font-bold text-primary">${prizeAmount}</p>
+              <p className="text-[9px] text-muted-foreground">{t("prize")}</p>
             </div>
           </div>
         </div>

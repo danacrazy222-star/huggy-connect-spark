@@ -113,10 +113,25 @@ export default function Chat() {
   const [challengeState, setChallengeState] = useState<ChallengeState>("idle");
   const [countdown, setCountdown] = useState(60);
   const [opponent, setOpponent] = useState<string | null>(null);
+  const { user } = useAuth();
+  const [userProfile, setUserProfile] = useState<{ avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);
   const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
   const { notify, clearUnread } = useChatNotification();
+
+  // Fetch current user profile for avatar & gender
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("profiles")
+      .select("avatar_url, gender")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setUserProfile(data as any);
+      });
+  }, [user]);
 
   const currentRoom = rooms[activeRoom];
   const canAccess = level >= currentRoom.level;

@@ -1,25 +1,34 @@
 import { useTranslation } from "@/hooks/useTranslation";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import brandShein from "@/assets/brand-shein.png";
+import brandGooglePlay from "@/assets/brand-google-play.png";
+import brandAmazon from "@/assets/brand-amazon.png";
 
 const BRANDS = [
   {
     name: "SHEIN",
-    bg: "bg-gradient-to-br from-pink-500 to-rose-600",
-    logo: "SHEIN",
+    logo: brandShein,
     subtitle: "$500",
+    borderColor: "border-pink-500",
+    textColor: "text-pink-400",
+    bgAccent: "from-pink-500/20 to-pink-600/10",
   },
   {
     name: "Google Play",
-    bg: "bg-gradient-to-br from-sky-400 to-blue-600",
-    logo: "Google Play",
+    logo: brandGooglePlay,
     subtitle: "$500",
+    borderColor: "border-sky-500",
+    textColor: "text-sky-400",
+    bgAccent: "from-sky-500/20 to-blue-600/10",
   },
   {
     name: "Amazon",
-    bg: "bg-gradient-to-br from-amber-400 to-orange-600",
-    logo: "amazon",
+    logo: brandAmazon,
     subtitle: "$500",
+    borderColor: "border-amber-500",
+    textColor: "text-amber-400",
+    bgAccent: "from-amber-500/20 to-orange-600/10",
   },
 ];
 
@@ -42,19 +51,28 @@ export function ShopGiftCards() {
         {BRANDS.map((brand, i) => (
           <motion.div
             key={brand.name}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.12, type: "spring", bounce: 0.4 }}
-            className={cn(
-              "relative w-[100px] h-[68px] rounded-xl flex flex-col items-center justify-center shadow-lg border border-white/20 overflow-hidden",
-              brand.bg
-            )}
-            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.2)" }}
+            className="flex flex-col items-center gap-1.5"
           >
-            {/* Shine effect */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none" />
-            <span className="font-bold text-white text-sm drop-shadow-md z-10">{brand.logo}</span>
-            <span className="font-bold text-primary text-xs z-10">{brand.subtitle}</span>
+            {/* Card */}
+            <div
+              className={cn(
+                "relative w-[105px] h-[72px] rounded-xl flex flex-col items-center justify-center border-2 overflow-hidden bg-gradient-to-br from-gray-900 to-black",
+                brand.borderColor
+              )}
+              style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.4)" }}
+            >
+              <img
+                src={brand.logo}
+                alt={brand.name}
+                className="h-8 w-auto object-contain mb-0.5"
+              />
+              <span className={cn("font-bold text-xs", brand.textColor)}>{brand.subtitle}</span>
+            </div>
+            {/* Price below */}
+            <span className={cn("font-display font-bold text-lg", brand.textColor)}>{brand.subtitle}</span>
           </motion.div>
         ))}
       </div>

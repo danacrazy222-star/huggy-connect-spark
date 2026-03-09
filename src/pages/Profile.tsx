@@ -36,11 +36,11 @@ export default function Profile() {
     if (!user) return;
     supabase
       .from("profiles")
-      .select("display_name, avatar_url")
+      .select("display_name, avatar_url, gender")
       .eq("user_id", user.id)
       .maybeSingle()
       .then(({ data }) => {
-        if (data) setProfile(data);
+        if (data) setProfile(data as any);
       });
   }, [user]);
 

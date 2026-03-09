@@ -34,7 +34,7 @@ export default function Auth() {
     const cleanEmail = sanitize(email);
     const cleanPassword = sanitize(password);
     if (!cleanEmail || !cleanPassword) return;
-    if (password.length < 6) {
+    if (cleanPassword.length < 6) {
       toast.error(t('passwordMinLength'));
       return;
     }
@@ -42,16 +42,16 @@ export default function Auth() {
     setLoading(true);
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password: cleanPassword });
         if (error) throw error;
         toast.success(t('welcomeBack'));
         navigate('/');
       } else {
         const { error } = await supabase.auth.signUp({
-          email,
-          password,
+          email: cleanEmail,
+          password: cleanPassword,
           options: {
-            data: { display_name: displayName || email },
+            data: { display_name: sanitize(displayName) || cleanEmail },
             emailRedirectTo: window.location.origin,
           },
         });

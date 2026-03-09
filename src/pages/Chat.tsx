@@ -16,6 +16,13 @@ import roomSilver from "@/assets/room-silver.jpg";
 import roomGold from "@/assets/room-gold.jpg";
 import roomDiamond from "@/assets/room-diamond.jpg";
 
+import avatarMale1 from "@/assets/avatar-male-1.png";
+import avatarMale2 from "@/assets/avatar-male-2.png";
+import avatarMale3 from "@/assets/avatar-male-3.png";
+import avatarFemale1 from "@/assets/avatar-female-1.png";
+import avatarFemale2 from "@/assets/avatar-female-2.png";
+import avatarFemale3 from "@/assets/avatar-female-3.png";
+
 const rooms = [
   { name: "Bronze", level: 1, image: roomBronze, accent: "from-blue-500/60", border: "border-blue-400/50", glow: "hsl(185 100% 60%)", shape: "circle" as const },
   { name: "Silver", level: 5, image: roomSilver, accent: "from-pink-500/60", border: "border-pink-400/50", glow: "hsl(320 100% 65%)", shape: "circle" as const },

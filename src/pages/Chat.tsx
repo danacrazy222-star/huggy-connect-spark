@@ -166,7 +166,7 @@ export default function Chat() {
           <div className="flex-1 flex flex-col px-4">
             {/* Chat messages area */}
             <div className="flex-1" />
-            <div className="space-y-3 mb-3 overflow-y-auto max-h-[35vh]">
+            <div className="space-y-3 mb-3 overflow-y-auto max-h-[30vh]">
               {messages.map((msg, i) => (
                 <ChatMessageBubble
                   key={i}
@@ -180,24 +180,15 @@ export default function Chat() {
               ))}
             </div>
 
-            {/* Input bar + duel button */}
-            <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
-              {/* Daily Duel button */}
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setShowDuel(true)}
-                disabled={showDuel}
-                className={cn(
-                  "shrink-0 w-10 h-10 rounded-full flex items-center justify-center border transition-all",
-                  !showDuel
-                    ? "bg-primary/20 border-primary/40 text-primary"
-                    : "bg-muted/30 border-border text-muted-foreground opacity-50"
-                )}
-              >
-                <Swords className="w-5 h-5" />
-              </motion.button>
+            {/* Duel challenge - embedded in chat */}
+            <ChatDuelChallenge
+              playerName={user?.email?.split("@")[0] || "You"}
+              onEnd={handleDuelEnd}
+              isRTL={isRTL}
+            />
 
-              {/* Message input */}
+            {/* Message input */}
+            <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
               <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
                 <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
@@ -206,17 +197,6 @@ export default function Chat() {
                 <button onClick={sendMessage} className="text-primary hover:text-primary/80 transition-colors"><Send className="w-5 h-5" /></button>
               </div>
             </div>
-
-            {/* Anime Duel Arena overlay */}
-            <AnimatePresence>
-              {showDuel && (
-                <AnimeDuelArena
-                  playerName={user?.email?.split("@")[0] || "You"}
-                  onEnd={handleDuelEnd}
-                  onClose={() => setShowDuel(false)}
-                />
-              )}
-            </AnimatePresence>
           </div>
         )}
       </div>

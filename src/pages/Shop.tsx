@@ -26,6 +26,7 @@ export interface BookPackage {
   rewards: { icon: React.ReactNode; label: string; type: "xp" | "gameTicket" | "tarotTicket" | "drawEntry"; amount: number }[];
   tag: string | null;
   entry: string;
+  valueTag?: string | null;
 }
 
 export default function Shop() {
@@ -80,7 +81,8 @@ export default function Shop() {
         { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: t("drawEntry"), type: "drawEntry", amount: 1 },
       ],
       tag: t("mostPopular"),
-      entry: `300% ${t("value")}`,
+      entry: `$3 ${t("entry")}`,
+      valueTag: `300% ${t("value")}`,
     },
   ];
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Timer, Trophy, Search, User, Sparkles } from "lucide-react";
+import { Timer, Trophy, Search, User, Sparkles, Hand, Shield, Scissors } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const PLAYER_NAMES = [
@@ -16,13 +16,19 @@ function getRandomName(exclude: string): string {
   return filtered[Math.floor(Math.random() * filtered.length)];
 }
 
-const DiceIcon = ({ value, className }: { value: number; className?: string }) => {
-  const icons = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
-  const Icon = icons[Math.max(0, Math.min(5, value - 1))];
-  return <Icon className={className} />;
-};
+type Move = "rock" | "paper" | "scissors";
+type Phase = "idle" | "searching" | "matched" | "picking" | "clash" | "round_result" | "final_result";
 
-type Phase = "idle" | "searching" | "matched" | "rolling" | "round_result" | "final_result";
+const MOVE_EMOJI: Record<Move, string> = { rock: "🪨", paper: "📄", scissors: "✂️" };
+const MOVE_LABEL: Record<Move, string> = { rock: "حجر", paper: "ورقة", scissors: "مقص" };
+
+function resolveRPS(a: Move, b: Move): "a" | "b" | "draw" {
+  if (a === b) return "draw";
+  if ((a === "rock" && b === "scissors") || (a === "scissors" && b === "paper") || (a === "paper" && b === "rock")) return "a";
+  return "b";
+}
+
+const MOVES: Move[] = ["rock", "paper", "scissors"];
 
 interface Props {
   playerName: string;
@@ -35,15 +41,16 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
   const [searchTimer, setSearchTimer] = useState(40);
   const [opponentName, setOpponentName] = useState("");
 
-  // Dice state
   const [round, setRound] = useState(0);
   const [scores, setScores] = useState({ player: 0, opponent: 0 });
-  const [playerDice, setPlayerDice] = useState(1);
-  const [opponentDice, setOpponentDice] = useState(1);
-  const [rollingTick, setRollingTick] = useState(0);
+  const [pickTimer, setPickTimer] = useState(15);
+  const [playerMove, setPlayerMove] = useState<Move | null>(null);
+  const [opponentMove, setOpponentMove] = useState<Move | null>(null);
   const [roundWinner, setRoundWinner] = useState<"player" | "opponent" | "draw" | null>(null);
   const [finalWinner, setFinalWinner] = useState<"player" | "opponent" | null>(null);
-  const [showDiceGlow, setShowDiceGlow] = useState(false);
+  const [shakeIndex, setShakeIndex] = useState(0);
+
+  const pickTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // ── SEARCHING ──
   useEffect(() => {
@@ -71,49 +78,68 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
     return () => clearInterval(timer);
   }, [phase, playerName]);
 
-  // ── MATCHED → auto start first roll after 2.5s ──
+  // ── MATCHED → PICKING after 2.5s ──
   useEffect(() => {
     if (phase !== "matched") return;
-    const t = setTimeout(() => startRoll(), 2500);
+    const t = setTimeout(() => {
+      setPhase("picking");
+      setPickTimer(15);
+      setPlayerMove(null);
+      setOpponentMove(null);
+    }, 2500);
     return () => clearTimeout(t);
   }, [phase]);
 
-  // ── ROLLING animation ──
+  // ── PICKING: 15s countdown ──
   useEffect(() => {
-    if (phase !== "rolling") return;
-    let tick = 0;
-    const maxTicks = 15;
-    const interval = setInterval(() => {
-      tick++;
-      setRollingTick(tick);
-      setPlayerDice(Math.ceil(Math.random() * 6));
-      setOpponentDice(Math.ceil(Math.random() * 6));
-      if (tick >= maxTicks) {
-        clearInterval(interval);
-        // Final values
-        const pVal = Math.ceil(Math.random() * 6);
-        const oVal = Math.ceil(Math.random() * 6);
-        setPlayerDice(pVal);
-        setOpponentDice(oVal);
-        setShowDiceGlow(true);
+    if (phase !== "picking") return;
+    pickTimerRef.current = setInterval(() => {
+      setPickTimer((t) => {
+        if (t <= 1) {
+          // Auto-pick random if time runs out
+          const auto = MOVES[Math.floor(Math.random() * 3)];
+          executeMove(auto);
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+    return () => { if (pickTimerRef.current) clearInterval(pickTimerRef.current); };
+  }, [phase, round]);
 
+  const executeMove = useCallback((move: Move) => {
+    if (pickTimerRef.current) clearInterval(pickTimerRef.current);
+    const opp = MOVES[Math.floor(Math.random() * 3)];
+    setPlayerMove(move);
+    setOpponentMove(opp);
+    setPhase("clash");
+    setShakeIndex(0);
+  }, []);
+
+  // ── CLASH animation (3 shakes then reveal) ──
+  useEffect(() => {
+    if (phase !== "clash") return;
+    let count = 0;
+    const interval = setInterval(() => {
+      count++;
+      setShakeIndex(count);
+      if (count >= 3) {
+        clearInterval(interval);
         setTimeout(() => {
-          let w: "player" | "opponent" | "draw";
-          if (pVal > oVal) w = "player";
-          else if (oVal > pVal) w = "opponent";
-          else w = "draw";
+          // Resolve
+          const result = resolveRPS(playerMove!, opponentMove!);
+          const w = result === "a" ? "player" : result === "b" ? "opponent" : "draw";
           setRoundWinner(w);
           setPhase("round_result");
-        }, 800);
+        }, 600);
       }
-    }, 80 + tick * 8);
+    }, 500);
     return () => clearInterval(interval);
-  }, [phase, round]);
+  }, [phase, playerMove, opponentMove]);
 
   // ── ROUND RESULT → next round or final ──
   useEffect(() => {
     if (phase !== "round_result" || !roundWinner) return;
-
     const newScores = { ...scores };
     if (roundWinner === "player") newScores.player++;
     else if (roundWinner === "opponent") newScores.opponent++;
@@ -127,22 +153,21 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
         setFinalWinner("opponent");
         setPhase("final_result");
       } else {
-        // Next round (handle draw by replaying)
         setRound((r) => r + 1);
         setRoundWinner(null);
-        setShowDiceGlow(false);
-        startRoll();
+        setPlayerMove(null);
+        setOpponentMove(null);
+        setPhase("picking");
+        setPickTimer(15);
       }
     }, 2500);
     return () => clearTimeout(t);
   }, [phase, roundWinner]);
 
-  const startRoll = () => {
-    setRollingTick(0);
-    setRoundWinner(null);
-    setShowDiceGlow(false);
-    setPhase("rolling");
-  };
+  const handlePick = useCallback((move: Move) => {
+    if (playerMove) return;
+    executeMove(move);
+  }, [playerMove, executeMove]);
 
   const startSearch = () => {
     setPhase("searching");
@@ -152,7 +177,8 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
     setScores({ player: 0, opponent: 0 });
     setRoundWinner(null);
     setFinalWinner(null);
-    setShowDiceGlow(false);
+    setPlayerMove(null);
+    setOpponentMove(null);
   };
 
   const handleFinish = () => {
@@ -165,9 +191,8 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
     return (
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mx-auto my-3 w-full max-w-xs">
         <button onClick={startSearch}
-          className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-gradient-to-r from-accent via-blue-accent to-accent text-accent-foreground font-bold text-sm border border-accent/30 shadow-[0_0_20px_hsl(270_80%_55%/0.3)] hover:shadow-[0_0_30px_hsl(270_80%_55%/0.5)] transition-all">
-          <Dice6 className="w-5 h-5" />
-          🎲 تحدي الزهر اليومي
+          className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-gradient-to-r from-accent via-blue-accent to-accent text-accent-foreground font-bold text-sm border border-accent/30 shadow-purple hover:shadow-[0_0_30px_hsl(270_80%_55%/0.5)] transition-all">
+          ✊✋✌️ تحدي حجر ورقة مقص
         </button>
       </motion.div>
     );
@@ -178,20 +203,18 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
       <div className="relative rounded-2xl border border-accent/30 bg-gradient-to-b from-purple-deep via-background to-purple-deep backdrop-blur-lg overflow-hidden">
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-accent/10 via-blue-accent/10 to-accent/10 animate-pulse pointer-events-none" />
 
-        {/* Round dots */}
-        {phase !== "searching" && phase !== "matched" && (
+        {/* Round indicator */}
+        {!["searching", "matched"].includes(phase) && (
           <div className="relative flex items-center justify-center gap-2 pt-3 pb-1">
             {[0, 1, 2].map((r) => (
               <div key={r} className={cn(
                 "w-7 h-2 rounded-full transition-all duration-500",
-                r < round + (phase === "round_result" || phase === "final_result" ? 1 : 0)
-                  ? roundWinner === "player" || scores.player > scores.opponent ? "bg-blue-accent" : "bg-destructive"
-                  : r === round && phase === "rolling" ? "bg-primary/60 animate-pulse" : "bg-muted"
+                r < round + (["round_result", "final_result"].includes(phase) ? 1 : 0)
+                  ? scores.player > scores.opponent ? "bg-green-accent" : scores.opponent > scores.player ? "bg-destructive" : "bg-primary"
+                  : r === round && phase === "picking" ? "bg-primary/60 animate-pulse" : "bg-muted"
               )} />
             ))}
-            <span className="text-[10px] text-muted-foreground ml-2 font-bold">
-              {scores.player} - {scores.opponent}
-            </span>
+            <span className="text-[10px] text-muted-foreground ml-2 font-bold">{scores.player} - {scores.opponent}</span>
           </div>
         )}
 
@@ -205,7 +228,6 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
               </motion.div>
               <p className="text-sm font-bold text-foreground mb-1">🔍 البحث عن لاعب...</p>
               <p className="text-xs text-muted-foreground mb-3">جاري إرسال دعوات للاعبين</p>
-
               <div className="relative w-16 h-16 mx-auto mb-3">
                 <svg className="w-full h-full -rotate-90" viewBox="0 0 64 64">
                   <circle cx="32" cy="32" r="28" fill="none" stroke="hsl(var(--muted))" strokeWidth="3" opacity={0.3} />
@@ -215,7 +237,6 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                 </svg>
                 <span className="absolute inset-0 flex items-center justify-center text-lg font-bold text-accent">{searchTimer}</span>
               </div>
-
               <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
                 <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity }} className="flex items-center gap-1">
                   <User className="w-3 h-3" />
@@ -228,7 +249,6 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
           {/* ═══ MATCHED (VS) ═══ */}
           {phase === "matched" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
-              {/* Particles */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 {[...Array(8)].map((_, i) => (
                   <motion.div key={i} className="absolute w-1.5 h-1.5 rounded-full bg-primary"
@@ -237,7 +257,6 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                     transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.15 }} />
                 ))}
               </div>
-
               <div className="flex items-center justify-between gap-3">
                 <motion.div initial={{ x: -60, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: "spring" }} className="flex-1 text-center">
                   <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-blue-accent to-accent flex items-center justify-center text-xl font-bold text-accent-foreground mb-1 shadow-[0_0_15px_hsl(210_90%_55%/0.5)]">
@@ -245,11 +264,9 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                   </div>
                   <p className="text-xs font-bold text-foreground truncate">{playerName}</p>
                 </motion.div>
-
                 <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} transition={{ delay: 0.3, type: "spring", stiffness: 200 }}>
                   <span className="text-3xl font-black text-gold-gradient drop-shadow-lg">VS</span>
                 </motion.div>
-
                 <motion.div initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: "spring", delay: 0.15 }} className="flex-1 text-center">
                   <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-destructive to-accent flex items-center justify-center text-xl font-bold text-accent-foreground mb-1 shadow-[0_0_15px_hsl(var(--destructive)/0.5)]">
                     {opponentName.charAt(0).toUpperCase()}
@@ -257,97 +274,104 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                   <p className="text-xs font-bold text-foreground truncate">{opponentName}</p>
                 </motion.div>
               </div>
-
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="text-xs text-primary mt-3">
                 ⚡ تم العثور على خصم! ⚡
               </motion.p>
             </motion.div>
           )}
 
-          {/* ═══ ROLLING DICE ═══ */}
-          {phase === "rolling" && (
+          {/* ═══ PICKING (15s) ═══ */}
+          {phase === "picking" && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-              <p className="text-sm font-bold text-primary mb-4">🎲 الجولة {round + 1} — رمي الزهر!</p>
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Timer className="w-4 h-4 text-primary" />
+                <motion.span key={pickTimer} initial={{ scale: 1.4 }} animate={{ scale: 1 }}
+                  className={cn("text-lg font-black", pickTimer <= 5 ? "text-destructive" : "text-primary")}>
+                  {pickTimer}
+                </motion.span>
+              </div>
+              <p className="text-sm font-bold text-foreground mb-1">✊ الجولة {round + 1} — اختر حركتك!</p>
+              <p className="text-[11px] text-muted-foreground mb-4">ضد {opponentName}</p>
 
-              <div className="flex items-center justify-between gap-4">
-                {/* Player dice */}
-                <div className="flex-1 flex flex-col items-center gap-2">
-                  <p className="text-[11px] font-bold text-foreground truncate max-w-[80px]">{playerName}</p>
-                  <motion.div
-                    animate={{ rotate: [0, 15, -15, 10, -10, 0], scale: [1, 1.1, 0.95, 1.05, 1] }}
-                    transition={{ duration: 0.15, repeat: rollingTick < 15 ? Infinity : 0 }}
-                    className="relative"
-                  >
-                    <div className={cn(
-                      "w-16 h-16 rounded-xl bg-gradient-to-br from-blue-accent/20 to-accent/20 border-2 border-blue-accent/40 flex items-center justify-center transition-all duration-300",
-                      showDiceGlow && "border-primary shadow-[0_0_20px_hsl(var(--primary)/0.5)]"
-                    )}>
-                      <DiceIcon value={playerDice} className={cn("w-10 h-10 text-blue-accent transition-all", showDiceGlow && "text-primary")} />
-                    </div>
-                  </motion.div>
-                  {showDiceGlow && (
-                    <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-2xl font-black text-foreground">
-                      {playerDice}
+              <div className="grid grid-cols-3 gap-2">
+                {MOVES.map((move) => (
+                  <motion.button key={move} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.88 }}
+                    onClick={() => handlePick(move)}
+                    className="flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 border-accent/20 bg-accent/5 hover:border-primary/50 hover:bg-primary/10 transition-all">
+                    <motion.span className="text-3xl" animate={{ y: [0, -4, 0] }} transition={{ duration: 1.5, repeat: Infinity, delay: MOVES.indexOf(move) * 0.2 }}>
+                      {MOVE_EMOJI[move]}
                     </motion.span>
-                  )}
-                </div>
-
-                {/* VS */}
-                <div className="shrink-0">
-                  <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }}
-                    className="text-xl font-black text-muted-foreground">⚔️</motion.span>
-                </div>
-
-                {/* Opponent dice */}
-                <div className="flex-1 flex flex-col items-center gap-2">
-                  <p className="text-[11px] font-bold text-foreground truncate max-w-[80px]">{opponentName}</p>
-                  <motion.div
-                    animate={{ rotate: [0, -15, 15, -10, 10, 0], scale: [1, 0.95, 1.1, 1.05, 1] }}
-                    transition={{ duration: 0.15, repeat: rollingTick < 15 ? Infinity : 0 }}
-                    className="relative"
-                  >
-                    <div className={cn(
-                      "w-16 h-16 rounded-xl bg-gradient-to-br from-destructive/20 to-accent/20 border-2 border-destructive/40 flex items-center justify-center transition-all duration-300",
-                      showDiceGlow && "border-primary shadow-[0_0_20px_hsl(var(--primary)/0.5)]"
-                    )}>
-                      <DiceIcon value={opponentDice} className={cn("w-10 h-10 text-destructive transition-all", showDiceGlow && "text-primary")} />
-                    </div>
-                  </motion.div>
-                  {showDiceGlow && (
-                    <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-2xl font-black text-foreground">
-                      {opponentDice}
-                    </motion.span>
-                  )}
-                </div>
+                    <span className="text-[10px] font-bold text-foreground">{MOVE_LABEL[move]}</span>
+                  </motion.button>
+                ))}
               </div>
             </motion.div>
           )}
 
+          {/* ═══ CLASH (shake animation) ═══ */}
+          {phase === "clash" && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-4">
+              <p className="text-sm font-bold text-primary mb-5">⚡ حجر... ورقة... مقص!</p>
+
+              <div className="flex items-center justify-center gap-8">
+                {/* Player fist shaking */}
+                <div className="flex flex-col items-center gap-2">
+                  <motion.div
+                    animate={shakeIndex < 3 ? { y: [0, -20, 0], rotate: [0, -5, 0] } : {}}
+                    transition={{ duration: 0.3, repeat: shakeIndex < 3 ? Infinity : 0 }}
+                  >
+                    <span className="text-5xl">{shakeIndex >= 3 ? MOVE_EMOJI[playerMove!] : "✊"}</span>
+                  </motion.div>
+                  <span className="text-[10px] font-bold text-muted-foreground">{playerName}</span>
+                </div>
+
+                <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 0.5, repeat: Infinity }}
+                  className="text-xl font-black text-primary">⚔️</motion.span>
+
+                {/* Opponent fist shaking */}
+                <div className="flex flex-col items-center gap-2">
+                  <motion.div
+                    animate={shakeIndex < 3 ? { y: [0, -20, 0], rotate: [0, 5, 0] } : {}}
+                    transition={{ duration: 0.3, repeat: shakeIndex < 3 ? Infinity : 0, delay: 0.15 }}
+                  >
+                    <span className="text-5xl">{shakeIndex >= 3 ? MOVE_EMOJI[opponentMove!] : "✊"}</span>
+                  </motion.div>
+                  <span className="text-[10px] font-bold text-muted-foreground">{opponentName}</span>
+                </div>
+              </div>
+
+              {/* Flash */}
+              {shakeIndex >= 3 && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: [0, 0.4, 0] }} transition={{ duration: 0.3 }}
+                  className="absolute inset-0 bg-primary/20 pointer-events-none rounded-2xl" />
+              )}
+            </motion.div>
+          )}
+
           {/* ═══ ROUND RESULT ═══ */}
-          {phase === "round_result" && roundWinner && (
-            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-2">
-              {/* Dice results */}
+          {phase === "round_result" && roundWinner && playerMove && opponentMove && (
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-3">
               <div className="flex items-center justify-center gap-6 mb-3">
                 <div className="flex flex-col items-center gap-1">
                   <div className={cn(
-                    "w-14 h-14 rounded-xl flex items-center justify-center border-2 transition-all",
-                    roundWinner === "player" ? "border-green-accent bg-green-accent/10 shadow-[0_0_15px_hsl(var(--green-accent)/0.4)]" : "border-destructive/30 bg-destructive/5"
+                    "w-16 h-16 rounded-xl flex items-center justify-center border-2 text-3xl transition-all",
+                    roundWinner === "player" ? "border-green-accent bg-green-accent/10 shadow-[0_0_15px_hsl(var(--green-accent)/0.4)]" : "border-muted bg-muted/10"
                   )}>
-                    <DiceIcon value={playerDice} className={cn("w-9 h-9", roundWinner === "player" ? "text-green-accent" : "text-muted-foreground")} />
+                    {MOVE_EMOJI[playerMove]}
                   </div>
-                  <span className="text-[10px] font-bold text-muted-foreground truncate max-w-[60px]">{playerName}</span>
+                  <span className="text-[10px] font-bold text-muted-foreground">{playerName}</span>
                 </div>
 
                 <span className="text-lg font-black text-muted-foreground">vs</span>
 
                 <div className="flex flex-col items-center gap-1">
                   <div className={cn(
-                    "w-14 h-14 rounded-xl flex items-center justify-center border-2 transition-all",
-                    roundWinner === "opponent" ? "border-green-accent bg-green-accent/10 shadow-[0_0_15px_hsl(var(--green-accent)/0.4)]" : "border-destructive/30 bg-destructive/5"
+                    "w-16 h-16 rounded-xl flex items-center justify-center border-2 text-3xl transition-all",
+                    roundWinner === "opponent" ? "border-green-accent bg-green-accent/10 shadow-[0_0_15px_hsl(var(--green-accent)/0.4)]" : "border-muted bg-muted/10"
                   )}>
-                    <DiceIcon value={opponentDice} className={cn("w-9 h-9", roundWinner === "opponent" ? "text-green-accent" : "text-muted-foreground")} />
+                    {MOVE_EMOJI[opponentMove]}
                   </div>
-                  <span className="text-[10px] font-bold text-muted-foreground truncate max-w-[60px]">{opponentName}</span>
+                  <span className="text-[10px] font-bold text-muted-foreground">{opponentName}</span>
                 </div>
               </div>
 
@@ -365,19 +389,15 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
 
           {/* ═══ FINAL RESULT ═══ */}
           {phase === "final_result" && finalWinner && (
-            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-2">
-              {/* Confetti */}
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-3">
               <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {[...Array(12)].map((_, i) => (
-                  <motion.div key={i}
-                    className="absolute w-2 h-2 rounded-full"
-                    style={{
-                      left: `${10 + Math.random() * 80}%`,
-                      background: ["hsl(var(--primary))", "hsl(var(--accent))", "hsl(var(--blue-accent))", "hsl(var(--green-accent))"][i % 4]
-                    }}
+                {[...Array(14)].map((_, i) => (
+                  <motion.div key={i} className="absolute w-2 h-2 rounded-full"
+                    style={{ left: `${10 + Math.random() * 80}%`,
+                      background: ["hsl(var(--primary))", "hsl(var(--accent))", "hsl(var(--blue-accent))", "hsl(var(--green-accent))"][i % 4] }}
                     initial={{ top: "50%", opacity: 0 }}
                     animate={{ top: `${-10 + Math.random() * 30}%`, opacity: [0, 1, 0], scale: [0, 1.5, 0] }}
-                    transition={{ duration: 1.5, delay: i * 0.08, repeat: 2 }} />
+                    transition={{ duration: 1.5, delay: i * 0.06, repeat: 2 }} />
                 ))}
               </div>
 
@@ -399,9 +419,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                 </>
               )}
 
-              <p className="text-xs text-muted-foreground mt-1 mb-3">
-                النتيجة: {scores.player} - {scores.opponent}
-              </p>
+              <p className="text-xs text-muted-foreground mt-1 mb-3">النتيجة: {scores.player} - {scores.opponent}</p>
 
               <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleFinish}
                 className="px-6 py-2 rounded-full bg-gradient-to-r from-accent to-blue-accent text-accent-foreground text-sm font-bold shadow-purple">

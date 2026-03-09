@@ -341,13 +341,21 @@ export default function Tarot() {
                   initial={{ rotateY: 180, scale: 0.5 }}
                   animate={{ rotateY: 0, scale: 1 }}
                   transition={{ delay: i * 0.2, duration: 0.5 }}
-                  className="bg-card border border-accent/30 rounded-xl p-2 text-center w-20 shadow-gold"
+                  className="relative bg-card border border-accent/30 rounded-xl overflow-hidden text-center w-24 shadow-gold"
                 >
-                  <div className="text-2xl mb-1">{card.emoji}</div>
-                  <div className="absolute -top-2 -right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center relative">
+                  {/* Card Image */}
+                  <img
+                    src={card.imageUrl}
+                    alt={card.name}
+                    className="w-full aspect-[2/3] object-cover"
+                    loading="eager"
+                  />
+                  {/* Order Badge */}
+                  <div className="absolute top-1.5 left-1.5 w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-md">
                     <span className="text-[10px] font-bold">{i + 1}</span>
                   </div>
-                  <p className="text-[9px] font-bold text-foreground leading-tight">
+                  {/* Card Name */}
+                  <p className="text-[9px] font-bold text-foreground py-1.5 px-1 leading-tight">
                     {language === "ar" ? card.nameAr : card.name}
                   </p>
                 </motion.div>

@@ -144,10 +144,10 @@ export default function Chat() {
   // Simulate incoming messages with notification sound
   useEffect(() => {
     if (!canAccess) return;
-    const fakeMessages = [
-      { user: "Sara", avatar: "S", message: "مرحبا! 👋", crown: false },
-      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮", crown: true },
-      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false },
+    const fakeMessages: ChatMsg[] = [
+      { user: "Sara", avatar: "S", message: "مرحبا! 👋", crown: false, gender: "female" },
+      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮", crown: true, gender: "male" },
+      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false, gender: "female" },
     ];
     const interval = setInterval(() => {
       const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];

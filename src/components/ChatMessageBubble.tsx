@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Crown, Languages } from "lucide-react";
+import { Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -26,7 +26,7 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
   const isOwn = msg.user === "You";
 
   const translate = async () => {
-    if (msg.translated || loading) return;
+    if (msg.translated || loading || isOwn) return;
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("translate", {
@@ -59,37 +59,45 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
           {msg.crown && <Crown className="w-3 h-3 text-primary" />}
         </div>
 
-        {/* Message bubble */}
-        <div className="bg-black/40 backdrop-blur-md rounded-2xl rounded-tl-sm px-3 py-1.5 border border-white/10 relative">
+        {/* Message bubble - tappable for translation */}
+        <div
+          onClick={translate}
+          className={cn(
+            "bg-black/40 backdrop-blur-md rounded-2xl rounded-tl-sm px-3 py-1.5 border border-white/10",
+            !isOwn && !msg.translated && "cursor-pointer active:scale-[0.98] transition-transform"
+          )}
+        >
           <p className="text-sm text-foreground/90">{msg.message}</p>
 
-          {/* Translated text (Last War style - below original with divider) */}
-          {msg.translated && (
-            <>
-              <div className="border-t border-white/15 my-1.5" />
-              <p className="text-sm text-foreground/70 italic">{msg.translated}</p>
-            </>
+          {/* Loading indicator */}
+          {loading && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="flex items-center gap-1.5 mt-1.5 pt-1.5 border-t border-white/15"
+            >
+              <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <span className="text-[10px] text-muted-foreground">Translating...</span>
+            </motion.div>
           )}
 
-          {/* Translate button - small icon at bottom-right of bubble */}
-          {!isOwn && (
-            <button
-              onClick={translate}
-              disabled={loading || !!msg.translated}
-              className={cn(
-                "absolute -bottom-2.5 flex items-center justify-center w-5 h-5 rounded-full bg-black/60 border border-white/20 transition-all",
-                isRTL ? "-left-1.5" : "-right-1.5",
-                loading && "animate-pulse",
-                msg.translated ? "opacity-40" : "hover:bg-primary/30 hover:border-primary/50"
-              )}
-            >
-              {loading ? (
-                <div className="w-3 h-3 border border-primary border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <Languages className="w-3 h-3 text-primary" />
-              )}
-            </button>
-          )}
+          {/* Translated text */}
+          <AnimatePresence>
+            {msg.translated && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                <div className="border-t border-white/15 my-1.5" />
+                <div className={cn("flex items-start gap-1", isRTL && "flex-row-reverse")}>
+                  <span className="text-[10px] text-primary mt-0.5">➡️</span>
+                  <p className="text-sm text-primary/80 italic">{msg.translated}</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </motion.div>

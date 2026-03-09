@@ -165,8 +165,8 @@ export default function Profile() {
           {/* Avatar with upload */}
           <div className="relative">
             <Avatar className="w-24 h-24 border-2 border-primary shadow-gold">
-              <AvatarImage src={profile?.avatar_url || undefined} />
-              <AvatarFallback className="bg-muted text-foreground text-2xl font-bold">{initials}</AvatarFallback>
+              <AvatarImage src={profile?.avatar_url || undefined} key={profile?.avatar_url} />
+              <AvatarFallback className="bg-muted text-foreground text-2xl font-bold" delayMs={600}>{initials}</AvatarFallback>
             </Avatar>
             <button
               onClick={() => fileInputRef.current?.click()}

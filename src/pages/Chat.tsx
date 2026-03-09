@@ -110,16 +110,9 @@ export default function Chat() {
     setMessage("");
   }, [message, activeRoom, addMessage, user, userProfile]);
 
-  const startChallenge = useCallback(() => {
-    setChallengeState("waiting");
-    setCountdown(60);
-    setOpponent(null);
-  }, []);
-
-  const handleGameEnd = useCallback((won: boolean) => {
-    addXP(won ? 40 : 5);
-    setChallengeState("idle");
-    setOpponent(null);
+  const handleDuelEnd = useCallback((won: boolean) => {
+    addXP(won ? 300 : 80);
+    setShowDuel(false);
   }, [addXP]);
 
   return (

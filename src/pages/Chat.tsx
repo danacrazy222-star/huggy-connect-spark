@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useGameStore } from "@/store/useGameStore";
 import { useChatNotification } from "@/hooks/useChatNotification";
 import { containsProfanity, censorMessage } from "@/utils/profanityFilter";
+import { ChatMessageBubble, type ChatMsg } from "@/components/ChatMessageBubble";
 
 import roomBronze from "@/assets/room-bronze.jpg";
 import roomSilver from "@/assets/room-silver.jpg";

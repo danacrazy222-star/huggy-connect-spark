@@ -112,7 +112,6 @@ export default function Chat() {
 
   const handleDuelEnd = useCallback((won: boolean) => {
     addXP(won ? 300 : 80);
-    setShowDuel(false);
   }, [addXP]);
 
   return (

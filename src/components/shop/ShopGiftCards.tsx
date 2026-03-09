@@ -1,34 +1,28 @@
 import { useTranslation } from "@/hooks/useTranslation";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import brandShein from "@/assets/brand-shein.png";
-import brandGooglePlay from "@/assets/brand-google-play.png";
-import brandAmazon from "@/assets/brand-amazon.png";
+import giftcardShein from "@/assets/giftcard-shein.png";
+import giftcardGooglePlay from "@/assets/giftcard-google-play.png";
+import giftcardAmazon from "@/assets/giftcard-amazon.png";
 
 const BRANDS = [
   {
     name: "SHEIN",
-    logo: brandShein,
+    image: giftcardShein,
     subtitle: "$500",
-    borderColor: "border-pink-500",
     textColor: "text-pink-400",
-    bgAccent: "from-pink-500/20 to-pink-600/10",
   },
   {
     name: "Google Play",
-    logo: brandGooglePlay,
+    image: giftcardGooglePlay,
     subtitle: "$500",
-    borderColor: "border-sky-500",
     textColor: "text-sky-400",
-    bgAccent: "from-sky-500/20 to-blue-600/10",
   },
   {
     name: "Amazon",
-    logo: brandAmazon,
+    image: giftcardAmazon,
     subtitle: "$500",
-    borderColor: "border-amber-500",
     textColor: "text-amber-400",
-    bgAccent: "from-amber-500/20 to-orange-600/10",
   },
 ];
 
@@ -56,22 +50,13 @@ export function ShopGiftCards() {
             transition={{ delay: i * 0.12, type: "spring", bounce: 0.4 }}
             className="flex flex-col items-center gap-1.5"
           >
-            {/* Card */}
-            <div
-              className={cn(
-                "relative w-[105px] h-[72px] rounded-xl flex flex-col items-center justify-center border-2 overflow-hidden bg-gradient-to-br from-gray-900 to-black",
-                brand.borderColor
-              )}
-              style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.4)" }}
-            >
+            <div className="w-[105px] h-[72px] rounded-xl overflow-hidden shadow-lg">
               <img
-                src={brand.logo}
+                src={brand.image}
                 alt={brand.name}
-                className="h-8 w-auto object-contain mb-0.5"
+                className="w-full h-full object-cover"
               />
-              <span className={cn("font-bold text-xs", brand.textColor)}>{brand.subtitle}</span>
             </div>
-            {/* Price below */}
             <span className={cn("font-display font-bold text-lg", brand.textColor)}>{brand.subtitle}</span>
           </motion.div>
         ))}

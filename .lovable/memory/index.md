@@ -21,7 +21,7 @@
 ## Economy
 - Spin: 1x per 24h, rewards: XP/Points/Tickets/Entries
 - Books: Basic($1)=1500XP+entry, Plus($2)=3500XP+ticket+entry, Premium($3)=6000XP+tickets+entry
-- Snake & Ladder: 1 ticket entry, Win=120XP, Lose=20XP, bet with points
+- Snake & Ladder: 1 ticket entry, Win=300XP, Lose=80XP, bet with points
 - Scratch Card rewards: 20XP, 50XP, 100XP, Game Ticket, Points, Empty
 - Draw: hidden $ tracking, users see % only, prize×2 = required sales
 

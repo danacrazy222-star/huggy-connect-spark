@@ -149,8 +149,8 @@ export default function Shop() {
                 </div>
               </div>
               <h4 className="font-display text-sm font-bold text-foreground mb-3">{pkg.name}</h4>
-              <div className="w-16 h-20 mx-auto mb-3 bg-gradient-to-br from-accent/40 to-secondary/40 rounded-lg border border-border flex items-center justify-center">
-                <Crown className="w-8 h-8 text-primary/60" />
+              <div className="w-16 h-24 mx-auto mb-3 rounded-lg overflow-hidden shadow-lg border border-border">
+                <img src={BOOK_IMAGES[i]} alt={pkg.name} className="w-full h-full object-cover" />
               </div>
               <div className="space-y-1.5 mb-3">
                 {pkg.rewards.map((r, ri) => (

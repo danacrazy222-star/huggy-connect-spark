@@ -152,9 +152,9 @@ export default function Chat() {
   useEffect(() => {
     if (!canAccess) return;
     const fakeMessages: ChatMsg[] = [
-      { user: "Sara", avatar: "S", message: "مرحبا! 👋", crown: false, gender: "female" },
-      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮", crown: true, gender: "male" },
-      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false, gender: "female" },
+      { user: "Sara", avatar: "S", message: "مرحبا! 👋", crown: false, gender: "female", avatarUrl: avatarFemale3 },
+      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮", crown: true, gender: "male", avatarUrl: avatarMale2 },
+      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2 },
     ];
     const interval = setInterval(() => {
       const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];

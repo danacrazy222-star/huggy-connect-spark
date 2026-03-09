@@ -329,10 +329,12 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
             </motion.div>
             <h3 className="font-display text-xl text-gold-gradient">{winner === "You" ? t("youWin") : t("botWins")}</h3>
             <div className="flex gap-3 justify-center">
-              <div className="bg-card border border-border rounded-lg px-4 py-2">
-                <Zap className="w-4 h-4 text-primary mx-auto" />
-                <span className="text-xs text-foreground">{winner === "You" ? "+40" : "+5"} XP</span>
-              </div>
+              {winner === "You" && (
+                <div className="bg-card border border-border rounded-lg px-4 py-2">
+                  <Zap className="w-4 h-4 text-primary mx-auto" />
+                  <span className="text-xs text-foreground">+{getGameXPReward().win} XP</span>
+                </div>
+              )}
               {winner === "You" && (
                 <div className="bg-card border border-border rounded-lg px-4 py-2">
                   <Trophy className="w-4 h-4 text-primary mx-auto" />

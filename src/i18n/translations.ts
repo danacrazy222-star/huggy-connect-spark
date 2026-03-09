@@ -237,7 +237,7 @@ export const translations: Record<Language, TranslationKeys> = {
     memoryMatch: "تطابق الذاكرة", matchHiddenCards: "طابق البطاقات المخفية",
     comingSoon: "قريباً", ticket: "تذكرة", gameRules: "قوانين اللعبة",
     entryTicket: "الدخول: تذكرة لعبة واحدة لكل لعبة", betWithPoints: "الرهان بالنقاط فقط (ليس XP)",
-    winnerGets: "الفائز يحصل على +40 XP", loserGets: "الخاسر يحصل على +5 XP كحد أقصى",
+    winnerGets: "الفائز يحصل على +300 XP", loserGets: "الخاسر يحصل على +80 XP",
     noOpponentBot: "لا خصم خلال 60 ثانية؟ البوت ينضم تلقائياً",
     findOpponent: "ابحث عن خصم", noTickets: "لا تذاكر!", notEnoughPoints: "نقاط غير كافية",
     setYourBet: "حدد رهانك (نقاط)", yourPoints: "نقاطك",

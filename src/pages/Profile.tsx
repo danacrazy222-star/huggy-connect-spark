@@ -24,7 +24,7 @@ export default function Profile() {
   const { user, signOut, loading: authLoading } = useAuth();
   const { points, xp, level, gameTickets, tarotTickets, drawEntries } = useGameStore();
   const navigate = useNavigate();
-  const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+  const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null; gender: string | null } | null>(null);
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState("");
   const [uploading, setUploading] = useState(false);

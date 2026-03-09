@@ -6,14 +6,14 @@ import { Gift, Gamepad2, Zap, RotateCcw, Ticket, Percent, Star, Trophy, Sparkles
 import { cn } from "@/lib/utils";
 
 const SEGMENTS = [
-  { labelKey: "xpPoints", label: "10 XP\nPoints", color: "#B91C1C", colorEnd: "#DC2626", reward: { type: "xp", amount: 10 }, icon: "⚡" },
-  { labelKey: "extraChance", label: "+5%\nExtra Chance", color: "#15803D", colorEnd: "#22C55E", reward: { type: "xp", amount: 5 }, icon: "%" },
+  { labelKey: "xpPoints", label: "XP\n+50", color: "#B91C1C", colorEnd: "#DC2626", reward: { type: "xp", amount: 50 }, icon: "⚡" },
+  { labelKey: "xpPoints", label: "XP\n+10", color: "#15803D", colorEnd: "#22C55E", reward: { type: "xp", amount: 10 }, icon: "✨" },
+  { labelKey: "gameTicket", label: "Game\nTicket", color: "#7E22CE", colorEnd: "#A855F7", reward: { type: "gameTicket", amount: 1 }, icon: "🎮" },
   { labelKey: "drawEntry", label: "Draw\nEntry", color: "#1D4ED8", colorEnd: "#3B82F6", reward: { type: "drawEntry", amount: 1 }, icon: "🎟️" },
   { labelKey: "tryAgain", label: "Try\nAgain", color: "#166534", colorEnd: "#16A34A", reward: { type: "none", amount: 0 }, icon: "🔄" },
-  { labelKey: "xpPoints", label: "50 XP\nPoints", color: "#14532D", colorEnd: "#15803D", reward: { type: "xp", amount: 50 }, icon: "🧪" },
-  { labelKey: "gameTicket", label: "Game\nTicket", color: "#7E22CE", colorEnd: "#A855F7", reward: { type: "gameTicket", amount: 1 }, icon: "🎮" },
   { labelKey: "surpriseReward", label: "Surprise\nReward", color: "#86198F", colorEnd: "#C026D3", reward: { type: "surprise", amount: 0 }, icon: "🎁" },
-  { labelKey: "xpPoints", label: "XP+50\nPts 50", color: "#991B1B", colorEnd: "#EF4444", reward: { type: "combo", amount: 50 }, icon: "💎" },
+  { labelKey: "xpPoints", label: "XP\n+50", color: "#14532D", colorEnd: "#15803D", reward: { type: "xp", amount: 50 }, icon: "🧪" },
+  { labelKey: "xpPoints", label: "Points\n+50", color: "#991B1B", colorEnd: "#EF4444", reward: { type: "combo", amount: 50 }, icon: "💎" },
 ];
 
 const SEGMENT_ANGLE = 360 / SEGMENTS.length;

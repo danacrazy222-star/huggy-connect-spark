@@ -26,10 +26,15 @@ export default function Auth() {
     if (user) navigate('/', { replace: true });
   }, [user, navigate]);
 
+  // Strip invisible/RTL/LTR characters from input
+  const sanitize = (val: string) => val.replace(/[\u200F\u200E\u061C\u200B\u200C\u200D\uFEFF]/g, '').trim();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !password.trim()) return;
-    if (password.length < 6) {
+    const cleanEmail = sanitize(email);
+    const cleanPassword = sanitize(password);
+    if (!cleanEmail || !cleanPassword) return;
+    if (cleanPassword.length < 6) {
       toast.error(t('passwordMinLength'));
       return;
     }
@@ -37,16 +42,16 @@ export default function Auth() {
     setLoading(true);
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password: cleanPassword });
         if (error) throw error;
         toast.success(t('welcomeBack'));
         navigate('/');
       } else {
         const { error } = await supabase.auth.signUp({
-          email,
-          password,
+          email: cleanEmail,
+          password: cleanPassword,
           options: {
-            data: { display_name: displayName || email },
+            data: { display_name: sanitize(displayName) || cleanEmail },
             emailRedirectTo: window.location.origin,
           },
         });

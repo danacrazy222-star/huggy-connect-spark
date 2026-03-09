@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Smile, Lock, Gamepad2, Timer, Trophy, X, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGameStore } from "@/store/useGameStore";
-import { useChatNotification } from "@/hooks/useChatNotification";
+import { useChatStore } from "@/store/useChatStore";
 import { containsProfanity, censorMessage } from "@/utils/profanityFilter";
 import { ChatMessageBubble, type ChatMsg } from "@/components/ChatMessageBubble";
 import { useAuth } from "@/contexts/AuthContext";
@@ -116,7 +116,6 @@ type ChatMessage = ChatMsg;
 export default function Chat() {
   const [activeRoom, setActiveRoom] = useState(0);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<ChatMessage[]>(mockMessages);
   const [challengeState, setChallengeState] = useState<ChallengeState>("idle");
   const [countdown, setCountdown] = useState(60);
   const [opponent, setOpponent] = useState<string | null>(null);
@@ -125,7 +124,14 @@ export default function Chat() {
   const level = useGameStore((s) => s.level);
   const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
-  const { notify, clearUnread } = useChatNotification();
+  const { roomMessages, addMessage, initRoom, addUnread, clearUnread, updateMessageInRoom } = useChatStore();
+
+  // Initialize room with default messages
+  useEffect(() => {
+    initRoom(activeRoom, mockMessages);
+  }, [activeRoom, initRoom]);
+
+  const messages = roomMessages[activeRoom] || [];
 
   // Fetch current user profile for avatar & gender
   useEffect(() => {
@@ -158,11 +164,11 @@ export default function Chat() {
     ];
     const interval = setInterval(() => {
       const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];
-      setMessages((prev) => [...prev, msg]);
-      notify();
+      addMessage(activeRoom, msg);
+      addUnread();
     }, 15000 + Math.random() * 10000);
     return () => clearInterval(interval);
-  }, [canAccess, notify]);
+  }, [canAccess, activeRoom, addMessage, addUnread]);
 
   // Waiting room countdown
   useEffect(() => {
@@ -201,16 +207,16 @@ export default function Chat() {
     const trimmed = message.trim();
     if (!trimmed) return;
     const filtered = containsProfanity(trimmed) ? censorMessage(trimmed) : trimmed;
-    setMessages((prev) => [...prev, {
+    addMessage(activeRoom, {
       user: "You",
       avatar: user?.email?.charAt(0).toUpperCase() || "Y",
       message: filtered,
       crown: false,
       avatarUrl: userProfile?.avatar_url || undefined,
       gender: (userProfile?.gender as "male" | "female" | null) || null,
-    }]);
+    });
     setMessage("");
-  }, [message]);
+  }, [message, activeRoom, addMessage, user, userProfile]);
 
   const startChallenge = useCallback(() => {
     setChallengeState("waiting");
@@ -345,9 +351,7 @@ export default function Chat() {
                   index={i}
                   isRTL={isRTL}
                   onTranslated={(translated) =>
-                    setMessages((prev) =>
-                      prev.map((m, idx) => (idx === i ? { ...m, translated } : m))
-                    )
+                    updateMessageInRoom(activeRoom, i, { translated })
                   }
                 />
               ))}

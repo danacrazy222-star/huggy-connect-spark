@@ -16,6 +16,13 @@ import roomSilver from "@/assets/room-silver.jpg";
 import roomGold from "@/assets/room-gold.jpg";
 import roomDiamond from "@/assets/room-diamond.jpg";
 
+import avatarMale1 from "@/assets/avatar-male-1.png";
+import avatarMale2 from "@/assets/avatar-male-2.png";
+import avatarMale3 from "@/assets/avatar-male-3.png";
+import avatarFemale1 from "@/assets/avatar-female-1.png";
+import avatarFemale2 from "@/assets/avatar-female-2.png";
+import avatarFemale3 from "@/assets/avatar-female-3.png";
+
 const rooms = [
   { name: "Bronze", level: 1, image: roomBronze, accent: "from-blue-500/60", border: "border-blue-400/50", glow: "hsl(185 100% 60%)", shape: "circle" as const },
   { name: "Silver", level: 5, image: roomSilver, accent: "from-pink-500/60", border: "border-pink-400/50", glow: "hsl(320 100% 65%)", shape: "circle" as const },
@@ -24,9 +31,9 @@ const rooms = [
 ];
 
 const mockMessages: ChatMsg[] = [
-  { user: "Michael", avatar: "M", message: "Wow, this room is amazing! 🤩", crown: false, gender: "male" },
-  { user: "Luna", avatar: "L", message: "Let's go! 🤗", crown: true, gender: "female" },
-  { user: "Alex", avatar: "A", message: "Good luck all! 🍀🔥", crown: false, gender: "male" },
+  { user: "Michael", avatar: "M", message: "Wow, this room is amazing! 🤩", crown: false, gender: "male", avatarUrl: avatarMale1 },
+  { user: "Luna", avatar: "L", message: "Let's go! 🤗", crown: true, gender: "female", avatarUrl: avatarFemale1 },
+  { user: "Alex", avatar: "A", message: "Good luck all! 🍀🔥", crown: false, gender: "male", avatarUrl: avatarMale3 },
 ];
 
 type ChallengeState = "idle" | "waiting" | "playing" | "pickWinner" | "result";
@@ -145,9 +152,9 @@ export default function Chat() {
   useEffect(() => {
     if (!canAccess) return;
     const fakeMessages: ChatMsg[] = [
-      { user: "Sara", avatar: "S", message: "مرحبا! 👋", crown: false, gender: "female" },
-      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮", crown: true, gender: "male" },
-      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false, gender: "female" },
+      { user: "Sara", avatar: "S", message: "مرحبا! 👋", crown: false, gender: "female", avatarUrl: avatarFemale3 },
+      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮", crown: true, gender: "male", avatarUrl: avatarMale2 },
+      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2 },
     ];
     const interval = setInterval(() => {
       const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];

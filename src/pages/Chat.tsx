@@ -31,9 +31,9 @@ const rooms = [
 ];
 
 const mockMessages: ChatMsg[] = [
-  { user: "Michael", avatar: "M", message: "Wow, this room is amazing! 🤩", crown: false, gender: "male" },
-  { user: "Luna", avatar: "L", message: "Let's go! 🤗", crown: true, gender: "female" },
-  { user: "Alex", avatar: "A", message: "Good luck all! 🍀🔥", crown: false, gender: "male" },
+  { user: "Michael", avatar: "M", message: "Wow, this room is amazing! 🤩", crown: false, gender: "male", avatarUrl: avatarMale1 },
+  { user: "Luna", avatar: "L", message: "Let's go! 🤗", crown: true, gender: "female", avatarUrl: avatarFemale1 },
+  { user: "Alex", avatar: "A", message: "Good luck all! 🍀🔥", crown: false, gender: "male", avatarUrl: avatarMale3 },
 ];
 
 type ChallengeState = "idle" | "waiting" | "playing" | "pickWinner" | "result";

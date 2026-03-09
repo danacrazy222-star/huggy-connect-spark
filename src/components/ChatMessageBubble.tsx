@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "@/hooks/useTranslation";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export interface ChatMsg {
   user: string;
@@ -11,6 +12,8 @@ export interface ChatMsg {
   message: string;
   crown: boolean;
   translated?: string;
+  avatarUrl?: string;
+  gender?: "male" | "female" | null;
 }
 
 interface Props {
@@ -40,6 +43,9 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
     }
   };
 
+  const genderColor = msg.gender === "female" ? "border-pink-400 shadow-[0_0_6px_rgba(236,72,153,0.4)]" : msg.gender === "male" ? "border-blue-400 shadow-[0_0_6px_rgba(59,130,246,0.4)]" : "border-white/20";
+  const genderDot = msg.gender === "female" ? "bg-pink-400" : msg.gender === "male" ? "bg-blue-400" : null;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -47,9 +53,19 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
       transition={{ delay: Math.min(index * 0.1, 0.5) }}
       className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}
     >
-      {/* Avatar */}
-      <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 flex items-center justify-center text-sm font-bold text-foreground shrink-0">
-        {msg.avatar}
+      {/* Avatar with gender ring */}
+      <div className="relative shrink-0">
+        <Avatar className={cn("w-8 h-8 border-2", genderColor)}>
+          {msg.avatarUrl ? (
+            <AvatarImage src={msg.avatarUrl} alt={msg.user} />
+          ) : null}
+          <AvatarFallback className="bg-white/20 backdrop-blur-sm text-xs font-bold text-foreground">
+            {msg.avatar}
+          </AvatarFallback>
+        </Avatar>
+        {genderDot && (
+          <div className={cn("absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background", genderDot)} />
+        )}
       </div>
 
       <div className={cn("max-w-[75%]", isRTL ? "text-right" : "")}>
@@ -57,9 +73,11 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
         <div className={cn("flex items-center gap-1 mb-0.5", isRTL && "flex-row-reverse")}>
           <span className="text-xs font-medium text-foreground">{msg.user}</span>
           {msg.crown && <Crown className="w-3 h-3 text-primary" />}
+          {msg.gender === "female" && <span className="text-[10px]">♀</span>}
+          {msg.gender === "male" && <span className="text-[10px]">♂</span>}
         </div>
 
-        {/* Message bubble - tappable for translation */}
+        {/* Message bubble */}
         <div
           onClick={translate}
           className={cn(
@@ -69,7 +87,6 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
         >
           <p className="text-sm text-foreground/90">{msg.message}</p>
 
-          {/* Loading indicator */}
           {loading && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
@@ -81,7 +98,6 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
             </motion.div>
           )}
 
-          {/* Translated text */}
           <AnimatePresence>
             {msg.translated && (
               <motion.div

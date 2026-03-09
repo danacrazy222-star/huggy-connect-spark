@@ -8,6 +8,8 @@ import { useGameStore } from "@/store/useGameStore";
 import { useChatNotification } from "@/hooks/useChatNotification";
 import { containsProfanity, censorMessage } from "@/utils/profanityFilter";
 import { ChatMessageBubble, type ChatMsg } from "@/components/ChatMessageBubble";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 import roomBronze from "@/assets/room-bronze.jpg";
 import roomSilver from "@/assets/room-silver.jpg";
@@ -21,10 +23,10 @@ const rooms = [
   { name: "Diamond", level: 15, image: roomDiamond, accent: "from-amber-500/60", border: "border-amber-400/50", glow: "hsl(35 100% 55%)", shape: "flame" as const },
 ];
 
-const mockMessages = [
-  { user: "Michael", avatar: "M", message: "Wow, this room is amazing! 🤩", crown: false },
-  { user: "Luna", avatar: "L", message: "Let's go! 🤗", crown: true },
-  { user: "Alex", avatar: "A", message: "Good luck all! 🍀🔥", crown: false },
+const mockMessages: ChatMsg[] = [
+  { user: "Michael", avatar: "M", message: "Wow, this room is amazing! 🤩", crown: false, gender: "male" },
+  { user: "Luna", avatar: "L", message: "Let's go! 🤗", crown: true, gender: "female" },
+  { user: "Alex", avatar: "A", message: "Good luck all! 🍀🔥", crown: false, gender: "male" },
 ];
 
 type ChallengeState = "idle" | "waiting" | "playing" | "pickWinner" | "result";
@@ -111,10 +113,25 @@ export default function Chat() {
   const [challengeState, setChallengeState] = useState<ChallengeState>("idle");
   const [countdown, setCountdown] = useState(60);
   const [opponent, setOpponent] = useState<string | null>(null);
+  const { user } = useAuth();
+  const [userProfile, setUserProfile] = useState<{ avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);
   const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
   const { notify, clearUnread } = useChatNotification();
+
+  // Fetch current user profile for avatar & gender
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("profiles")
+      .select("avatar_url, gender")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setUserProfile(data as any);
+      });
+  }, [user]);
 
   const currentRoom = rooms[activeRoom];
   const canAccess = level >= currentRoom.level;
@@ -127,10 +144,10 @@ export default function Chat() {
   // Simulate incoming messages with notification sound
   useEffect(() => {
     if (!canAccess) return;
-    const fakeMessages = [
-      { user: "Sara", avatar: "S", message: "مرحبا! 👋", crown: false },
-      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮", crown: true },
-      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false },
+    const fakeMessages: ChatMsg[] = [
+      { user: "Sara", avatar: "S", message: "مرحبا! 👋", crown: false, gender: "female" },
+      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮", crown: true, gender: "male" },
+      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false, gender: "female" },
     ];
     const interval = setInterval(() => {
       const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];
@@ -177,7 +194,14 @@ export default function Chat() {
     const trimmed = message.trim();
     if (!trimmed) return;
     const filtered = containsProfanity(trimmed) ? censorMessage(trimmed) : trimmed;
-    setMessages((prev) => [...prev, { user: "You", avatar: "Y", message: filtered, crown: false }]);
+    setMessages((prev) => [...prev, {
+      user: "You",
+      avatar: user?.email?.charAt(0).toUpperCase() || "Y",
+      message: filtered,
+      crown: false,
+      avatarUrl: userProfile?.avatar_url || undefined,
+      gender: (userProfile?.gender as "male" | "female" | null) || null,
+    }]);
     setMessage("");
   }, [message]);
 

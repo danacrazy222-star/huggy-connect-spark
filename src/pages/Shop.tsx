@@ -46,7 +46,7 @@ export default function Shop() {
       borderColor: "border-green-500/60",
       glowColor: "shadow-[0_0_20px_rgba(34,197,94,0.3)]",
       rewards: [
-        { icon: <Star className="w-4 h-4 text-primary" />, label: `50 ${t("vipXP")}`, type: "xp", amount: 50 },
+        { icon: <Star className="w-4 h-4 text-primary" />, label: `1,500 ${t("vipXP")}`, type: "xp", amount: 1500 },
         { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: t("drawEntry"), type: "drawEntry", amount: 1 },
       ],
       tag: null,

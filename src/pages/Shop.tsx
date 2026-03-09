@@ -26,6 +26,7 @@ export interface BookPackage {
   rewards: { icon: React.ReactNode; label: string; type: "xp" | "gameTicket" | "tarotTicket" | "drawEntry"; amount: number }[];
   tag: string | null;
   entry: string;
+  valueTag?: string | null;
 }
 
 export default function Shop() {

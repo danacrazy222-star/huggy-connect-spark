@@ -669,7 +669,7 @@ export const translations: Record<Language, TranslationKeys> = {
     memoryMatch: "मेमोरी मैच", matchHiddenCards: "छुपे कार्ड मिलाएं",
     comingSoon: "जल्द आ रहा है", ticket: "टिकट", gameRules: "खेल के नियम",
     entryTicket: "प्रवेश: प्रति गेम 1 टिकट", betWithPoints: "केवल अंकों से दांव लगाएं",
-    winnerGets: "विजेता को +40 XP मिलता है", loserGets: "हारने वाले को अधिकतम +5 XP",
+    winnerGets: "विजेता को +300 XP मिलता है", loserGets: "हारने वाले को +80 XP",
     noOpponentBot: "60s में कोई प्रतिद्वंद्वी नहीं? बॉट आता है",
     findOpponent: "प्रतिद्वंद्वी खोजें", noTickets: "कोई टिकट नहीं!", notEnoughPoints: "अपर्याप्त अंक",
     setYourBet: "अपना दांव सेट करें (अंक)", yourPoints: "आपके अंक",

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Smile, Lock, Gamepad2, Timer, Trophy, X, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGameStore } from "@/store/useGameStore";
-import { useChatNotification } from "@/hooks/useChatNotification";
+import { useChatStore } from "@/store/useChatStore";
 import { containsProfanity, censorMessage } from "@/utils/profanityFilter";
 import { ChatMessageBubble, type ChatMsg } from "@/components/ChatMessageBubble";
 import { useAuth } from "@/contexts/AuthContext";

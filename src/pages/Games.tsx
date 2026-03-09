@@ -150,11 +150,7 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
   }, []);
 
   const getGameXPReward = useCallback(() => {
-    const { level } = useGameStore.getState();
-    if (level >= 16) return { win: 3000, predict: 1000 };
-    if (level >= 11) return { win: 2000, predict: 700 };
-    if (level >= 6) return { win: 1200, predict: 400 };
-    return { win: 600, predict: 250 };
+    return { win: 120, lose: 20 };
   }, []);
 
   useEffect(() => {
@@ -164,7 +160,7 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
       setPhase("finished");
       const rewards = getGameXPReward();
       if (!w.isBot) { addXP(rewards.win); addPoints(betAmount * 2); }
-      // Loss gives 0 XP
+      else { addXP(rewards.lose); } // Loser gets 20 XP
     }
   }, [players, phase, addXP, addPoints, betAmount, getGameXPReward]);
 

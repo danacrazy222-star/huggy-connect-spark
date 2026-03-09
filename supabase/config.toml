@@ -1,1 +1,4 @@
 project_id = "cdwdygclgaeimvrofizi"
+
+[functions.tarot-reading]
+verify_jwt = false

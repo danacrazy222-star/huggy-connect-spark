@@ -9,8 +9,9 @@ interface DrawEntry {
 }
 
 interface DrawState {
-  poolAmount: number; // internal $ amount
+  poolAmount: number;
   targetAmount: number;
+  prizeAmount: number;
   entries: DrawEntry[];
   currentWinner: string | null;
   winnerAnnouncedAt: number | null;

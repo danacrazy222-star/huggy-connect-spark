@@ -20,10 +20,14 @@ interface GameState {
   checkSpinAvailability: () => boolean;
 }
 
-const XP_PER_LEVEL = [
-  0, 5000, 11000, 18000, 27000, 39000, 53000, 71000, 93000, 121000,
-  156000, 198000, 248000, 308000, 378000, 458000, 553000, 663000, 793000, 953000
-];
+// XP required to advance FROM each level (index = level)
+// e.g. XP_FOR_LEVEL[5] = 12000 means Level 5→6 requires 12,000 XP
+export const XP_FOR_LEVEL: Record<number, number> = {
+  1: 5000, 2: 6000, 3: 7000, 4: 9000, 5: 12000,
+  6: 14000, 7: 18000, 8: 22000, 9: 28000, 10: 35000,
+  11: 42000, 12: 50000, 13: 60000, 14: 70000, 15: 80000,
+  16: 95000, 17: 110000, 18: 130000, 19: 160000,
+};
 
 export const useGameStore = create<GameState>()(
   persist(
@@ -40,9 +44,11 @@ export const useGameStore = create<GameState>()(
       addPoints: (amount) => set((s) => ({ points: s.points + amount })),
       
       addXP: (amount) => set((s) => {
-        const newXP = s.xp + amount;
+        let newXP = s.xp + amount;
         let newLevel = s.level;
-        while (newLevel < 20 && newXP >= XP_PER_LEVEL[newLevel]) {
+        // Level up: if XP exceeds requirement, advance and carry remainder
+        while (newLevel < 20 && XP_FOR_LEVEL[newLevel] && newXP >= XP_FOR_LEVEL[newLevel]) {
+          newXP -= XP_FOR_LEVEL[newLevel];
           newLevel++;
         }
         return { xp: newXP, level: newLevel };

@@ -1,25 +1,17 @@
 import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
-import { useGameStore } from "@/store/useGameStore";
+import { useGameStore, XP_FOR_LEVEL } from "@/store/useGameStore";
 import { motion } from "framer-motion";
 import { Star, Diamond, Flame, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const XP_PER_LEVEL = [
-  0, 5000, 11000, 18000, 27000, 39000, 53000, 71000, 93000, 121000,
-  156000, 198000, 248000, 308000, 378000, 458000, 553000, 663000, 793000, 953000
-];
 
 export default function VIP() {
   const { xp, level } = useGameStore();
   const { t, isRTL } = useTranslation();
 
-  const currentLevelXP = XP_PER_LEVEL[level - 1] || 0;
-  const nextLevelXP = XP_PER_LEVEL[level] || XP_PER_LEVEL[XP_PER_LEVEL.length - 1];
-  const xpInCurrentLevel = xp - currentLevelXP;
-  const xpNeededForNext = nextLevelXP - currentLevelXP;
-  const progress = level >= 20 ? 100 : Math.min((xpInCurrentLevel / xpNeededForNext) * 100, 100);
-  const xpRemaining = Math.max(nextLevelXP - xp, 0);
+  const xpNeededForNext = XP_FOR_LEVEL[level] || 0;
+  const progress = level >= 20 ? 100 : xpNeededForNext > 0 ? Math.min((xp / xpNeededForNext) * 100, 100) : 100;
+  const xpRemaining = Math.max(xpNeededForNext - xp, 0);
 
   const milestones: { name: string; lvl: number; stars?: number; icon?: "diamond" | "flame" }[] = [
     { name: `${t("level")} 1`, lvl: 1, stars: 1 },
@@ -89,7 +81,7 @@ export default function VIP() {
 
           <div className={cn("flex justify-between text-xs", isRTL && "flex-row-reverse")}>
             <span className="text-muted-foreground">
-              {xpInCurrentLevel.toLocaleString()} / {xpNeededForNext.toLocaleString()} XP
+              {xp.toLocaleString()} / {xpNeededForNext.toLocaleString()} XP
             </span>
             {level < 20 && (
               <span className="text-primary font-semibold">

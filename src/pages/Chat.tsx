@@ -194,7 +194,14 @@ export default function Chat() {
     const trimmed = message.trim();
     if (!trimmed) return;
     const filtered = containsProfanity(trimmed) ? censorMessage(trimmed) : trimmed;
-    setMessages((prev) => [...prev, { user: "You", avatar: "Y", message: filtered, crown: false }]);
+    setMessages((prev) => [...prev, {
+      user: "You",
+      avatar: user?.email?.charAt(0).toUpperCase() || "Y",
+      message: filtered,
+      crown: false,
+      avatarUrl: userProfile?.avatar_url || undefined,
+      gender: (userProfile?.gender as "male" | "female" | null) || null,
+    }]);
     setMessage("");
   }, [message]);
 

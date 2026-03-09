@@ -6,10 +6,10 @@ interface ChatStore {
   unreadCount: number;
   addUnread: (count?: number) => void;
   clearUnread: () => void;
-  // Messages per room (by room index)
   roomMessages: Record<number, ChatMsg[]>;
   addMessage: (room: number, msg: ChatMsg) => void;
   initRoom: (room: number, defaults: ChatMsg[]) => void;
+  updateMessageInRoom: (room: number, index: number, updates: Partial<ChatMsg>) => void;
 }
 
 export const useChatStore = create<ChatStore>()(
@@ -33,6 +33,15 @@ export const useChatStore = create<ChatStore>()(
           }));
         }
       },
+      updateMessageInRoom: (room, index, updates) =>
+        set((s) => ({
+          roomMessages: {
+            ...s.roomMessages,
+            [room]: (s.roomMessages[room] || []).map((m, i) =>
+              i === index ? { ...m, ...updates } : m
+            ),
+          },
+        })),
     }),
     { name: 'winline-chat-store' }
   )

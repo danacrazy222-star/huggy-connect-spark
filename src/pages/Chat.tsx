@@ -116,7 +116,6 @@ type ChatMessage = ChatMsg;
 export default function Chat() {
   const [activeRoom, setActiveRoom] = useState(0);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<ChatMessage[]>(mockMessages);
   const [challengeState, setChallengeState] = useState<ChallengeState>("idle");
   const [countdown, setCountdown] = useState(60);
   const [opponent, setOpponent] = useState<string | null>(null);
@@ -125,7 +124,14 @@ export default function Chat() {
   const level = useGameStore((s) => s.level);
   const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
-  const { notify, clearUnread } = useChatNotification();
+  const { roomMessages, addMessage, initRoom, addUnread, clearUnread } = useChatStore();
+
+  // Initialize room with default messages
+  useEffect(() => {
+    initRoom(activeRoom, mockMessages);
+  }, [activeRoom, initRoom]);
+
+  const messages = roomMessages[activeRoom] || [];
 
   // Fetch current user profile for avatar & gender
   useEffect(() => {
@@ -158,8 +164,8 @@ export default function Chat() {
     ];
     const interval = setInterval(() => {
       const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];
-      setMessages((prev) => [...prev, msg]);
-      notify();
+      addMessage(activeRoom, msg);
+      addUnread();
     }, 15000 + Math.random() * 10000);
     return () => clearInterval(interval);
   }, [canAccess, notify]);

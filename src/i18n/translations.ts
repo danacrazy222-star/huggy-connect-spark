@@ -399,7 +399,7 @@ export const translations: Record<Language, TranslationKeys> = {
     memoryMatch: "Hafıza Eşleştirme", matchHiddenCards: "Gizli kartları eşleştir",
     comingSoon: "Yakında", ticket: "Bilet", gameRules: "Oyun Kuralları",
     entryTicket: "Giriş: oyun başına 1 bilet", betWithPoints: "Sadece Puanlarla bahis yap",
-    winnerGets: "Kazanan +40 XP alır", loserGets: "Kaybeden maks +5 XP alır",
+    winnerGets: "Kazanan +300 XP alır", loserGets: "Kaybeden +80 XP alır",
     noOpponentBot: "60s içinde rakip yok mu? Bot otomatik katılır",
     findOpponent: "RAKİP BUL", noTickets: "Bilet yok!", notEnoughPoints: "Yetersiz Puan",
     setYourBet: "Bahsinizi Belirleyin (Puan)", yourPoints: "Puanlarınız",

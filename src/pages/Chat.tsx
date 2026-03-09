@@ -168,7 +168,7 @@ export default function Chat() {
       addUnread();
     }, 15000 + Math.random() * 10000);
     return () => clearInterval(interval);
-  }, [canAccess, notify]);
+  }, [canAccess, activeRoom, addMessage, addUnread]);
 
   // Waiting room countdown
   useEffect(() => {

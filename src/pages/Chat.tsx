@@ -6,6 +6,7 @@ import { Send, Smile, Lock, Crown, Gamepad2, Timer, Trophy, X, Users } from "luc
 import { cn } from "@/lib/utils";
 import { useGameStore } from "@/store/useGameStore";
 import { useChatNotification } from "@/hooks/useChatNotification";
+import { containsProfanity, censorMessage } from "@/utils/profanityFilter";
 
 import roomBronze from "@/assets/room-bronze.jpg";
 import roomSilver from "@/assets/room-silver.jpg";
@@ -174,7 +175,8 @@ export default function Chat() {
   const sendMessage = useCallback(() => {
     const trimmed = message.trim();
     if (!trimmed) return;
-    setMessages((prev) => [...prev, { user: "You", avatar: "Y", message: trimmed, crown: false }]);
+    const filtered = containsProfanity(trimmed) ? censorMessage(trimmed) : trimmed;
+    setMessages((prev) => [...prev, { user: "You", avatar: "Y", message: filtered, crown: false }]);
     setMessage("");
   }, [message]);
 

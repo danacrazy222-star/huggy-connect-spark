@@ -81,7 +81,7 @@ export function SpinWheel() {
     setSpinning(true);
     setResult(null);
 
-    const segmentIndex = Math.floor(Math.random() * SEGMENTS.length);
+    const segmentIndex = getWeightedSegment();
     const extraSpins = 5 * 360;
     const targetAngle = extraSpins + (360 - segmentIndex * SEGMENT_ANGLE - SEGMENT_ANGLE / 2);
     setRotation((prev) => prev + targetAngle);
@@ -91,10 +91,12 @@ export function SpinWheel() {
       setSpinning(false);
       setLastSpinTime(Date.now());
       switch (segment.reward.type) {
-        case "xp": addXP(segment.reward.amount); break;
-        case "gameTicket": addGameTicket(segment.reward.amount); break;
-        case "drawEntry": addDrawEntry(segment.reward.amount); break;
-        case "combo": addXP(50); addPoints(50); break;
+        case "xp50": addXP(50); break;
+        case "xp100": addXP(100); break;
+        case "gameTicket": addGameTicket(1); break;
+        case "tarotTicket": addTarotTicket(1); break;
+        case "ticketCombo": addGameTicket(1); addTarotTicket(1); break;
+        case "pointsXp": addPoints(15); addXP(50); break;
         case "surprise": addXP(50); addTarotTicket(1); break;
       }
       setResult(segment.label.replace("\n", " "));

@@ -6,15 +6,37 @@ import { Gift, Gamepad2, Zap, RotateCcw, Ticket, Percent, Star, Trophy, Sparkles
 import { cn } from "@/lib/utils";
 
 const SEGMENTS = [
-  { labelKey: "xpPoints", label: "XP\n+50", color: "#B91C1C", colorEnd: "#DC2626", reward: { type: "xp", amount: 50 }, icon: "⚡" },
-  { labelKey: "xpPoints", label: "XP\n+10", color: "#15803D", colorEnd: "#22C55E", reward: { type: "xp", amount: 10 }, icon: "✨" },
-  { labelKey: "gameTicket", label: "Game\nTicket", color: "#7E22CE", colorEnd: "#A855F7", reward: { type: "gameTicket", amount: 1 }, icon: "🎮" },
-  { labelKey: "drawEntry", label: "Draw\nEntry", color: "#1D4ED8", colorEnd: "#3B82F6", reward: { type: "drawEntry", amount: 1 }, icon: "🎟️" },
-  { labelKey: "tryAgain", label: "Try\nAgain", color: "#166534", colorEnd: "#16A34A", reward: { type: "none", amount: 0 }, icon: "🔄" },
-  { labelKey: "surpriseReward", label: "Surprise\nReward", color: "#86198F", colorEnd: "#C026D3", reward: { type: "surprise", amount: 0 }, icon: "🎁" },
-  { labelKey: "xpPoints", label: "XP\n+50", color: "#14532D", colorEnd: "#15803D", reward: { type: "xp", amount: 50 }, icon: "🧪" },
-  { labelKey: "xpPoints", label: "Points\n+50", color: "#991B1B", colorEnd: "#EF4444", reward: { type: "combo", amount: 50 }, icon: "💎" },
+  { label: "Surprise\nReward", color: "#86198F", colorEnd: "#C026D3", reward: { type: "surprise" }, icon: "🎁" },
+  { label: "Game\nTicket", color: "#15803D", colorEnd: "#22C55E", reward: { type: "gameTicket" }, icon: "🎮" },
+  { label: "15 Pts\n+50 XP", color: "#B8860B", colorEnd: "#FFD700", reward: { type: "pointsXp" }, icon: "💎" },
+  { label: "100\nXP", color: "#1D4ED8", colorEnd: "#3B82F6", reward: { type: "xp100" }, icon: "⚡" },
+  { label: "Tarot\nTicket", color: "#7E22CE", colorEnd: "#A855F7", reward: { type: "tarotTicket" }, icon: "🔮" },
+  { label: "Game +\nTarot", color: "#B91C1C", colorEnd: "#DC2626", reward: { type: "ticketCombo" }, icon: "🎟️" },
+  { label: "Try\nAgain", color: "#166534", colorEnd: "#16A34A", reward: { type: "none" }, icon: "🔄" },
+  { label: "50\nXP", color: "#14532D", colorEnd: "#15803D", reward: { type: "xp50" }, icon: "✨" },
 ];
+
+// Weighted distribution: tickets common, points rare
+const REWARD_DISTRIBUTION = [
+  { segmentIndex: 0, weight: 8 },  // Surprise (50 XP + Tarot)
+  { segmentIndex: 1, weight: 18 }, // Game Ticket
+  { segmentIndex: 2, weight: 3 },  // 15 Pts + 50 XP (RARE)
+  { segmentIndex: 3, weight: 12 }, // 100 XP
+  { segmentIndex: 4, weight: 18 }, // Tarot Ticket
+  { segmentIndex: 5, weight: 13 }, // Game + Tarot combo
+  { segmentIndex: 6, weight: 13 }, // Try Again
+  { segmentIndex: 7, weight: 15 }, // 50 XP
+];
+
+function getWeightedSegment(): number {
+  const totalWeight = REWARD_DISTRIBUTION.reduce((sum, r) => sum + r.weight, 0);
+  let rand = Math.random() * totalWeight;
+  for (const entry of REWARD_DISTRIBUTION) {
+    rand -= entry.weight;
+    if (rand <= 0) return entry.segmentIndex;
+  }
+  return REWARD_DISTRIBUTION[REWARD_DISTRIBUTION.length - 1].segmentIndex;
+}
 
 const SEGMENT_ANGLE = 360 / SEGMENTS.length;
 const NUM_LIGHTS = 20;
@@ -59,7 +81,7 @@ export function SpinWheel() {
     setSpinning(true);
     setResult(null);
 
-    const segmentIndex = Math.floor(Math.random() * SEGMENTS.length);
+    const segmentIndex = getWeightedSegment();
     const extraSpins = 5 * 360;
     const targetAngle = extraSpins + (360 - segmentIndex * SEGMENT_ANGLE - SEGMENT_ANGLE / 2);
     setRotation((prev) => prev + targetAngle);
@@ -69,10 +91,12 @@ export function SpinWheel() {
       setSpinning(false);
       setLastSpinTime(Date.now());
       switch (segment.reward.type) {
-        case "xp": addXP(segment.reward.amount); break;
-        case "gameTicket": addGameTicket(segment.reward.amount); break;
-        case "drawEntry": addDrawEntry(segment.reward.amount); break;
-        case "combo": addXP(50); addPoints(50); break;
+        case "xp50": addXP(50); break;
+        case "xp100": addXP(100); break;
+        case "gameTicket": addGameTicket(1); break;
+        case "tarotTicket": addTarotTicket(1); break;
+        case "ticketCombo": addGameTicket(1); addTarotTicket(1); break;
+        case "pointsXp": addPoints(15); addXP(50); break;
         case "surprise": addXP(50); addTarotTicket(1); break;
       }
       setResult(segment.label.replace("\n", " "));

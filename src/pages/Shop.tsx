@@ -7,6 +7,11 @@ import { Star, Ticket, Sparkles, Flame, Crown, CheckCircle, X } from "lucide-rea
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { toast } from "sonner";
+import book1 from "@/assets/book-1.png";
+import book2 from "@/assets/book-2.png";
+import book3 from "@/assets/book-3.png";
+
+const BOOK_IMAGES = [book1, book2, book3];
 
 interface BookPackage {
   name: string;

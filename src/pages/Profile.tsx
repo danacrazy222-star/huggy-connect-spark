@@ -24,7 +24,7 @@ export default function Profile() {
   const { user, signOut, loading: authLoading } = useAuth();
   const { points, xp, level, gameTickets, tarotTickets, drawEntries } = useGameStore();
   const navigate = useNavigate();
-  const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+  const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null; gender: string | null } | null>(null);
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -36,11 +36,11 @@ export default function Profile() {
     if (!user) return;
     supabase
       .from("profiles")
-      .select("display_name, avatar_url")
+      .select("display_name, avatar_url, gender")
       .eq("user_id", user.id)
       .maybeSingle()
       .then(({ data }) => {
-        if (data) setProfile(data);
+        if (data) setProfile(data as any);
       });
   }, [user]);
 
@@ -83,7 +83,7 @@ export default function Profile() {
         .from("avatars")
         .getPublicUrl(filePath);
 
-      const avatarUrl = `${publicUrl}?t=${Date.now()}`;
+      const avatarUrl = `${publicUrl}?v=${Date.now()}`;
 
       const { error: updateError } = await supabase
         .from("profiles")
@@ -165,8 +165,8 @@ export default function Profile() {
           {/* Avatar with upload */}
           <div className="relative">
             <Avatar className="w-24 h-24 border-2 border-primary shadow-gold">
-              <AvatarImage src={profile?.avatar_url || undefined} />
-              <AvatarFallback className="bg-muted text-foreground text-2xl font-bold">{initials}</AvatarFallback>
+              <AvatarImage src={profile?.avatar_url || undefined} key={profile?.avatar_url} />
+              <AvatarFallback className="bg-muted text-foreground text-2xl font-bold" delayMs={600}>{initials}</AvatarFallback>
             </Avatar>
             <button
               onClick={() => fileInputRef.current?.click()}
@@ -215,6 +215,40 @@ export default function Profile() {
               </button>
             )}
             <p className="text-xs text-muted-foreground mt-0.5">{user.email}</p>
+
+            {/* Gender Selection */}
+            <div className="flex items-center gap-2 mt-2">
+              <button
+                onClick={async () => {
+                  const newGender = profile?.gender === "male" ? null : "male";
+                  await supabase.from("profiles").update({ gender: newGender } as any).eq("user_id", user.id);
+                  setProfile((prev) => prev ? { ...prev, gender: newGender } : prev);
+                }}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all",
+                  profile?.gender === "male"
+                    ? "bg-blue-500/20 border-blue-500/50 text-blue-400"
+                    : "bg-muted/30 border-border text-muted-foreground hover:text-foreground"
+                )}
+              >
+                ♂ {t("male") !== "male" ? t("male") : "ذكر"}
+              </button>
+              <button
+                onClick={async () => {
+                  const newGender = profile?.gender === "female" ? null : "female";
+                  await supabase.from("profiles").update({ gender: newGender } as any).eq("user_id", user.id);
+                  setProfile((prev) => prev ? { ...prev, gender: newGender } : prev);
+                }}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all",
+                  profile?.gender === "female"
+                    ? "bg-pink-500/20 border-pink-500/50 text-pink-400"
+                    : "bg-muted/30 border-border text-muted-foreground hover:text-foreground"
+                )}
+              >
+                ♀ {t("female") !== "female" ? t("female") : "أنثى"}
+              </button>
+            </div>
           </div>
         </motion.div>
 

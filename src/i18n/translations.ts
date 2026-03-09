@@ -615,7 +615,7 @@ export const translations: Record<Language, TranslationKeys> = {
     memoryMatch: "Memory Match", matchHiddenCards: "Найдите пары",
     comingSoon: "Скоро", ticket: "Билет", gameRules: "Правила игры",
     entryTicket: "Вход: 1 билет за игру", betWithPoints: "Ставки только Очками",
-    winnerGets: "Победитель получает +40 XP", loserGets: "Проигравший получает макс +5 XP",
+    winnerGets: "Победитель получает +300 XP", loserGets: "Проигравший получает +80 XP",
     noOpponentBot: "Нет соперника за 60с? Бот присоединится",
     findOpponent: "НАЙТИ СОПЕРНИКА", noTickets: "Нет билетов!", notEnoughPoints: "Недостаточно очков",
     setYourBet: "Установите ставку (Очки)", yourPoints: "Ваши Очки",

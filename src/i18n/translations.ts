@@ -183,7 +183,7 @@ export const translations: Record<Language, TranslationKeys> = {
     memoryMatch: "Memory Match", matchHiddenCards: "Match the hidden cards",
     comingSoon: "Coming Soon", ticket: "Ticket", gameRules: "Game Rules",
     entryTicket: "Entry: 1 Game Ticket per game", betWithPoints: "Bet with Points only (not XP)",
-    winnerGets: "Winner gets +40 XP", loserGets: "Loser gets +5 XP max",
+    winnerGets: "Winner gets +300 XP", loserGets: "Loser gets +80 XP",
     noOpponentBot: "No opponent in 60s? Bot joins automatically",
     findOpponent: "FIND OPPONENT", noTickets: "No Tickets!", notEnoughPoints: "Not Enough Points",
     setYourBet: "Set Your Bet (Points)", yourPoints: "Your Points",

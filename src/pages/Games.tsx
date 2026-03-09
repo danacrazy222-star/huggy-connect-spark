@@ -150,7 +150,7 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
   }, []);
 
   const getGameXPReward = useCallback(() => {
-    return { win: 120, lose: 20 };
+    return { win: 300, lose: 80 };
   }, []);
 
   useEffect(() => {

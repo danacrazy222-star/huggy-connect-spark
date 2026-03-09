@@ -26,9 +26,14 @@ export default function Auth() {
     if (user) navigate('/', { replace: true });
   }, [user, navigate]);
 
+  // Strip invisible/RTL/LTR characters from input
+  const sanitize = (val: string) => val.replace(/[\u200F\u200E\u061C\u200B\u200C\u200D\uFEFF]/g, '').trim();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !password.trim()) return;
+    const cleanEmail = sanitize(email);
+    const cleanPassword = sanitize(password);
+    if (!cleanEmail || !cleanPassword) return;
     if (password.length < 6) {
       toast.error(t('passwordMinLength'));
       return;

@@ -306,23 +306,19 @@ export default function Chat() {
 
             {/* Chat messages area */}
             <div className="flex-1" />
-            <div className="space-y-2 mb-3 overflow-y-auto max-h-[35vh]">
+            <div className="space-y-3 mb-3 overflow-y-auto max-h-[35vh]">
               {messages.map((msg, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.15 }}
-                  className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}>
-                  <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 flex items-center justify-center text-sm font-bold text-foreground shrink-0">
-                    {msg.avatar}
-                  </div>
-                  <div className={cn("max-w-[75%]", isRTL ? "text-right" : "")}>
-                    <div className={cn("flex items-center gap-1 mb-0.5", isRTL && "flex-row-reverse")}>
-                      <span className="text-xs font-medium text-foreground">{msg.user}</span>
-                      {msg.crown && <Crown className="w-3 h-3 text-primary" />}
-                    </div>
-                    <div className="bg-black/40 backdrop-blur-md rounded-2xl rounded-tl-sm px-3 py-1.5 border border-white/10">
-                      <p className="text-sm text-foreground/90">{msg.message}</p>
-                    </div>
-                  </div>
-                </motion.div>
+                <ChatMessageBubble
+                  key={i}
+                  msg={msg}
+                  index={i}
+                  isRTL={isRTL}
+                  onTranslated={(translated) =>
+                    setMessages((prev) =>
+                      prev.map((m, idx) => (idx === i ? { ...m, translated } : m))
+                    )
+                  }
+                />
               ))}
             </div>
 

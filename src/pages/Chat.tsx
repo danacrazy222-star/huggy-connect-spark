@@ -351,9 +351,7 @@ export default function Chat() {
                   index={i}
                   isRTL={isRTL}
                   onTranslated={(translated) =>
-                    setMessages((prev) =>
-                      prev.map((m, idx) => (idx === i ? { ...m, translated } : m))
-                    )
+                    updateMessageInRoom(activeRoom, i, { translated })
                   }
                 />
               ))}

@@ -42,9 +42,7 @@ type ChatMessage = ChatMsg;
 export default function Chat() {
   const [activeRoom, setActiveRoom] = useState(0);
   const [message, setMessage] = useState("");
-  const [challengeState, setChallengeState] = useState<ChallengeState>("idle");
-  const [countdown, setCountdown] = useState(60);
-  const [opponent, setOpponent] = useState<string | null>(null);
+  const [showDuel, setShowDuel] = useState(false);
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<{ avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);

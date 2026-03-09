@@ -6,6 +6,7 @@ import { Send, Smile, Lock, Crown, Gamepad2, Timer, Trophy, X, Users } from "luc
 import { cn } from "@/lib/utils";
 import { useGameStore } from "@/store/useGameStore";
 import { useChatNotification } from "@/hooks/useChatNotification";
+import { containsProfanity, censorMessage } from "@/utils/profanityFilter";
 
 import roomBronze from "@/assets/room-bronze.jpg";
 import roomSilver from "@/assets/room-silver.jpg";

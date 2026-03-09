@@ -124,7 +124,7 @@ export default function Chat() {
   const level = useGameStore((s) => s.level);
   const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
-  const { roomMessages, addMessage, initRoom, addUnread, clearUnread } = useChatStore();
+  const { roomMessages, addMessage, initRoom, addUnread, clearUnread, updateMessageInRoom } = useChatStore();
 
   // Initialize room with default messages
   useEffect(() => {

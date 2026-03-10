@@ -11,7 +11,7 @@ import { ChatMessageBubble, type ChatMsg } from "@/components/ChatMessageBubble"
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatDuelChallenge } from "@/components/chat/ChatDuelChallenge";
-import EmojiPicker from "emoji-picker-react";
+
 
 import roomBronze from "@/assets/room-bronze.jpg";
 import roomSilver from "@/assets/room-silver.jpg";

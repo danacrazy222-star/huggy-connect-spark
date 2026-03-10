@@ -62,9 +62,23 @@ export const useGameStore = create<GameState>()(
       
       checkSpinAvailability: () => {
         const { lastSpinTime } = get();
-        if (!lastSpinTime) return true;
-        const elapsed = Date.now() - lastSpinTime;
-        const canSpin = elapsed >= 24 * 60 * 60 * 1000;
+        if (!lastSpinTime) { set({ canSpin: true }); return true; }
+        // Lebanon timezone (Asia/Beirut) daily reset at 11:00 AM
+        const now = new Date();
+        const beirutNow = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Beirut' }));
+        const beirutSpin = new Date(new Date(lastSpinTime).toLocaleString('en-US', { timeZone: 'Asia/Beirut' }));
+        
+        // Find the current day's 11:00 AM reset boundary in Beirut time
+        const todayReset = new Date(beirutNow);
+        todayReset.setHours(11, 0, 0, 0);
+        
+        // If current Beirut time is before 11 AM, the relevant reset was yesterday's 11 AM
+        const currentReset = beirutNow.getHours() < 11 
+          ? new Date(todayReset.getTime() - 24 * 60 * 60 * 1000)
+          : todayReset;
+        
+        // User can spin if the last spin was before the current reset boundary
+        const canSpin = beirutSpin < currentReset;
         set({ canSpin });
         return canSpin;
       },

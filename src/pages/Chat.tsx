@@ -297,14 +297,15 @@ export default function Chat() {
             )}
             {/* Duel challenge — in World room only if unlocked, in other rooms always */}
             {(activeRoom !== 0 || worldChallengeUnlocked) && (
-            <ChatDuelChallenge
-              playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
-              playerLevel={level}
-              roomId={activeRoom}
-              onEnd={handleDuelEnd}
-              onStart={handleWorldChallengeStart}
-              isRTL={isRTL}
-            />
+              <ChatDuelChallenge
+                playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
+                playerLevel={level}
+                roomId={activeRoom}
+                onEnd={handleDuelEnd}
+                onStart={handleWorldChallengeStart}
+                isRTL={isRTL}
+              />
+            )}
 
             {/* Chat messages */}
             <div className="flex-1 min-h-0" />

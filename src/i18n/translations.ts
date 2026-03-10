@@ -268,6 +268,30 @@ export type TranslationKeys = {
   xpRainAddedToAccount: string;
   xpRainStarting: string;
   xpRainAnnounce: string;
+  // Google Play compliance
+  promotionRules: string;
+  termsAndConditions: string;
+  promotionalGiveaway: string;
+  drawGiveawayNote: string;
+  shopPackDisclaimer: string;
+  promoRulesHowDrawWorks: string;
+  promoRulesHowDrawWorksDesc: string;
+  promoRulesWinnerSelection: string;
+  promoRulesWinnerSelectionDesc: string;
+  promoRulesDateConditions: string;
+  promoRulesDateConditionsDesc: string;
+  promoRulesRewardsNote: string;
+  promoRulesRewardsNoteDesc: string;
+  promoRulesDisclaimer: string;
+  termsPromotionRules: string;
+  termsPromotionRulesDesc: string;
+  termsRewardExplanation: string;
+  termsRewardExplanationDesc: string;
+  termsRefundPolicy: string;
+  termsRefundPolicyDesc: string;
+  termsDisclaimer: string;
+  termsDisclaimerDesc: string;
+  termsLastUpdated: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

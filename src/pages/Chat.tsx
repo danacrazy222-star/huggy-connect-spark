@@ -12,7 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatDuelChallenge } from "@/components/chat/ChatDuelChallenge";
 import { WorldChallengePromo } from "@/components/chat/WorldChallengePromo";
-
+import { XPRainEvent } from "@/components/chat/XPRainEvent";
 
 import roomWorld from "@/assets/room-world.jpg";
 import roomBronze from "@/assets/room-bronze.jpg";
@@ -48,6 +48,8 @@ export default function Chat() {
   const [message, setMessage] = useState("");
   
   const [worldChallengeSessionActive, setWorldChallengeSessionActive] = useState(false);
+  const [xpRainActive, setXpRainActive] = useState(false);
+  const [xpRainCountdown, setXpRainCountdown] = useState(false);
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<{ avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);
@@ -137,6 +139,57 @@ export default function Chat() {
     return () => clearTimeout(welcomeTimeout);
   }, [activeRoom, canAccess]);
 
+  // XP Rain event - triggers every 30 minutes in Bronze room (index 1)
+  useEffect(() => {
+    if (activeRoom !== 1 || !canAccess) return;
+
+    const triggerRain = () => {
+      // Show countdown message first
+      const now = new Date();
+      const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+      addMessage(1, {
+        user: "⚡ System",
+        avatar: "⚡",
+        message: t("xpRainStarting"),
+        crown: true,
+        gender: null,
+        level: 0,
+        time: timeStr,
+        isSystem: true,
+      });
+      setXpRainCountdown(true);
+      setTimeout(() => {
+        setXpRainCountdown(false);
+        setXpRainActive(true);
+      }, 3000);
+    };
+
+    // First trigger after 20 seconds (demo), then every 30 min
+    const initialTimeout = setTimeout(triggerRain, 20000);
+    const interval = setInterval(triggerRain, 30 * 60 * 1000);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
+  }, [activeRoom, canAccess, addMessage, t]);
+
+  const handleXPRainEnd = useCallback((collected: number) => {
+    setXpRainActive(false);
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+    const userName = user?.email?.split("@")[0] || "Player";
+    addMessage(1, {
+      user: "⚡ System",
+      avatar: "⚡",
+      message: `🎉 ${userName} ${t("xpRainAnnounce")} ${collected} XP! ⚡`,
+      crown: true,
+      gender: null,
+      level: 0,
+      time: timeStr,
+      isSystem: true,
+    });
+  }, [addMessage, user, t]);
 
   const sendMessage = useCallback(() => {
     const trimmed = message.trim();
@@ -288,6 +341,19 @@ export default function Chat() {
         )}
       </div>
 
+      {/* XP Rain overlay */}
+      {xpRainActive && <XPRainEvent onEnd={handleXPRainEnd} />}
+
+      {/* Countdown overlay */}
+      {xpRainCountdown && (
+        <div className="fixed inset-0 z-[85] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="text-center space-y-2 animate-pulse">
+            <span className="text-5xl">⚡</span>
+            <p className="text-primary font-display text-2xl">{t("xpRainTitle")}</p>
+            <p className="text-foreground text-sm">3...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

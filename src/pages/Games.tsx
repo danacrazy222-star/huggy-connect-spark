@@ -106,36 +106,37 @@ function GamesList({ onPlaySnake, onPlayScratch }: { onPlaySnake: () => void; on
 function SnakeAndLadder({ onBack }: { onBack: () => void }) {
   const { gameTickets, addGameTicket, addXP, addPoints, points } = useGameStore();
   const { t, isRTL } = useTranslation();
+  const { user } = useAuth();
   const [phase, setPhase] = useState<GamePhase>("lobby");
   const [betAmount, setBetAmount] = useState(50);
-  const [searchTimer, setSearchTimer] = useState(60);
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentTurn, setCurrentTurn] = useState(0);
   const [diceValue, setDiceValue] = useState(1);
   const [rolling, setRolling] = useState(false);
   const [winner, setWinner] = useState<string | null>(null);
   const [message, setMessage] = useState("");
-  const searchIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startSearch = useCallback(() => {
     if (gameTickets <= 0) return;
+    if (!user) return;
     addGameTicket(-1);
     setPhase("searching");
-    setSearchTimer(60);
-    const timeout = setTimeout(() => {
-      setPlayers([
-        { name: t("playerYou"), pos: 0, isBot: false, color: "bg-primary" },
-        { name: t("botPlayer"), pos: 0, isBot: true, color: "bg-accent" },
-      ]);
-      setPhase("playing");
-      setCurrentTurn(0);
-      setMessage(t("rollTheDice"));
-    }, 5000);
-    searchIntervalRef.current = setInterval(() => {
-      setSearchTimer((prev) => { if (prev <= 1) { if (searchIntervalRef.current) clearInterval(searchIntervalRef.current); return 0; } return prev - 1; });
-    }, 1000);
-    return () => { clearTimeout(timeout); if (searchIntervalRef.current) clearInterval(searchIntervalRef.current); };
-  }, [gameTickets, addGameTicket, t]);
+  }, [gameTickets, addGameTicket, user]);
+
+  const handleMatchFound = useCallback((matchedPlayers: { name: string; isBot: boolean }[]) => {
+    const colors = ["bg-primary", "bg-accent", "bg-green-accent", "bg-blue-accent"];
+    setPlayers(
+      matchedPlayers.map((p, i) => ({
+        name: p.name,
+        pos: 0,
+        isBot: p.isBot,
+        color: colors[i] || colors[0],
+      }))
+    );
+    setPhase("playing");
+    setCurrentTurn(0);
+    setMessage(t("rollTheDice"));
+  }, [t]);
 
   const movePlayer = useCallback((playerIdx: number, dice: number) => {
     setPlayers((prev) => {
@@ -162,30 +163,45 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
       setPhase("finished");
       const rewards = getGameXPReward();
       if (!w.isBot) { addXP(rewards.win); addPoints(betAmount * 2); }
-      else { addXP(rewards.lose); } // Loser gets 20 XP
+      else { addXP(rewards.lose); }
     }
   }, [players, phase, addXP, addPoints, betAmount, getGameXPReward]);
 
+  // Bot turns — handle all bot players sequentially
   useEffect(() => {
-    if (phase !== "playing" || currentTurn !== 1 || !players[1]?.isBot) return;
+    if (phase !== "playing") return;
+    const currentPlayer = players[currentTurn];
+    if (!currentPlayer?.isBot) return;
+    
     const timer = setTimeout(() => {
       const dice = Math.floor(Math.random() * 6) + 1;
       setDiceValue(dice);
       setRolling(true);
-      setTimeout(() => { setRolling(false); movePlayer(1, dice); setCurrentTurn(0); }, 800);
+      setTimeout(() => {
+        setRolling(false);
+        movePlayer(currentTurn, dice);
+        // Move to next player
+        setCurrentTurn((prev) => (prev + 1) % players.length);
+      }, 800);
     }, 1200);
     return () => clearTimeout(timer);
   }, [currentTurn, phase, players, movePlayer]);
 
   const rollDice = () => {
-    if (rolling || currentTurn !== 0 || phase !== "playing") return;
+    if (rolling || players[currentTurn]?.isBot || phase !== "playing") return;
     setRolling(true);
     const dice = Math.floor(Math.random() * 6) + 1;
     let count = 0;
     const interval = setInterval(() => {
       setDiceValue(Math.floor(Math.random() * 6) + 1);
       count++;
-      if (count > 8) { clearInterval(interval); setDiceValue(dice); setRolling(false); movePlayer(0, dice); setTimeout(() => setCurrentTurn(1), 500); }
+      if (count > 8) {
+        clearInterval(interval);
+        setDiceValue(dice);
+        setRolling(false);
+        movePlayer(currentTurn, dice);
+        setTimeout(() => setCurrentTurn((prev) => (prev + 1) % players.length), 500);
+      }
     }, 100);
   };
 
@@ -229,10 +245,26 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
             <span className="text-sm text-foreground">{t("yourTickets")}</span>
             <span className="text-sm font-bold text-primary">{gameTickets}</span>
           </div>
-          <button onClick={startSearch} disabled={gameTickets <= 0 || points < betAmount}
-            className="w-full py-3.5 rounded-xl font-display font-bold text-lg bg-gradient-to-r from-gold-dark via-primary to-gold-dark text-primary-foreground shadow-gold hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-            {gameTickets <= 0 ? t("noTickets") : points < betAmount ? t("notEnoughPoints") : t("findOpponent")}
-          </button>
+          
+          {/* Queue info */}
+          <div className="bg-card/60 border border-border rounded-xl p-3 space-y-1">
+            <div className={cn("flex items-center gap-2 text-xs text-muted-foreground", isRTL && "flex-row-reverse")}>
+              <Users className="w-4 h-4 text-accent" />
+              <span>{t("queueBotFallback")}</span>
+            </div>
+          </div>
+
+          {!user ? (
+            <button onClick={() => window.location.href = '/auth'}
+              className="w-full py-3.5 rounded-xl font-display font-bold text-lg bg-gradient-to-r from-accent/80 via-accent to-accent/80 text-primary-foreground flex items-center justify-center gap-2">
+              <LogIn className="w-5 h-5" /> {t("loginToPlay")}
+            </button>
+          ) : (
+            <button onClick={startSearch} disabled={gameTickets <= 0 || points < betAmount}
+              className="w-full py-3.5 rounded-xl font-display font-bold text-lg bg-gradient-to-r from-gold-dark via-primary to-gold-dark text-primary-foreground shadow-gold hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+              {gameTickets <= 0 ? t("noTickets") : points < betAmount ? t("notEnoughPoints") : t("findOpponent")}
+            </button>
+          )}
         </div>
       </div>
     );
@@ -240,15 +272,13 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
 
   if (phase === "searching") {
     return (
-      <div className="min-h-screen bg-premium-gradient stars-bg pb-20 flex flex-col items-center justify-center">
-        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-          className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full mb-6" />
-        <h2 className="font-display text-xl text-foreground mb-2">{t("findingOpponent")}</h2>
-        <p className="text-muted-foreground text-sm mb-4">{t("botJoinsIn")} <span className="text-primary font-bold">{searchTimer}s</span></p>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Users className="w-4 h-4" /><span>{t("searchingPlayers")}</span>
-        </div>
-      </div>
+      <MatchmakingQueue
+        gameType="snake"
+        betAmount={betAmount}
+        maxPlayers={2}
+        onMatchFound={handleMatchFound}
+        onCancel={() => { addGameTicket(1); setPhase("lobby"); }}
+      />
     );
   }
 

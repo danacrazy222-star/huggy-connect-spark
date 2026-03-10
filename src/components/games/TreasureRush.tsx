@@ -397,10 +397,9 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
             </button>
             <div className="flex items-center gap-2">
               <Clock className={cn("w-4 h-4", timerColor)} />
-              <motion.span key={timeLeft} initial={{ scale: 1.3 }} animate={{ scale: 1 }}
-                className={cn("text-xl font-mono font-bold", timerColor)}>
+              <span className={cn("text-xl font-mono font-bold", timerColor)}>
                 {timeLeft}s
-              </motion.span>
+              </span>
             </div>
             {doubleActive && (
               <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 0.5 }}
@@ -420,21 +419,22 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
         {/* Scoreboard */}
         <div className={cn("flex gap-2 px-3 py-2 overflow-x-auto shrink-0", isRTL && "flex-row-reverse")}>
           {[...players].sort((a, b) => b.score - a.score).map((p, i) => (
-            <motion.div key={p.name} layout
+            <div key={p.name}
               className={cn("flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold shrink-0",
                 i === 0 ? "border-primary/50 bg-primary/10" : "border-border bg-card/50"
               )}>
               <span>{p.emoji}</span>
               <span className={cn("text-foreground", i === 0 && "text-primary")}>{p.name}</span>
               <span className="text-primary font-mono">{p.score}</span>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Last opened feedback */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {lastOpened && (
-            <motion.div key={`${lastOpened.box.id}-${Date.now()}`} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+            <motion.div key={`feedback`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               className="mx-3 mb-2">
               <div className={cn("text-center text-xs py-1.5 rounded-lg",
                 lastOpened.content === "trap" ? "bg-destructive/20 text-destructive" :
@@ -464,18 +464,15 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
               return (
                 <motion.button
                   key={`${roundNumber}-${box.id}`}
-                  initial={{ scale: 0, rotateY: 180 }}
+                  initial={false}
                   animate={{
-                    scale: 1,
-                    rotateY: 0,
-                    x: shakeBox === box.id ? [0, -5, 5, -5, 0] : 0,
+                    x: shakeBox === box.id ? [0, -4, 4, -4, 0] : 0,
                   }}
-                  transition={{ delay: box.id * 0.03, duration: 0.3 }}
-                  whileTap={!box.opened ? { scale: 0.9 } : undefined}
+                  transition={{ duration: 0.3 }}
                   onClick={() => !box.opened && handlePlayerClick(box.id)}
                   disabled={box.opened}
                   className={cn(
-                    "aspect-square rounded-xl border-2 flex items-center justify-center text-2xl transition-all relative overflow-hidden",
+                    "aspect-square rounded-xl border-2 flex items-center justify-center text-2xl relative overflow-hidden",
                     box.opened
                       ? box.content === "trap"
                         ? "bg-destructive/10 border-destructive/30"
@@ -492,14 +489,9 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
                   )}
                 >
                   {box.opened ? (
-                    <motion.span initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }}
-                      transition={{ type: "spring", bounce: 0.5 }}>
-                      {info.emoji}
-                    </motion.span>
+                    <span>{info.emoji}</span>
                   ) : (
-                    <motion.span animate={{ y: [0, -2, 0] }} transition={{ repeat: Infinity, duration: 1.5, delay: box.id * 0.1 }}>
-                      📦
-                    </motion.span>
+                    <span>📦</span>
                   )}
                   {/* Player indicator who opened */}
                   {box.opened && box.openedBy !== null && (

@@ -1,0 +1,1 @@
+ALTER TABLE public.rps_matches ADD COLUMN room_id integer NOT NULL DEFAULT 0;

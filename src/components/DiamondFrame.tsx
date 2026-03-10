@@ -11,43 +11,80 @@ interface DiamondFrameProps {
 export function DiamondFrame({ children, size = "sm", active = true, className }: DiamondFrameProps) {
   if (!active) return <>{children}</>;
 
-  const sizeClasses = size === "lg" ? "p-[3px]" : "p-[2px]";
-  const glowSize = size === "lg" ? "shadow-[0_0_16px_rgba(255,215,0,0.5),0_0_32px_rgba(147,51,234,0.3)]" : "shadow-[0_0_10px_rgba(255,215,0,0.4),0_0_20px_rgba(147,51,234,0.25)]";
+  const ringSize = size === "lg" ? "w-[104px] h-[104px]" : "w-[43px] h-[43px]";
+  const innerSize = size === "lg" ? "w-[96px] h-[96px]" : "w-[39px] h-[39px]";
+  const cornerSize = size === "lg" ? 6 : 3;
 
   return (
-    <div className={cn("relative", className)}>
-      {/* Animated rotating gradient border */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-        className={cn(
-          "absolute inset-0 rounded-full",
-          glowSize,
-        )}
+    <div className={cn("relative inline-flex items-center justify-center", className)}>
+      {/* Outer elegant ring */}
+      <div className={cn("absolute rounded-full", ringSize)}
         style={{
-          background: "conic-gradient(from 0deg, hsl(45 100% 50%), hsl(270 80% 55%), hsl(45 100% 70%), hsl(320 80% 50%), hsl(45 100% 50%))",
+          background: "linear-gradient(135deg, hsl(45 100% 65%), hsl(45 100% 45%), hsl(35 100% 40%), hsl(45 100% 55%))",
+          padding: size === "lg" ? 3 : 2,
+        }}
+      >
+        <div className={cn("w-full h-full rounded-full")}
+          style={{ background: "hsl(var(--background))" }}
+        />
+      </div>
+
+      {/* Inner gold ring with gap */}
+      <div className={cn("absolute rounded-full", innerSize)}
+        style={{
+          boxShadow: `inset 0 0 0 ${size === "lg" ? "1.5px" : "1px"} hsl(45 100% 55% / 0.6)`,
         }}
       />
-      {/* Inner container */}
-      <div className={cn("relative rounded-full", sizeClasses)}
+
+      {/* Subtle ambient glow */}
+      <motion.div
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className={cn("absolute rounded-full", ringSize)}
         style={{
-          background: "conic-gradient(from 0deg, hsl(45 100% 50%), hsl(270 80% 55%), hsl(45 100% 70%), hsl(320 80% 50%), hsl(45 100% 50%))",
-        }}>
-        <div className="rounded-full overflow-hidden bg-background">
-          {children}
+          boxShadow: size === "lg"
+            ? "0 0 12px hsl(45 100% 50% / 0.25), 0 0 24px hsl(45 100% 50% / 0.1)"
+            : "0 0 6px hsl(45 100% 50% / 0.2), 0 0 12px hsl(45 100% 50% / 0.08)",
+        }}
+      />
+
+      {/* Corner ornaments */}
+      {[0, 90, 180, 270].map((deg) => (
+        <div
+          key={deg}
+          className="absolute"
+          style={{
+            width: cornerSize,
+            height: cornerSize,
+            background: "linear-gradient(135deg, hsl(45 100% 70%), hsl(45 100% 45%))",
+            borderRadius: "50%",
+            transform: `rotate(${deg}deg) translateY(${size === "lg" ? -52 : -21.5}px)`,
+            boxShadow: "0 0 4px hsl(45 100% 50% / 0.5)",
+          }}
+        />
+      ))}
+
+      {/* The actual avatar */}
+      <div className="relative z-10">
+        {children}
+      </div>
+
+      {/* Diamond badge */}
+      <div className={cn(
+        "absolute z-20 flex items-center justify-center",
+        size === "lg" ? "-bottom-1 left-1/2 -translate-x-1/2" : "-bottom-1 -right-1"
+      )}>
+        <div className={cn(
+          "flex items-center justify-center rounded-full border-2 border-background",
+          size === "lg" ? "w-6 h-6 text-[10px]" : "w-4 h-4 text-[8px]"
+        )}
+          style={{
+            background: "linear-gradient(135deg, hsl(45 100% 55%), hsl(35 100% 40%))",
+          }}
+        >
+          <span className="font-bold text-primary-foreground">💎</span>
         </div>
       </div>
-      {/* Diamond badge */}
-      <motion.div
-        animate={{ scale: [1, 1.2, 1] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className={cn(
-          "absolute -top-1 -right-1 z-10 text-xs",
-          size === "lg" ? "text-base -top-1.5 -right-1.5" : ""
-        )}
-      >
-        💎
-      </motion.div>
     </div>
   );
 }

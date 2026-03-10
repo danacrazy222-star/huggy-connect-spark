@@ -510,7 +510,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Pro
                   )}>
                     {MOVE_EMOJI[opponentMove]}
                   </div>
-                  <span className="text-[10px] font-bold text-muted-foreground">{opponentName}</span>
+                  <NameWithLevel name={opponentName} level={opponentLevel} className="text-[10px]" />
                 </div>
               </div>
               <motion.div initial={{ y: 10 }} animate={{ y: 0 }}>

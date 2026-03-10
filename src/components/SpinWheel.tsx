@@ -6,14 +6,14 @@ import { Gift, Zap, Ticket, Trophy, Sparkles, X, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const SEGMENTS = [
-  { label: "50\nXP", color: "#14532D", colorEnd: "#16A34A", reward: { type: "xp50" }, icon: "⚡" },
-  { label: "Try\nAgain", color: "#166534", colorEnd: "#22C55E", reward: { type: "none" }, icon: "🔄" },
-  { label: "Surprise\nGift", color: "#86198F", colorEnd: "#C026D3", reward: { type: "surprise" }, icon: "🎁" },
-  { label: "Game\nTicket", color: "#15803D", colorEnd: "#22C55E", reward: { type: "gameTicket" }, icon: "🎮" },
-  { label: "15 Pts\n+50 XP", color: "#B8860B", colorEnd: "#FFD700", reward: { type: "pointsXp" }, icon: "💎" },
-  { label: "100\nXP", color: "#1D4ED8", colorEnd: "#3B82F6", reward: { type: "xp100" }, icon: "⚡" },
-  { label: "Tarot\nTicket", color: "#7E22CE", colorEnd: "#A855F7", reward: { type: "tarotTicket" }, icon: "🔮" },
-  { label: "Game &\nTarot", color: "#B91C1C", colorEnd: "#DC2626", reward: { type: "ticketCombo" }, icon: "🎟️" },
+  { label: "50\nXP", color: "#1a8a4a", colorEnd: "#2ecc71", reward: { type: "xp50" }, icon: "⚡" },
+  { label: "Try\nAgain", color: "#6b6b6b", colorEnd: "#95a5a6", reward: { type: "none" }, icon: "🔄" },
+  { label: "Surprise\nGift", color: "#7b3fa0", colorEnd: "#9b59b6", reward: { type: "surprise" }, icon: "🎁" },
+  { label: "Game\nTicket", color: "#1a8a4a", colorEnd: "#2ecc71", reward: { type: "gameTicket" }, icon: "🎮" },
+  { label: "15 Pts\n+50 XP", color: "#c9950a", colorEnd: "#f1c40f", reward: { type: "pointsXp" }, icon: "💎" },
+  { label: "100\nXP", color: "#2270b8", colorEnd: "#3498db", reward: { type: "xp100" }, icon: "⚡" },
+  { label: "Tarot\nTicket", color: "#7b3fa0", colorEnd: "#9b59b6", reward: { type: "tarotTicket" }, icon: "🔮" },
+  { label: "Game &\nTarot", color: "#c0392b", colorEnd: "#e74c3c", reward: { type: "ticketCombo" }, icon: "🎟️" },
 ];
 
 const REWARD_LABELS: Record<string, string> = {

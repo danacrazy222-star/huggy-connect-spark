@@ -388,9 +388,9 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
     const timerColor = timeLeft <= 10 ? "text-destructive" : timeLeft <= 20 ? "text-primary" : "text-green-accent";
 
     return (
-      <div className="min-h-screen bg-premium-gradient stars-bg pb-4" dir={isRTL ? "rtl" : "ltr"}>
+      <div className="h-screen bg-premium-gradient stars-bg flex flex-col overflow-hidden fixed inset-0 z-50" dir={isRTL ? "rtl" : "ltr"}>
         {/* Header with timer */}
-        <div className="px-3 py-2">
+        <div className="px-3 py-2 shrink-0">
           <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
             <button onClick={onBack} className="text-muted-foreground hover:text-foreground">
               <ArrowLeft className={cn("w-4 h-4", isRTL && "rotate-180")} />

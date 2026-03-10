@@ -213,6 +213,9 @@ export type TranslationKeys = {
   duelVoteWrong: string;
   duelDidntVote: string;
   duelDone: string;
+  duelWaitingReal: string;
+  duelWaitingOpponent: string;
+  duelYouPicked: string;
   duelRock: string;
   duelPaper: string;
   duelScissors: string;

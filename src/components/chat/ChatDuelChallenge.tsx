@@ -466,7 +466,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
           {/* ═══ CLASH ═══ */}
           {phase === "clash" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-4">
-              <p className="text-sm font-bold text-primary mb-5">⚡ حجر... ورقة... مقص!</p>
+              <p className="text-sm font-bold text-primary mb-5">{t("duelRockPaperScissors")}</p>
               <div className="flex items-center justify-center gap-8">
                 <div className="flex flex-col items-center gap-2">
                   <motion.div

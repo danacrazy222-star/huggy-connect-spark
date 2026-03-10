@@ -6,6 +6,8 @@ import { useGameStore } from "@/store/useGameStore";
 export function WorldChallengePromo() {
   const [open, setOpen] = useState(false);
   const [purchased, setPurchased] = useState(false);
+  const worldChallengeUnlocked = useGameStore((s) => s.worldChallengeUnlocked);
+  const unlockWorldChallenge = useGameStore((s) => s.unlockWorldChallenge);
 
   const handleBuy = () => {
     setPurchased(true);

@@ -58,7 +58,7 @@ export default function Draw() {
   const {
     prizeAmount, entries, currentWinner, winningEntryId,
     drawHistory, isDrawActive, getProgressPercent, resetDraw,
-    drawStartedAt, drawDurationMs, checkTimerExpired, triggerDraw
+    drawStartedAt, drawDurationMs, checkTimerExpired, handleTimerEnd, wasExtended
   } = useDrawStore();
 
   const [showWinnerPopup, setShowWinnerPopup] = useState(!!currentWinner);

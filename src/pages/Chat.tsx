@@ -63,6 +63,7 @@ const botScripts: Record<number, ChatMsg[]> = {
     { user: "Noor", avatar: "N", message: "I grinded for months to get here — totally worth it! 💪✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 21 },
     { user: "Sara", avatar: "S", message: "Legend players get the best mystery chest drops! 🎁👑", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 25 },
     { user: "Omar", avatar: "O", message: "Keep pushing — Level 40 is the ultimate achievement! 🏅🔥", crown: true, gender: "male", avatarUrl: avatarMale2, level: 38 },
+  ],
 };
 
 const rooms = [

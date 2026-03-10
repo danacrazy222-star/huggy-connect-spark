@@ -254,6 +254,22 @@ export default function Profile() {
                   </motion.div>
                 )}
               </AnimatePresence>
+              <button onClick={() => navigate("/promotion-rules")}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <Shield className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">{t("promotionRules")}</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+              <button onClick={() => navigate("/terms")}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <FileText className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">{t("termsAndConditions")}</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
               <button onClick={handleClearData}
                 className={cn("w-full flex items-center justify-between p-3 hover:bg-destructive/10 transition-colors", isRTL && "flex-row-reverse")}>
                 <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>

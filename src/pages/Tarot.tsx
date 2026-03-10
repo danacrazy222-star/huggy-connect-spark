@@ -29,10 +29,18 @@ export default function Tarot() {
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [shuffledDeck, setShuffledDeck] = useState<TarotCard[]>([]);
+  const [userGender, setUserGender] = useState<string>("male");
   const { tarotTickets, addTarotTicket } = useGameStore();
   const { t, isRTL, language } = useTranslation();
   const chatEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("gender").eq("user_id", user.id).single()
+      .then(({ data }) => { if (data?.gender) setUserGender(data.gender); });
+  }, [user]);
 
   useEffect(() => {
     setShuffledDeck([...fullTarotDeck].sort(() => Math.random() - 0.5).slice(0, DISPLAY_CARDS));

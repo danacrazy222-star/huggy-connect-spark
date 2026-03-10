@@ -270,8 +270,8 @@ export default function Draw() {
               animate={{ opacity: 1, y: 0 }}
               className="bg-accent/10 border border-accent/30 rounded-xl p-3 text-center"
             >
-              <p className="text-xs text-accent font-bold mb-0.5">🔄 Draw Extended</p>
-              <p className="text-[10px] text-muted-foreground">The draw has been extended due to high demand. All entries remain active.</p>
+              <p className="text-xs text-accent font-bold mb-0.5">🔄 {t("drawExtended")}</p>
+              <p className="text-[10px] text-muted-foreground">{t("drawExtendedMessage")}</p>
             </motion.div>
           )}
 

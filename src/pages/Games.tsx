@@ -139,7 +139,7 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
     setPlayers((prev) => {
       const updated = [...prev];
       let newPos = updated[playerIdx].pos + dice;
-      if (newPos > BOARD_SIZE) { setMessage(`${updated[playerIdx].name} needs exact roll!`); return updated; }
+      if (newPos > BOARD_SIZE) { setMessage(`${updated[playerIdx].name} ${t("needsExactRoll")}`); return updated; }
       if (newPos === BOARD_SIZE) { updated[playerIdx] = { ...updated[playerIdx], pos: newPos }; return updated; }
       if (SNAKES[newPos]) { const from = newPos; newPos = SNAKES[newPos]; setMessage(`🐍 ${from} → ${newPos}`); }
       else if (LADDERS[newPos]) { const from = newPos; newPos = LADDERS[newPos]; setMessage(`🪜 ${from} → ${newPos}`); }

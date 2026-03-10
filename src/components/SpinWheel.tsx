@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 const SEGMENTS = [
   { label: "50\nXP", color: "#1a8a4a", colorEnd: "#2ecc71", reward: { type: "xp50" }, icon: "⚡" },
-  { label: "Try\nAgain", color: "#6b6b6b", colorEnd: "#95a5a6", reward: { type: "none" }, icon: "🔄" },
+  { label: "Try\nAgain", color: "#7a8085", colorEnd: "#9aa0a6", reward: { type: "none" }, icon: "🔄" },
   { label: "Surprise\nGift", color: "#7b3fa0", colorEnd: "#9b59b6", reward: { type: "surprise" }, icon: "🎁" },
   { label: "Game\nTicket", color: "#1a8a4a", colorEnd: "#2ecc71", reward: { type: "gameTicket" }, icon: "🎮" },
   { label: "15 Pts\n+50 XP", color: "#c9950a", colorEnd: "#f1c40f", reward: { type: "pointsXp" }, icon: "💎" },
@@ -142,7 +142,7 @@ export function SpinWheel() {
     <div className={cn("flex flex-col items-center gap-5", isRTL && "direction-rtl")}>
       
       {/* === WHEEL === */}
-      <div className="relative w-[300px] h-[300px] mx-auto">
+      <div className="relative w-[300px] h-[300px] mx-auto" style={{ filter: "drop-shadow(0 0 25px rgba(255,200,0,0.35))" }}>
         <div className="absolute -inset-6 rounded-full" 
           style={{ 
             background: "radial-gradient(circle, rgba(255,215,0,0.12) 30%, rgba(155,89,182,0.08) 60%, transparent 100%)",

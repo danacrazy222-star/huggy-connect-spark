@@ -52,6 +52,7 @@ const App = () => (
             </Routes>
             <BottomNav />
             <WelcomePopup />
+            <DmNotificationBubble />
           </div>
         </BrowserRouter>
       </AuthProvider>

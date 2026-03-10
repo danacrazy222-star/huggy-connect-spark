@@ -10,15 +10,15 @@ export default function VIP() {
   const { t, isRTL } = useTranslation();
 
   const xpNeededForNext = XP_FOR_LEVEL[level] || 0;
-  const progress = level >= 30 ? 100 : xpNeededForNext > 0 ? Math.min((xp / xpNeededForNext) * 100, 100) : 100;
+  const progress = level >= 40 ? 100 : xpNeededForNext > 0 ? Math.min((xp / xpNeededForNext) * 100, 100) : 100;
   const xpRemaining = Math.max(xpNeededForNext - xp, 0);
 
   const milestones: { name: string; lvl: number; stars?: number; icon?: "diamond" | "flame" }[] = [
     { name: `${t("level")} 1`, lvl: 1, stars: 1 },
     { name: `${t("level")} 5`, lvl: 5, stars: 2 },
     { name: `${t("level")} 10`, lvl: 10, stars: 3 },
-    { name: t("elite"), lvl: 15, icon: "diamond" },
-    { name: t("legend"), lvl: 20, icon: "flame" },
+    { name: t("elite"), lvl: 20, icon: "diamond" },
+    { name: t("legend"), lvl: 40, icon: "flame" },
   ];
 
   const chests = [
@@ -58,8 +58,8 @@ export default function VIP() {
           <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
             <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
               <TrendingUp className="w-4 h-4 text-primary" />
-              <span className="text-sm font-bold text-foreground">
-                {t("level")} {level} → {Math.min(level + 1, 30)}
+            <span className="text-sm font-bold text-foreground">
+                {t("level")} {level} → {Math.min(level + 1, 40)}
               </span>
             </div>
             <span className="text-xs text-muted-foreground">{Math.round(progress)}%</span>
@@ -83,7 +83,7 @@ export default function VIP() {
             <span className="text-muted-foreground">
               {xp.toLocaleString()} / {xpNeededForNext.toLocaleString()} XP
             </span>
-            {level < 30 && (
+            {level < 40 && (
               <span className="text-primary font-semibold">
                 {xpRemaining.toLocaleString()} XP ⬅️
               </span>

@@ -38,7 +38,7 @@ const botScripts: Record<number, ChatMsg[]> = {
     { user: "Luna", avatar: "L", message: "Don't forget to check the Shop — buy a book pack and enter the $500 gift card draw! 💳", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
     { user: "Omar", avatar: "O", message: "The Draw page shows the prizes — Amazon, Google Play, or SHEIN gift cards! 🎉", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12 },
     { user: "Noor", avatar: "N", message: "I love the Tarot feature! Madam Zara reads your cards with AI 🔮✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-    { user: "Sara", avatar: "S", message: "Level up to unlock VIP rooms — Bronze at Lv.1, Silver at Lv.5, Gold at Lv.10! 👑", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+    { user: "Sara", avatar: "S", message: "Level up to unlock VIP rooms — Bronze at Lv.1, Silver at Lv.5, Gold at Lv.10, Diamond at Lv.20! 👑", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
     { user: "Omar", avatar: "O", message: "Challenge other players in the duel games to earn XP fast! ⚔️💪", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
     { user: "Luna", avatar: "L", message: "Who's here? Say hi! 👋 The more the merrier! 🎊", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
     { user: "Noor", avatar: "N", message: "Pro tip: the Premium book pack gives you the most XP + 2 tarot tickets! 📚✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
@@ -62,19 +62,19 @@ const botScripts: Record<number, ChatMsg[]> = {
   3: [ // Gold
     { user: "Omar", avatar: "O", message: "Gold room! 🥇 Only legends reach Level 10! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
     { user: "Sara", avatar: "S", message: "The XP rewards get bigger in higher rooms! 💎", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-    { user: "Luna", avatar: "L", message: "Diamond room at Level 15 is the ultimate goal! 💎🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+    { user: "Luna", avatar: "L", message: "Diamond room at Level 20 is the next big goal! 💎🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
   ],
   4: [ // Diamond
     { user: "Sara", avatar: "S", message: "Diamond room! 💎👑 The elite club! Welcome champion!", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 15 },
     { user: "Omar", avatar: "O", message: "You're at the top! The best rewards and events happen here! 🏆✨", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
   ],
   5: [ // Legend
-    { user: "Sara", avatar: "S", message: "🔥 Legend room! Only true champions reach Level 20! 👑🏆", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 25 },
+    { user: "Sara", avatar: "S", message: "🔥 Legend room! Only true champions reach Level 40! 👑🏆", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 42 },
     { user: "Omar", avatar: "O", message: "Welcome to the hall of legends! The rewards here are INSANE! 💎⚡", crown: true, gender: "male", avatarUrl: avatarMale2, level: 22 },
     { user: "Luna", avatar: "L", message: "This is where the elite gather — XP Rain drops are HUGE here! 🌧️🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 28 },
     { user: "Noor", avatar: "N", message: "I grinded for months to get here — totally worth it! 💪✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 21 },
     { user: "Sara", avatar: "S", message: "Legend players get the best mystery chest drops! 🎁👑", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 25 },
-    { user: "Omar", avatar: "O", message: "Keep pushing — Level 30 is the ultimate achievement! 🏅🔥", crown: true, gender: "male", avatarUrl: avatarMale2, level: 22 },
+    { user: "Omar", avatar: "O", message: "Keep pushing — Level 40 is the ultimate achievement! 🏅🔥", crown: true, gender: "male", avatarUrl: avatarMale2, level: 42 },
   ],
 };
 
@@ -83,8 +83,8 @@ const rooms = [
   { name: "Bronze", level: 1, image: roomBronze, accent: "from-blue-500/60", border: "border-blue-400/50", glow: "hsl(185 100% 60%)", shape: "circle" as const },
   { name: "Silver", level: 5, image: roomSilver, accent: "from-pink-500/60", border: "border-pink-400/50", glow: "hsl(320 100% 65%)", shape: "circle" as const },
   { name: "Gold", level: 10, image: roomGold, accent: "from-purple-500/60", border: "border-purple-400/50", glow: "hsl(280 80% 65%)", shape: "diamond" as const },
-  { name: "Diamond", level: 15, image: roomDiamond, accent: "from-amber-500/60", border: "border-amber-400/50", glow: "hsl(35 100% 55%)", shape: "flame" as const },
-  { name: "🔥 Legend", level: 20, image: roomLegendary, accent: "from-red-500/60", border: "border-red-400/50", glow: "hsl(0 100% 55%)", shape: "flame" as const },
+  { name: "💎 Diamond", level: 20, image: roomDiamond, accent: "from-amber-500/60", border: "border-amber-400/50", glow: "hsl(35 100% 55%)", shape: "flame" as const },
+  { name: "🔥 Legend", level: 40, image: roomLegendary, accent: "from-red-500/60", border: "border-red-400/50", glow: "hsl(0 100% 55%)", shape: "flame" as const },
 ];
 
 export default function Chat() {

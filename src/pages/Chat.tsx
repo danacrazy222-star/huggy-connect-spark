@@ -49,6 +49,7 @@ export default function Chat() {
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<{ avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);
+  const worldChallengeUnlocked = useGameStore((s) => s.worldChallengeUnlocked);
   const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
   const { roomMessages, addMessage, initRoom, addUnread, clearUnread, updateMessageInRoom } = useChatStore();
@@ -206,13 +207,15 @@ export default function Chat() {
           </div>
         ) : (
           <div className="flex-1 flex flex-col px-4">
-            {/* Duel challenge - at top */}
-            <ChatDuelChallenge
-              playerName={user?.email?.split("@")[0] || "You"}
-              playerLevel={level}
-              onEnd={handleDuelEnd}
-              isRTL={isRTL}
-            />
+            {/* Duel challenge - only in World room if unlocked, always in other rooms */}
+            {(activeRoom !== 0 || worldChallengeUnlocked) && (
+              <ChatDuelChallenge
+                playerName={user?.email?.split("@")[0] || "You"}
+                playerLevel={level}
+                onEnd={handleDuelEnd}
+                isRTL={isRTL}
+              />
+            )}
 
             {/* Chat messages area */}
             <div className="flex-1" />

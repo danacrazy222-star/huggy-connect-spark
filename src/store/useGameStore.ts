@@ -10,6 +10,7 @@ interface GameState {
   drawEntries: number;
   lastSpinTime: number | null;
   canSpin: boolean;
+  worldChallengeUnlocked: boolean;
   
   addPoints: (amount: number) => void;
   addXP: (amount: number) => void;
@@ -18,6 +19,7 @@ interface GameState {
   addDrawEntry: (amount: number) => void;
   setLastSpinTime: (time: number) => void;
   checkSpinAvailability: () => boolean;
+  unlockWorldChallenge: () => void;
 }
 
 // XP required to advance FROM each level (index = level)
@@ -40,7 +42,7 @@ export const useGameStore = create<GameState>()(
       drawEntries: 2,
       lastSpinTime: null,
       canSpin: true,
-
+      worldChallengeUnlocked: false,
       addPoints: (amount) => set((s) => ({ points: s.points + amount })),
       
       addXP: (amount) => set((s) => {
@@ -59,6 +61,7 @@ export const useGameStore = create<GameState>()(
       addDrawEntry: (amount) => set((s) => ({ drawEntries: s.drawEntries + amount })),
       
       setLastSpinTime: (time) => set({ lastSpinTime: time, canSpin: false }),
+      unlockWorldChallenge: () => set({ worldChallengeUnlocked: true }),
       
       checkSpinAvailability: () => {
         const { lastSpinTime } = get();

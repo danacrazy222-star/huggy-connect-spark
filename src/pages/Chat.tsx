@@ -21,6 +21,45 @@ import roomSilver from "@/assets/room-silver.jpg";
 import roomGold from "@/assets/room-gold.jpg";
 import roomDiamond from "@/assets/room-diamond.jpg";
 
+import avatarMale1 from "@/assets/avatar-male-1.png";
+import avatarMale2 from "@/assets/avatar-male-2.png";
+import avatarFemale1 from "@/assets/avatar-female-1.png";
+import avatarFemale2 from "@/assets/avatar-female-2.png";
+import avatarFemale3 from "@/assets/avatar-female-3.png";
+
+const getWelcomeMessages = (roomIndex: number): ChatMsg[] => {
+  const baseMessages: ChatMsg[][] = [
+    // World room
+    [
+      { user: "Luna", avatar: "L", message: "Welcome to the World Room! 🌍✨ Say hello!", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7, time: "12:00" },
+      { user: "Omar", avatar: "O", message: "Hey everyone! Let's have fun 🎮", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12, time: "12:01" },
+      { user: "Sara", avatar: "S", message: "Good vibes only! 🍀💖", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15, time: "12:02" },
+    ],
+    // Bronze room
+    [
+      { user: "Luna", avatar: "L", message: "Welcome to Bronze! 🥉🔥 Who's spinning today?", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7, time: "12:00" },
+      { user: "Noor", avatar: "N", message: "Just got here! Good luck everyone 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8, time: "12:01" },
+      { user: "Omar", avatar: "O", message: "Let's play! 🎰 Who's ready for a duel?", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12, time: "12:02" },
+    ],
+    // Silver room
+    [
+      { user: "Sara", avatar: "S", message: "Silver squad! 🥈✨ Welcome!", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15, time: "12:00" },
+      { user: "Luna", avatar: "L", message: "This room is getting lit 🔥🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7, time: "12:01" },
+    ],
+    // Gold room
+    [
+      { user: "Omar", avatar: "O", message: "Gold room! 🥇 Only legends here 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12, time: "12:00" },
+      { user: "Sara", avatar: "S", message: "Level 10+ gang! 💪🏆", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15, time: "12:01" },
+    ],
+    // Diamond room
+    [
+      { user: "Sara", avatar: "S", message: "Diamond room! 💎👑 The elite club!", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 15, time: "12:00" },
+      { user: "Omar", avatar: "O", message: "Welcome to the top! 🏆✨", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12, time: "12:01" },
+    ],
+  ];
+  return baseMessages[roomIndex] || baseMessages[0];
+};
+
 const rooms = [
   { name: "🌍 World", level: 0, image: roomWorld, accent: "from-emerald-500/60", border: "border-emerald-400/50", glow: "hsl(160 80% 50%)", shape: "circle" as const },
   { name: "Bronze", level: 1, image: roomBronze, accent: "from-blue-500/60", border: "border-blue-400/50", glow: "hsl(185 100% 60%)", shape: "circle" as const },

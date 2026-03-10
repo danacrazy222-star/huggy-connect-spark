@@ -41,6 +41,7 @@ interface Props {
   playerName: string;
   playerLevel: number;
   onEnd: (won: boolean, winnerName: string, loserName: string) => void;
+  onStart?: () => void;
   isRTL?: boolean;
 }
 

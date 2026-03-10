@@ -12,7 +12,6 @@ const tabs = [
   { path: "/draw", icon: Gift, key: "draw" as const },
   { path: "/games", icon: Gamepad2, key: "games" as const },
   { path: "/chat", icon: MessageCircle, key: "chat" as const, dynamicBadge: true },
-  { path: "/messages", icon: Mail, key: "privateMessages" as const },
   { path: "/vip", icon: Crown, key: "crown" as const },
   { path: "/tarot", icon: Sparkles, key: "cards" as const },
   { path: "/profile", icon: User, key: "profile" as const },

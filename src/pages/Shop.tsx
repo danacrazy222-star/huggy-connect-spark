@@ -2,7 +2,7 @@ import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useGameStore } from "@/store/useGameStore";
 import { useDrawStore } from "@/store/useDrawStore";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Star, Ticket, Sparkles, Flame, CheckCircle, Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -17,6 +17,7 @@ import { ShopConfirmPopup } from "@/components/shop/ShopConfirmPopup";
 const BOOK_IMAGES = [book1, book2, book3];
 
 export interface BookPackage {
+  nameKey: string;
   name: string;
   price: string;
   priceNum: number;
@@ -51,7 +52,8 @@ export default function Shop() {
 
   const packages: BookPackage[] = [
     {
-      name: "Basic Pack",
+      nameKey: "basicPack",
+      name: t("basicPack"),
       price: "$1",
       priceNum: 1,
       number: 1,
@@ -59,14 +61,15 @@ export default function Shop() {
       borderColor: "border-green-500/40",
       glowColor: "shadow-[0_0_15px_rgba(34,197,94,0.15)]",
       rewards: [
-        { icon: <Star className="w-4 h-4 text-primary" />, label: "1,500 VIP XP", type: "xp", amount: 1500 },
-        { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: "1 Draw Entry", type: "drawEntry", amount: 1 },
+        { icon: <Star className="w-4 h-4 text-primary" />, label: `1,500 ${t("vipXP")}`, type: "xp", amount: 1500 },
+        { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: `1 ${t("drawEntry")}`, type: "drawEntry", amount: 1 },
       ],
       tag: null,
-      includes: ["1 Digital Book", "1,500 VIP XP", "1 Draw Entry"],
+      includes: [`1 ${t("digitalBook")}`, `1,500 ${t("vipXP")}`, `1 ${t("drawEntry")}`],
     },
     {
-      name: "Plus Pack",
+      nameKey: "plusPack",
+      name: t("plusPack"),
       price: "$2",
       priceNum: 2,
       number: 2,
@@ -74,15 +77,16 @@ export default function Shop() {
       borderColor: "border-blue-500/40",
       glowColor: "shadow-[0_0_15px_rgba(59,130,246,0.15)]",
       rewards: [
-        { icon: <Star className="w-4 h-4 text-primary" />, label: "3,500 VIP XP", type: "xp", amount: 3500 },
-        { icon: <Ticket className="w-4 h-4 text-red-accent" />, label: "1 Game Ticket", type: "gameTicket", amount: 1 },
-        { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: "1 Draw Entry", type: "drawEntry", amount: 1 },
+        { icon: <Star className="w-4 h-4 text-primary" />, label: `3,500 ${t("vipXP")}`, type: "xp", amount: 3500 },
+        { icon: <Ticket className="w-4 h-4 text-red-accent" />, label: `1 ${t("gameTicket")}`, type: "gameTicket", amount: 1 },
+        { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: `1 ${t("drawEntry")}`, type: "drawEntry", amount: 1 },
       ],
       tag: null,
-      includes: ["1 Digital Book", "3,500 VIP XP", "1 Game Ticket", "1 Draw Entry"],
+      includes: [`1 ${t("digitalBook")}`, `3,500 ${t("vipXP")}`, `1 ${t("gameTicket")}`, `1 ${t("drawEntry")}`],
     },
     {
-      name: "Premium Pack",
+      nameKey: "premiumPack",
+      name: t("premiumPack"),
       price: "$3",
       priceNum: 3,
       number: 3,
@@ -90,20 +94,20 @@ export default function Shop() {
       borderColor: "border-primary/40",
       glowColor: "shadow-[0_0_20px_rgba(168,85,247,0.2)]",
       rewards: [
-        { icon: <Star className="w-4 h-4 text-primary" />, label: "6,000 VIP XP", type: "xp", amount: 6000 },
-        { icon: <Sparkles className="w-4 h-4 text-primary" />, label: "20 Points", type: "points", amount: 20 },
-        { icon: <Ticket className="w-4 h-4 text-red-accent" />, label: "1 Game Ticket", type: "gameTicket", amount: 1 },
-        { icon: <Sparkles className="w-4 h-4 text-accent" />, label: "1 Tarot Ticket", type: "tarotTicket", amount: 1 },
-        { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: "2 Draw Entries", type: "drawEntry", amount: 2 },
+        { icon: <Star className="w-4 h-4 text-primary" />, label: `6,000 ${t("vipXP")}`, type: "xp", amount: 6000 },
+        { icon: <Sparkles className="w-4 h-4 text-primary" />, label: `20 ${t("xpPoints")}`, type: "points", amount: 20 },
+        { icon: <Ticket className="w-4 h-4 text-red-accent" />, label: `1 ${t("gameTicket")}`, type: "gameTicket", amount: 1 },
+        { icon: <Sparkles className="w-4 h-4 text-accent" />, label: `1 ${t("tarotTicket")}`, type: "tarotTicket", amount: 1 },
+        { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: `2 ${t("drawEntry")}`, type: "drawEntry", amount: 2 },
       ],
-      tag: "Most Popular",
-      includes: ["1 Digital Book", "6,000 VIP XP", "20 Points", "1 Game Ticket", "1 Tarot Ticket", "2 Draw Entries"],
+      tag: t("mostPopular"),
+      includes: [`1 ${t("digitalBook")}`, `6,000 ${t("vipXP")}`, `20 ${t("xpPoints")}`, `1 ${t("gameTicket")}`, `1 ${t("tarotTicket")}`, `2 ${t("drawEntry")}`],
     },
   ];
 
   const handleBuyClick = (pkg: BookPackage) => {
     setSelectedPkg(pkg);
-    setPurchaseQty(getQty(pkg.name));
+    setPurchaseQty(getQty(pkg.nameKey));
     setShowConfirm(true);
   };
 
@@ -114,7 +118,6 @@ export default function Shop() {
     const qty = purchaseQty;
 
     setTimeout(() => {
-      // Apply rewards × quantity
       selectedPkg.rewards.forEach((r) => {
         const totalAmount = r.amount * qty;
         if (r.type === "xp") addXP(totalAmount);
@@ -124,17 +127,16 @@ export default function Shop() {
         else if (r.type === "drawEntry") {
           addDrawEntry(totalAmount);
           for (let i = 0; i < totalAmount; i++) {
-            addPurchase("You", selectedPkg.priceNum);
+            addPurchase(t("playerYou"), selectedPkg.priceNum);
           }
         }
       });
 
       setPurchasing(false);
       setShowSuccess(true);
-      toast.success(`${qty}x ${selectedPkg.name} purchased! 🎉`);
+      toast.success(`${qty}x ${selectedPkg.name} ${t("purchasedToast")} 🎉`);
 
-      // Reset quantity after purchase
-      setQuantities(prev => ({ ...prev, [selectedPkg.name]: 1 }));
+      setQuantities(prev => ({ ...prev, [selectedPkg.nameKey]: 1 }));
 
       setTimeout(() => {
         setShowSuccess(false);
@@ -150,77 +152,68 @@ export default function Shop() {
       {/* Hero Header */}
       <div className="text-center px-5 pt-4 pb-2">
         <h1 className="font-display text-xl font-bold text-foreground leading-tight mb-2">
-          Buy a Digital Book &<br />
-          <span className="text-gold-gradient">Enter the $500 Gift Card Draw</span>
+          {t("shopHeroTitle").split("\n").map((line, i) => (
+            <span key={i}>
+              {i === 0 ? line : <><br /><span className="text-gold-gradient">{line}</span></>}
+            </span>
+          ))}
         </h1>
         <p className="text-xs text-muted-foreground leading-relaxed max-w-[300px] mx-auto">
-          Every purchase gives you game rewards and a chance to win a $500 Gift Card.
+          {t("shopHeroSubtitle")}
         </p>
       </div>
 
-      {/* Gift Cards Section */}
       <ShopGiftCards />
 
-      {/* Book Packs Title */}
       <div className="px-4 mb-3">
         <h2 className="font-display text-lg font-bold text-foreground text-center">
-          Choose Your Book Pack
+          {t("chooseBookPack")}
         </h2>
       </div>
 
-      {/* Book Pack Cards - Vertical */}
       <div className="px-4 space-y-3 mb-4">
         {packages.map((pkg, i) => {
-          const qty = getQty(pkg.name);
+          const qty = getQty(pkg.nameKey);
           const totalPrice = pkg.priceNum * qty;
 
           return (
             <motion.div
-              key={pkg.name}
+              key={pkg.nameKey}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               className={cn(
                 "relative bg-gradient-to-b rounded-2xl p-4 transition-all",
-                pkg.color,
-                `border ${pkg.borderColor}`,
-                pkg.glowColor,
+                pkg.color, `border ${pkg.borderColor}`, pkg.glowColor,
                 pkg.tag && "scale-[1.05]"
               )}
             >
-              {/* Most Popular + Best Value Tags */}
               {pkg.tag && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
                   <div className="bg-gradient-to-r from-red-600 to-orange-500 rounded-full px-3 py-1 flex items-center gap-1">
                     <Flame className="w-3 h-3 text-yellow-300" />
-                    <span className="text-[9px] font-bold text-white whitespace-nowrap">Most Popular</span>
+                    <span className="text-[9px] font-bold text-white whitespace-nowrap">{t("mostPopular")}</span>
                   </div>
                   <div className="bg-gradient-to-r from-primary to-gold-dark rounded-full px-3 py-1 flex items-center gap-1">
                     <Star className="w-3 h-3 text-primary-foreground" />
-                    <span className="text-[9px] font-bold text-primary-foreground whitespace-nowrap">Best Value</span>
+                    <span className="text-[9px] font-bold text-primary-foreground whitespace-nowrap">{t("bestValueTag")}</span>
                   </div>
                 </div>
               )}
 
               <div className="flex items-start gap-3">
-                {/* Book Image */}
                 <div className="w-20 h-28 flex-shrink-0 flex items-center justify-center">
-                  <img
-                    src={BOOK_IMAGES[i]}
-                    alt={pkg.name}
-                    className="max-w-full max-h-full object-contain drop-shadow-[0_0_12px_rgba(255,215,0,0.3)]"
-                  />
+                  <img src={BOOK_IMAGES[i]} alt={pkg.name}
+                    className="max-w-full max-h-full object-contain drop-shadow-[0_0_12px_rgba(255,215,0,0.3)]" />
                 </div>
 
-                {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <h3 className="font-display text-base font-bold text-foreground">{pkg.name}</h3>
                     <span className="font-display text-lg font-bold text-primary">{pkg.price}</span>
                   </div>
 
-                  {/* Includes List */}
-                  <p className="text-[10px] text-muted-foreground mb-1.5 uppercase tracking-wider">Includes:</p>
+                  <p className="text-[10px] text-muted-foreground mb-1.5 uppercase tracking-wider">{t("includesLabel")}</p>
                   <ul className="space-y-1 mb-3">
                     {pkg.includes.map((item, idx) => (
                       <li key={idx} className={cn("flex items-center gap-1.5 text-xs text-foreground/85", isRTL && "flex-row-reverse")}>
@@ -230,37 +223,26 @@ export default function Shop() {
                     ))}
                   </ul>
 
-                  {/* Quantity Selector + Buy Button */}
                   <div className="flex items-center gap-2">
-                    {/* Quantity Selector */}
                     <div className="flex items-center gap-0 bg-background/40 border border-border rounded-xl overflow-hidden">
-                      <button
-                        onClick={() => setQty(pkg.name, -1)}
-                        disabled={qty <= 1}
-                        className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors disabled:opacity-30"
-                      >
+                      <button onClick={() => setQty(pkg.nameKey, -1)} disabled={qty <= 1}
+                        className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors disabled:opacity-30">
                         <Minus className="w-3.5 h-3.5" />
                       </button>
                       <span className="w-8 text-center font-display font-bold text-sm text-foreground">{qty}</span>
-                      <button
-                        onClick={() => setQty(pkg.name, 1)}
-                        className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors"
-                      >
+                      <button onClick={() => setQty(pkg.nameKey, 1)}
+                        className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors">
                         <Plus className="w-3.5 h-3.5" />
                       </button>
                     </div>
 
-                    {/* Buy Button */}
-                    <button
-                      onClick={() => handleBuyClick(pkg)}
-                      disabled={purchasing}
+                    <button onClick={() => handleBuyClick(pkg)} disabled={purchasing}
                       className="flex-1 py-2 rounded-xl font-display font-bold text-sm text-primary-foreground shadow-gold hover:brightness-110 transition-all disabled:opacity-40"
                       style={{
                         background: "linear-gradient(180deg, hsl(45 100% 50%), hsl(40 100% 40%))",
                         boxShadow: "0 0 20px rgba(255,200,0,0.2)",
-                      }}
-                    >
-                      {qty > 1 ? `${qty}x — $${totalPrice}` : `Buy for ${pkg.price}`}
+                      }}>
+                      {qty > 1 ? `${qty}x — $${totalPrice}` : `${t("buyForPrice")} ${pkg.price}`}
                     </button>
                   </div>
                 </div>
@@ -270,33 +252,18 @@ export default function Shop() {
         })}
       </div>
 
-      {/* Disclaimer */}
       <div className="text-center px-4 space-y-1 pb-4">
-        <p className="text-xs text-muted-foreground">
-          Purchases provide access to digital books.
-        </p>
-        <p className="text-[10px] text-muted-foreground">
-          Game rewards and draw entries are promotional bonuses.
-        </p>
+        <p className="text-xs text-muted-foreground">{t("purchasesProvideAccess")}</p>
+        <p className="text-[10px] text-muted-foreground">{t("shopDisclaimer2")}</p>
       </div>
 
-      {/* Confirm Purchase Popup */}
       <ShopConfirmPopup
-        show={showConfirm}
-        pkg={selectedPkg}
-        quantity={purchaseQty}
-        onConfirm={handleConfirmPurchase}
-        onCancel={() => setShowConfirm(false)}
-        isRTL={isRTL}
+        show={showConfirm} pkg={selectedPkg} quantity={purchaseQty}
+        onConfirm={handleConfirmPurchase} onCancel={() => setShowConfirm(false)} isRTL={isRTL}
       />
 
-      {/* Success Popup */}
       <ShopSuccessPopup
-        showSuccess={showSuccess}
-        selectedPkg={selectedPkg}
-        quantity={purchaseQty}
-        isRTL={isRTL}
-        t={t}
+        showSuccess={showSuccess} selectedPkg={selectedPkg} quantity={purchaseQty} isRTL={isRTL} t={t}
       />
     </div>
   );

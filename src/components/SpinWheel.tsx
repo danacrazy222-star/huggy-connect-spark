@@ -5,42 +5,33 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { Gift, Zap, Ticket, Trophy, Sparkles, X, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const SEGMENTS = [
-  { label: "50\nXP", color: "#1a8a4a", colorEnd: "#2ecc71", reward: { type: "xp50" }, icon: "⚡" },
-  { label: "Try\nAgain", color: "#7a8085", colorEnd: "#9aa0a6", reward: { type: "none" }, icon: "🔄" },
-  { label: "Surprise\nGift", color: "#7b3fa0", colorEnd: "#9b59b6", reward: { type: "surprise" }, icon: "🎁" },
-  { label: "Game\nTicket", color: "#1a8a4a", colorEnd: "#2ecc71", reward: { type: "gameTicket" }, icon: "🎮" },
-  { label: "15 Pts\n+50 XP", color: "#c9950a", colorEnd: "#f1c40f", reward: { type: "pointsXp" }, icon: "💎" },
-  { label: "100\nXP", color: "#2270b8", colorEnd: "#3498db", reward: { type: "xp100" }, icon: "⚡" },
-  { label: "Tarot\nTicket", color: "#7b3fa0", colorEnd: "#9b59b6", reward: { type: "tarotTicket" }, icon: "🔮" },
-  { label: "Game &\nTarot", color: "#c0392b", colorEnd: "#e74c3c", reward: { type: "ticketCombo" }, icon: "🎟️" },
+const SEGMENT_COLORS = [
+  { color: "#1a8a4a", colorEnd: "#2ecc71" },
+  { color: "#7a8085", colorEnd: "#9aa0a6" },
+  { color: "#7b3fa0", colorEnd: "#9b59b6" },
+  { color: "#1a8a4a", colorEnd: "#2ecc71" },
+  { color: "#c9950a", colorEnd: "#f1c40f" },
+  { color: "#2270b8", colorEnd: "#3498db" },
+  { color: "#7b3fa0", colorEnd: "#9b59b6" },
+  { color: "#c0392b", colorEnd: "#e74c3c" },
 ];
 
-const REWARD_LABELS: Record<string, string> = {
-  xp50: "50 XP",
-  xp100: "100 XP",
-  gameTicket: "Game Ticket",
-  tarotTicket: "Tarot Ticket",
-  ticketCombo: "Game & Tarot Ticket",
-  pointsXp: "15 Points + 50 XP",
-  surprise: "Surprise Gift",
-  none: "Try Again",
-};
+const SEGMENT_ICONS = ["⚡", "🔄", "🎁", "🎮", "💎", "⚡", "🔮", "🎟️"];
+const SEGMENT_REWARDS = [
+  { type: "xp50" }, { type: "none" }, { type: "surprise" }, { type: "gameTicket" },
+  { type: "pointsXp" }, { type: "xp100" }, { type: "tarotTicket" }, { type: "ticketCombo" },
+];
 
-const REWARD_ICONS: Record<string, string> = {
+const REWARD_ICON_MAP: Record<string, string> = {
   xp50: "⚡", xp100: "⚡⚡", gameTicket: "🎮", tarotTicket: "🔮",
   ticketCombo: "🎟️", pointsXp: "💎", surprise: "🎁", none: "🔄",
 };
 
 const REWARD_DISTRIBUTION = [
-  { segmentIndex: 0, weight: 15 },
-  { segmentIndex: 1, weight: 13 },
-  { segmentIndex: 2, weight: 8 },
-  { segmentIndex: 3, weight: 18 },
-  { segmentIndex: 4, weight: 3 },
-  { segmentIndex: 5, weight: 12 },
-  { segmentIndex: 6, weight: 18 },
-  { segmentIndex: 7, weight: 13 },
+  { segmentIndex: 0, weight: 15 }, { segmentIndex: 1, weight: 13 },
+  { segmentIndex: 2, weight: 8 }, { segmentIndex: 3, weight: 18 },
+  { segmentIndex: 4, weight: 3 }, { segmentIndex: 5, weight: 12 },
+  { segmentIndex: 6, weight: 18 }, { segmentIndex: 7, weight: 13 },
 ];
 
 function getWeightedSegment(): number {
@@ -53,29 +44,37 @@ function getWeightedSegment(): number {
   return REWARD_DISTRIBUTION[REWARD_DISTRIBUTION.length - 1].segmentIndex;
 }
 
-/** Get ms remaining until next 11:00 AM Asia/Beirut */
 function getMsUntilNextBeirutReset(): number {
   const now = new Date();
   const beirutStr = now.toLocaleString('en-US', { timeZone: 'Asia/Beirut' });
   const beirutNow = new Date(beirutStr);
-  
   const nextReset = new Date(beirutNow);
   nextReset.setHours(11, 0, 0, 0);
-  
-  if (beirutNow.getHours() >= 11) {
-    nextReset.setDate(nextReset.getDate() + 1);
-  }
-  
+  if (beirutNow.getHours() >= 11) nextReset.setDate(nextReset.getDate() + 1);
   return nextReset.getTime() - beirutNow.getTime();
 }
 
-const SEGMENT_ANGLE = 360 / SEGMENTS.length;
+const NUM_SEGMENTS = 8;
+const SEGMENT_ANGLE = 360 / NUM_SEGMENTS;
 const NUM_LIGHTS = 24;
+
+// Segment label keys for translation
+const SEGMENT_LABEL_KEYS = [
+  "seg_xp50", "seg_tryAgain", "seg_surprise", "seg_gameTicket",
+  "seg_pointsXp", "seg_xp100", "seg_tarotTicket", "seg_ticketCombo",
+];
+
+// Reward label keys
+const REWARD_LABEL_KEYS: Record<string, string> = {
+  xp50: "reward_xp50", xp100: "reward_xp100", gameTicket: "reward_gameTicket",
+  tarotTicket: "reward_tarotTicket", ticketCombo: "reward_ticketCombo",
+  pointsXp: "reward_pointsXp", surprise: "reward_surprise", none: "reward_tryAgain",
+};
 
 export function SpinWheel() {
   const { canSpin, setLastSpinTime, addXP, addPoints, addGameTicket, addTarotTicket, addDrawEntry, checkSpinAvailability } = useGameStore();
   const lastSpinTime = useGameStore((s) => s.lastSpinTime);
-  const { isRTL } = useTranslation();
+  const { t, isRTL } = useTranslation();
   const [spinning, setSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [showWinModal, setShowWinModal] = useState(false);
@@ -116,10 +115,10 @@ export function SpinWheel() {
     setRotation((prev) => prev + targetAngle);
 
     setTimeout(() => {
-      const segment = SEGMENTS[segmentIndex];
+      const rewardType = SEGMENT_REWARDS[segmentIndex].type;
       setSpinning(false);
       setLastSpinTime(Date.now());
-      switch (segment.reward.type) {
+      switch (rewardType) {
         case "xp50": addXP(50); break;
         case "xp100": addXP(100); break;
         case "gameTicket": addGameTicket(1); break;
@@ -129,14 +128,17 @@ export function SpinWheel() {
         case "surprise": addXP(50); addTarotTicket(1); break;
       }
       setWinReward({
-        type: segment.reward.type,
-        label: REWARD_LABELS[segment.reward.type] || segment.label.replace("\n", " "),
+        type: rewardType,
+        label: t(REWARD_LABEL_KEYS[rewardType] || "tryAgain"),
       });
       setShowWinModal(true);
     }, 4500);
-  }, [spinning, canSpin, setLastSpinTime, addXP, addPoints, addGameTicket, addTarotTicket, addDrawEntry]);
+  }, [spinning, canSpin, setLastSpinTime, addXP, addPoints, addGameTicket, addTarotTicket, addDrawEntry, t]);
 
   const isDisabled = spinning || !canSpin;
+
+  // Build translated segment labels for SVG
+  const segmentLabels = SEGMENT_LABEL_KEYS.map(k => t(k));
 
   return (
     <div className={cn("flex flex-col items-center gap-5", isRTL && "direction-rtl")}>
@@ -194,7 +196,7 @@ export function SpinWheel() {
         >
           <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-lg">
             <defs>
-              {SEGMENTS.map((seg, i) => (
+              {SEGMENT_COLORS.map((seg, i) => (
                 <radialGradient key={`grad-${i}`} id={`seg-grad-${i}`} cx="50%" cy="50%" r="50%">
                   <stop offset="20%" stopColor={seg.colorEnd} />
                   <stop offset="100%" stopColor={seg.color} />
@@ -209,7 +211,7 @@ export function SpinWheel() {
               </filter>
             </defs>
 
-            {SEGMENTS.map((seg, i) => {
+            {SEGMENT_COLORS.map((seg, i) => {
               const startAngle = i * SEGMENT_ANGLE - 90;
               const endAngle = startAngle + SEGMENT_ANGLE;
               const startRad = (startAngle * Math.PI) / 180;
@@ -224,17 +226,18 @@ export function SpinWheel() {
               const textX = 100 + 72 * Math.cos(midAngle);
               const textY = 100 + 72 * Math.sin(midAngle);
               const textRotation = (startAngle + endAngle) / 2 + 90;
+              const label = segmentLabels[i];
               return (
                 <g key={i}>
                   <path d={`M100,100 L${x1},${y1} A95,95 0 0,1 ${x2},${y2} Z`}
                     fill={`url(#seg-grad-${i})`} stroke="rgba(255,215,0,0.4)" strokeWidth="0.8" filter="url(#seg-shadow)" />
                   <line x1="100" y1="100" x2={x1} y2={y1} stroke="rgba(255,215,0,0.15)" strokeWidth="0.5" />
                   <text x={iconX} y={iconY} textAnchor="middle" dominantBaseline="middle" fontSize="13"
-                    transform={`rotate(${textRotation}, ${iconX}, ${iconY})`}>{seg.icon}</text>
+                    transform={`rotate(${textRotation}, ${iconX}, ${iconY})`}>{SEGMENT_ICONS[i]}</text>
                   <text x={textX} y={textY} textAnchor="middle" dominantBaseline="middle"
                     fill="white" fontSize="6.5" fontWeight="700" fontFamily="Inter, sans-serif"
                     transform={`rotate(${textRotation}, ${textX}, ${textY})`}>
-                    {seg.label.split("\n").map((line, li) => (
+                    {label.split("\n").map((line, li) => (
                       <tspan key={li} x={textX} dy={li === 0 ? "-3" : "8"}>{line}</tspan>
                     ))}
                   </text>
@@ -290,13 +293,13 @@ export function SpinWheel() {
       >
         <span className="flex items-center justify-center gap-2">
           {spinning ? (
-            "Spinning..."
+            t("spinning")
           ) : canSpin ? (
-            <>🎰 SPIN THE WHEEL</>
+            <>{t("spinTheWheelBtn")}</>
           ) : (
             <>
               <Lock className="w-4 h-4" />
-              Come Back Tomorrow for Your Next Spin
+              {t("comeBackSpin")}
             </>
           )}
         </span>
@@ -311,22 +314,22 @@ export function SpinWheel() {
       >
         <div className="px-4 pt-4 pb-2 text-center">
           <h3 className="font-display text-sm font-bold text-gold-gradient tracking-wider">
-            {canSpin ? "DAILY SPIN REWARD" : "NEXT FREE SPIN"}
+            {canSpin ? t("dailySpinReward") : t("nextFreeSpin")}
           </h3>
         </div>
 
         {canSpin ? (
           <div className="px-4 pb-4 text-center">
-            <p className="text-sm text-foreground/80">You have one free spin available!</p>
+            <p className="text-sm text-foreground/80">{t("freeSpinAvailable")}</p>
           </div>
         ) : (
           <div className="px-4 pb-4">
-            <p className="text-xs text-muted-foreground text-center mb-3">Your next free spin will be available in</p>
+            <p className="text-xs text-muted-foreground text-center mb-3">{t("nextSpinIn")}</p>
             <div className={cn("flex items-center justify-center gap-3", isRTL && "flex-row-reverse")}>
               {[
-                { val: timeLeft.hours, label: "HOURS" },
-                { val: timeLeft.minutes, label: "MINUTES" },
-                { val: timeLeft.seconds, label: "SECONDS" },
+                { val: timeLeft.hours, label: t("hours") },
+                { val: timeLeft.minutes, label: t("minutes") },
+                { val: timeLeft.seconds, label: t("seconds") },
               ].map((ti, i) => (
                 <div key={i} className="flex flex-col items-center">
                   <div className="rounded-xl px-4 py-2.5 min-w-[56px]"
@@ -351,10 +354,10 @@ export function SpinWheel() {
 
         <div className={cn("grid grid-cols-4 gap-1 px-3 py-3", isRTL && "direction-rtl")}>
           {[
-            { icon: <Zap className="w-4 h-4" />, label: "XP Points" },
-            { icon: <Ticket className="w-4 h-4" />, label: "Game Tickets" },
-            { icon: <Trophy className="w-4 h-4" />, label: "Bonus Entries" },
-            { icon: <Gift className="w-4 h-4" />, label: "Surprise Rewards" },
+            { icon: <Zap className="w-4 h-4" />, label: t("xpPoints") },
+            { icon: <Ticket className="w-4 h-4" />, label: t("gameTickets") },
+            { icon: <Trophy className="w-4 h-4" />, label: t("bonusEntriesLabel") },
+            { icon: <Gift className="w-4 h-4" />, label: t("surpriseRewards") },
           ].map((item, i) => (
             <div key={i} className="flex flex-col items-center gap-1 py-1">
               <div className="text-primary">{item.icon}</div>
@@ -365,8 +368,7 @@ export function SpinWheel() {
 
         <div className="px-4 pb-3">
           <p className="text-[10px] text-muted-foreground/60 text-center">
-            🔒 All rewards are promotional and have{" "}
-            <span className="text-destructive/80">no cash value</span>.
+            🔒 {t("allRewardsPromotional")} — <span className="text-destructive/80">{t("noCashValue")}</span>
           </p>
         </div>
       </div>
@@ -382,40 +384,22 @@ export function SpinWheel() {
             style={{ background: "hsl(0 0% 0% / 0.75)", backdropFilter: "blur(12px)" }}
             onClick={() => setShowWinModal(false)}
           >
-            {/* Background particles */}
             {winReward.type !== "none" && (
               <>
                 {Array.from({ length: 12 }).map((_, i) => (
                   <motion.div
                     key={`particle-${i}`}
                     className="absolute rounded-full"
-                    initial={{
-                      opacity: 0,
-                      scale: 0,
-                      x: 0,
-                      y: 0,
-                    }}
+                    initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
                     animate={{
-                      opacity: [0, 1, 0],
-                      scale: [0, 1.5, 0],
-                      x: (Math.random() - 0.5) * 300,
-                      y: (Math.random() - 0.5) * 400,
+                      opacity: [0, 1, 0], scale: [0, 1.5, 0],
+                      x: (Math.random() - 0.5) * 300, y: (Math.random() - 0.5) * 400,
                     }}
-                    transition={{
-                      duration: 2,
-                      delay: Math.random() * 0.5,
-                      ease: "easeOut",
-                    }}
+                    transition={{ duration: 2, delay: Math.random() * 0.5, ease: "easeOut" }}
                     style={{
-                      width: Math.random() * 8 + 4,
-                      height: Math.random() * 8 + 4,
-                      background: i % 3 === 0
-                        ? "hsl(45 100% 60%)"
-                        : i % 3 === 1
-                        ? "hsl(270 80% 65%)"
-                        : "hsl(330 80% 65%)",
-                      left: "50%",
-                      top: "50%",
+                      width: Math.random() * 8 + 4, height: Math.random() * 8 + 4,
+                      background: i % 3 === 0 ? "hsl(45 100% 60%)" : i % 3 === 1 ? "hsl(270 80% 65%)" : "hsl(330 80% 65%)",
+                      left: "50%", top: "50%",
                     }}
                   />
                 ))}
@@ -441,69 +425,46 @@ export function SpinWheel() {
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Radial glow behind for wins */}
               {winReward.type !== "none" && (
                 <motion.div
                   className="absolute inset-0 pointer-events-none"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: [0, 0.6, 0.3] }}
                   transition={{ duration: 1.5, ease: "easeOut" }}
-                  style={{
-                    background: "radial-gradient(circle at 50% 30%, hsl(45 100% 50% / 0.15), transparent 70%)",
-                  }}
+                  style={{ background: "radial-gradient(circle at 50% 30%, hsl(45 100% 50% / 0.15), transparent 70%)" }}
                 />
               )}
 
-              <button
-                onClick={() => setShowWinModal(false)}
-                className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors z-10"
-              >
+              <button onClick={() => setShowWinModal(false)}
+                className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors z-10">
                 <X className="w-5 h-5" />
               </button>
 
-              {/* Animated emoji */}
-              <motion.div
-                initial={{ scale: 0, rotate: -20 }}
-                animate={{ scale: 1, rotate: 0 }}
+              <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }}
                 transition={{ delay: 0.15, type: "spring", damping: 12, stiffness: 200 }}
-                className="text-5xl mb-2 relative z-10"
-              >
-                {winReward.type === "none" ? "😅" : REWARD_ICONS[winReward.type] || "🎉"}
+                className="text-5xl mb-2 relative z-10">
+                {winReward.type === "none" ? "😅" : REWARD_ICON_MAP[winReward.type] || "🎉"}
               </motion.div>
 
-              {/* Title */}
-              <motion.h2
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+              <motion.h2 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
                 className="font-display text-xl font-bold mb-1 relative z-10"
-                style={{
-                  color: winReward.type === "none" ? "hsl(var(--foreground) / 0.8)" : undefined,
-                }}
-              >
+                style={{ color: winReward.type === "none" ? "hsl(var(--foreground) / 0.8)" : undefined }}>
                 {winReward.type === "none" ? (
-                  <span className="text-foreground/80">Better Luck Next Time!</span>
+                  <span className="text-foreground/80">{t("betterLuckNextTime")}</span>
                 ) : (
-                  <span className="text-gold-gradient">🎉 Congratulations!</span>
+                  <span className="text-gold-gradient">🎉 {t("congratulations")}!</span>
                 )}
               </motion.h2>
 
-              {/* Subtitle */}
-              <motion.p
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
+              <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35 }}
-                className="text-foreground/70 text-sm mb-4 relative z-10"
-              >
-                {winReward.type === "none"
-                  ? "Come back tomorrow for another chance!"
-                  : "You just won an amazing reward!"}
+                className="text-foreground/70 text-sm mb-4 relative z-10">
+                {winReward.type === "none" ? t("comeBackTomorrowChance") : t("wonAmazingReward")}
               </motion.p>
 
-              {/* Prize display */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4, type: "spring", damping: 15 }}
                 className="relative z-10 rounded-2xl px-5 py-4 mb-5"
                 style={{
@@ -517,28 +478,19 @@ export function SpinWheel() {
               >
                 <div className="flex items-center justify-center gap-2">
                   <Sparkles className="w-5 h-5 text-primary" />
-                  <span className="text-lg font-bold text-gold-gradient font-display">
-                    {winReward.label}
-                  </span>
+                  <span className="text-lg font-bold text-gold-gradient font-display">{winReward.label}</span>
                   <Sparkles className="w-5 h-5 text-primary" />
                 </div>
                 {winReward.type !== "none" && (
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="text-xs text-muted-foreground mt-1.5"
-                  >
-                    Added to your account
+                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
+                    className="text-xs text-muted-foreground mt-1.5">
+                    {t("addedToAccount")}
                   </motion.p>
                 )}
               </motion.div>
 
-              {/* CTA button */}
               <motion.button
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
                 onClick={() => setShowWinModal(false)}
                 className="w-full py-3 rounded-xl font-display font-semibold text-sm transition-all hover:brightness-110 active:scale-[0.97] relative z-10"
                 style={{
@@ -549,7 +501,7 @@ export function SpinWheel() {
                   border: winReward.type === "none" ? "1px solid hsl(var(--muted) / 0.3)" : "none",
                 }}
               >
-                {winReward.type === "none" ? "Try Again Tomorrow" : "Awesome! 🎉"}
+                {winReward.type === "none" ? t("tryAgainTomorrow") : t("awesomeBtn")}
               </motion.button>
             </motion.div>
           </motion.div>

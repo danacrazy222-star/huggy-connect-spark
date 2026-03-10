@@ -64,11 +64,14 @@ export default function Tarot() {
     addTarotTicket(-1);
     setPhase("reading");
 
-    const cardNames = selectedCards.map((c) => `${c.name} (${c.suit})`).join(", ");
+    const cardNames = language === "ar"
+      ? selectedCards.map(c => c.nameAr).join("، ")
+      : selectedCards.map((c) => `${c.name} (${c.suit})`).join(", ");
+    
     const userMsg: ChatMessage = {
       role: "user",
       content: language === "ar"
-        ? `اخترت هذه البطاقات: ${selectedCards.map(c => c.nameAr).join("، ")}. أعطني قراءة.`
+        ? `اخترت هذه البطاقات: ${cardNames}. أعطني قراءة.`
         : `I selected: ${cardNames}. Give me a reading.`,
     };
     setMessages([userMsg]);
@@ -98,9 +101,8 @@ export default function Tarot() {
       });
 
       if (!resp.ok) {
-        if (resp.status === 429) toast({ title: "Rate limited", description: "Please try again later", variant: "destructive" });
-        else if (resp.status === 402) toast({ title: "Credits required", description: "Please add credits", variant: "destructive" });
-        else toast({ title: "Error", description: "Something went wrong", variant: "destructive" });
+        if (resp.status === 429) toast({ title: t("tryAgain"), description: t("comeBackTomorrow"), variant: "destructive" });
+        else toast({ title: t("tryAgain"), description: t("tryAgain"), variant: "destructive" });
         setIsStreaming(false);
         return;
       }
@@ -141,7 +143,7 @@ export default function Tarot() {
       }
     } catch (e) {
       console.error(e);
-      toast({ title: "Error", description: "Connection failed", variant: "destructive" });
+      toast({ title: t("tryAgain"), description: t("tryAgain"), variant: "destructive" });
     }
     setIsStreaming(false);
   };
@@ -163,9 +165,9 @@ export default function Tarot() {
           </div>
           <div className={cn(isRTL && "text-right")}>
             <h1 className="font-display text-sm font-bold text-gold-gradient">
-              {language === "ar" ? "مدام زارا — التاروت" : "Madam Zara — Tarot"}
+              {t("madamZaraTitle")}
             </h1>
-            <p className="text-[10px] text-accent">{language === "ar" ? "قارئة الأسرار" : "Mystery Reader"}</p>
+            <p className="text-[10px] text-accent">{t("mysteryReaderLabel")}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -184,119 +186,64 @@ export default function Tarot() {
       {/* Landing Phase */}
       <AnimatePresence mode="wait">
         {phase === "landing" && (
-          <motion.div
-            key="landing"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="flex flex-col items-center px-4 pt-4"
-          >
-            {/* Character Image */}
+          <motion.div key="landing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="flex flex-col items-center px-4 pt-4">
             <div className="w-full max-w-sm rounded-2xl overflow-hidden border border-accent/20 shadow-gold mb-4">
               <img src={madamZaraImg} alt="Madam Zara" className="w-full object-cover" />
             </div>
-
-            {/* Name & Description */}
             <h2 className="font-display text-2xl font-bold text-gold-gradient mb-2">
-              {language === "ar" ? "مدام زارا" : "Madam Zara"}
+              {t("madamZaraTitle").replace(" — ", "\n").split("\n")[0] || "Madam Zara"}
             </h2>
             <p className="text-sm text-muted-foreground text-center leading-relaxed max-w-xs mb-6">
-              {language === "ar"
-                ? "الساحرة الروحانية العريقة — ستختار 3 بطاقات من 50 وهي تفسّر لك أسرار الكون"
-                : "The ancient mystic — select 3 cards from 50 and she will reveal the secrets of the universe"}
+              {t("selectCardReveal")}
             </p>
-
-            {/* Start Button */}
-            <motion.button
-              whileTap={{ scale: 0.96 }}
-              onClick={startSession}
-              disabled={tarotTickets <= 0}
+            <motion.button whileTap={{ scale: 0.96 }} onClick={startSession} disabled={tarotTickets <= 0}
               className={cn(
                 "w-full max-w-sm py-3.5 rounded-2xl font-bold text-sm shadow-gold flex items-center justify-center gap-2",
                 tarotTickets > 0
                   ? "bg-gradient-to-r from-primary to-yellow-500 text-primary-foreground"
                   : "bg-muted text-muted-foreground cursor-not-allowed"
-              )}
-            >
+              )}>
               <Sparkles className="w-4 h-4" />
-              {language === "ar"
-                ? `ابدأ جلسة التاروت (${tarotTickets} تذاكر)`
-                : `Start Tarot Session (${tarotTickets} tickets)`}
+              {t("startTarotBtn")} ({tarotTickets} {t("ticket")})
             </motion.button>
-
             {tarotTickets <= 0 && (
-              <p className="text-xs text-muted-foreground mt-3 text-center">
-                {language === "ar" ? "لا تذاكر متاحة. أدر العجلة أو اشترِ من المتجر" : "No tickets. Spin the wheel or buy from shop"}
-              </p>
+              <p className="text-xs text-muted-foreground mt-3 text-center">{t("noTicketsTarot")}</p>
             )}
           </motion.div>
         )}
 
         {/* Card Selection Phase */}
         {phase === "select" && (
-          <motion.div
-            key="select"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="px-4 pt-4"
-          >
-            {/* Selection Header */}
+          <motion.div key="select" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+            className="px-4 pt-4">
             <div className="text-center mb-3">
               <p className="text-sm font-bold text-primary">
-                {language === "ar"
-                  ? `اختر ${MAX_CARDS} بطاقات من القلب — (${selectedCards.length}/${MAX_CARDS} مختار)`
-                  : `Select ${MAX_CARDS} cards from your heart — (${selectedCards.length}/${MAX_CARDS} selected)`}
+                {t("selectCardsHeart")} — ({selectedCards.length}/{MAX_CARDS})
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {language === "ar" ? "انقر على أي بطاقة لاختيارها" : "Tap any card to select it"}
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">{t("tapAnyCard")}</p>
             </div>
 
-            {/* Card Grid - 5 columns */}
             <div className="grid grid-cols-5 gap-2 max-h-[58vh] overflow-y-auto pb-3 px-0.5">
               {shuffledDeck.map((card, index) => {
                 const order = getSelectionOrder(card.id);
                 const isSelected = order > 0;
                 const disabled = !isSelected && selectedCards.length >= MAX_CARDS;
                 return (
-                  <motion.button
-                    key={card.id}
-                    onClick={() => handleCardSelect(card)}
-                    disabled={disabled}
+                  <motion.button key={card.id} onClick={() => handleCardSelect(card)} disabled={disabled}
                     whileTap={{ scale: 0.92 }}
                     className={cn(
                       "relative aspect-[2/3] rounded-lg overflow-hidden transition-all duration-200",
-                      isSelected
-                        ? "ring-2 ring-primary shadow-gold scale-[1.02] brightness-110"
-                        : "ring-1 ring-border/40 hover:ring-accent/60",
+                      isSelected ? "ring-2 ring-primary shadow-gold scale-[1.02] brightness-110" : "ring-1 ring-border/40 hover:ring-accent/60",
                       disabled && "opacity-30 pointer-events-none"
-                    )}
-                  >
-                    {/* Card Back Image */}
-                    <img
-                      src={cardBackImg}
-                      alt={`Card ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-
-                    {/* Card Number */}
+                    )}>
+                    <img src={cardBackImg} alt={`${t("card")} ${index + 1}`} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className={cn(
-                        "text-lg font-display font-bold",
-                        isSelected ? "text-primary" : "text-primary/70"
-                      )}>
-                        {index + 1}
-                      </span>
+                      <span className={cn("text-lg font-display font-bold", isSelected ? "text-primary" : "text-primary/70")}>{index + 1}</span>
                     </div>
-
-                    {/* Selection Order Badge */}
                     {isSelected && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="absolute top-1 right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center"
-                      >
+                      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}
+                        className="absolute top-1 right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
                         <span className="text-[10px] font-bold">{order}</span>
                       </motion.div>
                     )}
@@ -305,19 +252,13 @@ export default function Tarot() {
               })}
             </div>
 
-            {/* Reveal Button */}
             <AnimatePresence>
               {selectedCards.length === MAX_CARDS && (
-                <motion.button
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={startReading}
-                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-primary to-yellow-500 text-primary-foreground font-bold text-sm shadow-gold flex items-center justify-center gap-2 mt-3"
-                >
+                <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
+                  whileTap={{ scale: 0.96 }} onClick={startReading}
+                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-primary to-yellow-500 text-primary-foreground font-bold text-sm shadow-gold flex items-center justify-center gap-2 mt-3">
                   <Sparkles className="w-4 h-4" />
-                  {language === "ar" ? "اكشف البطاقات واقرأ التاروت" : "Reveal Cards & Read Tarot"}
+                  {t("revealReadTarot")}
                 </motion.button>
               )}
             </AnimatePresence>
@@ -326,35 +267,18 @@ export default function Tarot() {
 
         {/* Reading / Chat Phase */}
         {(phase === "reading" || phase === "chat") && (
-          <motion.div
-            key="chat"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex flex-col px-4 pt-3"
-            style={{ height: "calc(100vh - 140px)" }}
-          >
-            {/* Selected Cards Reveal Bar */}
+          <motion.div key="chat" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            className="flex flex-col px-4 pt-3" style={{ height: "calc(100vh - 140px)" }}>
             <div className="flex items-center justify-center gap-3 pb-3">
               {selectedCards.map((card, i) => (
-                <motion.div
-                  key={card.id}
-                  initial={{ rotateY: 180, scale: 0.5 }}
-                  animate={{ rotateY: 0, scale: 1 }}
+                <motion.div key={card.id}
+                  initial={{ rotateY: 180, scale: 0.5 }} animate={{ rotateY: 0, scale: 1 }}
                   transition={{ delay: i * 0.2, duration: 0.5 }}
-                  className="relative bg-card border border-accent/30 rounded-xl overflow-hidden text-center w-24 shadow-gold"
-                >
-                  {/* Card Image */}
-                  <img
-                    src={card.imageUrl}
-                    alt={card.name}
-                    className="w-full aspect-[2/3] object-cover"
-                    loading="eager"
-                  />
-                  {/* Order Badge */}
+                  className="relative bg-card border border-accent/30 rounded-xl overflow-hidden text-center w-24 shadow-gold">
+                  <img src={card.imageUrl} alt={card.name} className="w-full aspect-[2/3] object-cover" loading="eager" />
                   <div className="absolute top-1.5 left-1.5 w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-md">
                     <span className="text-[10px] font-bold">{i + 1}</span>
                   </div>
-                  {/* Card Name */}
                   <p className="text-[9px] font-bold text-foreground py-1.5 px-1 leading-tight">
                     {language === "ar" ? card.nameAr : card.name}
                   </p>
@@ -362,15 +286,10 @@ export default function Tarot() {
               ))}
             </div>
 
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto space-y-3 py-2">
               {messages.filter(m => m.role === "assistant").map((msg, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-card/80 border border-accent/20 rounded-2xl px-4 py-3 text-sm text-foreground/90"
-                >
+                <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                  className="bg-card/80 border border-accent/20 rounded-2xl px-4 py-3 text-sm text-foreground/90">
                   <div className="prose prose-sm prose-invert max-w-none [&_p]:my-1.5 [&_li]:my-0 [&_h2]:text-primary [&_h3]:text-accent [&_strong]:text-foreground">
                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                   </div>
@@ -388,22 +307,15 @@ export default function Tarot() {
               <div ref={chatEndRef} />
             </div>
 
-            {/* Chat Input */}
             {phase === "chat" && (
               <div className={cn("flex gap-2 pt-2 pb-2 border-t border-border/30", isRTL && "flex-row-reverse")}>
-                <input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                <input value={input} onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                  placeholder={language === "ar" ? "اسأل مدام زارا..." : "Ask Madam Zara..."}
+                  placeholder={t("askMadamZara")}
                   className="flex-1 bg-muted/30 border border-border/50 rounded-xl px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent/50"
-                  disabled={isStreaming}
-                />
-                <button
-                  onClick={sendMessage}
-                  disabled={isStreaming || !input.trim()}
-                  className="p-2.5 rounded-xl bg-primary/20 border border-primary/30 text-primary disabled:opacity-40"
-                >
+                  disabled={isStreaming} />
+                <button onClick={sendMessage} disabled={isStreaming || !input.trim()}
+                  className="p-2.5 rounded-xl bg-primary/20 border border-primary/30 text-primary disabled:opacity-40">
                   <Send className="w-4 h-4" />
                 </button>
               </div>

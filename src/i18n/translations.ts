@@ -219,13 +219,6 @@ export type TranslationKeys = {
   duelRock: string;
   duelPaper: string;
   duelScissors: string;
-  duelWantsChallenge: string;
-  duelSpectating: string;
-  duelMatchStarting: string;
-  duelPlayersCannotVote: string;
-  duelPlayersChoosing: string;
-  duelYouWon: string;
-  duelYouLost: string;
   // World Challenge
   worldChallengeTitle: string;
   worldChallengeDesc: string;

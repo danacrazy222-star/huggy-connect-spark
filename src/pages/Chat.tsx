@@ -170,6 +170,10 @@ export default function Chat() {
       time: timeStr,
       isSystem: true,
     });
+
+    if (activeRoom === 0) {
+      useGameStore.getState().lockWorldChallenge();
+    }
   }, [addXP, addMessage, activeRoom]);
 
   return (

@@ -139,7 +139,7 @@ export function WorldChallengePromo() {
                         📖 اشترِ الكتاب وافتح التحدي
                       </motion.button>
 
-                      <p className="text-[10px] text-muted-foreground mt-3">* التحدي يُفتح فوراً بعد الشراء ويظهر لجميع اللاعبين</p>
+                      <p className="text-[10px] text-muted-foreground mt-3">* بعد انتهاء التحدي، ينقفل فوراً وتحتاج شراء جديد للعب مرة ثانية</p>
                     </motion.div>
                   )}
                 </AnimatePresence>

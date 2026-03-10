@@ -3,7 +3,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useGameStore } from "@/store/useGameStore";
 import { useDrawStore } from "@/store/useDrawStore";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Ticket, Sparkles, Flame, CheckCircle, BookOpen, Trophy } from "lucide-react";
+import { Star, Ticket, Sparkles, Flame, CheckCircle, Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -37,6 +37,17 @@ export default function Shop() {
   const [purchasing, setPurchasing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [purchaseQty, setPurchaseQty] = useState(1);
+
+  const getQty = (name: string) => quantities[name] || 1;
+
+  const setQty = (name: string, delta: number) => {
+    setQuantities(prev => ({
+      ...prev,
+      [name]: Math.max(1, Math.min(99, (prev[name] || 1) + delta)),
+    }));
+  };
 
   const packages: BookPackage[] = [
     {
@@ -91,6 +102,7 @@ export default function Shop() {
 
   const handleBuyClick = (pkg: BookPackage) => {
     setSelectedPkg(pkg);
+    setPurchaseQty(getQty(pkg.name));
     setShowConfirm(true);
   };
 
@@ -98,15 +110,18 @@ export default function Shop() {
     if (!selectedPkg) return;
     setShowConfirm(false);
     setPurchasing(true);
+    const qty = purchaseQty;
 
     setTimeout(() => {
+      // Apply rewards × quantity
       selectedPkg.rewards.forEach((r) => {
-        if (r.type === "xp") addXP(r.amount);
-        else if (r.type === "gameTicket") addGameTicket(r.amount);
-        else if (r.type === "tarotTicket") addTarotTicket(r.amount);
+        const totalAmount = r.amount * qty;
+        if (r.type === "xp") addXP(totalAmount);
+        else if (r.type === "gameTicket") addGameTicket(totalAmount);
+        else if (r.type === "tarotTicket") addTarotTicket(totalAmount);
         else if (r.type === "drawEntry") {
-          addDrawEntry(r.amount);
-          for (let i = 0; i < r.amount; i++) {
+          addDrawEntry(totalAmount);
+          for (let i = 0; i < totalAmount; i++) {
             addPurchase("You", selectedPkg.priceNum);
           }
         }
@@ -114,7 +129,10 @@ export default function Shop() {
 
       setPurchasing(false);
       setShowSuccess(true);
-      toast.success(`${selectedPkg.name} purchased! 🎉`);
+      toast.success(`${qty}x ${selectedPkg.name} purchased! 🎉`);
+
+      // Reset quantity after purchase
+      setQuantities(prev => ({ ...prev, [selectedPkg.name]: 1 }));
 
       setTimeout(() => {
         setShowSuccess(false);
@@ -150,78 +168,104 @@ export default function Shop() {
 
       {/* Book Pack Cards - Vertical */}
       <div className="px-4 space-y-3 mb-4">
-        {packages.map((pkg, i) => (
-          <motion.div
-            key={pkg.name}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className={cn(
-              "relative bg-gradient-to-b rounded-2xl p-4 transition-all",
-              pkg.color,
-              `border ${pkg.borderColor}`,
-              pkg.glowColor,
-              pkg.tag && "scale-[1.05]"
-            )}
-          >
-            {/* Most Popular + Best Value Tags */}
-            {pkg.tag && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
-                <div className="bg-gradient-to-r from-red-600 to-orange-500 rounded-full px-3 py-1 flex items-center gap-1">
-                  <Flame className="w-3 h-3 text-yellow-300" />
-                  <span className="text-[9px] font-bold text-white whitespace-nowrap">Most Popular</span>
-                </div>
-                <div className="bg-gradient-to-r from-primary to-gold-dark rounded-full px-3 py-1 flex items-center gap-1">
-                  <Star className="w-3 h-3 text-primary-foreground" />
-                  <span className="text-[9px] font-bold text-primary-foreground whitespace-nowrap">Best Value</span>
-                </div>
-              </div>
-            )}
+        {packages.map((pkg, i) => {
+          const qty = getQty(pkg.name);
+          const totalPrice = pkg.priceNum * qty;
 
-            <div className="flex items-start gap-3">
-              {/* Book Image */}
-              <div className="w-20 h-28 flex-shrink-0 flex items-center justify-center">
-                <img
-                  src={BOOK_IMAGES[i]}
-                  alt={pkg.name}
-                  className="max-w-full max-h-full object-contain drop-shadow-[0_0_12px_rgba(255,215,0,0.3)]"
-                />
-              </div>
+          return (
+            <motion.div
+              key={pkg.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className={cn(
+                "relative bg-gradient-to-b rounded-2xl p-4 transition-all",
+                pkg.color,
+                `border ${pkg.borderColor}`,
+                pkg.glowColor,
+                pkg.tag && "scale-[1.05]"
+              )}
+            >
+              {/* Most Popular + Best Value Tags */}
+              {pkg.tag && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
+                  <div className="bg-gradient-to-r from-red-600 to-orange-500 rounded-full px-3 py-1 flex items-center gap-1">
+                    <Flame className="w-3 h-3 text-yellow-300" />
+                    <span className="text-[9px] font-bold text-white whitespace-nowrap">Most Popular</span>
+                  </div>
+                  <div className="bg-gradient-to-r from-primary to-gold-dark rounded-full px-3 py-1 flex items-center gap-1">
+                    <Star className="w-3 h-3 text-primary-foreground" />
+                    <span className="text-[9px] font-bold text-primary-foreground whitespace-nowrap">Best Value</span>
+                  </div>
+                </div>
+              )}
 
-              {/* Content */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="font-display text-base font-bold text-foreground">{pkg.name}</h3>
-                  <span className="font-display text-lg font-bold text-primary">{pkg.price}</span>
+              <div className="flex items-start gap-3">
+                {/* Book Image */}
+                <div className="w-20 h-28 flex-shrink-0 flex items-center justify-center">
+                  <img
+                    src={BOOK_IMAGES[i]}
+                    alt={pkg.name}
+                    className="max-w-full max-h-full object-contain drop-shadow-[0_0_12px_rgba(255,215,0,0.3)]"
+                  />
                 </div>
 
-                {/* Includes List */}
-                <p className="text-[10px] text-muted-foreground mb-1.5 uppercase tracking-wider">Includes:</p>
-                <ul className="space-y-1 mb-3">
-                  {pkg.includes.map((item, idx) => (
-                    <li key={idx} className={cn("flex items-center gap-1.5 text-xs text-foreground/85", isRTL && "flex-row-reverse")}>
-                      <CheckCircle className="w-3 h-3 text-green-accent flex-shrink-0" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className="font-display text-base font-bold text-foreground">{pkg.name}</h3>
+                    <span className="font-display text-lg font-bold text-primary">{pkg.price}</span>
+                  </div>
 
-                {/* Buy Button */}
-                <button
-                  onClick={() => handleBuyClick(pkg)}
-                  disabled={purchasing}
-                  className="w-full py-2 rounded-xl font-display font-bold text-sm text-primary-foreground shadow-gold hover:brightness-110 transition-all disabled:opacity-40"
-                  style={{
-                    background: "linear-gradient(180deg, #FFD700, #FFB000)",
-                    boxShadow: "0 0 20px rgba(255,200,0,0.2)",
-                  }}
-                >
-                  Buy for {pkg.price}
-                </button>
+                  {/* Includes List */}
+                  <p className="text-[10px] text-muted-foreground mb-1.5 uppercase tracking-wider">Includes:</p>
+                  <ul className="space-y-1 mb-3">
+                    {pkg.includes.map((item, idx) => (
+                      <li key={idx} className={cn("flex items-center gap-1.5 text-xs text-foreground/85", isRTL && "flex-row-reverse")}>
+                        <CheckCircle className="w-3 h-3 text-green-accent flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Quantity Selector + Buy Button */}
+                  <div className="flex items-center gap-2">
+                    {/* Quantity Selector */}
+                    <div className="flex items-center gap-0 bg-background/40 border border-border rounded-xl overflow-hidden">
+                      <button
+                        onClick={() => setQty(pkg.name, -1)}
+                        disabled={qty <= 1}
+                        className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors disabled:opacity-30"
+                      >
+                        <Minus className="w-3.5 h-3.5" />
+                      </button>
+                      <span className="w-8 text-center font-display font-bold text-sm text-foreground">{qty}</span>
+                      <button
+                        onClick={() => setQty(pkg.name, 1)}
+                        className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    {/* Buy Button */}
+                    <button
+                      onClick={() => handleBuyClick(pkg)}
+                      disabled={purchasing}
+                      className="flex-1 py-2 rounded-xl font-display font-bold text-sm text-primary-foreground shadow-gold hover:brightness-110 transition-all disabled:opacity-40"
+                      style={{
+                        background: "linear-gradient(180deg, hsl(45 100% 50%), hsl(40 100% 40%))",
+                        boxShadow: "0 0 20px rgba(255,200,0,0.2)",
+                      }}
+                    >
+                      {qty > 1 ? `${qty}x — $${totalPrice}` : `Buy for ${pkg.price}`}
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Disclaimer */}
@@ -238,6 +282,7 @@ export default function Shop() {
       <ShopConfirmPopup
         show={showConfirm}
         pkg={selectedPkg}
+        quantity={purchaseQty}
         onConfirm={handleConfirmPurchase}
         onCancel={() => setShowConfirm(false)}
         isRTL={isRTL}

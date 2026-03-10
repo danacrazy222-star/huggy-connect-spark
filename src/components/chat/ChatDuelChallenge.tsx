@@ -74,6 +74,8 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
   const [finalWinner, setFinalWinner] = useState<"p1" | "p2" | null>(null);
   const [shakeIndex, setShakeIndex] = useState(0);
   const [waitingForOpponent, setWaitingForOpponent] = useState(false);
+  const [isBotMatch, setIsBotMatch] = useState(false);
+  const botTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const roomChannelRef = useRef<any>(null);

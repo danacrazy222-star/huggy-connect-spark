@@ -754,7 +754,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
           )}>
           {t("duelRPS")}
         </button>
-      </motion.div>
+      </div>
     );
   }
 

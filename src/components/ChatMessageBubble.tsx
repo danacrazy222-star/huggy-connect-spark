@@ -16,6 +16,7 @@ export interface ChatMsg {
   gender?: "male" | "female" | null;
   level?: number;
   time?: string;
+  isSystem?: boolean;
 }
 
 const getLevelIcon = (level: number) => {

@@ -716,7 +716,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       }
     };
     poll();
-    const interval = setInterval(poll, 1500);
+    const interval = setInterval(poll, 3000);
     return () => clearInterval(interval);
   }, [phase, roomId, user]);
 
@@ -729,7 +729,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
   // IDLE: show Start or Join
   if (phase === "idle") {
     return (
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mx-auto my-3 w-full max-w-xs space-y-2">
+      <div className="mx-auto my-3 w-full max-w-xs space-y-2">
         {/* Join an existing challenge */}
         {activeWaitingMatch && (
           <motion.button
@@ -754,7 +754,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
           )}>
           {t("duelRPS")}
         </button>
-      </motion.div>
+      </div>
     );
   }
 

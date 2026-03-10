@@ -17,8 +17,8 @@ export default function VIP() {
     { name: `${t("level")} 1`, lvl: 1, stars: 1 },
     { name: `${t("level")} 5`, lvl: 5, stars: 2 },
     { name: `${t("level")} 10`, lvl: 10, stars: 3 },
-    { name: t("elite"), lvl: 15, icon: "diamond" },
-    { name: t("legend"), lvl: 20, icon: "flame" },
+    { name: t("elite"), lvl: 20, icon: "diamond" },
+    { name: t("legend"), lvl: 40, icon: "flame" },
   ];
 
   const chests = [

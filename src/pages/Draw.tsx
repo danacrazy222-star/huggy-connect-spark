@@ -319,9 +319,9 @@ export default function Draw() {
           <div className="space-y-2">
             {[
               { step: "1", text: t("buyBook"), icon: "📚" },
-              { step: "2", text: "Get a unique Entry #ID", icon: "🎫" },
-              { step: "3", text: "Premium Pack = 2 Entries!", icon: "🔥" },
-              { step: "4", text: "Random number picks the winner!", icon: "🏆" },
+              { step: "2", text: t("getUniqueEntry"), icon: "🎫" },
+              { step: "3", text: t("premiumTwoEntries"), icon: "🔥" },
+              { step: "4", text: t("randomPicksWinner"), icon: "🏆" },
             ].map((item) => (
               <div key={item.step} className={cn("flex items-center gap-3", isRTL && "flex-row-reverse")}>
                 <div className="w-7 h-7 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center flex-shrink-0">

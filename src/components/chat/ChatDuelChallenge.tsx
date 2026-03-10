@@ -30,6 +30,13 @@ function resolveRPS(a: Move, b: Move): "a" | "b" | "draw" {
 
 const MOVES: Move[] = ["rock", "paper", "scissors"];
 
+const NameWithLevel = ({ name, level, className }: { name: string; level: number; className?: string }) => (
+  <div className={cn("flex items-center justify-center gap-1", className)}>
+    <span className="text-[11px] font-bold text-foreground truncate max-w-[70px]">{name}</span>
+    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">Lv.{level}</span>
+  </div>
+);
+
 interface Props {
   playerName: string;
   playerLevel: number;

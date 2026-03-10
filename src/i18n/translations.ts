@@ -128,6 +128,21 @@ export type TranslationKeys = {
   newDraw: string;
   drawDescription: string;
   draw: string;
+  // Draw new keys
+  drawExtended: string;
+  drawExtendedMessage: string;
+  nextDrawIn: string;
+  fairDrawSystem: string;
+  fairDrawDescription: string;
+  winnerAnnounced: string;
+  won: string;
+  enterTheDraw: string;
+  giftCardDraw: string;
+  drawCloseInfo: string;
+  getUniqueEntry: string;
+  premiumTwoEntries: string;
+  randomPicksWinner: string;
+  yourEntries: string;
   // Auth
   login: string;
   signup: string;
@@ -213,7 +228,8 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "START NEW DRAW", drawDescription: "Buy books to enter the $500 gift card draw!", draw: "Draw",
     login: "Login", signup: "Sign Up", loginSubtitle: "Welcome back to WINLINE", signupSubtitle: "Create your account", displayName: "Display Name", email: "Email", password: "Password", passwordMinLength: "Password must be at least 6 characters", welcomeBack: "Welcome back!", accountCreated: "Account created successfully!", logout: "Logout",
     scratchCard: "Scratch Card", scratchCardDesc: "Scratch to reveal your prize!", scratchToReveal: "Scratch the card to reveal your reward", scratchArea: "Scratch here!", youRevealed: "You revealed", claimReward: "CLAIM REWARD", tryAnotherCard: "TRY ANOTHER CARD", noReward: "Better luck next time!", scratchCardCost: "1 Game Ticket",
-    profile: "Profile", loginToViewProfile: "Login to view your profile", inventory: "Inventory", settings: "Settings", clearData: "Clear Data", photoUpdated: "Photo updated!", nameUpdated: "Name updated!", dataCleared: "Data cleared!"
+    profile: "Profile", loginToViewProfile: "Login to view your profile", inventory: "Inventory", settings: "Settings", clearData: "Clear Data", photoUpdated: "Photo updated!", nameUpdated: "Name updated!", dataCleared: "Data cleared!",
+    drawExtended: "Draw Extended", drawExtendedMessage: "The draw has been extended due to high demand. All entries remain active.", nextDrawIn: "Next Draw In", fairDrawSystem: "Fair Draw System", fairDrawDescription: "Winner is selected randomly from all entries using a secure random generator. Every entry has an equal chance to win.", winnerAnnounced: "Winner Announced!", won: "Won", enterTheDraw: "Enter the $500 Draw", giftCardDraw: "$500 Gift Card Draw", drawCloseInfo: "The draw will close when progress reaches 100% or when the countdown timer ends.", getUniqueEntry: "Get a unique Entry #ID", premiumTwoEntries: "Premium Pack = 2 Entries!", randomPicksWinner: "Random number picks the winner!", yourEntries: "Your Entries"
   },
   ar: {
     home: "الرئيسية", shop: "المتجر", games: "الألعاب", chat: "الدردشة", crown: "التاج", cards: "البطاقات",
@@ -267,7 +283,8 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "ابدأ سحباً جديداً", drawDescription: "اشترِ كتباً للدخول في سحب بطاقة هدية $500!", draw: "السحب",
     login: "تسجيل الدخول", signup: "إنشاء حساب", loginSubtitle: "مرحباً بعودتك إلى WINLINE", signupSubtitle: "أنشئ حسابك", displayName: "اسم العرض", email: "البريد الإلكتروني", password: "كلمة المرور", passwordMinLength: "كلمة المرور يجب أن تكون 6 أحرف على الأقل", welcomeBack: "مرحباً بعودتك!", accountCreated: "تم إنشاء الحساب بنجاح!", logout: "تسجيل الخروج",
     scratchCard: "بطاقة الحك", scratchCardDesc: "احك لتكشف جائزتك!", scratchToReveal: "احك البطاقة لكشف مكافأتك", scratchArea: "احك هنا!", youRevealed: "كشفت", claimReward: "اطلب المكافأة", tryAnotherCard: "جرب بطاقة أخرى", noReward: "حظ أوفر المرة القادمة!", scratchCardCost: "تذكرة لعبة واحدة",
-    profile: "الملف الشخصي", loginToViewProfile: "سجّل دخولك لعرض ملفك الشخصي", inventory: "المخزون", settings: "الإعدادات", clearData: "مسح البيانات", photoUpdated: "تم تحديث الصورة!", nameUpdated: "تم تحديث الاسم!", dataCleared: "تم مسح البيانات!"
+    profile: "الملف الشخصي", loginToViewProfile: "سجّل دخولك لعرض ملفك الشخصي", inventory: "المخزون", settings: "الإعدادات", clearData: "مسح البيانات", photoUpdated: "تم تحديث الصورة!", nameUpdated: "تم تحديث الاسم!", dataCleared: "تم مسح البيانات!",
+    drawExtended: "تم تمديد السحب", drawExtendedMessage: "تم تمديد السحب بسبب الإقبال الكبير. جميع الإدخالات تبقى فعّالة.", nextDrawIn: "السحب القادم خلال", fairDrawSystem: "نظام سحب عادل", fairDrawDescription: "يتم اختيار الفائز عشوائياً من جميع الإدخالات باستخدام مولّد عشوائي آمن. كل إدخال لديه فرصة متساوية للفوز.", winnerAnnounced: "تم إعلان الفائز!", won: "فاز بـ", enterTheDraw: "ادخل سحب الـ $500", giftCardDraw: "سحب بطاقة هدية $500", drawCloseInfo: "سيُغلق السحب عند وصول التقدم إلى 100% أو عند انتهاء العداد التنازلي.", getUniqueEntry: "احصل على رقم دخول فريد #ID", premiumTwoEntries: "الباقة المميزة = دخولان!", randomPicksWinner: "رقم عشوائي يختار الفائز!", yourEntries: "إدخالاتك"
   },
   fr: {
     home: "Accueil", shop: "Boutique", games: "Jeux", chat: "Discussion", crown: "Couronne", cards: "Cartes",
@@ -321,7 +338,8 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "NOUVEAU TIRAGE", drawDescription: "Achetez des livres pour le tirage de $500!", draw: "Tirage",
     login: "Connexion", signup: "Inscription", loginSubtitle: "Bienvenue sur WINLINE", signupSubtitle: "Créez votre compte", displayName: "Nom d'affichage", email: "Email", password: "Mot de passe", passwordMinLength: "Le mot de passe doit contenir au moins 6 caractères", welcomeBack: "Bon retour !", accountCreated: "Compte créé avec succès !", logout: "Déconnexion",
     scratchCard: "Carte à gratter", scratchCardDesc: "Grattez pour révéler votre prix !", scratchToReveal: "Grattez la carte", scratchArea: "Grattez ici !", youRevealed: "Vous avez révélé", claimReward: "RÉCLAMER", tryAnotherCard: "AUTRE CARTE", noReward: "Plus de chance la prochaine fois !", scratchCardCost: "1 Ticket de jeu",
-    profile: "Profil", loginToViewProfile: "Connectez-vous pour voir votre profil", inventory: "Inventaire", settings: "Paramètres", clearData: "Effacer les données", photoUpdated: "Photo mise à jour !", nameUpdated: "Nom mis à jour !", dataCleared: "Données effacées !"
+    profile: "Profil", loginToViewProfile: "Connectez-vous pour voir votre profil", inventory: "Inventaire", settings: "Paramètres", clearData: "Effacer les données", photoUpdated: "Photo mise à jour !", nameUpdated: "Nom mis à jour !", dataCleared: "Données effacées !",
+    drawExtended: "Tirage prolongé", drawExtendedMessage: "Le tirage a été prolongé en raison de la forte demande. Toutes les participations restent actives.", nextDrawIn: "Prochain tirage dans", fairDrawSystem: "Système de tirage équitable", fairDrawDescription: "Le gagnant est sélectionné aléatoirement parmi toutes les participations. Chaque participation a une chance égale de gagner.", winnerAnnounced: "Gagnant annoncé !", won: "A gagné", enterTheDraw: "Participer au tirage $500", giftCardDraw: "Tirage carte cadeau $500", drawCloseInfo: "Le tirage se terminera lorsque la progression atteindra 100% ou à la fin du compte à rebours.", getUniqueEntry: "Obtenez un numéro d'entrée unique #ID", premiumTwoEntries: "Pack Premium = 2 Participations !", randomPicksWinner: "Un numéro aléatoire désigne le gagnant !", yourEntries: "Vos participations"
   },
   es: {
     home: "Inicio", shop: "Tienda", games: "Juegos", chat: "Chat", crown: "Corona", cards: "Cartas",
@@ -375,7 +393,8 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "NUEVO SORTEO", drawDescription: "¡Compra libros para el sorteo de $500!", draw: "Sorteo",
     login: "Iniciar sesión", signup: "Registrarse", loginSubtitle: "Bienvenido a WINLINE", signupSubtitle: "Crea tu cuenta", displayName: "Nombre", email: "Correo", password: "Contraseña", passwordMinLength: "La contraseña debe tener al menos 6 caracteres", welcomeBack: "¡Bienvenido de vuelta!", accountCreated: "¡Cuenta creada!", logout: "Cerrar sesión",
     scratchCard: "Rasca y Gana", scratchCardDesc: "¡Rasca para revelar tu premio!", scratchToReveal: "Rasca la tarjeta", scratchArea: "¡Rasca aquí!", youRevealed: "Revelaste", claimReward: "RECLAMAR", tryAnotherCard: "OTRA TARJETA", noReward: "¡Mejor suerte la próxima!", scratchCardCost: "1 Boleto de juego",
-    profile: "Perfil", loginToViewProfile: "Inicia sesión para ver tu perfil", inventory: "Inventario", settings: "Ajustes", clearData: "Borrar datos", photoUpdated: "¡Foto actualizada!", nameUpdated: "¡Nombre actualizado!", dataCleared: "¡Datos borrados!"
+    profile: "Perfil", loginToViewProfile: "Inicia sesión para ver tu perfil", inventory: "Inventario", settings: "Ajustes", clearData: "Borrar datos", photoUpdated: "¡Foto actualizada!", nameUpdated: "¡Nombre actualizado!", dataCleared: "¡Datos borrados!",
+    drawExtended: "Sorteo extendido", drawExtendedMessage: "El sorteo ha sido extendido debido a la alta demanda. Todas las participaciones siguen activas.", nextDrawIn: "Próximo sorteo en", fairDrawSystem: "Sistema de sorteo justo", fairDrawDescription: "El ganador se selecciona aleatoriamente entre todas las participaciones. Cada participación tiene la misma probabilidad de ganar.", winnerAnnounced: "¡Ganador anunciado!", won: "Ganó", enterTheDraw: "Participar en el sorteo de $500", giftCardDraw: "Sorteo tarjeta regalo $500", drawCloseInfo: "El sorteo se cerrará cuando el progreso llegue al 100% o cuando termine la cuenta regresiva.", getUniqueEntry: "Obtén un número de entrada único #ID", premiumTwoEntries: "¡Pack Premium = 2 Entradas!", randomPicksWinner: "¡Un número aleatorio elige al ganador!", yourEntries: "Tus participaciones"
   },
   tr: {
     home: "Ana Sayfa", shop: "Mağaza", games: "Oyunlar", chat: "Sohbet", crown: "Taç", cards: "Kartlar",
@@ -429,7 +448,8 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "YENİ ÇEKİLİŞ", drawDescription: "$500 hediye kartı çekilişi için kitap satın alın!", draw: "Çekiliş",
     login: "Giriş Yap", signup: "Kayıt Ol", loginSubtitle: "WINLINE'a hoş geldiniz", signupSubtitle: "Hesabınızı oluşturun", displayName: "Görünen Ad", email: "E-posta", password: "Şifre", passwordMinLength: "Şifre en az 6 karakter olmalıdır", welcomeBack: "Tekrar hoş geldiniz!", accountCreated: "Hesap başarıyla oluşturuldu!", logout: "Çıkış",
     scratchCard: "Kazı Kazan", scratchCardDesc: "Ödülünüzü kazıyarak öğrenin!", scratchToReveal: "Kartı kazıyın", scratchArea: "Burayı kazıyın!", youRevealed: "Ortaya çıkardınız", claimReward: "ÖDÜLÜ AL", tryAnotherCard: "BAŞKA KART", noReward: "Bir dahaki sefere!", scratchCardCost: "1 Oyun Bileti",
-    profile: "Profil", loginToViewProfile: "Profilinizi görmek için giriş yapın", inventory: "Envanter", settings: "Ayarlar", clearData: "Verileri Temizle", photoUpdated: "Fotoğraf güncellendi!", nameUpdated: "İsim güncellendi!", dataCleared: "Veriler temizlendi!"
+    profile: "Profil", loginToViewProfile: "Profilinizi görmek için giriş yapın", inventory: "Envanter", settings: "Ayarlar", clearData: "Verileri Temizle", photoUpdated: "Fotoğraf güncellendi!", nameUpdated: "İsim güncellendi!", dataCleared: "Veriler temizlendi!",
+    drawExtended: "Çekiliş Uzatıldı", drawExtendedMessage: "Yüksek talep nedeniyle çekiliş uzatıldı. Tüm katılımlar geçerli kalmaya devam ediyor.", nextDrawIn: "Sonraki çekiliş", fairDrawSystem: "Adil Çekiliş Sistemi", fairDrawDescription: "Kazanan, güvenli bir rastgele oluşturucu kullanılarak tüm katılımlar arasından rastgele seçilir. Her katılımın kazanma şansı eşittir.", winnerAnnounced: "Kazanan Açıklandı!", won: "Kazandı", enterTheDraw: "$500 Çekilişe Katıl", giftCardDraw: "$500 Hediye Kartı Çekilişi", drawCloseInfo: "Çekiliş, ilerleme %100'e ulaştığında veya geri sayım sona erdiğinde kapanacaktır.", getUniqueEntry: "Benzersiz bir Giriş #ID alın", premiumTwoEntries: "Premium Paket = 2 Giriş!", randomPicksWinner: "Rastgele numara kazananı seçer!", yourEntries: "Girişleriniz"
   },
   de: {
     home: "Startseite", shop: "Shop", games: "Spiele", chat: "Chat", crown: "Krone", cards: "Karten",
@@ -483,7 +503,8 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "NEUE ZIEHUNG", drawDescription: "Kaufen Sie Bücher für die $500 Geschenkkarte!", draw: "Ziehung",
     login: "Anmelden", signup: "Registrieren", loginSubtitle: "Willkommen bei WINLINE", signupSubtitle: "Erstellen Sie Ihr Konto", displayName: "Anzeigename", email: "E-Mail", password: "Passwort", passwordMinLength: "Passwort muss mindestens 6 Zeichen haben", welcomeBack: "Willkommen zurück!", accountCreated: "Konto erfolgreich erstellt!", logout: "Abmelden",
     scratchCard: "Rubbelkarte", scratchCardDesc: "Rubbeln Sie Ihren Preis frei!", scratchToReveal: "Rubbeln Sie die Karte", scratchArea: "Hier rubbeln!", youRevealed: "Sie haben enthüllt", claimReward: "EINLÖSEN", tryAnotherCard: "NEUE KARTE", noReward: "Nächstes Mal mehr Glück!", scratchCardCost: "1 Spielticket",
-    profile: "Profil", loginToViewProfile: "Melden Sie sich an, um Ihr Profil zu sehen", inventory: "Inventar", settings: "Einstellungen", clearData: "Daten löschen", photoUpdated: "Foto aktualisiert!", nameUpdated: "Name aktualisiert!", dataCleared: "Daten gelöscht!"
+    profile: "Profil", loginToViewProfile: "Melden Sie sich an, um Ihr Profil zu sehen", inventory: "Inventar", settings: "Einstellungen", clearData: "Daten löschen", photoUpdated: "Foto aktualisiert!", nameUpdated: "Name aktualisiert!", dataCleared: "Daten gelöscht!",
+    drawExtended: "Ziehung verlängert", drawExtendedMessage: "Die Ziehung wurde aufgrund hoher Nachfrage verlängert. Alle Teilnahmen bleiben gültig.", nextDrawIn: "Nächste Ziehung in", fairDrawSystem: "Faires Ziehungssystem", fairDrawDescription: "Der Gewinner wird zufällig aus allen Teilnahmen ausgewählt. Jede Teilnahme hat die gleiche Gewinnchance.", winnerAnnounced: "Gewinner bekannt gegeben!", won: "Gewonnen", enterTheDraw: "An der $500 Ziehung teilnehmen", giftCardDraw: "$500 Geschenkkarten-Ziehung", drawCloseInfo: "Die Ziehung endet, wenn der Fortschritt 100% erreicht oder der Countdown abläuft.", getUniqueEntry: "Erhalten Sie eine einzigartige Eintrags-#ID", premiumTwoEntries: "Premium-Paket = 2 Einträge!", randomPicksWinner: "Eine Zufallszahl wählt den Gewinner!", yourEntries: "Ihre Einträge"
   },
   it: {
     home: "Home", shop: "Negozio", games: "Giochi", chat: "Chat", crown: "Corona", cards: "Carte",
@@ -537,7 +558,8 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "NUOVA ESTRAZIONE", drawDescription: "Acquista libri per l'estrazione da $500!", draw: "Estrazione",
     login: "Accedi", signup: "Registrati", loginSubtitle: "Bentornato su WINLINE", signupSubtitle: "Crea il tuo account", displayName: "Nome visualizzato", email: "Email", password: "Password", passwordMinLength: "La password deve avere almeno 6 caratteri", welcomeBack: "Bentornato!", accountCreated: "Account creato con successo!", logout: "Esci",
     scratchCard: "Gratta e Vinci", scratchCardDesc: "Gratta per rivelare il premio!", scratchToReveal: "Gratta la carta", scratchArea: "Gratta qui!", youRevealed: "Hai rivelato", claimReward: "RISCUOTI", tryAnotherCard: "ALTRA CARTA", noReward: "Più fortuna la prossima volta!", scratchCardCost: "1 Biglietto gioco",
-    profile: "Profilo", loginToViewProfile: "Accedi per vedere il tuo profilo", inventory: "Inventario", settings: "Impostazioni", clearData: "Cancella dati", photoUpdated: "Foto aggiornata!", nameUpdated: "Nome aggiornato!", dataCleared: "Dati cancellati!"
+    profile: "Profilo", loginToViewProfile: "Accedi per vedere il tuo profilo", inventory: "Inventario", settings: "Impostazioni", clearData: "Cancella dati", photoUpdated: "Foto aggiornata!", nameUpdated: "Nome aggiornato!", dataCleared: "Dati cancellati!",
+    drawExtended: "Estrazione prolungata", drawExtendedMessage: "L'estrazione è stata prolungata a causa dell'elevata richiesta. Tutte le partecipazioni restano valide.", nextDrawIn: "Prossima estrazione tra", fairDrawSystem: "Sistema di estrazione equo", fairDrawDescription: "Il vincitore viene selezionato casualmente tra tutte le partecipazioni. Ogni partecipazione ha le stesse probabilità di vincere.", winnerAnnounced: "Vincitore annunciato!", won: "Ha vinto", enterTheDraw: "Partecipa all'estrazione da $500", giftCardDraw: "Estrazione carta regalo $500", drawCloseInfo: "L'estrazione si chiuderà quando il progresso raggiunge il 100% o allo scadere del conto alla rovescia.", getUniqueEntry: "Ottieni un numero di ingresso unico #ID", premiumTwoEntries: "Pack Premium = 2 Ingressi!", randomPicksWinner: "Un numero casuale sceglie il vincitore!", yourEntries: "Le tue partecipazioni"
   },
   pt: {
     home: "Início", shop: "Loja", games: "Jogos", chat: "Chat", crown: "Coroa", cards: "Cartas",
@@ -591,7 +613,8 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "NOVO SORTEIO", drawDescription: "Compre livros para o sorteio de $500!", draw: "Sorteio",
     login: "Entrar", signup: "Cadastrar", loginSubtitle: "Bem-vindo ao WINLINE", signupSubtitle: "Crie sua conta", displayName: "Nome de exibição", email: "Email", password: "Senha", passwordMinLength: "A senha deve ter pelo menos 6 caracteres", welcomeBack: "Bem-vindo de volta!", accountCreated: "Conta criada com sucesso!", logout: "Sair",
     scratchCard: "Raspadinha", scratchCardDesc: "Raspe para revelar seu prêmio!", scratchToReveal: "Raspe o cartão", scratchArea: "Raspe aqui!", youRevealed: "Você revelou", claimReward: "RESGATAR", tryAnotherCard: "OUTRO CARTÃO", noReward: "Mais sorte na próxima!", scratchCardCost: "1 Ingresso de jogo",
-    profile: "Perfil", loginToViewProfile: "Entre para ver seu perfil", inventory: "Inventário", settings: "Configurações", clearData: "Limpar dados", photoUpdated: "Foto atualizada!", nameUpdated: "Nome atualizado!", dataCleared: "Dados limpos!"
+    profile: "Perfil", loginToViewProfile: "Entre para ver seu perfil", inventory: "Inventário", settings: "Configurações", clearData: "Limpar dados", photoUpdated: "Foto atualizada!", nameUpdated: "Nome atualizado!", dataCleared: "Dados limpos!",
+    drawExtended: "Sorteio estendido", drawExtendedMessage: "O sorteio foi estendido devido à alta demanda. Todas as participações permanecem ativas.", nextDrawIn: "Próximo sorteio em", fairDrawSystem: "Sistema de sorteio justo", fairDrawDescription: "O vencedor é selecionado aleatoriamente entre todas as participações. Cada participação tem a mesma chance de ganhar.", winnerAnnounced: "Vencedor anunciado!", won: "Ganhou", enterTheDraw: "Participar do sorteio de $500", giftCardDraw: "Sorteio cartão presente $500", drawCloseInfo: "O sorteio será encerrado quando o progresso atingir 100% ou quando a contagem regressiva terminar.", getUniqueEntry: "Receba um número de entrada único #ID", premiumTwoEntries: "Pacote Premium = 2 Entradas!", randomPicksWinner: "Um número aleatório escolhe o vencedor!", yourEntries: "Suas participações"
   },
   ru: {
     home: "Главная", shop: "Магазин", games: "Игры", chat: "Чат", crown: "Корона", cards: "Карты",
@@ -645,7 +668,8 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "НОВЫЙ РОЗЫГРЫШ", drawDescription: "Покупайте книги для розыгрыша $500!", draw: "Розыгрыш",
     login: "Войти", signup: "Регистрация", loginSubtitle: "Добро пожаловать в WINLINE", signupSubtitle: "Создайте аккаунт", displayName: "Имя", email: "Эл. почта", password: "Пароль", passwordMinLength: "Пароль должен быть не менее 6 символов", welcomeBack: "С возвращением!", accountCreated: "Аккаунт создан!", logout: "Выйти",
     scratchCard: "Скретч-карта", scratchCardDesc: "Сотрите, чтобы узнать приз!", scratchToReveal: "Сотрите карту", scratchArea: "Сотрите здесь!", youRevealed: "Вы открыли", claimReward: "ПОЛУЧИТЬ", tryAnotherCard: "ДРУГАЯ КАРТА", noReward: "Повезёт в следующий раз!", scratchCardCost: "1 Игровой билет",
-    profile: "Профиль", loginToViewProfile: "Войдите, чтобы увидеть профиль", inventory: "Инвентарь", settings: "Настройки", clearData: "Очистить данные", photoUpdated: "Фото обновлено!", nameUpdated: "Имя обновлено!", dataCleared: "Данные очищены!"
+    profile: "Профиль", loginToViewProfile: "Войдите, чтобы увидеть профиль", inventory: "Инвентарь", settings: "Настройки", clearData: "Очистить данные", photoUpdated: "Фото обновлено!", nameUpdated: "Имя обновлено!", dataCleared: "Данные очищены!",
+    drawExtended: "Розыгрыш продлён", drawExtendedMessage: "Розыгрыш был продлён из-за высокого спроса. Все участия остаются действительными.", nextDrawIn: "Следующий розыгрыш через", fairDrawSystem: "Честная система розыгрыша", fairDrawDescription: "Победитель выбирается случайным образом из всех участий. Каждое участие имеет равные шансы на выигрыш.", winnerAnnounced: "Победитель объявлен!", won: "Выиграл", enterTheDraw: "Участвовать в розыгрыше $500", giftCardDraw: "Розыгрыш подарочной карты $500", drawCloseInfo: "Розыгрыш завершится, когда прогресс достигнет 100% или когда истечёт обратный отсчёт.", getUniqueEntry: "Получите уникальный номер входа #ID", premiumTwoEntries: "Премиум пакет = 2 Входа!", randomPicksWinner: "Случайное число выбирает победителя!", yourEntries: "Ваши участия"
   },
   hi: {
     home: "होम", shop: "दुकान", games: "खेल", chat: "चैट", crown: "क्राउन", cards: "कार्ड्स",
@@ -699,6 +723,7 @@ export const translations: Record<Language, TranslationKeys> = {
     newDraw: "नया ड्रॉ", drawDescription: "$500 गिफ्ट कार्ड ड्रॉ के लिए पुस्तकें खरीदें!", draw: "ड्रॉ",
     login: "लॉगिन", signup: "साइन अप", loginSubtitle: "WINLINE में आपका स्वागत है", signupSubtitle: "अपना खाता बनाएं", displayName: "प्रदर्शन नाम", email: "ईमेल", password: "पासवर्ड", passwordMinLength: "पासवर्ड कम से कम 6 अक्षर का होना चाहिए", welcomeBack: "वापस स्वागत है!", accountCreated: "खाता सफलतापूर्वक बनाया गया!", logout: "लॉगआउट",
     scratchCard: "स्क्रैच कार्ड", scratchCardDesc: "इनाम जानने के लिए खरोंचें!", scratchToReveal: "कार्ड खरोंचें", scratchArea: "यहाँ खरोंचें!", youRevealed: "आपने पाया", claimReward: "इनाम लें", tryAnotherCard: "दूसरा कार्ड", noReward: "अगली बार किस्मत आज़माएं!", scratchCardCost: "1 गेम टिकट",
-    profile: "प्रोफ़ाइल", loginToViewProfile: "अपना प्रोफ़ाइल देखने के लिए लॉगिन करें", inventory: "सामग्री", settings: "सेटिंग्स", clearData: "डेटा साफ़ करें", photoUpdated: "फ़ोटो अपडेट हुई!", nameUpdated: "नाम अपडेट हुआ!", dataCleared: "डेटा साफ़ हुआ!"
+    profile: "प्रोफ़ाइल", loginToViewProfile: "अपना प्रोफ़ाइल देखने के लिए लॉगिन करें", inventory: "सामग्री", settings: "सेटिंग्स", clearData: "डेटा साफ़ करें", photoUpdated: "फ़ोटो अपडेट हुई!", nameUpdated: "नाम अपडेट हुआ!", dataCleared: "डेटा साफ़ हुआ!",
+    drawExtended: "ड्रॉ बढ़ाया गया", drawExtendedMessage: "उच्च मांग के कारण ड्रॉ बढ़ा दिया गया है। सभी प्रविष्टियाँ सक्रिय रहती हैं।", nextDrawIn: "अगला ड्रॉ", fairDrawSystem: "निष्पक्ष ड्रॉ प्रणाली", fairDrawDescription: "विजेता को सुरक्षित यादृच्छिक जनरेटर का उपयोग करके सभी प्रविष्टियों में से यादृच्छिक रूप से चुना जाता है। हर प्रविष्टि को जीतने का समान मौका है।", winnerAnnounced: "विजेता की घोषणा!", won: "जीता", enterTheDraw: "$500 ड्रॉ में भाग लें", giftCardDraw: "$500 गिफ्ट कार्ड ड्रॉ", drawCloseInfo: "ड्रॉ तब बंद होगा जब प्रगति 100% तक पहुंच जाए या काउंटडाउन समाप्त हो जाए।", getUniqueEntry: "एक अद्वितीय प्रवेश #ID प्राप्त करें", premiumTwoEntries: "प्रीमियम पैक = 2 प्रवेश!", randomPicksWinner: "यादृच्छिक संख्या विजेता चुनती है!", yourEntries: "आपकी प्रविष्टियाँ"
   },
 };

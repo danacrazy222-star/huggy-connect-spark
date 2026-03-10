@@ -129,14 +129,14 @@ export default function Draw() {
               <motion.div animate={{ rotate: [0, -10, 10, -10, 10, 0] }} transition={{ duration: 0.6, delay: 0.3 }}>
                 <Trophy className="w-16 h-16 text-primary mx-auto mb-3" style={{ filter: "drop-shadow(0 0 20px rgba(255,215,0,0.5))" }} />
               </motion.div>
-              <h2 className="font-display text-2xl font-bold text-gold-gradient mb-2">🎉 Winner Announced!</h2>
+              <h2 className="font-display text-2xl font-bold text-gold-gradient mb-2">🎉 {t("winnerAnnounced")}</h2>
               <div className="bg-primary/10 border border-primary/30 rounded-xl px-4 py-3 mb-3">
                 <p className="text-xl font-bold text-foreground">{currentWinner}</p>
                 {winningEntryId && (
                   <p className="text-xs text-primary mt-1">Entry #{winningEntryId}</p>
                 )}
               </div>
-              <p className="text-sm text-foreground mb-1">Won</p>
+              <p className="text-sm text-foreground mb-1">{t("won")}</p>
               <p className="text-2xl font-display font-bold text-gold-gradient">${prizeAmount} Gift Card</p>
               <div className="flex items-center justify-center gap-2 mt-3 text-xs text-muted-foreground">
                 <PartyPopper className="w-4 h-4 text-primary" />
@@ -158,7 +158,7 @@ export default function Draw() {
         <div className="text-center">
           <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/40 rounded-full px-4 py-1.5 mb-3">
             <Gift className="w-4 h-4 text-primary" />
-            <span className="text-sm font-bold text-primary">${prizeAmount} Gift Card Draw</span>
+            <span className="text-sm font-bold text-primary">{t("giftCardDraw")}</span>
           </div>
           <h2 className="font-display text-xl font-bold text-gold-gradient mb-1">{t("promotionalDraw")}</h2>
           <p className="text-xs text-muted-foreground mb-3">{t("drawDescription")}</p>
@@ -202,7 +202,7 @@ export default function Draw() {
         {/* Progress + Countdown Section */}
         <div className="bg-card/80 border border-border rounded-2xl p-5 space-y-4">
           <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
-            <h3 className="font-display text-sm font-bold text-foreground">Draw Progress</h3>
+            <h3 className="font-display text-sm font-bold text-foreground">{t("drawProgress")}</h3>
             <span className={cn("flex items-center gap-1 text-xs", isDrawActive ? "text-green-accent" : "text-red-accent")}>
               <span className={`w-2 h-2 rounded-full ${isDrawActive ? "bg-green-accent" : "bg-red-accent"} animate-pulse`} />
               {isDrawActive ? t("drawActive") : t("drawComplete")}
@@ -257,7 +257,7 @@ export default function Draw() {
             <div className="flex items-center justify-center gap-3 bg-muted/40 rounded-xl py-3 px-4">
               <Clock className="w-5 h-5 text-primary" />
               <div className="text-center">
-                <p className="text-[10px] text-muted-foreground">Next Draw In</p>
+                <p className="text-[10px] text-muted-foreground">{t("nextDrawIn")}</p>
                 <p className="text-2xl font-display font-bold text-primary tracking-wider">{countdown}</p>
               </div>
             </div>
@@ -270,20 +270,20 @@ export default function Draw() {
               animate={{ opacity: 1, y: 0 }}
               className="bg-accent/10 border border-accent/30 rounded-xl p-3 text-center"
             >
-              <p className="text-xs text-accent font-bold mb-0.5">🔄 Draw Extended</p>
-              <p className="text-[10px] text-muted-foreground">The draw has been extended due to high demand. All entries remain active.</p>
+              <p className="text-xs text-accent font-bold mb-0.5">🔄 {t("drawExtended")}</p>
+              <p className="text-[10px] text-muted-foreground">{t("drawExtendedMessage")}</p>
             </motion.div>
           )}
 
           {/* Closing info text */}
           <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
-            The draw will close when progress reaches <span className="text-primary font-bold">100%</span> or when the countdown timer ends.
+            {t("drawCloseInfo")}
           </p>
 
           {/* Your Entries - only if user has entries */}
           {userEntries > 0 && (
             <div className="bg-primary/10 border border-primary/30 rounded-xl p-3 text-center">
-              <p className="text-xs text-muted-foreground">Your Entries</p>
+              <p className="text-xs text-muted-foreground">{t("yourEntries")}</p>
               <p className="text-2xl font-display font-bold text-primary">{userEntries}</p>
             </div>
           )}
@@ -300,10 +300,10 @@ export default function Draw() {
         <div className="bg-card/60 border border-primary/20 rounded-2xl p-4 space-y-3">
           <h3 className="font-display text-sm font-bold text-gold-gradient flex items-center gap-2">
             <Shield className="w-4 h-4 text-primary" />
-            Fair Draw System
+            {t("fairDrawSystem")}
           </h3>
           <p className="text-[11px] text-muted-foreground leading-relaxed">
-            Winner is selected randomly from all entries using a secure random generator. Every entry has an equal chance to win.
+            {t("fairDrawDescription")}
           </p>
           <div className="bg-muted/30 rounded-xl p-3 space-y-1.5">
             <p className="text-[10px] text-muted-foreground font-mono">Entry #1 — Sarah_M</p>
@@ -319,9 +319,9 @@ export default function Draw() {
           <div className="space-y-2">
             {[
               { step: "1", text: t("buyBook"), icon: "📚" },
-              { step: "2", text: "Get a unique Entry #ID", icon: "🎫" },
-              { step: "3", text: "Premium Pack = 2 Entries!", icon: "🔥" },
-              { step: "4", text: "Random number picks the winner!", icon: "🏆" },
+              { step: "2", text: t("getUniqueEntry"), icon: "🎫" },
+              { step: "3", text: t("premiumTwoEntries"), icon: "🔥" },
+              { step: "4", text: t("randomPicksWinner"), icon: "🏆" },
             ].map((item) => (
               <div key={item.step} className={cn("flex items-center gap-3", isRTL && "flex-row-reverse")}>
                 <div className="w-7 h-7 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center flex-shrink-0">
@@ -371,7 +371,7 @@ export default function Draw() {
             }}
           >
             <ShoppingBag className="w-5 h-5" />
-            Enter the ${prizeAmount} Draw
+            {t("enterTheDraw")}
           </button>
         )}
 

@@ -429,7 +429,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                     transition={{ duration: 0.5 }}
                   />
                 </div>
-                <p className="text-[10px] text-muted-foreground">📊 نسبة التصويت الحي</p>
+                <p className="text-[10px] text-muted-foreground">{t("duelLiveVote")}</p>
               </div>
             </motion.div>
           )}

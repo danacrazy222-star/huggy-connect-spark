@@ -1,26 +1,108 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useDrawStore } from "@/store/useDrawStore";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trophy, Gift, Users, ChevronRight, PartyPopper, X, Hash, Ticket } from "lucide-react";
+import { Trophy, Gift, Users, ChevronRight, PartyPopper, X, Hash, Ticket, Clock, Percent, Activity, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+
+// Simulated live activity messages
+const ACTIVITY_MESSAGES = [
+  "Alex bought Premium Pack 🔥",
+  "Sarah entered the draw 🎫",
+  "Mike gained 2 entries ⚡",
+  "John bought Basic Pack 📚",
+  "Luna bought Plus Pack 🌟",
+  "Nora_VIP entered the draw 🎫",
+  "GoldRush bought Premium Pack 🔥",
+  "DiamondQ gained 2 entries ⚡",
+  "Player_X bought Basic Pack 📚",
+  "CryptoKing bought Premium Pack 🔥",
+];
+
+// Simple confetti component
+function Confetti() {
+  const pieces = Array.from({ length: 30 }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    delay: Math.random() * 0.5,
+    duration: 1.5 + Math.random() * 1.5,
+    color: ["#FFD700", "#FF6B6B", "#4ECDC4", "#A855F7", "#3B82F6"][Math.floor(Math.random() * 5)],
+    size: 4 + Math.random() * 6,
+  }));
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {pieces.map((p) => (
+        <motion.div
+          key={p.id}
+          initial={{ y: -20, x: `${p.left}%`, opacity: 1, rotate: 0 }}
+          animate={{ y: "120%", opacity: 0, rotate: 360 + Math.random() * 360 }}
+          transition={{ duration: p.duration, delay: p.delay, ease: "easeOut" }}
+          style={{
+            position: "absolute",
+            width: p.size,
+            height: p.size,
+            backgroundColor: p.color,
+            borderRadius: Math.random() > 0.5 ? "50%" : "2px",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function Draw() {
   const { t, isRTL } = useTranslation();
-  const { poolAmount, targetAmount, prizeAmount, entries, currentWinner, winningEntryId, winnerAnnouncedAt, drawHistory, isDrawActive, getProgressPercent, addPurchase, resetDraw } = useDrawStore();
+  const navigate = useNavigate();
+  const { poolAmount, targetAmount, prizeAmount, entries, currentWinner, winningEntryId, winnerAnnouncedAt, drawHistory, isDrawActive, getProgressPercent, resetDraw } = useDrawStore();
   const [showWinnerPopup, setShowWinnerPopup] = useState(!!currentWinner);
   const percent = getProgressPercent();
   const totalParticipants = new Set(entries.map(e => e.username)).size;
   const totalEntries = entries.length;
 
-  const recentEntries = [...entries].sort((a, b) => b.timestamp - a.timestamp).slice(0, 10);
+  // User's entries (demo: count entries by "You")
+  const userEntries = entries.filter(e => e.username === "You").length;
+  const chanceToWin = totalEntries > 0 ? Math.round((userEntries / totalEntries) * 100) : 0;
+
+  // Countdown timer (next draw resets daily at midnight or when pool fills)
+  const [countdown, setCountdown] = useState("");
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date();
+      const tomorrow = new Date(now);
+      tomorrow.setHours(23, 59, 59, 0);
+      const diff = tomorrow.getTime() - now.getTime();
+      const h = Math.floor(diff / 3600000).toString().padStart(2, "0");
+      const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, "0");
+      const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, "0");
+      setCountdown(`${h}:${m}:${s}`);
+    };
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Live activity feed
+  const [activityIndex, setActivityIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActivityIndex((prev) => (prev + 1) % ACTIVITY_MESSAGES.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const recentEntries = useMemo(() =>
+    [...entries].sort((a, b) => b.timestamp - a.timestamp).slice(0, 10),
+    [entries]
+  );
 
   return (
     <div className="min-h-screen bg-premium-gradient stars-bg pb-20" dir={isRTL ? "rtl" : "ltr"}>
       <TopBar title={t("promotionalDraw")} />
 
-      {/* Winner Popup */}
+      {/* Winner Popup with Confetti */}
       <AnimatePresence>
         {showWinnerPopup && currentWinner && (
           <motion.div
@@ -33,25 +115,27 @@ export default function Draw() {
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
-              className="bg-card border-2 border-primary rounded-2xl p-6 text-center max-w-sm w-full shadow-gold relative"
+              className="bg-card border-2 border-primary rounded-2xl p-6 text-center max-w-sm w-full relative overflow-hidden"
+              style={{ boxShadow: "0 0 60px rgba(255,215,0,0.3), 0 0 120px rgba(255,215,0,0.1)" }}
             >
-              <button onClick={() => setShowWinnerPopup(false)} className="absolute top-3 right-3 text-muted-foreground hover:text-foreground">
+              <Confetti />
+              <button onClick={() => setShowWinnerPopup(false)} className="absolute top-3 right-3 text-muted-foreground hover:text-foreground z-10">
                 <X className="w-5 h-5" />
               </button>
               <motion.div animate={{ rotate: [0, -10, 10, -10, 10, 0] }} transition={{ duration: 0.6, delay: 0.3 }}>
-                <Trophy className="w-16 h-16 text-primary mx-auto mb-3 glow-gold" />
+                <Trophy className="w-16 h-16 text-primary mx-auto mb-3" style={{ filter: "drop-shadow(0 0 20px rgba(255,215,0,0.5))" }} />
               </motion.div>
-              <h2 className="font-display text-2xl font-bold text-gold-gradient mb-2">🎉 {t("drawWinner")}!</h2>
+              <h2 className="font-display text-2xl font-bold text-gold-gradient mb-2">🎉 Winner Announced!</h2>
               <div className="bg-primary/10 border border-primary/30 rounded-xl px-4 py-3 mb-3">
                 <p className="text-xl font-bold text-foreground">{currentWinner}</p>
                 {winningEntryId && (
                   <p className="text-xs text-primary mt-1">
-                    Entry #{winningEntryId} — out of {totalEntries} entries
+                    Entry #{winningEntryId} of {totalEntries} entries
                   </p>
                 )}
               </div>
-              <p className="text-sm text-foreground mb-1">{t("wonPrize")}</p>
-              <p className="text-2xl font-display font-bold text-gold-gradient">${prizeAmount} {t("giftCard")}</p>
+              <p className="text-sm text-foreground mb-1">Won</p>
+              <p className="text-2xl font-display font-bold text-gold-gradient">${prizeAmount} Amazon Gift Card</p>
               <div className="flex items-center justify-center gap-2 mt-3 text-xs text-muted-foreground">
                 <PartyPopper className="w-4 h-4 text-primary" />
                 <span>{t("congratulations")}!</span>
@@ -68,14 +152,31 @@ export default function Draw() {
       </AnimatePresence>
 
       <div className="px-4 space-y-5">
-        {/* Gift Card Banner */}
+        {/* Header + Countdown */}
         <div className="text-center">
           <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/40 rounded-full px-4 py-1.5 mb-3">
             <Gift className="w-4 h-4 text-primary" />
-            <span className="text-sm font-bold text-primary">{t("giftCard")}</span>
+            <span className="text-sm font-bold text-primary">${prizeAmount} Gift Card Draw</span>
           </div>
           <h2 className="font-display text-xl font-bold text-gold-gradient mb-1">{t("promotionalDraw")}</h2>
-          <p className="text-xs text-muted-foreground">{t("drawDescription")}</p>
+          <p className="text-xs text-muted-foreground mb-3">{t("drawDescription")}</p>
+
+          {/* Countdown Timer */}
+          {isDrawActive && (
+            <div className="inline-flex items-center gap-2 bg-card/80 border border-border rounded-xl px-4 py-2.5">
+              <Clock className="w-4 h-4 text-primary" />
+              <div>
+                <p className="text-[10px] text-muted-foreground">Next Draw In</p>
+                <p className="text-lg font-display font-bold text-primary tracking-wider">{countdown}</p>
+              </div>
+            </div>
+          )}
+          {!isDrawActive && currentWinner && (
+            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-xl px-4 py-2.5">
+              <Trophy className="w-4 h-4 text-primary" />
+              <p className="text-sm font-bold text-primary">Winner announced!</p>
+            </div>
+          )}
         </div>
 
         {/* Gift Card Brands */}
@@ -93,20 +194,23 @@ export default function Draw() {
           ))}
         </div>
 
-        {/* How It Works - Fair Draw */}
-        <div className="bg-card/60 border border-primary/20 rounded-2xl p-4 space-y-3">
-          <h3 className="font-display text-sm font-bold text-gold-gradient flex items-center gap-2">
-            <Hash className="w-4 h-4 text-primary" />
-            Fair Random Draw System
-          </h3>
-          <p className="text-[11px] text-muted-foreground leading-relaxed">
-            Each purchase gives you a unique <span className="text-primary font-bold">Entry #ID</span>. When progress reaches 100%, a random number is generated to select the winner. Every entry has an equal chance!
-          </p>
-          <div className="bg-muted/30 rounded-xl p-3 space-y-1.5">
-            <p className="text-[10px] text-muted-foreground font-mono">Entry #1 — Sarah_M</p>
-            <p className="text-[10px] text-muted-foreground font-mono">Entry #2 — Ahmed_K</p>
-            <p className="text-[10px] text-muted-foreground font-mono">Entry #3 — Luna_Star</p>
-            <p className="text-[10px] text-primary font-mono font-bold">🎲 Random = #2 → Winner: Ahmed_K</p>
+        {/* Live Activity Feed */}
+        <div className="bg-card/60 border border-border rounded-xl px-4 py-2.5 overflow-hidden">
+          <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
+            <Activity className="w-3.5 h-3.5 text-green-accent flex-shrink-0" />
+            <span className="text-[10px] text-green-accent font-bold uppercase tracking-wide">Live</span>
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={activityIndex}
+                initial={{ y: 15, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -15, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-xs text-muted-foreground flex-1"
+              >
+                {ACTIVITY_MESSAGES[activityIndex]}
+              </motion.p>
+            </AnimatePresence>
           </div>
         </div>
 
@@ -164,23 +268,57 @@ export default function Draw() {
             </div>
           </div>
 
-          {/* Stats */}
-          <div className={cn("grid grid-cols-3 gap-2", isRTL && "direction-rtl")}>
+          {/* Stats - 4 cards now */}
+          <div className={cn("grid grid-cols-2 gap-2", isRTL && "direction-rtl")}>
             <div className="bg-muted/40 rounded-xl p-2.5 text-center">
-              <Users className="w-4 h-4 text-accent mx-auto mb-1" />
-              <p className="text-lg font-bold text-foreground">{totalParticipants}</p>
-              <p className="text-[9px] text-muted-foreground">{t("participants")}</p>
+              <Trophy className="w-4 h-4 text-primary mx-auto mb-1" />
+              <p className="text-lg font-bold text-primary">${prizeAmount}</p>
+              <p className="text-[9px] text-muted-foreground">{t("prize")}</p>
             </div>
             <div className="bg-muted/40 rounded-xl p-2.5 text-center">
-              <Ticket className="w-4 h-4 text-primary mx-auto mb-1" />
+              <Ticket className="w-4 h-4 text-accent mx-auto mb-1" />
               <p className="text-lg font-bold text-foreground">{totalEntries}</p>
               <p className="text-[9px] text-muted-foreground">{t("totalEntries")}</p>
             </div>
             <div className="bg-muted/40 rounded-xl p-2.5 text-center">
-              <Trophy className="w-4 h-4 text-gold mx-auto mb-1" />
-              <p className="text-lg font-bold text-primary">${prizeAmount}</p>
-              <p className="text-[9px] text-muted-foreground">{t("prize")}</p>
+              <Users className="w-4 h-4 text-blue-accent mx-auto mb-1" />
+              <p className="text-lg font-bold text-foreground">{totalParticipants}</p>
+              <p className="text-[9px] text-muted-foreground">{t("participants")}</p>
             </div>
+            <div className="bg-primary/10 border border-primary/20 rounded-xl p-2.5 text-center">
+              <Hash className="w-4 h-4 text-primary mx-auto mb-1" />
+              <p className="text-lg font-bold text-primary">{userEntries}</p>
+              <p className="text-[9px] text-muted-foreground">Your Entries</p>
+            </div>
+          </div>
+
+          {/* Chance to Win */}
+          {userEntries > 0 && (
+            <div className="bg-primary/10 border border-primary/30 rounded-xl p-3 text-center">
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <Percent className="w-4 h-4 text-primary" />
+                <span className="text-xs font-bold text-foreground">Chance to Win</span>
+              </div>
+              <p className="text-2xl font-display font-bold text-primary">{chanceToWin}%</p>
+              <p className="text-[9px] text-muted-foreground mt-0.5">{userEntries} / {totalEntries} entries</p>
+            </div>
+          )}
+        </div>
+
+        {/* Fair Draw System */}
+        <div className="bg-card/60 border border-primary/20 rounded-2xl p-4 space-y-3">
+          <h3 className="font-display text-sm font-bold text-gold-gradient flex items-center gap-2">
+            <Hash className="w-4 h-4 text-primary" />
+            Fair Draw System
+          </h3>
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
+            Winner is selected randomly from all entries using a secure random generator. Every entry has an equal chance to win.
+          </p>
+          <div className="bg-muted/30 rounded-xl p-3 space-y-1.5">
+            <p className="text-[10px] text-muted-foreground font-mono">Entry #1 — Sarah_M</p>
+            <p className="text-[10px] text-muted-foreground font-mono">Entry #2 — Ahmed_K</p>
+            <p className="text-[10px] text-muted-foreground font-mono">Entry #3 — Luna_Star</p>
+            <p className="text-[10px] text-primary font-mono font-bold">🎲 Random = #2 → Winner: Ahmed_K</p>
           </div>
         </div>
 
@@ -191,7 +329,7 @@ export default function Draw() {
             {[
               { step: "1", text: t("buyBook"), icon: "📚" },
               { step: "2", text: "Get a unique Entry #ID", icon: "🎫" },
-              { step: "3", text: t("moreBooks"), icon: "🔥" },
+              { step: "3", text: "Premium Pack = 2 Entries!", icon: "🔥" },
               { step: "4", text: "Random number picks the winner!", icon: "🏆" },
             ].map((item) => (
               <div key={item.step} className={cn("flex items-center gap-3", isRTL && "flex-row-reverse")}>
@@ -205,7 +343,7 @@ export default function Draw() {
           </div>
         </div>
 
-        {/* Recent Entries with Entry IDs */}
+        {/* Recent Entries */}
         <div className="bg-card/60 border border-border rounded-2xl p-4">
           <h3 className="font-display text-sm font-bold text-gold-gradient mb-3">{t("recentEntries")}</h3>
           <div className="space-y-2 max-h-48 overflow-y-auto">
@@ -257,13 +395,18 @@ export default function Draw() {
           </div>
         )}
 
-        {/* Demo Button */}
+        {/* CTA Button - navigates to Shop */}
         {isDrawActive && (
           <button
-            onClick={() => addPurchase("You", 1)}
-            className="w-full py-3.5 rounded-xl font-display font-bold text-lg bg-gradient-to-r from-gold-dark via-primary to-gold-dark text-primary-foreground shadow-gold hover:brightness-110 transition-all"
+            onClick={() => navigate("/shop")}
+            className="w-full py-3.5 rounded-xl font-display font-bold text-lg text-primary-foreground shadow-gold hover:brightness-110 transition-all flex items-center justify-center gap-2"
+            style={{
+              background: "linear-gradient(180deg, hsl(45 100% 50%), hsl(40 100% 40%))",
+              boxShadow: "0 0 25px rgba(255,215,0,0.25)",
+            }}
           >
-            {t("enterDraw")}
+            <ShoppingBag className="w-5 h-5" />
+            Buy Book & Enter Draw
           </button>
         )}
 

@@ -82,10 +82,10 @@ export default function Shop() {
         { icon: <Star className="w-4 h-4 text-primary" />, label: "6,000 VIP XP", type: "xp", amount: 6000 },
         { icon: <Ticket className="w-4 h-4 text-red-accent" />, label: "1 Game Ticket", type: "gameTicket", amount: 1 },
         { icon: <Sparkles className="w-4 h-4 text-accent" />, label: "1 Tarot Ticket", type: "tarotTicket", amount: 1 },
-        { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: "1 Draw Entry", type: "drawEntry", amount: 1 },
+        { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: "2 Draw Entries", type: "drawEntry", amount: 2 },
       ],
       tag: "Most Popular",
-      includes: ["1 Digital Book", "6,000 VIP XP", "1 Game Ticket", "1 Tarot Ticket", "1 Draw Entry"],
+      includes: ["1 Digital Book", "6,000 VIP XP", "1 Game Ticket", "1 Tarot Ticket", "2 Draw Entries"],
     },
   ];
 

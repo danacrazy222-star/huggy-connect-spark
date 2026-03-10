@@ -128,6 +128,21 @@ export type TranslationKeys = {
   newDraw: string;
   drawDescription: string;
   draw: string;
+  // Draw new keys
+  drawExtended: string;
+  drawExtendedMessage: string;
+  nextDrawIn: string;
+  fairDrawSystem: string;
+  fairDrawDescription: string;
+  winnerAnnounced: string;
+  won: string;
+  enterTheDraw: string;
+  giftCardDraw: string;
+  drawCloseInfo: string;
+  getUniqueEntry: string;
+  premiumTwoEntries: string;
+  randomPicksWinner: string;
+  yourEntries: string;
   // Auth
   login: string;
   signup: string;

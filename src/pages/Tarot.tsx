@@ -107,7 +107,7 @@ export default function Tarot() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ messages: allMessages, selectedCards, language }),
+        body: JSON.stringify({ messages: allMessages, selectedCards, language, gender: userGender }),
       });
 
       if (!resp.ok) {

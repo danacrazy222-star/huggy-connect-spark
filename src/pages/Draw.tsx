@@ -283,7 +283,7 @@ export default function Draw() {
           {/* Your Entries - only if user has entries */}
           {userEntries > 0 && (
             <div className="bg-primary/10 border border-primary/30 rounded-xl p-3 text-center">
-              <p className="text-xs text-muted-foreground">Your Entries</p>
+              <p className="text-xs text-muted-foreground">{t("yourEntries")}</p>
               <p className="text-2xl font-display font-bold text-primary">{userEntries}</p>
             </div>
           )}

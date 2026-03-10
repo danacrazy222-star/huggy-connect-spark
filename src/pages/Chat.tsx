@@ -50,6 +50,7 @@ export default function Chat() {
   const [message, setMessage] = useState("");
   
   const [worldChallengeSessionActive, setWorldChallengeSessionActive] = useState(false);
+  const [selectedGame, setSelectedGame] = useState<"duel" | "treasure" | null>(null);
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<{ avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);

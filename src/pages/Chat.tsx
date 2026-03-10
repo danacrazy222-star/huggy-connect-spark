@@ -112,7 +112,7 @@ export default function Chat() {
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [realtimeMessages]);
+  }, [realtimeMessages, botMessages]);
 
   // Clear unread when entering
   useEffect(() => { clearUnread(); }, [clearUnread]);

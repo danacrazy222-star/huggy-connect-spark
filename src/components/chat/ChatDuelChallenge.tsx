@@ -197,7 +197,22 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     setPlayerMove(null);
     setOpponentMove(null);
 
-    // Try to find a waiting match
+    // First, cleanup any old stale matches from this user
+    await supabase
+      .from('rps_matches')
+      .delete()
+      .eq('player1_id', user.id)
+      .eq('status', 'waiting');
+
+    // Also cleanup stale waiting matches older than 2 minutes
+    const twoMinAgo = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+    await supabase
+      .from('rps_matches')
+      .delete()
+      .eq('status', 'waiting')
+      .lt('created_at', twoMinAgo);
+
+    // Try to find a waiting match in same room
     const { data: waitingMatches } = await supabase
       .from('rps_matches')
       .select('*')
@@ -225,7 +240,8 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
         setMatchId(match.id);
         setIsPlayer1(false);
         setOpponentName(match.player1_name);
-        setOpponentLevel(match.player1_level);
+        setOpponentLevel(match.player1_level ?? 1);
+        subscribeToMatch(match.id);
         setPhase("matched");
         return;
       }
@@ -240,13 +256,14 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
         player1_level: playerLevel,
         room_id: roomId,
         status: 'waiting',
-      })
+      } as any)
       .select()
       .single();
 
     if (newMatch && !error) {
       setMatchId(newMatch.id);
       setIsPlayer1(true);
+      subscribeToMatch(newMatch.id);
       startSearchTimer(newMatch.id);
     }
   };

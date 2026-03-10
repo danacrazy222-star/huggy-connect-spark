@@ -32,9 +32,9 @@ const rooms = [
 ];
 
 const mockMessages: ChatMsg[] = [
-  { user: "Michael", avatar: "M", message: "Wow, this room is amazing! 🤩", crown: false, gender: "male", avatarUrl: avatarMale1 },
-  { user: "Luna", avatar: "L", message: "Let's go! 🤗", crown: true, gender: "female", avatarUrl: avatarFemale1 },
-  { user: "Alex", avatar: "A", message: "Good luck all! 🍀🔥", crown: false, gender: "male", avatarUrl: avatarMale3 },
+  { user: "Michael", avatar: "M", message: "Welcome to the Bronze room! 🔥", crown: false, gender: "male", avatarUrl: avatarMale1, level: 4, time: "02:01" },
+  { user: "Luna", avatar: "L", message: "Who's spinning today?", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7, time: "02:02" },
+  { user: "Alex", avatar: "A", message: "Just won a game ticket! 🎰", crown: false, gender: "male", avatarUrl: avatarMale3, level: 3, time: "02:03" },
 ];
 
 type ChatMessage = ChatMsg;

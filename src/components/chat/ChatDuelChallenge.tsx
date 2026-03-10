@@ -506,9 +506,23 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
   }, [phase, round]);
 
   const handlePick = useCallback(async (move: Move) => {
-    if (playerMove || !matchId || !user || role !== "player") return;
+    if (playerMove || !user || role !== "player") return;
     setPlayerMove(move);
 
+    if (isBotMatch) {
+      setP1Move(move);
+      // If bot already picked, go to clash
+      if (p2Move) {
+        setWaitingForOpponent(false);
+        setPhase("clash");
+        setShakeIndex(0);
+      } else {
+        setWaitingForOpponent(true);
+      }
+      return;
+    }
+
+    if (!matchId) return;
     const moveCol = isPlayer1 ? 'player1_move' : 'player2_move';
     const oppCol = isPlayer1 ? 'player2_move' : 'player1_move';
 
@@ -524,7 +538,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     } else {
       setWaitingForOpponent(true);
     }
-  }, [playerMove, matchId, user, isPlayer1, role]);
+  }, [playerMove, matchId, user, isPlayer1, role, isBotMatch, p2Move]);
 
   // Poll for opponent's move when waiting
   useEffect(() => {

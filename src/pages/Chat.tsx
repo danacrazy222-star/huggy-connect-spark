@@ -12,7 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatDuelChallenge } from "@/components/chat/ChatDuelChallenge";
 import { WorldChallengePromo } from "@/components/chat/WorldChallengePromo";
-
+import { XPRainEvent } from "@/components/chat/XPRainEvent";
 
 import roomWorld from "@/assets/room-world.jpg";
 import roomBronze from "@/assets/room-bronze.jpg";

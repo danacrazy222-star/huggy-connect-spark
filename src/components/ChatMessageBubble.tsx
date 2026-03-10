@@ -118,7 +118,7 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
         <div className={cn("flex items-center gap-1.5 mb-0.5", isRTL && "flex-row-reverse")}>
           <span className="text-xs font-medium text-foreground">{msg.user}</span>
           {msg.crown && <Crown className="w-3 h-3 text-primary" />}
-          {msg.level && (
+          {msg.level && msg.level > 0 && !msg.isSystem && (
             <span className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">
               {getLevelIcon(msg.level)} Lv.{msg.level}
             </span>

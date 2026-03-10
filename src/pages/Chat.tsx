@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,19 +13,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { ChatDuelChallenge } from "@/components/chat/ChatDuelChallenge";
 import { WorldChallengePromo } from "@/components/chat/WorldChallengePromo";
 import { XPRainEvent } from "@/components/chat/XPRainEvent";
+import { useChatRealtime } from "@/hooks/useChatRealtime";
 
 import roomWorld from "@/assets/room-world.jpg";
 import roomBronze from "@/assets/room-bronze.jpg";
 import roomSilver from "@/assets/room-silver.jpg";
 import roomGold from "@/assets/room-gold.jpg";
 import roomDiamond from "@/assets/room-diamond.jpg";
-
-import avatarMale1 from "@/assets/avatar-male-1.png";
-import avatarMale2 from "@/assets/avatar-male-2.png";
-import avatarMale3 from "@/assets/avatar-male-3.png";
-import avatarFemale1 from "@/assets/avatar-female-1.png";
-import avatarFemale2 from "@/assets/avatar-female-2.png";
-import avatarFemale3 from "@/assets/avatar-female-3.png";
 
 const rooms = [
   { name: "🌍 World", level: 0, image: roomWorld, accent: "from-emerald-500/60", border: "border-emerald-400/50", glow: "hsl(160 80% 50%)", shape: "circle" as const },
@@ -35,180 +29,90 @@ const rooms = [
   { name: "Diamond", level: 15, image: roomDiamond, accent: "from-amber-500/60", border: "border-amber-400/50", glow: "hsl(35 100% 55%)", shape: "flame" as const },
 ];
 
-const getMockMessages = (t: (key: string) => string): ChatMsg[] => [
-  { user: "Michael", avatar: "M", message: "Welcome to the Bronze room! 🔥", crown: false, gender: "male", avatarUrl: avatarMale1, level: 4, time: "02:01" },
-  { user: "Luna", avatar: "L", message: "Who's spinning today?", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7, time: "02:02" },
-  { user: "Alex", avatar: "A", message: "Just won a game ticket! 🎰", crown: false, gender: "male", avatarUrl: avatarMale3, level: 3, time: "02:03" },
-];
-
-type ChatMessage = ChatMsg;
-
 export default function Chat() {
   const [activeRoom, setActiveRoom] = useState(0);
   const [message, setMessage] = useState("");
-  
   const [worldChallengeSessionActive, setWorldChallengeSessionActive] = useState(false);
   const [xpRainActive, setXpRainActive] = useState(false);
   const [xpRainCountdown, setXpRainCountdown] = useState(false);
   const { user } = useAuth();
-  const [userProfile, setUserProfile] = useState<{ avatar_url: string | null; gender: string | null } | null>(null);
+  const [userProfile, setUserProfile] = useState<{ display_name: string | null; avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);
   const worldChallengeUnlocked = useGameStore((s) => s.worldChallengeUnlocked);
   const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
-  const { roomMessages, addMessage, initRoom, addUnread, clearUnread, updateMessageInRoom } = useChatStore();
+  const { clearUnread } = useChatStore();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-
-  // Initialize room with default messages
-  useEffect(() => {
-    initRoom(activeRoom, getMockMessages(t));
-  }, [activeRoom, initRoom]);
-
-  const messages = roomMessages[activeRoom] || [];
-
-  // Fetch current user profile for avatar & gender
-  useEffect(() => {
-    if (!user) return;
-    supabase
-      .from("profiles")
-      .select("avatar_url, gender")
-      .eq("user_id", user.id)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (data) setUserProfile(data as any);
-      });
-  }, [user]);
+  const { messages: realtimeMessages, sendMessage: sendRealtimeMessage } = useChatRealtime(activeRoom);
 
   const currentRoom = rooms[activeRoom];
   const canAccess = level >= currentRoom.level;
 
-  // Clear unread when entering chat
+  // Fetch user profile
   useEffect(() => {
-    clearUnread();
-  }, [clearUnread]);
+    if (!user) return;
+    supabase
+      .from("profiles")
+      .select("display_name, avatar_url, gender")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => { if (data) setUserProfile(data as any); });
+  }, [user]);
 
-  // Simulate active chat with varied messages
+  // Auto-scroll to bottom
   useEffect(() => {
-    if (!canAccess) return;
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [realtimeMessages]);
 
-    const chatMessages: ChatMsg[] = [
-      { user: "Sara", avatar: "S", message: "Hello! 👋 Welcome everyone", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-      { user: "Omar", avatar: "O", message: "Let's play! 🎮 Who's ready?", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
-      { user: "Noor", avatar: "N", message: "Good luck everyone 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-      { user: "Sara", avatar: "S", message: "I won the draw today! 🎉🎉", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-      { user: "Omar", avatar: "O", message: "Congrats Sara! 🥳👏", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
-      { user: "Noor", avatar: "N", message: "Who wants a challenge? ⚔️", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-      { user: "Sara", avatar: "S", message: "The room is fire today 🔥🔥", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-      { user: "Omar", avatar: "O", message: "I reached level 12! 💪", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
-      { user: "Noor", avatar: "N", message: "Keep pushing everyone 💪🏆", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-      { user: "Omar", avatar: "O", message: "Anyone tried tarot today? 🔮", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
-      { user: "Sara", avatar: "S", message: "I spin every day ✨", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-      { user: "Noor", avatar: "N", message: "Let's gooo! 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-    ];
-
-    let msgIndex = 0;
-    const interval = setInterval(() => {
-      const now = new Date();
-      const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-      const msg = { ...chatMessages[msgIndex % chatMessages.length], time: timeStr };
-      addMessage(activeRoom, msg);
-      addUnread();
-      msgIndex++;
-    }, 8000 + Math.random() * 7000);
-    return () => clearInterval(interval);
-  }, [canAccess, activeRoom, addMessage, addUnread]);
-
-  // Welcome message when user enters
-  useEffect(() => {
-    if (!canAccess || !user) return;
-    const userName = user.email?.split("@")[0] || "Player";
-    const welcomeTimeout = setTimeout(() => {
-      const now = new Date();
-      const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-      addMessage(activeRoom, {
-        user: "Luna",
-        avatar: "L",
-        message: `${t("welcomeMsg")} ${userName}! 👋🎉 ${t("welcomeLitRoom")}`,
-        crown: true,
-        gender: "female",
-        avatarUrl: avatarFemale1,
-        level: 7,
-        time: timeStr,
-      });
-    }, 2000);
-    return () => clearTimeout(welcomeTimeout);
-  }, [activeRoom, canAccess]);
+  // Clear unread when entering
+  useEffect(() => { clearUnread(); }, [clearUnread]);
 
   // XP Rain event - triggers every 30 minutes in Bronze room (index 1)
   useEffect(() => {
     if (activeRoom !== 1 || !canAccess) return;
-
     const triggerRain = () => {
-      // Show countdown message first
-      const now = new Date();
-      const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-      addMessage(1, {
-        user: "⚡ System",
-        avatar: "⚡",
-        message: t("xpRainStarting"),
-        crown: true,
-        gender: null,
-        level: 0,
-        time: timeStr,
-        isSystem: true,
-      });
       setXpRainCountdown(true);
       setTimeout(() => {
         setXpRainCountdown(false);
         setXpRainActive(true);
       }, 3000);
     };
-
-    // First trigger after 20 seconds (demo), then every 30 min
     const initialTimeout = setTimeout(triggerRain, 20000);
     const interval = setInterval(triggerRain, 30 * 60 * 1000);
-
-    return () => {
-      clearTimeout(initialTimeout);
-      clearInterval(interval);
-    };
-  }, [activeRoom, canAccess, addMessage, t]);
+    return () => { clearTimeout(initialTimeout); clearInterval(interval); };
+  }, [activeRoom, canAccess]);
 
   const handleXPRainEnd = useCallback((collected: number) => {
     setXpRainActive(false);
-    const now = new Date();
-    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-    const userName = user?.email?.split("@")[0] || "Player";
-    addMessage(1, {
-      user: "⚡ System",
-      avatar: "⚡",
-      message: `🎉 ${userName} ${t("xpRainAnnounce")} ${collected} XP! ⚡`,
-      crown: true,
-      gender: null,
-      level: 0,
-      time: timeStr,
-      isSystem: true,
-    });
-  }, [addMessage, user, t]);
+    const userName = userProfile?.display_name || user?.email?.split("@")[0] || "Player";
+    // Send system-like announcement as a real message
+    if (user) {
+      sendRealtimeMessage(
+        `🎉 ${userName} ${t("xpRainAnnounce")} ${collected} XP! ⚡`,
+        {
+          display_name: "⚡ System",
+          avatar_url: null,
+          gender: null,
+          level: 0,
+        }
+      );
+    }
+  }, [sendRealtimeMessage, user, userProfile, t]);
 
-  const sendMessage = useCallback(() => {
+  const handleSendMessage = useCallback(() => {
     const trimmed = message.trim();
-    if (!trimmed) return;
+    if (!trimmed || !user) return;
     const filtered = containsProfanity(trimmed) ? censorMessage(trimmed) : trimmed;
-    const now = new Date();
-    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-    addMessage(activeRoom, {
-      user: "You",
-      avatar: user?.email?.charAt(0).toUpperCase() || "Y",
-      message: filtered,
-      crown: false,
-      avatarUrl: userProfile?.avatar_url || undefined,
-      gender: (userProfile?.gender as "male" | "female" | null) || null,
+    const displayName = userProfile?.display_name || user.email?.split("@")[0] || "Player";
+    sendRealtimeMessage(filtered, {
+      display_name: displayName,
+      avatar_url: userProfile?.avatar_url,
+      gender: userProfile?.gender,
       level,
-      time: timeStr,
     });
     setMessage("");
-  }, [message, activeRoom, addMessage, user, userProfile]);
+  }, [message, user, userProfile, level, sendRealtimeMessage]);
 
   const handleWorldChallengeStart = useCallback(() => {
     if (activeRoom === 0) {
@@ -219,24 +123,17 @@ export default function Chat() {
 
   const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
     addXP(won ? 300 : 80);
-    const now = new Date();
-    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-    addMessage(activeRoom, {
-      user: "🏆 System",
-      avatar: "⚔️",
-      message: `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
-      crown: true,
-      gender: null,
-      level: 0,
-      time: timeStr,
-      isSystem: true,
-    });
-
+    if (user) {
+      sendRealtimeMessage(
+        `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
+        { display_name: "🏆 System", avatar_url: null, gender: null, level: 0 }
+      );
+    }
     if (activeRoom === 0) {
       setWorldChallengeSessionActive(false);
       useGameStore.getState().lockWorldChallenge();
     }
-  }, [addXP, addMessage, activeRoom]);
+  }, [addXP, activeRoom, sendRealtimeMessage, user, t]);
 
   return (
     <div className="min-h-screen pb-20 flex flex-col relative" dir={isRTL ? "rtl" : "ltr"}>
@@ -287,14 +184,12 @@ export default function Chat() {
           </div>
         ) : (
           <div className="flex-1 flex flex-col px-4">
-            {/* World challenge promo - inline at top */}
+            {/* World challenge promo */}
             {activeRoom === 0 && !worldChallengeUnlocked && !worldChallengeSessionActive && (
-              <div className="mb-2">
-                <WorldChallengePromo />
-              </div>
+              <div className="mb-2"><WorldChallengePromo /></div>
             )}
 
-            {/* Duel challenge - only in World room if unlocked, always in other rooms */}
+            {/* Duel challenge */}
             {activeRoom === 0 && !worldChallengeUnlocked && !worldChallengeSessionActive ? (
               <div className="mx-auto my-2 w-full max-w-xs text-center">
                 <div className="flex flex-col items-center gap-2 py-3 px-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
@@ -304,7 +199,7 @@ export default function Chat() {
               </div>
             ) : (
               <ChatDuelChallenge
-                playerName={user?.email?.split("@")[0] || "You"}
+                playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
                 playerLevel={level}
                 onEnd={handleDuelEnd}
                 onStart={activeRoom === 0 ? handleWorldChallengeStart : undefined}
@@ -312,31 +207,37 @@ export default function Chat() {
               />
             )}
 
-            {/* Chat messages area */}
+            {/* Chat messages */}
             <div className="flex-1" />
             <div className="space-y-3 mb-3 overflow-y-auto max-h-[30vh]">
-              {messages.map((msg, i) => (
-                <ChatMessageBubble
-                  key={i}
-                  msg={msg}
-                  index={i}
-                  isRTL={isRTL}
-                  onTranslated={(translated) =>
-                    updateMessageInRoom(activeRoom, i, { translated })
-                  }
-                />
+              {!user && (
+                <div className="text-center py-4">
+                  <p className="text-sm text-muted-foreground">{t("loginToChat") || "Login to chat with others"}</p>
+                </div>
+              )}
+              {realtimeMessages.map((msg, i) => (
+                <ChatMessageBubble key={(msg as any)._id || i} msg={msg} index={i} isRTL={isRTL} />
               ))}
+              <div ref={messagesEndRef} />
             </div>
 
             {/* Message input */}
-            <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
-              <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
-                <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}
-                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                  className={cn("flex-1 bg-transparent text-sm text-foreground placeholder:text-white/40 outline-none", isRTL && "text-right")} />
-                <button onClick={sendMessage} className="text-primary hover:text-primary/80 transition-colors"><Send className="w-5 h-5" /></button>
+            {user ? (
+              <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
+                  <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}
+                    onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                    className={cn("flex-1 bg-transparent text-sm text-foreground placeholder:text-white/40 outline-none", isRTL && "text-right")} />
+                  <button onClick={handleSendMessage} className="text-primary hover:text-primary/80 transition-colors"><Send className="w-5 h-5" /></button>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="text-center mb-2 py-2">
+                <button onClick={() => window.location.href = "/auth"} className="text-sm text-primary underline">
+                  {t("loginToChat") || "Login to chat"}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

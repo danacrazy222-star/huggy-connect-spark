@@ -1,39 +1,65 @@
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import { Trophy } from "lucide-react";
-import giftcardShein from "@/assets/giftcard-shein.png";
-import giftcardGooglePlay from "@/assets/giftcard-google-play.png";
-import giftcardAmazon from "@/assets/giftcard-amazon.png";
+import brandAmazon from "@/assets/brand-amazon.png";
+import brandGooglePlay from "@/assets/brand-google-play.png";
+import brandShein from "@/assets/brand-shein.png";
 
 const BRANDS = [
-  { name: "Amazon", image: giftcardAmazon, textColor: "text-amber-400" },
-  { name: "Google Play", image: giftcardGooglePlay, textColor: "text-sky-400" },
-  { name: "SHEIN", image: giftcardShein, textColor: "text-pink-400" },
+  {
+    name: "Amazon",
+    image: brandAmazon,
+    glowColor: "shadow-[0_0_25px_rgba(255,165,0,0.4)]",
+    borderColor: "border-amber-500/60",
+    bgGradient: "from-amber-950/80 via-background/90 to-amber-950/60",
+  },
+  {
+    name: "Google Play",
+    image: brandGooglePlay,
+    glowColor: "shadow-[0_0_25px_rgba(59,130,246,0.4)]",
+    borderColor: "border-sky-500/60",
+    bgGradient: "from-sky-950/80 via-background/90 to-sky-950/60",
+  },
+  {
+    name: "SHEIN",
+    image: brandShein,
+    glowColor: "shadow-[0_0_25px_rgba(236,72,153,0.4)]",
+    borderColor: "border-pink-500/60",
+    bgGradient: "from-pink-950/80 via-background/90 to-pink-950/60",
+  },
 ];
 
 export function ShopGiftCards() {
   return (
     <div className="text-center px-4 py-3">
-      <div className="inline-flex items-center gap-1.5 bg-primary/15 border border-primary/30 rounded-full px-4 py-1.5 mb-3">
-        <Trophy className="w-4 h-4 text-primary" />
-        <span className="text-sm font-bold text-primary">Win a $500 Gift Card</span>
-      </div>
+      <h2 className="font-display text-base font-bold text-foreground mb-4">
+        Choose Your Gift Card Prize
+      </h2>
 
-      <p className="text-xs text-muted-foreground mb-4">Choose from:</p>
-
-      <div className="flex items-center justify-center gap-3 mb-2">
+      <div className="flex items-stretch justify-center gap-2.5 mb-2">
         {BRANDS.map((brand, i) => (
           <motion.div
             key={brand.name}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1, type: "spring", bounce: 0.4 }}
-            className="flex flex-col items-center gap-1.5"
+            className={`relative flex flex-col items-center rounded-2xl border-2 ${brand.borderColor} ${brand.glowColor} bg-gradient-to-b ${brand.bgGradient} p-2.5 pb-3 w-[110px]`}
           >
-            <div className="w-[100px] h-[68px] rounded-xl overflow-hidden border border-border/50 shadow-md">
-              <img src={brand.image} alt={brand.name} className="w-full h-full object-cover" />
+            {/* Prize Badge */}
+            <div className="bg-background/80 border border-primary/50 rounded-full px-2.5 py-1 mb-2.5 flex items-center gap-1">
+              <Trophy className="w-3 h-3 text-primary" />
+              <span className="text-[10px] font-bold text-primary">500 Prize</span>
             </div>
-            <span className={cn("font-display font-bold text-xs", brand.textColor)}>{brand.name}</span>
+
+            {/* Brand Logo */}
+            <div className="w-[70px] h-[50px] flex items-center justify-center mb-2">
+              <img src={brand.image} alt={brand.name} className="max-w-full max-h-full object-contain" />
+            </div>
+
+            {/* Price Label */}
+            <span className="text-xs font-bold text-foreground/90 mb-1.5">$500 Gift Card</span>
+
+            {/* Brand Name */}
+            <span className="font-display text-[11px] font-bold text-muted-foreground">{brand.name}</span>
           </motion.div>
         ))}
       </div>

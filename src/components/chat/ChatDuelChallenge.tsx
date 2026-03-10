@@ -250,12 +250,28 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
 
   const startSearchTimer = (id: string) => {
     let timer = 40;
-    timerRef.current = setInterval(() => {
+    timerRef.current = setInterval(async () => {
       timer--;
       setSearchTimer(timer);
+      
+      // Poll every 3 seconds to check if someone joined
+      if (timer % 3 === 0 && timer > 0) {
+        const { data } = await supabase
+          .from('rps_matches')
+          .select('*')
+          .eq('id', id)
+          .single();
+        if (data && data.status === 'matched' && data.player2_id) {
+          clearTimer();
+          setOpponentName(data.player2_name);
+          setOpponentLevel(data.player2_level);
+          setPhase("matched");
+          return;
+        }
+      }
+      
       if (timer <= 0) {
         clearTimer();
-        // No one joined - cleanup and go back to idle
         supabase.from('rps_matches').delete().eq('id', id).then(() => {});
         setPhase("idle");
         setMatchId(null);
@@ -375,6 +391,27 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
       setWaitingForOpponent(true);
     }
   }, [playerMove, matchId, user, isPlayer1]);
+
+  // Poll for opponent's move when waiting
+  useEffect(() => {
+    if (!waitingForOpponent || !matchId || !user) return;
+    const oppCol = isPlayer1 ? 'player2_move' : 'player1_move';
+    const pollInterval = setInterval(async () => {
+      const { data } = await supabase
+        .from('rps_matches')
+        .select('*')
+        .eq('id', matchId)
+        .single();
+      if (data && data[oppCol]) {
+        clearInterval(pollInterval);
+        setOpponentMove(data[oppCol] as Move);
+        setWaitingForOpponent(false);
+        setPhase("clash");
+        setShakeIndex(0);
+      }
+    }, 2000);
+    return () => clearInterval(pollInterval);
+  }, [waitingForOpponent, matchId, user, isPlayer1]);
 
   // ── CLASH animation ──
   useEffect(() => {

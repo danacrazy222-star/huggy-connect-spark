@@ -173,6 +173,13 @@ export type TranslationKeys = {
   userAlreadyExists: string;
   invalidCredentials: string;
   emailNotConfirmed: string;
+  forgotPassword: string;
+  resetPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+  passwordsDoNotMatch: string;
+  resetLinkSent: string;
+  passwordUpdated: string;
   logout: string;
   // Profile
   loginToViewProfile: string;

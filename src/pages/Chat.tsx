@@ -11,6 +11,8 @@ import { ChatMessageBubble, type ChatMsg } from "@/components/ChatMessageBubble"
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatDuelChallenge } from "@/components/chat/ChatDuelChallenge";
+import { ChatTreasureRush } from "@/components/chat/ChatTreasureRush";
+import { ChatGameSelector } from "@/components/chat/ChatGameSelector";
 import { WorldChallengePromo } from "@/components/chat/WorldChallengePromo";
 
 

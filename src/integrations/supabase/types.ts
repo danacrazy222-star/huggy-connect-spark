@@ -152,6 +152,66 @@ export type Database = {
         }
         Relationships: []
       }
+      rps_matches: {
+        Row: {
+          bet_amount: number
+          created_at: string
+          current_round: number
+          id: string
+          player1_id: string
+          player1_level: number
+          player1_move: string | null
+          player1_name: string
+          player1_score: number
+          player2_id: string | null
+          player2_level: number | null
+          player2_move: string | null
+          player2_name: string | null
+          player2_score: number
+          status: string
+          updated_at: string
+          winner_id: string | null
+        }
+        Insert: {
+          bet_amount?: number
+          created_at?: string
+          current_round?: number
+          id?: string
+          player1_id: string
+          player1_level?: number
+          player1_move?: string | null
+          player1_name?: string
+          player1_score?: number
+          player2_id?: string | null
+          player2_level?: number | null
+          player2_move?: string | null
+          player2_name?: string | null
+          player2_score?: number
+          status?: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Update: {
+          bet_amount?: number
+          created_at?: string
+          current_round?: number
+          id?: string
+          player1_id?: string
+          player1_level?: number
+          player1_move?: string | null
+          player1_name?: string
+          player1_score?: number
+          player2_id?: string | null
+          player2_level?: number | null
+          player2_move?: string | null
+          player2_name?: string | null
+          player2_score?: number
+          status?: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

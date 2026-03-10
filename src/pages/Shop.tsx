@@ -31,7 +31,7 @@ export interface BookPackage {
 
 export default function Shop() {
   const { t, isRTL } = useTranslation();
-  const { addXP, addGameTicket, addTarotTicket, addDrawEntry } = useGameStore();
+  const { addXP, addPoints, addGameTicket, addTarotTicket, addDrawEntry } = useGameStore();
   const { addPurchase } = useDrawStore();
   const [selectedPkg, setSelectedPkg] = useState<BookPackage | null>(null);
   const [purchasing, setPurchasing] = useState(false);

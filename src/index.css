@@ -156,6 +156,10 @@
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
+.animate-wheel-wobble {
+  animation: wheel-wobble 3s ease-in-out infinite;
+}
+
 /* Room shimmer animation */
 @keyframes room-shimmer {
   0% { background-position: -200% 0; }

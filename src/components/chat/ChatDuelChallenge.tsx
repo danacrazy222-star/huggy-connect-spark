@@ -337,8 +337,9 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     }
   };
 
-  const startSearchTimer = (id: string) => {
-    let timer = 40;
+  const startSearchTimer = (id: string, initialTime = 40) => {
+    clearTimer();
+    let timer = initialTime;
     timerRef.current = setInterval(async () => {
       timer--;
       setSearchTimer(timer);

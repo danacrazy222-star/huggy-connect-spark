@@ -122,8 +122,8 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
     setSearchTimer(60);
     const timeout = setTimeout(() => {
       setPlayers([
-        { name: "You", pos: 0, isBot: false, color: "bg-primary" },
-        { name: "Bot 🤖", pos: 0, isBot: true, color: "bg-accent" },
+        { name: t("playerYou"), pos: 0, isBot: false, color: "bg-primary" },
+        { name: t("botPlayer"), pos: 0, isBot: true, color: "bg-accent" },
       ]);
       setPhase("playing");
       setCurrentTurn(0);

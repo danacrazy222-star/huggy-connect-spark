@@ -469,7 +469,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Pro
                     transition={{ duration: 0.35, repeat: shakeIndex < 3 ? Infinity : 0 }}>
                     <span className="text-5xl">{shakeIndex >= 3 ? MOVE_EMOJI[playerMove!] : "✊"}</span>
                   </motion.div>
-                  <span className="text-[10px] font-bold text-muted-foreground">{playerName}</span>
+                  <NameWithLevel name={playerName} level={playerLevel} className="text-[10px]" />
                 </div>
                 <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 0.5, repeat: Infinity }}
                   className="text-xl font-black text-primary">⚔️</motion.span>

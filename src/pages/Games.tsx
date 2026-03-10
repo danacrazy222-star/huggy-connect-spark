@@ -39,7 +39,7 @@ export default function Games() {
   return <GamesList onPlaySnake={() => setActiveGame("snake")} onPlayScratch={() => setActiveGame("scratch")} onPlayTreasure={() => setActiveGame("treasure")} />;
 }
 
-function GamesList({ onPlaySnake, onPlayScratch }: { onPlaySnake: () => void; onPlayScratch: () => void }) {
+function GamesList({ onPlaySnake, onPlayScratch, onPlayTreasure }: { onPlaySnake: () => void; onPlayScratch: () => void; onPlayTreasure: () => void }) {
   const { gameTickets } = useGameStore();
   const { t, isRTL } = useTranslation();
 

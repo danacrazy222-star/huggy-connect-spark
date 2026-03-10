@@ -357,7 +357,9 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
                   <span className="text-xs text-foreground">+{getGameXPReward().win} XP</span>
                 </div>
               )}
-              {winner === t("playerYou") && (
+            </div>
+            <button onClick={onBack} className="px-8 py-3 rounded-xl font-display font-bold bg-gradient-to-r from-gold-dark via-primary to-gold-dark text-primary-foreground shadow-gold">
+              {t("backToGames")}
             </button>
           </div>
         )}

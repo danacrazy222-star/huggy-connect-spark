@@ -12,20 +12,23 @@ interface DrawState {
   entries: DrawEntry[];
   nextEntryId: number;
   targetEntries: number; // INTERNAL ONLY - never show to users
+  minimumEntries: number; // INTERNAL ONLY - minimum before winner can be picked
   prizeAmount: number;
   currentWinner: string | null;
   winningEntryId: number | null;
   winnerAnnouncedAt: number | null;
   drawHistory: { winner: string; date: number; prize: string; entryId: number }[];
   isDrawActive: boolean;
-  drawStartedAt: number; // timestamp when current draw started
-  drawDurationMs: number; // duration in ms (24h default)
+  wasExtended: boolean; // true if draw was extended due to not meeting minimum
+  drawStartedAt: number;
+  drawDurationMs: number;
 
   addPurchase: (username: string) => void;
   getProgressPercent: () => number;
   resetDraw: () => void;
   checkTimerExpired: () => boolean;
   triggerDraw: () => void;
+  handleTimerEnd: () => void;
 }
 
 // Simulated entries for demo

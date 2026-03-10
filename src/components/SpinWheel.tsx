@@ -165,13 +165,13 @@ export function SpinWheel() {
                 transform: "translate(-50%, -50%)",
                 background: isLit
                   ? i % 2 === 0
-                    ? "radial-gradient(circle, hsl(45 100% 70%), hsl(45 100% 50%))"
-                    : "radial-gradient(circle, hsl(330 80% 65%), hsl(270 80% 55%))"
+                    ? "radial-gradient(circle, #FFD700, #FFC300)"
+                    : "radial-gradient(circle, #9b59b6, #7b3fa0)"
                   : "hsl(var(--muted))",
                 boxShadow: isLit
                   ? i % 2 === 0
-                    ? "0 0 6px hsl(45 100% 50%), 0 0 12px hsl(45 100% 50% / 0.5)"
-                    : "0 0 6px hsl(270 80% 55%), 0 0 12px hsl(270 80% 55% / 0.5)"
+                    ? "0 0 6px #FFD700, 0 0 12px rgba(255,215,0,0.5)"
+                    : "0 0 6px #9b59b6, 0 0 12px rgba(155,89,182,0.5)"
                   : "none",
               }}
             />

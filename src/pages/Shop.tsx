@@ -292,6 +292,7 @@ export default function Shop() {
       <ShopSuccessPopup
         showSuccess={showSuccess}
         selectedPkg={selectedPkg}
+        quantity={purchaseQty}
         isRTL={isRTL}
         t={t}
       />

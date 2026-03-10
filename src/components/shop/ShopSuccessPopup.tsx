@@ -6,11 +6,14 @@ import type { BookPackage } from "@/pages/Shop";
 interface ShopSuccessPopupProps {
   showSuccess: boolean;
   selectedPkg: BookPackage | null;
+  quantity: number;
   isRTL: boolean;
   t: (key: string) => string;
 }
 
-export function ShopSuccessPopup({ showSuccess, selectedPkg, isRTL, t }: ShopSuccessPopupProps) {
+export function ShopSuccessPopup({ showSuccess, selectedPkg, quantity, isRTL, t }: ShopSuccessPopupProps) {
+  const qty = quantity || 1;
+
   return (
     <AnimatePresence>
       {showSuccess && selectedPkg && (
@@ -30,21 +33,32 @@ export function ShopSuccessPopup({ showSuccess, selectedPkg, isRTL, t }: ShopSuc
               <CheckCircle className="w-16 h-16 text-green-accent mx-auto mb-3" />
             </motion.div>
             <h3 className="font-display text-xl text-gold-gradient mb-2">{t("congratulations")} 🎉</h3>
-            <p className="text-sm text-foreground mb-4">{selectedPkg.name} — {selectedPkg.price}</p>
+            <p className="text-sm text-foreground mb-4">
+              {qty > 1 ? `${qty}x ` : ""}{selectedPkg.name} — ${selectedPkg.priceNum * qty}
+            </p>
             <div className="space-y-2">
-              {selectedPkg.rewards.map((r, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: i * 0.15 }}
-                  className={cn("flex items-center gap-2 justify-center bg-muted/30 rounded-lg px-3 py-2", isRTL && "flex-row-reverse")}
-                >
-                  {r.icon}
-                  <span className="text-sm text-foreground font-medium">{r.label}</span>
-                  <CheckCircle className="w-4 h-4 text-green-accent" />
-                </motion.div>
-              ))}
+              {selectedPkg.rewards.map((r, i) => {
+                const totalAmount = r.amount * qty;
+                // Build label with multiplied amount
+                const match = r.label.match(/^([\d,]+)\s+(.+)$/);
+                const displayLabel = match
+                  ? `${(parseInt(match[1].replace(/,/g, '')) * qty).toLocaleString()} ${match[2]}`
+                  : `${r.label}${qty > 1 ? ` ×${qty}` : ""}`;
+
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: i * 0.15 }}
+                    className={cn("flex items-center gap-2 justify-center bg-muted/30 rounded-lg px-3 py-2", isRTL && "flex-row-reverse")}
+                  >
+                    {r.icon}
+                    <span className="text-sm text-foreground font-medium">{displayLabel}</span>
+                    <CheckCircle className="w-4 h-4 text-green-accent" />
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
         </motion.div>

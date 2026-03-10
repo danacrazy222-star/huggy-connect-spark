@@ -181,7 +181,7 @@ export function SpinWheel() {
         {/* Gold outer ring */}
         <div className="absolute inset-0 rounded-full z-10"
           style={{
-            background: "conic-gradient(from 0deg, hsl(35 100% 40%), hsl(45 100% 50%), hsl(35 80% 45%), hsl(45 100% 60%), hsl(35 100% 40%), hsl(45 100% 50%), hsl(35 80% 45%), hsl(45 100% 60%), hsl(35 100% 40%))",
+            background: "conic-gradient(from 0deg, #FF9F00, #FFD700, #FFC300, #FFD700, #FF9F00, #FFD700, #FFC300, #FFD700, #FF9F00)",
             padding: "5px",
           }}
         >

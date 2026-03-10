@@ -122,6 +122,33 @@ export type Database = {
         }
         Relationships: []
       }
+      private_messages: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          receiver_id: string
+          sender_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          receiver_id: string
+          sender_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          receiver_id?: string
+          sender_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -212,6 +239,33 @@ export type Database = {
           status?: string
           updated_at?: string
           winner_id?: string | null
+        }
+        Relationships: []
+      }
+      user_stats: {
+        Row: {
+          books_purchased: number
+          created_at: string
+          draw_entries: number
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          books_purchased?: number
+          created_at?: string
+          draw_entries?: number
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          books_purchased?: number
+          created_at?: string
+          draw_entries?: number
+          id?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

@@ -220,6 +220,7 @@ export default function Chat() {
       crown: false,
       isSystem: true,
       time: timeStr,
+      roomId: activeRoom,
     }]);
     if (activeRoom === 0) {
       setWorldChallengeSessionActive(false);

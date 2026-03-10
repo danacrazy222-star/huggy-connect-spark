@@ -12,7 +12,7 @@ interface DiamondFrameProps {
 export function DiamondFrame({ children, size = "sm", active = true, level = 15, className }: DiamondFrameProps) {
   if (!active) return <>{children}</>;
 
-  const isLegend = level >= 20;
+  const isLegend = level >= 40;
   const outerSize = size === "lg" ? "w-[110px] h-[110px]" : "w-[47px] h-[47px]";
   const innerSize = size === "lg" ? "w-[100px] h-[100px]" : "w-[41px] h-[41px]";
   const pad = size === "lg" ? 5 : 3;

@@ -143,6 +143,22 @@ export type TranslationKeys = {
   premiumTwoEntries: string;
   randomPicksWinner: string;
   yourEntries: string;
+  // Draw Ideelz-style keys
+  drawMainTitle: string;
+  drawSubtitle: string;
+  drawClosingCondition: string;
+  buyAndEnter: string;
+  howItWorks: string;
+  howStep1: string;
+  howStep2: string;
+  howStep3: string;
+  howStep4: string;
+  moreInfo: string;
+  moreInfo1: string;
+  moreInfo2: string;
+  moreInfo3: string;
+  moreInfo4: string;
+  yourCurrentEntries: string;
   // Auth
   login: string;
   signup: string;

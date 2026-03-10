@@ -242,10 +242,10 @@ export function SpinWheel() {
               );
             })}
 
-            <circle cx="100" cy="100" r="24" fill="url(#center-grad)" stroke="hsl(45 100% 50%)" strokeWidth="2.5" />
-            <circle cx="100" cy="100" r="20" fill="none" stroke="hsl(45 100% 50% / 0.3)" strokeWidth="0.8" />
-            <text x="100" y="96" textAnchor="middle" fill="hsl(45 100% 70%)" fontSize="7" fontWeight="700" fontFamily="Cinzel, serif" opacity="0.9">SPIN</text>
-            <text x="100" y="106" textAnchor="middle" fill="hsl(45 100% 70%)" fontSize="5.5" fontWeight="600" fontFamily="Cinzel, serif" opacity="0.7">THE WHEEL</text>
+            <circle cx="100" cy="100" r="24" fill="url(#center-grad)" stroke="#FFD700" strokeWidth="2.5" />
+            <circle cx="100" cy="100" r="20" fill="none" stroke="rgba(255,215,0,0.3)" strokeWidth="0.8" />
+            <text x="100" y="96" textAnchor="middle" fill="#FFD700" fontSize="7" fontWeight="700" fontFamily="Cinzel, serif" opacity="0.9">SPIN</text>
+            <text x="100" y="106" textAnchor="middle" fill="#FFD700" fontSize="5.5" fontWeight="600" fontFamily="Cinzel, serif" opacity="0.7">THE WHEEL</text>
           </svg>
         </motion.div>
 

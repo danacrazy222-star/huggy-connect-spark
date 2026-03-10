@@ -341,6 +341,19 @@ export default function Chat() {
         )}
       </div>
 
+      {/* XP Rain overlay */}
+      {xpRainActive && <XPRainEvent onEnd={handleXPRainEnd} />}
+
+      {/* Countdown overlay */}
+      {xpRainCountdown && (
+        <div className="fixed inset-0 z-[85] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="text-center space-y-2 animate-pulse">
+            <span className="text-5xl">⚡</span>
+            <p className="text-primary font-display text-2xl">{t("xpRainTitle")}</p>
+            <p className="text-foreground text-sm">3...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

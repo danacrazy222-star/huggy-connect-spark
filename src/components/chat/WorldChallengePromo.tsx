@@ -24,16 +24,26 @@ export function WorldChallengePromo() {
 
   return (
     <>
-      {/* Floating circle button - right side */}
+      {/* Inline banner button */}
       <motion.button
         onClick={() => setOpen(true)}
-        className="fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full flex items-center justify-center border-2 border-primary/60 shadow-[0_0_20px_hsl(var(--primary)/0.4)]"
-        style={{ background: "linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)))" }}
-        animate={{ scale: [1, 1.08, 1], boxShadow: ["0 0 15px hsl(45 100% 50% / 0.3)", "0 0 30px hsl(45 100% 50% / 0.6)", "0 0 15px hsl(45 100% 50% / 0.3)"] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        whileTap={{ scale: 0.9 }}
+        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-primary/30 backdrop-blur-md"
+        style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--accent) / 0.15))" }}
+        whileTap={{ scale: 0.97 }}
       >
-        <Swords className="w-7 h-7 text-primary-foreground drop-shadow-md" />
+        <motion.div
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border border-primary/50 shadow-[0_0_12px_hsl(var(--primary)/0.4)]"
+          style={{ background: "linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)))" }}
+        >
+          <Swords className="w-5 h-5 text-primary-foreground" />
+        </motion.div>
+        <div className="flex-1 text-start">
+          <p className="text-sm font-bold text-foreground">{t("worldChallengeTitle")}</p>
+          <p className="text-[11px] text-muted-foreground">{t("worldChallengeDesc")}</p>
+        </div>
+        <span className="text-lg font-black text-primary font-display">$5</span>
       </motion.button>
 
       {/* Fullscreen overlay */}

@@ -277,28 +277,15 @@ export default function Chat() {
         ) : (
           <div className="flex-1 flex flex-col px-4">
             {/* World challenge promo */}
-            {activeRoom === 0 && !worldChallengeUnlocked && !worldChallengeSessionActive && (
-              <div className="mb-2"><WorldChallengePromo /></div>
-            )}
-
             {/* Duel challenge */}
-            {activeRoom === 0 && !worldChallengeUnlocked && !worldChallengeSessionActive ? (
-              <div className="mx-auto my-2 w-full max-w-xs text-center">
-                <div className="flex flex-col items-center gap-2 py-3 px-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
-                  <Lock className="w-6 h-6 text-muted-foreground" />
-                  <p className="text-xs text-muted-foreground">{t("worldLockMsg")}</p>
-                </div>
-              </div>
-            ) : (
-              <ChatDuelChallenge
-                playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
-                playerLevel={level}
-                roomId={activeRoom}
-                onEnd={handleDuelEnd}
-                onStart={handleWorldChallengeStart}
-                isRTL={isRTL}
-              />
-            )}
+            <ChatDuelChallenge
+              playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
+              playerLevel={level}
+              roomId={activeRoom}
+              onEnd={handleDuelEnd}
+              onStart={handleWorldChallengeStart}
+              isRTL={isRTL}
+            />
 
             {/* Chat messages */}
             <div className="flex-1 min-h-0" />

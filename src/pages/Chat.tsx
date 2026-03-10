@@ -49,6 +49,7 @@ export default function Chat() {
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<{ avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);
+  const worldChallengeUnlocked = useGameStore((s) => s.worldChallengeUnlocked);
   const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
   const { roomMessages, addMessage, initRoom, addUnread, clearUnread, updateMessageInRoom } = useChatStore();

@@ -227,8 +227,8 @@ export function SpinWheel() {
               return (
                 <g key={i}>
                   <path d={`M100,100 L${x1},${y1} A95,95 0 0,1 ${x2},${y2} Z`}
-                    fill={`url(#seg-grad-${i})`} stroke="hsl(45 100% 50% / 0.4)" strokeWidth="0.8" filter="url(#seg-shadow)" />
-                  <line x1="100" y1="100" x2={x1} y2={y1} stroke="hsl(45 100% 50% / 0.15)" strokeWidth="0.5" />
+                    fill={`url(#seg-grad-${i})`} stroke="rgba(255,215,0,0.4)" strokeWidth="0.8" filter="url(#seg-shadow)" />
+                  <line x1="100" y1="100" x2={x1} y2={y1} stroke="rgba(255,215,0,0.15)" strokeWidth="0.5" />
                   <text x={iconX} y={iconY} textAnchor="middle" dominantBaseline="middle" fontSize="13"
                     transform={`rotate(${textRotation}, ${iconX}, ${iconY})`}>{seg.icon}</text>
                   <text x={textX} y={textY} textAnchor="middle" dominantBaseline="middle"

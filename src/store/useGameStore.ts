@@ -20,6 +20,7 @@ interface GameState {
   setLastSpinTime: (time: number) => void;
   checkSpinAvailability: () => boolean;
   unlockWorldChallenge: () => void;
+  lockWorldChallenge: () => void;
 }
 
 // XP required to advance FROM each level (index = level)

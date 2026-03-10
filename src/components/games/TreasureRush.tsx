@@ -401,78 +401,68 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
                 {timeLeft}s
               </span>
             </div>
-            {doubleActive && (
-              <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 0.5 }}
-                className="text-xs font-bold text-primary bg-primary/20 px-2 py-1 rounded-full">
-                ⚡ x2
-              </motion.div>
-            )}
+            <div className="w-10">
+              {doubleActive && (
+                <span className="text-xs font-bold text-primary bg-primary/20 px-2 py-1 rounded-full">
+                  ⚡ x2
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Timer bar */}
           <div className="relative h-1.5 bg-muted/30 rounded-full mt-2 overflow-hidden">
-            <motion.div animate={{ width: `${timerPct}%` }} transition={{ duration: 0.5 }}
-              className={cn("h-full rounded-full", timeLeft <= 10 ? "bg-destructive" : timeLeft <= 20 ? "bg-primary" : "bg-green-accent")} />
+            <div style={{ width: `${timerPct}%` }}
+              className={cn("h-full rounded-full transition-all duration-500", timeLeft <= 10 ? "bg-destructive" : timeLeft <= 20 ? "bg-primary" : "bg-green-accent")} />
           </div>
         </div>
 
-        {/* Scoreboard */}
-        <div className={cn("flex gap-2 px-3 py-2 overflow-x-auto shrink-0", isRTL && "flex-row-reverse")}>
-          {[...players].sort((a, b) => b.score - a.score).map((p, i) => (
+        {/* Scoreboard - fixed height */}
+        <div className={cn("flex gap-2 px-3 py-2 shrink-0", isRTL && "flex-row-reverse")}>
+          {players.map((p) => (
             <div key={p.name}
-              className={cn("flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold shrink-0",
-                i === 0 ? "border-primary/50 bg-primary/10" : "border-border bg-card/50"
-              )}>
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-border bg-card/50 text-xs font-bold shrink-0">
               <span>{p.emoji}</span>
-              <span className={cn("text-foreground", i === 0 && "text-primary")}>{p.name}</span>
-              <span className="text-primary font-mono">{p.score}</span>
+              <span className="text-foreground">{p.name}</span>
+              <span className="text-primary font-mono min-w-[24px] text-right">{p.score}</span>
             </div>
           ))}
         </div>
 
-        {/* Last opened feedback */}
-        <AnimatePresence mode="wait">
+        {/* Feedback - fixed height container so it doesn't shift layout */}
+        <div className="h-8 px-3 shrink-0 flex items-center justify-center">
           {lastOpened && (
-            <motion.div key={`feedback`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="mx-3 mb-2">
-              <div className={cn("text-center text-xs py-1.5 rounded-lg",
-                lastOpened.content === "trap" ? "bg-destructive/20 text-destructive" :
-                lastOpened.content === "steal" ? "bg-accent/20 text-accent" :
-                lastOpened.content === "rare" ? "bg-primary/20 text-primary" :
-                lastOpened.content === "gold" ? "bg-primary/10 text-primary" :
-                lastOpened.content === "double" ? "bg-primary/20 text-primary" :
-                "bg-muted/20 text-muted-foreground"
-              )}>
-                {getContentInfo(lastOpened.content).emoji}{" "}
-                {lastOpened.content === "gold" && `+10 ${t("treasureGoldPts")}`}
-                {lastOpened.content === "rare" && `+25 ${t("treasureRarePts")}`}
-                {lastOpened.content === "trap" && `-10 ${t("treasureTrapPts")}`}
-                {lastOpened.content === "steal" && `${t("treasureStolen")}`}
-                {lastOpened.content === "double" && `${t("treasureDoubleActive")}`}
-                {lastOpened.content === "empty" && `${t("treasureNothing")}`}
-              </div>
-            </motion.div>
+            <div className={cn("text-center text-xs py-1 px-4 rounded-lg",
+              lastOpened.content === "trap" ? "bg-destructive/20 text-destructive" :
+              lastOpened.content === "steal" ? "bg-accent/20 text-accent" :
+              lastOpened.content === "rare" ? "bg-primary/20 text-primary" :
+              lastOpened.content === "gold" ? "bg-primary/10 text-primary" :
+              lastOpened.content === "double" ? "bg-primary/20 text-primary" :
+              "bg-muted/20 text-muted-foreground"
+            )}>
+              {getContentInfo(lastOpened.content).emoji}{" "}
+              {lastOpened.content === "gold" && `+10 ${t("treasureGoldPts")}`}
+              {lastOpened.content === "rare" && `+25 ${t("treasureRarePts")}`}
+              {lastOpened.content === "trap" && `-10 ${t("treasureTrapPts")}`}
+              {lastOpened.content === "steal" && `${t("treasureStolen")}`}
+              {lastOpened.content === "double" && `${t("treasureDoubleActive")}`}
+              {lastOpened.content === "empty" && `${t("treasureNothing")}`}
+            </div>
           )}
-        </AnimatePresence>
+        </div>
 
-        {/* Box Grid */}
-        <div className="px-3 flex-1 flex items-center">
+        {/* Box Grid - takes remaining space, grid centered */}
+        <div className="flex-1 px-3 flex items-start pt-2">
           <div className="grid grid-cols-4 gap-2 w-full">
             {boxes.map((box) => {
               const info = getContentInfo(box.content);
               return (
-                <motion.button
+                <button
                   key={`${roundNumber}-${box.id}`}
-                  initial={false}
-                  animate={{
-                    x: shakeBox === box.id ? [0, -4, 4, -4, 0] : 0,
-                  }}
-                  transition={{ duration: 0.3 }}
                   onClick={() => !box.opened && handlePlayerClick(box.id)}
                   disabled={box.opened}
                   className={cn(
-                    "aspect-square rounded-xl border-2 flex items-center justify-center text-2xl relative overflow-hidden",
+                    "aspect-square rounded-xl border-2 flex items-center justify-center text-2xl relative overflow-hidden transition-colors duration-200",
                     box.opened
                       ? box.content === "trap"
                         ? "bg-destructive/10 border-destructive/30"
@@ -493,13 +483,12 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
                   ) : (
                     <span>📦</span>
                   )}
-                  {/* Player indicator who opened */}
                   {box.opened && box.openedBy !== null && (
                     <span className="absolute bottom-0.5 right-0.5 text-[8px]">
                       {players[box.openedBy]?.emoji}
                     </span>
                   )}
-                </motion.button>
+                </button>
               );
             })}
           </div>

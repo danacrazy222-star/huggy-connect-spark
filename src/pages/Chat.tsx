@@ -31,19 +31,7 @@ import avatarFemale3 from "@/assets/avatar-female-3.png";
 
 // Bot conversation scripts - each room has bots chatting about the app
 const botScripts: Record<number, ChatMsg[]> = {
-  0: [ // World
-    { user: "Luna", avatar: "L", message: "Welcome everyone! 🌍✨ This is the World Room — open for all levels!", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
-    { user: "Omar", avatar: "O", message: "If you're new here — spin the wheel daily on the Home page for free rewards! 🎰", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12 },
-    { user: "Sara", avatar: "S", message: "You get XP, points, tickets, and even draw entries from the spin! 🎁", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-    { user: "Luna", avatar: "L", message: "Don't forget to check the Shop — buy a book pack and enter the $500 gift card draw! 💳", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
-    { user: "Omar", avatar: "O", message: "The Draw page shows the prizes — Amazon, Google Play, or SHEIN gift cards! 🎉", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12 },
-    { user: "Noor", avatar: "N", message: "I love the Tarot feature! Madam Zara reads your cards with AI 🔮✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-    { user: "Sara", avatar: "S", message: "Level up to unlock VIP rooms — Bronze at Lv.1, Silver at Lv.5, Gold at Lv.10, Diamond at Lv.20! 👑", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-    { user: "Omar", avatar: "O", message: "Challenge other players in the duel games to earn XP fast! ⚔️💪", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
-    { user: "Luna", avatar: "L", message: "Who's here? Say hi! 👋 The more the merrier! 🎊", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
-    { user: "Noor", avatar: "N", message: "Pro tip: the Premium book pack gives you the most XP + 2 tarot tickets! 📚✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-  ],
-  1: [ // Bronze
+  0: [ // Bronze
     { user: "Luna", avatar: "L", message: "Welcome to Bronze! 🥉🔥 You made it to Level 1!", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
     { user: "Omar", avatar: "O", message: "In this room we get XP Rain events every 30 mins — tap fast to collect! ⚡", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12 },
     { user: "Noor", avatar: "N", message: "XP Rain is so fun! Last time I got 27 XP in 10 seconds! 🎉", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },

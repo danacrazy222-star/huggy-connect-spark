@@ -224,21 +224,36 @@ export default function Chat() {
   const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
     setDuelActive(false);
     addXP(won ? 300 : 80);
-    // Local styled announcement — no System account
     const now = new Date();
     const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-    setAnnouncements(prev => [...prev, {
-      user: "",
-      avatar: "",
-      message: `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
-      crown: false,
-      isSystem: true,
-      time: timeStr,
-      roomId: activeRoom,
-    }]);
+    
     if (activeRoom === 0) {
+      // World challenge — announce in ALL rooms
+      const allRoomIds = [0, 1, 2, 3, 4, 5];
+      allRoomIds.forEach(roomId => {
+        setAnnouncements(prev => [...prev, {
+          user: "",
+          avatar: "",
+          message: `🌍🏆 ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
+          crown: false,
+          isSystem: true,
+          time: timeStr,
+          roomId,
+        }]);
+      });
       setWorldChallengeSessionActive(false);
       useGameStore.getState().lockWorldChallenge();
+    } else {
+      // Normal room — announce only in current room
+      setAnnouncements(prev => [...prev, {
+        user: "",
+        avatar: "",
+        message: `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
+        crown: false,
+        isSystem: true,
+        time: timeStr,
+        roomId: activeRoom,
+      }]);
     }
   }, [addXP, activeRoom, t]);
 

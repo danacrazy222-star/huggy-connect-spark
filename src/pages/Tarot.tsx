@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Send, RotateCcw } from "lucide-react";
 import { useGameStore } from "@/store/useGameStore";
 import { cn } from "@/lib/utils";
+import { playCardFlip, playMysticReveal } from "@/utils/sounds";
 import { fullTarotDeck, type TarotCard } from "@/data/tarotDeck";
 import madamZaraImg from "@/assets/madam-zara.png";
 import cardBackImg from "@/assets/tarot-card-back.png";
@@ -56,6 +57,7 @@ export default function Tarot() {
   };
 
   const handleCardSelect = (card: TarotCard) => {
+    playCardFlip();
     if (selectedCards.find((c) => c.id === card.id)) {
       setSelectedCards((prev) => prev.filter((c) => c.id !== card.id));
       return;
@@ -71,6 +73,7 @@ export default function Tarot() {
 
   const startReading = async () => {
     if (selectedCards.length < MAX_CARDS || tarotTickets <= 0) return;
+    playMysticReveal();
     addTarotTicket(-1);
     setPhase("reading");
 

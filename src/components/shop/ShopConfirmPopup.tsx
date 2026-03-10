@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle, X } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { playPurchaseConfirm } from "@/utils/sounds";
 import type { BookPackage } from "@/pages/Shop";
 
 interface ShopConfirmPopupProps {
@@ -53,7 +54,7 @@ export function ShopConfirmPopup({ show, pkg, quantity, onConfirm, onCancel, isR
                 );
               })}
             </ul>
-            <button onClick={onConfirm} className="w-full py-3 rounded-xl font-display font-bold text-sm text-primary-foreground hover:brightness-110 transition-all" style={{ background: "linear-gradient(180deg, hsl(45 100% 50%), hsl(40 100% 40%))", boxShadow: "0 0 20px rgba(255,200,0,0.2)" }}>
+            <button onClick={() => { playPurchaseConfirm(); onConfirm(); }} className="w-full py-3 rounded-xl font-display font-bold text-sm text-primary-foreground hover:brightness-110 transition-all" style={{ background: "linear-gradient(180deg, hsl(45 100% 50%), hsl(40 100% 40%))", boxShadow: "0 0 20px rgba(255,200,0,0.2)" }}>
               {t("confirmPurchaseBtn")} — ${totalPrice}
             </button>
           </motion.div>

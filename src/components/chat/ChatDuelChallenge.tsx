@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Timer, Trophy, Search, Swords, Users, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { playDuelStart, playDuelClash, playDuelWin, playDuelLose } from "@/utils/sounds";
 import { useTranslation } from "@/hooks/useTranslation";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -592,6 +593,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
   // ── CLASH animation ──
   useEffect(() => {
     if (phase !== "clash") return;
+    playDuelClash();
     let count = 0;
     const interval = setInterval(() => {
       count++;
@@ -623,6 +625,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       if (newScores.p1 >= 2) {
         setFinalWinner("p1");
         setPhase("final_result");
+        playDuelWin();
         if (!isBotMatch && matchId && role === "player" && isPlayer1) {
           await supabase.from('rps_matches').update({
             status: 'finished',
@@ -634,6 +637,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       } else if (newScores.p2 >= 2) {
         setFinalWinner("p2");
         setPhase("final_result");
+        playDuelLose();
         if (!isBotMatch && matchId && role === "player" && isPlayer1) {
           await supabase.from('rps_matches').update({
             status: 'finished',

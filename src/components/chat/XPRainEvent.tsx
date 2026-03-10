@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useGameStore } from "@/store/useGameStore";
 import { cn } from "@/lib/utils";
+import { playXPCollect, playXPRainStart } from "@/utils/sounds";
 
 interface XPDrop {
   id: number;
@@ -23,6 +24,7 @@ const MAX_DROPS = 80;
 
 export function XPRainEvent({ onEnd }: XPRainEventProps) {
   const [active, setActive] = useState(true);
+  useEffect(() => { playXPRainStart(); }, []);
   const [timeLeft, setTimeLeft] = useState(DURATION);
   const [collected, setCollected] = useState(0);
   const [drops, setDrops] = useState<XPDrop[]>([]);
@@ -100,6 +102,7 @@ export function XPRainEvent({ onEnd }: XPRainEventProps) {
         prev.map((d) => (d.id === id ? { ...d, collected: true } : d))
       );
       setCollected((c) => c + 1);
+      playXPCollect();
     },
     [active]
   );

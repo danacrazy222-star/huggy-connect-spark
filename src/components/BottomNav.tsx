@@ -2,6 +2,7 @@ import { Home, ShoppingBag, MessageCircle, Crown, Sparkles, Gamepad2, Gift, User
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { playNavTap } from "@/utils/sounds";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useChatStore } from "@/store/useChatStore";
 
@@ -42,7 +43,7 @@ export function BottomNav() {
             return (
               <button
                 key={tab.path}
-                onClick={() => navigate(tab.path)}
+                onClick={() => { playNavTap(); navigate(tab.path); }}
                 className={cn(
                   "relative flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-xl transition-all min-w-[40px]",
                   isActive ? "text-primary" : "text-muted-foreground hover:text-foreground/70"

@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { playPurchaseSuccess } from "@/utils/sounds";
 import type { BookPackage } from "@/pages/Shop";
 
 interface ShopSuccessPopupProps {
@@ -13,6 +15,10 @@ interface ShopSuccessPopupProps {
 
 export function ShopSuccessPopup({ showSuccess, selectedPkg, quantity, isRTL, t }: ShopSuccessPopupProps) {
   const qty = quantity || 1;
+
+  useEffect(() => {
+    if (showSuccess) playPurchaseSuccess();
+  }, [showSuccess]);
 
   return (
     <AnimatePresence>

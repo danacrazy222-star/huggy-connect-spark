@@ -24,7 +24,7 @@ export interface BookPackage {
   color: string;
   borderColor: string;
   glowColor: string;
-  rewards: { icon: React.ReactNode; label: string; type: "xp" | "gameTicket" | "tarotTicket" | "drawEntry"; amount: number }[];
+  rewards: { icon: React.ReactNode; label: string; type: "xp" | "points" | "gameTicket" | "tarotTicket" | "drawEntry"; amount: number }[];
   tag: string | null;
   includes: string[];
 }

@@ -12,6 +12,8 @@ export function WorldChallengePromo() {
   const handleBuy = () => {
     setPurchased(true);
     unlockWorldChallenge();
+    // Give 1 draw entry with purchase
+    useGameStore.getState().addDrawEntry(1);
     setTimeout(() => {
       setPurchased(false);
       setOpen(false);
@@ -113,10 +115,14 @@ export function WorldChallengePromo() {
                           <Star className="w-5 h-5 text-primary shrink-0" />
                           <span className="text-sm text-foreground text-right flex-1">اسمك يبين قدام الكل كبطل التحدي</span>
                         </div>
+                        <div className="flex items-center gap-3 bg-accent/10 rounded-xl p-3 border border-accent/20">
+                          <Star className="w-5 h-5 text-primary shrink-0" />
+                          <span className="text-sm text-foreground text-right flex-1">🎟️ دخول سحب مرة واحدة مجاناً</span>
+                        </div>
                       </div>
 
                       <div className="mb-4">
-                        <span className="text-3xl font-black text-primary font-display">$20</span>
+                        <span className="text-3xl font-black text-primary font-display">$5</span>
                         <span className="text-sm text-muted-foreground mr-2">/ كتاب رقمي</span>
                       </div>
 

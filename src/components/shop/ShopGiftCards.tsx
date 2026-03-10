@@ -1,27 +1,27 @@
 import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
+import brandAmazon from "@/assets/brand-amazon.png";
+import brandGooglePlay from "@/assets/brand-google-play.png";
+import brandShein from "@/assets/brand-shein.png";
 
 const BRANDS = [
   {
     name: "Amazon",
-    logoText: "amazon",
-    logoStyle: "font-bold italic tracking-tight",
+    logo: brandAmazon,
     borderColor: "#ff9900",
     glowRgb: "255,153,0",
     bgHue: "35",
   },
   {
     name: "Google Play",
-    logoText: "Google Play",
-    logoStyle: "font-bold tracking-tight",
+    logo: brandGooglePlay,
     borderColor: "#4285f4",
     glowRgb: "66,133,244",
     bgHue: "210",
   },
   {
     name: "SHEIN",
-    logoText: "SHEIN",
-    logoStyle: "font-bold tracking-[0.15em]",
+    logo: brandShein,
     borderColor: "#ec4899",
     glowRgb: "236,72,153",
     bgHue: "330",

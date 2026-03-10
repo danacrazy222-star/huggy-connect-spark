@@ -323,7 +323,7 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="inline-block">
               <Trophy className="w-12 h-12 text-primary mx-auto" />
             </motion.div>
-            <h3 className="font-display text-xl text-gold-gradient">{winner === "You" ? t("youWin") : t("botWins")}</h3>
+            <h3 className="font-display text-xl text-gold-gradient">{winner === t("playerYou") ? t("youWin") : t("botWins")}</h3>
             <div className="flex gap-3 justify-center">
               {winner === "You" && (
                 <div className="bg-card border border-border rounded-lg px-4 py-2">

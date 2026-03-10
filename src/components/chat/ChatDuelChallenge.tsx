@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Timer, Trophy, Search, User, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const PLAYER_NAMES = [
   "Ryuuki", "SakuraBlade", "KenX", "NovaStar", "ZeroHero", "Akira99",
@@ -20,7 +21,6 @@ type Move = "rock" | "paper" | "scissors";
 type Phase = "idle" | "searching" | "matched" | "vote" | "picking" | "clash" | "round_result" | "final_result";
 
 const MOVE_EMOJI: Record<Move, string> = { rock: "🪨", paper: "📄", scissors: "✂️" };
-const MOVE_LABEL: Record<Move, string> = { rock: "حجر", paper: "ورقة", scissors: "مقص" };
 
 function resolveRPS(a: Move, b: Move): "a" | "b" | "draw" {
   if (a === b) return "draw";
@@ -46,6 +46,8 @@ interface Props {
 }
 
 export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isRTL }: Props) {
+  const { t } = useTranslation();
+  const MOVE_LABEL: Record<Move, string> = { rock: t("duelRock"), paper: t("duelPaper"), scissors: t("duelScissors") };
   const [phase, setPhase] = useState<Phase>("idle");
   const [searchTimer, setSearchTimer] = useState(40);
   const [opponentName, setOpponentName] = useState("");
@@ -267,7 +269,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mx-auto my-3 w-full max-w-xs">
         <button onClick={startSearch}
           className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-gradient-to-r from-accent via-blue-accent to-accent text-accent-foreground font-bold text-sm border border-accent/30 shadow-purple hover:shadow-[0_0_30px_hsl(270_80%_55%/0.5)] transition-all">
-          ✊✋✌️ تحدي حجر ورقة مقص
+          {t("duelRPS")}
         </button>
       </motion.div>
     );
@@ -301,8 +303,8 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
               <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
                 <Search className="w-8 h-8 text-accent mx-auto mb-2" />
               </motion.div>
-              <p className="text-sm font-bold text-foreground mb-1">🔍 البحث عن لاعب...</p>
-              <p className="text-xs text-muted-foreground mb-3">جاري إرسال دعوات للاعبين المتاحين</p>
+              <p className="text-sm font-bold text-foreground mb-1">{t("duelSearching")}</p>
+              <p className="text-xs text-muted-foreground mb-3">{t("duelSendingInvites")}</p>
 
               <div className="relative w-20 h-20 mx-auto mb-3">
                 <svg className="w-full h-full -rotate-90" viewBox="0 0 64 64">
@@ -358,7 +360,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                 </motion.div>
               </div>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="text-xs text-primary mt-3">
-                ⚡ تم العثور على خصم! استعد... ⚡
+                ⚡ {t("duelFoundOpponent")} ⚡
               </motion.p>
             </motion.div>
           )}
@@ -373,8 +375,8 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                   {voteTimer}
                 </motion.span>
               </div>
-              <p className="text-sm font-bold text-foreground mb-1">🎯 اختر من الرابح!</p>
-              <p className="text-[11px] text-muted-foreground mb-3">صوّت قبل ما يبدأ التحدي</p>
+               <p className="text-sm font-bold text-foreground mb-1">{t("duelChooseWinner")}</p>
+               <p className="text-[11px] text-muted-foreground mb-3">{t("duelVoteBefore")}</p>
 
               {/* Vote buttons */}
               <div className="grid grid-cols-2 gap-3 mb-4">
@@ -390,7 +392,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                     {playerName.charAt(0).toUpperCase()}
                   </div>
                   <NameWithLevel name={playerName} level={playerLevel} />
-                  {votePick === "player" && <span className="text-[10px] text-primary">✓ صوتك</span>}
+                  {votePick === "player" && <span className="text-[10px] text-primary">{t("duelYourVote")}</span>}
                 </motion.button>
 
                 <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.93 }}
@@ -405,7 +407,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                     {opponentName.charAt(0).toUpperCase()}
                   </div>
                   <NameWithLevel name={opponentName} level={opponentLevel} />
-                  {votePick === "opponent" && <span className="text-[10px] text-primary">✓ صوتك</span>}
+                  {votePick === "opponent" && <span className="text-[10px] text-primary">{t("duelYourVote")}</span>}
                 </motion.button>
               </div>
 
@@ -427,7 +429,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                     transition={{ duration: 0.5 }}
                   />
                 </div>
-                <p className="text-[10px] text-muted-foreground">📊 نسبة التصويت الحي</p>
+                <p className="text-[10px] text-muted-foreground">{t("duelLiveVote")}</p>
               </div>
             </motion.div>
           )}
@@ -442,8 +444,8 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                   {roundTimer}
                 </motion.span>
               </div>
-              <p className="text-sm font-bold text-foreground mb-1">✊ الجولة {round + 1} — اختر حركتك!</p>
-              <p className="text-[11px] text-muted-foreground mb-4">ضد {opponentName} (Lv.{opponentLevel})</p>
+              <p className="text-sm font-bold text-foreground mb-1">✊ {t("duelRound")} {round + 1} — {t("duelChooseMove")}</p>
+              <p className="text-[11px] text-muted-foreground mb-4">{t("duelVs")} {opponentName} (Lv.{opponentLevel})</p>
 
               <div className="grid grid-cols-3 gap-2">
                 {MOVES.map((move) => (
@@ -464,7 +466,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
           {/* ═══ CLASH ═══ */}
           {phase === "clash" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-4">
-              <p className="text-sm font-bold text-primary mb-5">⚡ حجر... ورقة... مقص!</p>
+              <p className="text-sm font-bold text-primary mb-5">{t("duelRockPaperScissors")}</p>
               <div className="flex items-center justify-center gap-8">
                 <div className="flex flex-col items-center gap-2">
                   <motion.div
@@ -518,10 +520,10 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
               </div>
               <motion.div initial={{ y: 10 }} animate={{ y: 0 }}>
                 {roundWinner === "draw" ? (
-                  <p className="text-sm font-bold text-primary">🤝 تعادل! إعادة الجولة...</p>
+                  <p className="text-sm font-bold text-primary">{t("duelDraw")}</p>
                 ) : (
                   <p className="text-sm font-bold text-green-accent">
-                    🏆 {roundWinner === "player" ? playerName : opponentName} فاز بالجولة!
+                    🏆 {roundWinner === "player" ? playerName : opponentName} {t("duelWonRound")}
                   </p>
                 )}
               </motion.div>
@@ -548,33 +550,33 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                 <Trophy className="w-12 h-12 text-primary mx-auto mb-2 glow-gold" />
               </motion.div>
               <p className="text-lg font-black text-primary mb-1">
-                🏆 {finalWinner === "player" ? playerName : opponentName} هو الفائز!
+                🏆 {finalWinner === "player" ? playerName : opponentName} {t("duelIsWinner")}
               </p>
-              <p className="text-xs text-muted-foreground mb-2">النتيجة: {scores.player} - {scores.opponent}</p>
+              <p className="text-xs text-muted-foreground mb-2">{t("duelScore")}: {scores.player} - {scores.opponent}</p>
 
               {/* Your vote result */}
               {votePick ? (
                 votePick === finalWinner ? (
                   <div className="bg-green-accent/10 border border-green-accent/30 rounded-xl p-2 mb-3">
-                    <p className="text-sm font-bold text-green-accent">🎉 صوتك صحيح!</p>
+                    <p className="text-sm font-bold text-green-accent">{t("duelVoteCorrect")}</p>
                     <p className="text-xs text-green-accent/80 font-bold">+300 XP</p>
                   </div>
                 ) : (
                   <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-2 mb-3">
-                    <p className="text-sm font-bold text-destructive">😔 صوتك خاطئ</p>
+                    <p className="text-sm font-bold text-destructive">{t("duelVoteWrong")}</p>
                     <p className="text-xs text-muted-foreground font-bold">+80 XP</p>
                   </div>
                 )
               ) : (
                 <div className="bg-muted/20 border border-muted/30 rounded-xl p-2 mb-3">
-                  <p className="text-sm font-bold text-muted-foreground">لم تصوّت</p>
+                  <p className="text-sm font-bold text-muted-foreground">{t("duelDidntVote")}</p>
                   <p className="text-xs text-muted-foreground font-bold">+80 XP</p>
                 </div>
               )}
 
               <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleFinish}
                 className="px-6 py-2 rounded-full bg-gradient-to-r from-accent to-blue-accent text-accent-foreground text-sm font-bold shadow-purple">
-                تم ✓
+                {t("duelDone")}
               </motion.button>
             </motion.div>
           )}

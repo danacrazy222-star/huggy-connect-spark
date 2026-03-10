@@ -2,12 +2,14 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Swords, BookOpen, Star, Globe, CheckCircle, PartyPopper } from "lucide-react";
 import { useGameStore } from "@/store/useGameStore";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function WorldChallengePromo() {
   const [open, setOpen] = useState(false);
   const [purchased, setPurchased] = useState(false);
   const worldChallengeUnlocked = useGameStore((s) => s.worldChallengeUnlocked);
   const unlockWorldChallenge = useGameStore((s) => s.unlockWorldChallenge);
+  const { t } = useTranslation();
 
   const handleBuy = () => {
     setPurchased(true);
@@ -79,8 +81,8 @@ export function WorldChallengePromo() {
                       >
                         <CheckCircle className="w-16 h-16 text-green-400" />
                       </motion.div>
-                      <h2 className="text-xl font-bold text-foreground font-display">🎉 تم الشراء بنجاح!</h2>
-                      <p className="text-sm text-muted-foreground">انفتح لك تحدي واحد الآن في غرفة العالم!</p>
+                      <h2 className="text-xl font-bold text-foreground font-display">{t("worldChallengePurchased")}</h2>
+                      <p className="text-sm text-muted-foreground">{t("worldChallengeUnlockedMsg")}</p>
                       <motion.div
                         animate={{ rotate: [0, 10, -10, 0] }}
                         transition={{ duration: 1, repeat: Infinity }}
@@ -99,35 +101,35 @@ export function WorldChallengePromo() {
                         <Swords className="w-10 h-10 text-primary-foreground" />
                       </motion.div>
 
-                      <h2 className="text-xl font-bold text-foreground mb-1 font-display">⚔️ تحدي أمام العالم</h2>
-                      <p className="text-sm text-muted-foreground mb-5">اشترِ الكتاب الرقمي لتحصل على محاولة واحدة وتفتح تحدي حصري في غرفة العالم!</p>
+                      <h2 className="text-xl font-bold text-foreground mb-1 font-display">{t("worldChallengeTitle")}</h2>
+                      <p className="text-sm text-muted-foreground mb-5">{t("worldChallengeDesc")}</p>
 
                       <div className="w-full space-y-3 mb-6">
                         <div className="flex items-center gap-3 bg-accent/10 rounded-xl p-3 border border-accent/20">
                           <BookOpen className="w-5 h-5 text-primary shrink-0" />
-                          <span className="text-sm text-foreground text-right flex-1">كتاب رقمي حصري</span>
+                          <span className="text-sm text-foreground text-right flex-1">{t("worldBookExclusive")}</span>
                         </div>
                         <div className="flex items-center gap-3 bg-accent/10 rounded-xl p-3 border border-accent/20">
                           <Globe className="w-5 h-5 text-primary shrink-0" />
-                          <span className="text-sm text-foreground text-right flex-1">تحدي واحد فقط في غرفة العالم لكل عملية شراء</span>
+                          <span className="text-sm text-foreground text-right flex-1">{t("worldOneChallenge")}</span>
                         </div>
                         <div className="flex items-center gap-3 bg-accent/10 rounded-xl p-3 border border-accent/20">
                           <Star className="w-5 h-5 text-primary shrink-0" />
-                          <span className="text-sm text-foreground text-right flex-1">اسمك يبين قدام الكل كبطل التحدي</span>
+                          <span className="text-sm text-foreground text-right flex-1">{t("worldNameShown")}</span>
                         </div>
                         <div className="flex items-center gap-3 bg-accent/10 rounded-xl p-3 border border-accent/20">
                           <Star className="w-5 h-5 text-primary shrink-0" />
-                          <span className="text-sm text-foreground text-right flex-1">🎮 بطاقة لعبة واحدة</span>
+                          <span className="text-sm text-foreground text-right flex-1">{t("worldGameTicket")}</span>
                         </div>
                         <div className="flex items-center gap-3 bg-accent/10 rounded-xl p-3 border border-accent/20">
                           <Star className="w-5 h-5 text-primary shrink-0" />
-                          <span className="text-sm text-foreground text-right flex-1">🎟️ قسيمة دخول سحب واحدة</span>
+                          <span className="text-sm text-foreground text-right flex-1">{t("worldDrawEntry")}</span>
                         </div>
                       </div>
 
                       <div className="mb-4">
                         <span className="text-3xl font-black text-primary font-display">$5</span>
-                        <span className="text-sm text-muted-foreground mr-2">/ كتاب رقمي</span>
+                        <span className="text-sm text-muted-foreground mr-2">{t("worldPerBook")}</span>
                       </div>
 
                       <motion.button
@@ -136,10 +138,10 @@ export function WorldChallengePromo() {
                         className="w-full py-3.5 rounded-2xl font-bold text-base text-primary-foreground border border-primary/30 shadow-[0_0_20px_hsl(var(--primary)/0.4)]"
                         style={{ background: "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))" }}
                       >
-                        📖 اشترِ الكتاب وافتح التحدي
+                        {t("worldBuyBook")}
                       </motion.button>
 
-                      <p className="text-[10px] text-muted-foreground mt-3">* بعد انتهاء التحدي، ينقفل فوراً وتحتاج شراء جديد للعب مرة ثانية</p>
+                      <p className="text-[10px] text-muted-foreground mt-3">{t("worldAfterChallenge")}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>

@@ -35,7 +35,7 @@ const rooms = [
   { name: "Diamond", level: 15, image: roomDiamond, accent: "from-amber-500/60", border: "border-amber-400/50", glow: "hsl(35 100% 55%)", shape: "flame" as const },
 ];
 
-const mockMessages: ChatMsg[] = [
+const getMockMessages = (t: (key: string) => string): ChatMsg[] => [
   { user: "Michael", avatar: "M", message: "Welcome to the Bronze room! 🔥", crown: false, gender: "male", avatarUrl: avatarMale1, level: 4, time: "02:01" },
   { user: "Luna", avatar: "L", message: "Who's spinning today?", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7, time: "02:02" },
   { user: "Alex", avatar: "A", message: "Just won a game ticket! 🎰", crown: false, gender: "male", avatarUrl: avatarMale3, level: 3, time: "02:03" },
@@ -59,7 +59,7 @@ export default function Chat() {
 
   // Initialize room with default messages
   useEffect(() => {
-    initRoom(activeRoom, mockMessages);
+    initRoom(activeRoom, getMockMessages(t));
   }, [activeRoom, initRoom]);
 
   const messages = roomMessages[activeRoom] || [];
@@ -90,18 +90,18 @@ export default function Chat() {
     if (!canAccess) return;
 
     const chatMessages: ChatMsg[] = [
-      { user: "Sara", avatar: "S", message: "مرحبا! 👋 أهلاً بالجميع", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮 مين جاهز؟", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
-      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-      { user: "Sara", avatar: "S", message: "فزت بالسحب اليوم! 🎉🎉", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-      { user: "Omar", avatar: "O", message: "مبروك يا سارة 🥳👏", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
-      { user: "Noor", avatar: "N", message: "مين يبي يلعب تحدي؟ ⚔️", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-      { user: "Sara", avatar: "S", message: "الغرفة اليوم حماسية 🔥🔥", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-      { user: "Omar", avatar: "O", message: "أنا وصلت لفل 12! 💪", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
-      { user: "Noor", avatar: "N", message: "شدوا حيلكم يا شباب 💪🏆", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-      { user: "Omar", avatar: "O", message: "مين جرب التاروت اليوم؟ 🔮", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
-      { user: "Sara", avatar: "S", message: "أنا بعمل سبين كل يوم ✨", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+      { user: "Sara", avatar: "S", message: "Hello! 👋 Welcome everyone", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+      { user: "Omar", avatar: "O", message: "Let's play! 🎮 Who's ready?", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
       { user: "Noor", avatar: "N", message: "Good luck everyone 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+      { user: "Sara", avatar: "S", message: "I won the draw today! 🎉🎉", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+      { user: "Omar", avatar: "O", message: "Congrats Sara! 🥳👏", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+      { user: "Noor", avatar: "N", message: "Who wants a challenge? ⚔️", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+      { user: "Sara", avatar: "S", message: "The room is fire today 🔥🔥", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+      { user: "Omar", avatar: "O", message: "I reached level 12! 💪", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+      { user: "Noor", avatar: "N", message: "Keep pushing everyone 💪🏆", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+      { user: "Omar", avatar: "O", message: "Anyone tried tarot today? 🔮", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+      { user: "Sara", avatar: "S", message: "I spin every day ✨", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+      { user: "Noor", avatar: "N", message: "Let's gooo! 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
     ];
 
     let msgIndex = 0;
@@ -126,7 +126,7 @@ export default function Chat() {
       addMessage(activeRoom, {
         user: "Luna",
         avatar: "L",
-        message: `أهلاً ${userName}! 👋🎉 نورت الغرفة`,
+        message: `${t("welcomeMsg")} ${userName}! 👋🎉 ${t("welcomeLitRoom")}`,
         crown: true,
         gender: "female",
         avatarUrl: avatarFemale1,
@@ -171,7 +171,7 @@ export default function Chat() {
     addMessage(activeRoom, {
       user: "🏆 System",
       avatar: "⚔️",
-      message: `🏆✨ البطل ${winnerName} فاز بالتحدي ضد ${loserName}! 🔥👏\n⚡ أسطورة الغرفة الجديدة! من يجرؤ على تحديه؟`,
+      message: `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
       crown: true,
       gender: null,
       level: 0,
@@ -239,7 +239,7 @@ export default function Chat() {
               <div className="mx-auto my-3 w-full max-w-xs text-center">
                 <div className="flex flex-col items-center gap-2 py-4 px-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
                   <Lock className="w-8 h-8 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">🔒 اشترِ الكتاب لفتح التحدي أمام العالم</p>
+                  <p className="text-sm text-muted-foreground">{t("worldLockMsg")}</p>
                 </div>
               </div>
             ) : (

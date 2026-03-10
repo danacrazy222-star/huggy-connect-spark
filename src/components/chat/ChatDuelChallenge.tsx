@@ -408,11 +408,11 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
 
   // ── BOT FALLBACK ──
   const startBotMatch = (id: string) => {
-    const botName = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
+    const botProfile = BOT_PROFILES[Math.floor(Math.random() * BOT_PROFILES.length)];
     const botLevel = Math.max(1, playerLevel + Math.floor(Math.random() * 5) - 2);
 
     setIsBotMatch(true);
-    setP2Name(`🤖 ${botName}`);
+    setP2Name(botProfile.name);
     setP2Level(botLevel);
     setP2Id(BOT_ID);
     setPhase("matched");

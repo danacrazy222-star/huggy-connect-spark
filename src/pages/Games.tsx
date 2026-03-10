@@ -6,6 +6,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useAuth } from "@/contexts/AuthContext";
 import { MatchmakingQueue } from "@/components/games/MatchmakingQueue";
 import { Gamepad2, Ticket, Users, Bot, Zap, Trophy, ArrowLeft, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Sparkles, Gift, LogIn } from "lucide-react";
+import { TreasureRush as TreasureRushGame } from "@/components/games/TreasureRush";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -28,20 +29,22 @@ function getCellColor(num: number): string {
 
 type GamePhase = "lobby" | "searching" | "playing" | "finished";
 type Player = { name: string; pos: number; isBot: boolean; color: string };
-type ActiveGame = "none" | "snake" | "scratch";
+type ActiveGame = "none" | "snake" | "scratch" | "treasure";
 
 export default function Games() {
   const [activeGame, setActiveGame] = useState<ActiveGame>("none");
   if (activeGame === "snake") return <SnakeAndLadder onBack={() => setActiveGame("none")} />;
   if (activeGame === "scratch") return <ScratchCard onBack={() => setActiveGame("none")} />;
-  return <GamesList onPlaySnake={() => setActiveGame("snake")} onPlayScratch={() => setActiveGame("scratch")} />;
+  if (activeGame === "treasure") return <TreasureRushGame onBack={() => setActiveGame("none")} />;
+  return <GamesList onPlaySnake={() => setActiveGame("snake")} onPlayScratch={() => setActiveGame("scratch")} onPlayTreasure={() => setActiveGame("treasure")} />;
 }
 
-function GamesList({ onPlaySnake, onPlayScratch }: { onPlaySnake: () => void; onPlayScratch: () => void }) {
+function GamesList({ onPlaySnake, onPlayScratch, onPlayTreasure }: { onPlaySnake: () => void; onPlayScratch: () => void; onPlayTreasure: () => void }) {
   const { gameTickets } = useGameStore();
   const { t, isRTL } = useTranslation();
 
   const games = [
+    { name: t("treasureRush"), desc: t("treasureRushDesc"), icon: "🏴‍☠️", color: "from-primary/30 to-amber-500/5", border: "border-amber-500/40", multiplayer: true, onClick: onPlayTreasure },
     { name: t("snakeAndLadder"), desc: t("classicBoardGame"), icon: "🐍", color: "from-green-accent/30 to-green-accent/5", border: "border-green-accent/40", multiplayer: true, onClick: onPlaySnake },
     { name: t("scratchCard"), desc: t("scratchCardDesc"), icon: "🎫", color: "from-primary/30 to-primary/5", border: "border-primary/40", multiplayer: false, onClick: onPlayScratch },
     { name: t("tapFrenzy"), desc: t("tapAsFast"), icon: "👆", color: "from-blue-accent/30 to-blue-accent/5", border: "border-blue-accent/40", multiplayer: false, onClick: () => {}, locked: true },

@@ -222,28 +222,21 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
             <h2 className="font-display text-xl text-foreground mt-3">{t("snakeAndLadder")}</h2>
             <p className="text-sm text-muted-foreground mt-1">{t("classicBoardGame")}</p>
           </div>
-          <div className="bg-card/80 border border-border rounded-xl p-4 space-y-3">
-            <h3 className="text-sm font-bold text-foreground">{t("setYourBet")}</h3>
-            <div className={cn("flex gap-2", isRTL && "flex-row-reverse")}>
-              {[50, 100, 200, 500].map((amt) => (
-                <button key={amt} onClick={() => setBetAmount(amt)}
-                  className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${betAmount === amt ? "bg-primary text-primary-foreground shadow-gold" : "bg-muted/50 text-muted-foreground border border-border"}`}>
-                  {amt}
-                </button>
-              ))}
+
+          <div className={cn("flex items-center justify-between bg-card/80 border border-primary/30 rounded-xl px-4 py-4", isRTL && "flex-row-reverse")}>
+            <div className={cn("flex items-center gap-3", isRTL && "flex-row-reverse")}>
+              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                <Ticket className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-foreground">{t("entryCost")}</p>
+                <p className="text-xs text-muted-foreground">1 {t("gameTicket")} {t("ticket")}</p>
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground">{t("yourPoints")}: {points.toLocaleString()}</p>
-          </div>
-          <div className={cn("flex items-center justify-between bg-card/60 border border-border rounded-xl px-4 py-3", isRTL && "flex-row-reverse")}>
-            <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
-              <Ticket className="w-4 h-4 text-primary" />
-              <span className="text-sm text-foreground">{t("entryCost")}</span>
+            <div className="text-center">
+              <span className="text-2xl font-display font-bold text-primary">{gameTickets}</span>
+              <p className="text-[10px] text-muted-foreground">{t("yourTickets")}</p>
             </div>
-            <span className="text-sm font-bold text-primary">1 {t("gameTicket")}</span>
-          </div>
-          <div className={cn("flex items-center justify-between bg-card/60 border border-border rounded-xl px-4 py-3", isRTL && "flex-row-reverse")}>
-            <span className="text-sm text-foreground">{t("yourTickets")}</span>
-            <span className="text-sm font-bold text-primary">{gameTickets}</span>
           </div>
           
           {/* Queue info */}
@@ -260,9 +253,9 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
               <LogIn className="w-5 h-5" /> {t("loginToPlay")}
             </button>
           ) : (
-            <button onClick={startSearch} disabled={gameTickets <= 0 || points < betAmount}
+            <button onClick={startSearch} disabled={gameTickets <= 0}
               className="w-full py-3.5 rounded-xl font-display font-bold text-lg bg-gradient-to-r from-gold-dark via-primary to-gold-dark text-primary-foreground shadow-gold hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-              {gameTickets <= 0 ? t("noTickets") : points < betAmount ? t("notEnoughPoints") : t("findOpponent")}
+              {gameTickets <= 0 ? t("noTickets") : t("findOpponent")}
             </button>
           )}
         </div>

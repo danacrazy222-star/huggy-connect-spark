@@ -194,6 +194,7 @@ export default function Chat() {
   }, [message, user, userProfile, level, sendRealtimeMessage]);
 
   const handleWorldChallengeStart = useCallback(() => {
+    setDuelActive(true);
     if (activeRoom === 0) {
       useGameStore.getState().lockWorldChallenge();
       setWorldChallengeSessionActive(true);

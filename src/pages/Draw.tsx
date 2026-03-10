@@ -58,7 +58,7 @@ export default function Draw() {
   const {
     prizeAmount, entries, currentWinner, winningEntryId,
     drawHistory, isDrawActive, getProgressPercent, resetDraw,
-    drawStartedAt, drawDurationMs, checkTimerExpired, triggerDraw
+    drawStartedAt, drawDurationMs, checkTimerExpired, handleTimerEnd, wasExtended
   } = useDrawStore();
 
   const [showWinnerPopup, setShowWinnerPopup] = useState(!!currentWinner);
@@ -75,9 +75,9 @@ export default function Draw() {
       const diff = Math.max(0, endTime - Date.now());
 
       if (diff <= 0 && isDrawActive) {
-        // Timer expired → trigger draw
+        // Timer expired → handleTimerEnd checks minimum entries
         if (entries.length > 0) {
-          triggerDraw();
+          handleTimerEnd();
         }
         setCountdown("00:00:00");
         return;
@@ -91,7 +91,7 @@ export default function Draw() {
     updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
-  }, [drawStartedAt, drawDurationMs, isDrawActive, entries.length, triggerDraw]);
+  }, [drawStartedAt, drawDurationMs, isDrawActive, entries.length, handleTimerEnd]);
 
   // Live activity feed
   const [activityIndex, setActivityIndex] = useState(0);
@@ -261,6 +261,18 @@ export default function Draw() {
                 <p className="text-2xl font-display font-bold text-primary tracking-wider">{countdown}</p>
               </div>
             </div>
+          )}
+
+          {/* Extension notice */}
+          {wasExtended && isDrawActive && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-accent/10 border border-accent/30 rounded-xl p-3 text-center"
+            >
+              <p className="text-xs text-accent font-bold mb-0.5">🔄 Draw Extended</p>
+              <p className="text-[10px] text-muted-foreground">The draw has been extended due to high demand. All entries remain active.</p>
+            </motion.div>
           )}
 
           {/* Closing info text */}

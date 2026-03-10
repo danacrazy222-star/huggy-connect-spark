@@ -52,10 +52,13 @@ export const useGameStore = create<GameState>()(
       addXP: (amount) => set((s) => {
         let newXP = s.xp + amount;
         let newLevel = s.level;
-        // Level up: if XP exceeds requirement, advance and carry remainder
+        const oldLevel = s.level;
         while (newLevel < 30 && XP_FOR_LEVEL[newLevel] && newXP >= XP_FOR_LEVEL[newLevel]) {
           newXP -= XP_FOR_LEVEL[newLevel];
           newLevel++;
+        }
+        if (newLevel > oldLevel) {
+          setTimeout(() => playLevelUp(), 100);
         }
         return { xp: newXP, level: newLevel };
       }),

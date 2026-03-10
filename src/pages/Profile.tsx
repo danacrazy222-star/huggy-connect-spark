@@ -18,6 +18,7 @@ import {
   Globe, Trash2, ChevronRight, Edit3, Check, X,
   Settings, RefreshCw, Shield, FileText,
 } from "lucide-react";
+import { DiamondFrame } from "@/components/DiamondFrame";
 
 export default function Profile() {
   const { t, isRTL } = useTranslation();

@@ -10,7 +10,7 @@ export default function VIP() {
   const { t, isRTL } = useTranslation();
 
   const xpNeededForNext = XP_FOR_LEVEL[level] || 0;
-  const progress = level >= 20 ? 100 : xpNeededForNext > 0 ? Math.min((xp / xpNeededForNext) * 100, 100) : 100;
+  const progress = level >= 30 ? 100 : xpNeededForNext > 0 ? Math.min((xp / xpNeededForNext) * 100, 100) : 100;
   const xpRemaining = Math.max(xpNeededForNext - xp, 0);
 
   const milestones: { name: string; lvl: number; stars?: number; icon?: "diamond" | "flame" }[] = [
@@ -59,7 +59,7 @@ export default function VIP() {
             <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
               <TrendingUp className="w-4 h-4 text-primary" />
               <span className="text-sm font-bold text-foreground">
-                {t("level")} {level} → {Math.min(level + 1, 20)}
+                {t("level")} {level} → {Math.min(level + 1, 30)}
               </span>
             </div>
             <span className="text-xs text-muted-foreground">{Math.round(progress)}%</span>
@@ -83,7 +83,7 @@ export default function VIP() {
             <span className="text-muted-foreground">
               {xp.toLocaleString()} / {xpNeededForNext.toLocaleString()} XP
             </span>
-            {level < 20 && (
+            {level < 30 && (
               <span className="text-primary font-semibold">
                 {xpRemaining.toLocaleString()} XP ⬅️
               </span>

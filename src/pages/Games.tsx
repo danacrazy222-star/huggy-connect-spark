@@ -6,6 +6,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useAuth } from "@/contexts/AuthContext";
 import { MatchmakingQueue } from "@/components/games/MatchmakingQueue";
 import { Gamepad2, Ticket, Users, Bot, Zap, Trophy, ArrowLeft, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Sparkles, Gift, LogIn } from "lucide-react";
+import { TreasureRush as TreasureRushGame } from "@/components/games/TreasureRush";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 

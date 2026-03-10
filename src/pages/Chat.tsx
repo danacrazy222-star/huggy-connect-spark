@@ -14,6 +14,7 @@ import { ChatDuelChallenge } from "@/components/chat/ChatDuelChallenge";
 import { WorldChallengePromo } from "@/components/chat/WorldChallengePromo";
 
 
+import roomWorld from "@/assets/room-world.jpg";
 import roomBronze from "@/assets/room-bronze.jpg";
 import roomSilver from "@/assets/room-silver.jpg";
 import roomGold from "@/assets/room-gold.jpg";
@@ -27,7 +28,7 @@ import avatarFemale2 from "@/assets/avatar-female-2.png";
 import avatarFemale3 from "@/assets/avatar-female-3.png";
 
 const rooms = [
-  { name: "🌍 World", level: 0, image: roomBronze, accent: "from-emerald-500/60", border: "border-emerald-400/50", glow: "hsl(160 80% 50%)", shape: "circle" as const },
+  { name: "🌍 World", level: 0, image: roomWorld, accent: "from-emerald-500/60", border: "border-emerald-400/50", glow: "hsl(160 80% 50%)", shape: "circle" as const },
   { name: "Bronze", level: 1, image: roomBronze, accent: "from-blue-500/60", border: "border-blue-400/50", glow: "hsl(185 100% 60%)", shape: "circle" as const },
   { name: "Silver", level: 5, image: roomSilver, accent: "from-pink-500/60", border: "border-pink-400/50", glow: "hsl(320 100% 65%)", shape: "circle" as const },
   { name: "Gold", level: 10, image: roomGold, accent: "from-purple-500/60", border: "border-purple-400/50", glow: "hsl(280 80% 65%)", shape: "diamond" as const },

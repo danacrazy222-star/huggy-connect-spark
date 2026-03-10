@@ -401,7 +401,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Pro
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-destructive to-accent flex items-center justify-center text-sm font-bold text-accent-foreground">
                     {opponentName.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-[11px] font-bold text-foreground truncate max-w-full">{opponentName}</span>
+                  <NameWithLevel name={opponentName} level={opponentLevel} />
                   {votePick === "opponent" && <span className="text-[10px] text-primary">✓ صوتك</span>}
                 </motion.button>
               </div>

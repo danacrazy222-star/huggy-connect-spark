@@ -216,7 +216,7 @@ export default function Chat() {
                 </div>
               )}
               {realtimeMessages.map((msg, i) => (
-                <ChatMessageBubble key={(msg as any)._id || i} msg={msg} index={i} isRTL={isRTL} />
+                <ChatMessageBubble key={(msg as any)._id || i} msg={msg} index={i} isRTL={isRTL} currentUserId={user?.id} />
               ))}
               <div ref={messagesEndRef} />
             </div>

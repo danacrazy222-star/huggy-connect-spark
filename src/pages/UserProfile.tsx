@@ -99,7 +99,7 @@ export default function UserProfile() {
             <Avatar
               className={cn(
                 "w-24 h-24 border-2",
-                userLevel >= 15
+                userLevel >= 20
                   ? "border-transparent"
                   : "border-primary shadow-gold"
               )}

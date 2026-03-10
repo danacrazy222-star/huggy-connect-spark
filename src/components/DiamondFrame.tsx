@@ -9,7 +9,7 @@ interface DiamondFrameProps {
   className?: string;
 }
 
-export function DiamondFrame({ children, size = "sm", active = true, level = 15, className }: DiamondFrameProps) {
+export function DiamondFrame({ children, size = "sm", active = true, level = 20, className }: DiamondFrameProps) {
   if (!active) return <>{children}</>;
 
   const isLegend = level >= 40;

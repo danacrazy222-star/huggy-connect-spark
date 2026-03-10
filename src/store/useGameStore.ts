@@ -55,7 +55,7 @@ export const useGameStore = create<GameState>()(
         let newXP = s.xp + amount;
         let newLevel = s.level;
         const oldLevel = s.level;
-        while (newLevel < 30 && XP_FOR_LEVEL[newLevel] && newXP >= XP_FOR_LEVEL[newLevel]) {
+        while (newLevel < 40 && XP_FOR_LEVEL[newLevel] && newXP >= XP_FOR_LEVEL[newLevel]) {
           newXP -= XP_FOR_LEVEL[newLevel];
           newLevel++;
         }

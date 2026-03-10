@@ -28,13 +28,14 @@ function getCellColor(num: number): string {
 
 type GamePhase = "lobby" | "searching" | "playing" | "finished";
 type Player = { name: string; pos: number; isBot: boolean; color: string };
-type ActiveGame = "none" | "snake" | "scratch";
+type ActiveGame = "none" | "snake" | "scratch" | "treasure";
 
 export default function Games() {
   const [activeGame, setActiveGame] = useState<ActiveGame>("none");
   if (activeGame === "snake") return <SnakeAndLadder onBack={() => setActiveGame("none")} />;
   if (activeGame === "scratch") return <ScratchCard onBack={() => setActiveGame("none")} />;
-  return <GamesList onPlaySnake={() => setActiveGame("snake")} onPlayScratch={() => setActiveGame("scratch")} />;
+  if (activeGame === "treasure") return <TreasureRushGame onBack={() => setActiveGame("none")} />;
+  return <GamesList onPlaySnake={() => setActiveGame("snake")} onPlayScratch={() => setActiveGame("scratch")} onPlayTreasure={() => setActiveGame("treasure")} />;
 }
 
 function GamesList({ onPlaySnake, onPlayScratch }: { onPlaySnake: () => void; onPlayScratch: () => void }) {

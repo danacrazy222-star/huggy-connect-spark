@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Swords, BookOpen, Star, Globe, CheckCircle, PartyPopper } from "lucide-react";
+import { useGameStore } from "@/store/useGameStore";
 
 export function WorldChallengePromo() {
   const [open, setOpen] = useState(false);

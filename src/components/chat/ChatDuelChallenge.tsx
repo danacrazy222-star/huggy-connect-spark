@@ -274,8 +274,8 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       timer--;
       setSearchTimer(timer);
       
-      // Poll every 3 seconds to check if someone joined
-      if (timer % 3 === 0 && timer > 0) {
+      // Poll every 2 seconds to check if someone joined
+      if (timer % 2 === 0 && timer > 0) {
         const { data } = await supabase
           .from('rps_matches')
           .select('*')
@@ -283,8 +283,8 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
           .single();
         if (data && data.status === 'matched' && data.player2_id) {
           clearTimer();
-          setOpponentName(data.player2_name);
-          setOpponentLevel(data.player2_level);
+          setOpponentName(data.player2_name ?? 'Player');
+          setOpponentLevel(data.player2_level ?? 1);
           setPhase("matched");
           return;
         }

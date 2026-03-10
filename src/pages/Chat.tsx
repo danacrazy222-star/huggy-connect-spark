@@ -283,8 +283,8 @@ export default function Chat() {
             )}
 
             {/* Chat messages */}
-            <div className="flex-1" />
-            <div className="space-y-3 mb-3 overflow-y-auto max-h-[30vh]">
+            <div className="flex-1 min-h-0" />
+            <div className="space-y-3 mb-3 overflow-y-auto max-h-[50vh]">
               {!user && (
                 <div className="text-center py-4">
                   <p className="text-sm text-muted-foreground">{t("loginToChat") || "Login to chat with others"}</p>

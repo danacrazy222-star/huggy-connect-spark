@@ -90,7 +90,7 @@ function dbToMsg(row: any): ChatMsg & { _id: string; _userId: string } {
     crown: row.level >= 10,
     gender: row.gender as "male" | "female" | null,
     avatarUrl: row.avatar_url || undefined,
-    level: row.level || 1,
+    level: row.level ?? 1,
     time: timeStr,
     isSystem: row.is_system || false,
   };

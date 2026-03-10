@@ -157,7 +157,7 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
                 <div className="border-t border-white/15 my-1.5" />
                 <div className={cn("flex items-start gap-1", isRTL && "flex-row-reverse")}>
                   <span className="text-[10px] text-primary mt-0.5">➡️</span>
-                  <p className="text-sm text-primary/80 italic">{msg.translated}</p>
+                  <p className="text-sm text-primary/80 italic">{translated}</p>
                 </div>
               </motion.div>
             )}

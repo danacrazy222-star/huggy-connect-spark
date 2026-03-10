@@ -591,7 +591,7 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
 
             <div className="bg-card/60 border border-border rounded-xl p-4 space-y-2">
               <p className="text-xs text-muted-foreground">🎫 {t("scratchCardCost")}</p>
-              <p className="text-xs text-muted-foreground">💰 {t("winnerGets")}: Points, XP, Tickets</p>
+              <p className="text-xs text-muted-foreground">💰 {t("winnerGets")}: {t("scratchWinTypes")}</p>
             </div>
 
             <button onClick={startGame} disabled={gameTickets <= 0}

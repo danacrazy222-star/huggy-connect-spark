@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "@/store/useGameStore";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Gift, Zap, Ticket, Trophy, Sparkles, X, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { playTick, playSpinStart, playWinSound, playLoseSound } from "@/utils/spinSounds";
 
 const SEGMENT_COLORS = [
   { color: "#1a8a4a", colorEnd: "#2ecc71" },
@@ -81,6 +82,7 @@ export function SpinWheel() {
   const [winReward, setWinReward] = useState<{ type: string; label: string } | null>(null);
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
   const [lightPhase, setLightPhase] = useState(0);
+  const tickIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     checkSpinAvailability();
@@ -109,12 +111,35 @@ export function SpinWheel() {
     setShowWinModal(false);
     setWinReward(null);
 
+    // Play spin start sound
+    playSpinStart();
+
+    // Tick sounds that slow down over time
+    let tickSpeed = 60;
+    const startTicking = () => {
+      if (tickIntervalRef.current) clearInterval(tickIntervalRef.current);
+      tickIntervalRef.current = setInterval(() => {
+        playTick();
+        tickSpeed += 15;
+        if (tickSpeed > 500) {
+          if (tickIntervalRef.current) clearInterval(tickIntervalRef.current);
+          return;
+        }
+        if (tickIntervalRef.current) clearInterval(tickIntervalRef.current);
+        tickIntervalRef.current = setInterval(() => {
+          playTick();
+        }, tickSpeed);
+      }, tickSpeed);
+    };
+    startTicking();
+
     const segmentIndex = getWeightedSegment();
     const extraSpins = 6 * 360;
     const targetAngle = extraSpins + (360 - segmentIndex * SEGMENT_ANGLE - SEGMENT_ANGLE / 2);
     setRotation((prev) => prev + targetAngle);
 
     setTimeout(() => {
+      if (tickIntervalRef.current) clearInterval(tickIntervalRef.current);
       const rewardType = SEGMENT_REWARDS[segmentIndex].type;
       setSpinning(false);
       setLastSpinTime(Date.now());
@@ -126,6 +151,12 @@ export function SpinWheel() {
         case "ticketCombo": addGameTicket(1); addTarotTicket(1); break;
         case "pointsXp": addPoints(15); addXP(50); break;
         case "surprise": addXP(50); addTarotTicket(1); break;
+      }
+      // Play result sound
+      if (rewardType === "none") {
+        playLoseSound();
+      } else {
+        playWinSound();
       }
       setWinReward({
         type: rewardType,

@@ -32,6 +32,7 @@ const MOVES: Move[] = ["rock", "paper", "scissors"];
 
 interface Props {
   playerName: string;
+  playerLevel: number;
   onEnd: (won: boolean) => void;
   isRTL?: boolean;
 }

@@ -144,7 +144,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       const match = data[0];
       applyMatchState(match);
     }
-  };
+  }, [user, roomId]);
 
   const applyMatchState = (match: any) => {
     if (!user) return;

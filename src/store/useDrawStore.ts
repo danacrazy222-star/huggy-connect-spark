@@ -51,6 +51,7 @@ export const useDrawStore = create<DrawState>()(
       entries: DEMO_ENTRIES,
       nextEntryId: 9,
       targetEntries: 500, // HIDDEN from users
+      minimumEntries: 300, // HIDDEN - minimum before winner allowed
       prizeAmount: 500,
       currentWinner: null,
       winningEntryId: null,
@@ -60,7 +61,8 @@ export const useDrawStore = create<DrawState>()(
         { winner: "Lucky_Luna", date: Date.now() - 86400000 * 60, prize: "$500 Google Play", entryId: 8 },
       ],
       isDrawActive: true,
-      drawStartedAt: Date.now() - 12 * 60 * 60 * 1000, // started 12h ago for demo
+      wasExtended: false,
+      drawStartedAt: Date.now() - 12 * 60 * 60 * 1000,
       drawDurationMs: DRAW_DURATION,
 
       addPurchase: (username) => {

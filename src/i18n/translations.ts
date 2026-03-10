@@ -261,6 +261,13 @@ export type TranslationKeys = {
   playersInQueue: string; betAmount: string; points: string; leaveQueue: string; matchFound: string;
   getReady: string; startingGame: string; botLabel: string; you: string; realPlayer: string;
   loginToPlay: string; queueBotFallback: string;
+  // Treasure Rush
+  treasureRush: string; treasureRushDesc: string; treasureBoxTypes: string;
+  treasureGold: string; treasureRare: string; treasureTrap: string; treasureSteal: string;
+  treasureDouble: string; treasureEmpty: string; treasureSolo: string; treasureMultiplayer: string;
+  treasureGetReady: string; treasureRound: string; treasureGoldPts: string; treasureRarePts: string;
+  treasureTrapPts: string; treasureStolen: string; treasureDoubleActive: string; treasureNothing: string;
+  treasureYouWon: string; treasureGameOver: string; treasurePlayAgain: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

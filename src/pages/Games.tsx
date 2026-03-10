@@ -266,7 +266,7 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
     return (
       <MatchmakingQueue
         gameType="snake"
-        betAmount={betAmount}
+        betAmount={0}
         maxPlayers={2}
         onMatchFound={handleMatchFound}
         onCancel={() => { addGameTicket(1); setPhase("lobby"); }}

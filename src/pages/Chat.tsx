@@ -92,6 +92,7 @@ export default function Chat() {
   const { clearUnread } = useChatStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [botMessages, setBotMessages] = useState<ChatMsg[]>([]);
+  const [announcements, setAnnouncements] = useState<ChatMsg[]>([]);
   const botIndexRef = useRef(0);
 
   const { messages: realtimeMessages, sendMessage: sendRealtimeMessage } = useChatRealtime(activeRoom);

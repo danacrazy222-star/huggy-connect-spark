@@ -958,14 +958,25 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
             </motion.div>
           )}
 
-          {/* ═══ WAITING FOR OPPONENT (PLAYER) ═══ */}
+          {/* ═══ WAITING FOR OPPONENT (PLAYER) — show pick buttons with selection ═══ */}
           {phase === "picking" && isPlayerRole && waitingForOpponent && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-4">
-              <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
-                <Search className="w-6 h-6 text-accent mx-auto mb-2" />
-              </motion.div>
-              <p className="text-sm font-bold text-foreground">{t("duelWaitingOpponent") || "Waiting for opponent..."}</p>
-              <p className="text-xs text-muted-foreground mt-1">{t("duelYouPicked") || "You picked"}: {playerMove ? MOVE_EMOJI[playerMove] : ""}</p>
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+              <p className="text-sm font-bold text-foreground mb-1">✊ {t("duelRound")} {round + 1}</p>
+              <p className="text-[11px] text-muted-foreground mb-4">{t("duelVs")} {isPlayer1 ? p2Name : p1Name} (Lv.{isPlayer1 ? p2Level : p1Level})</p>
+              <div className="grid grid-cols-3 gap-2">
+                {MOVES.map((move) => (
+                  <div key={move}
+                    className={cn(
+                      "flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all",
+                      playerMove === move
+                        ? "border-primary bg-primary/15 shadow-[0_0_15px_hsl(var(--primary)/0.3)]"
+                        : "border-accent/20 bg-accent/5 opacity-40"
+                    )}>
+                    <span className="text-3xl">{MOVE_EMOJI[move]}</span>
+                    <span className="text-[10px] font-bold text-foreground">{MOVE_LABEL[move]}</span>
+                  </div>
+                ))}
+              </div>
             </motion.div>
           )}
 

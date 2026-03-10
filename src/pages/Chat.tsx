@@ -209,17 +209,11 @@ export default function Chat() {
   const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
     setDuelActive(false);
     addXP(won ? 300 : 80);
-    if (user) {
-      sendRealtimeMessage(
-        `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
-        { display_name: "🏆 System", avatar_url: null, gender: null, level: 0 }
-      );
-    }
     if (activeRoom === 0) {
       setWorldChallengeSessionActive(false);
       useGameStore.getState().lockWorldChallenge();
     }
-  }, [addXP, activeRoom, sendRealtimeMessage, user, t]);
+  }, [addXP, activeRoom]);
 
   return (
     <div className="min-h-screen pb-20 flex flex-col relative" dir={isRTL ? "rtl" : "ltr"}>

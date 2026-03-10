@@ -29,22 +29,14 @@ type Player = { name: string; pos: number; isBot: boolean; color: string };
 type ActiveGame = "none" | "snake" | "scratch";
 
 export default function Games() {
-  const [activeGame, setActiveGame] = useState<ActiveGame>("none");
-  if (activeGame === "snake") return <SnakeAndLadder onBack={() => setActiveGame("none")} />;
-  if (activeGame === "scratch") return <ScratchCard onBack={() => setActiveGame("none")} />;
-  return <GamesList onPlaySnake={() => setActiveGame("snake")} onPlayScratch={() => setActiveGame("scratch")} />;
+  return <GamesList />;
 }
 
-function GamesList({ onPlaySnake, onPlayScratch }: { onPlaySnake: () => void; onPlayScratch: () => void }) {
+function GamesList() {
   const { gameTickets } = useGameStore();
   const { t, isRTL } = useTranslation();
 
-  const games = [
-    { name: t("snakeAndLadder"), desc: t("classicBoardGame"), icon: "🐍", color: "from-green-accent/30 to-green-accent/5", border: "border-green-accent/40", multiplayer: true, onClick: onPlaySnake },
-    { name: t("scratchCard"), desc: t("scratchCardDesc"), icon: "🎫", color: "from-primary/30 to-primary/5", border: "border-primary/40", multiplayer: false, onClick: onPlayScratch },
-    { name: t("tapFrenzy"), desc: t("tapAsFast"), icon: "👆", color: "from-blue-accent/30 to-blue-accent/5", border: "border-blue-accent/40", multiplayer: false, onClick: () => {}, locked: true },
-    { name: t("memoryMatch"), desc: t("matchHiddenCards"), icon: "🃏", color: "from-purple-glow/30 to-purple-glow/5", border: "border-purple-glow/40", multiplayer: false, onClick: () => {}, locked: true },
-  ];
+  const games: { name: string; desc: string; icon: string; color: string; border: string; multiplayer?: boolean; onClick: () => void; locked?: boolean }[] = [];
 
   return (
     <div className="min-h-screen bg-premium-gradient stars-bg pb-20" dir={isRTL ? "rtl" : "ltr"}>

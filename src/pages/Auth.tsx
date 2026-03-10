@@ -163,6 +163,31 @@ export default function Auth() {
               </button>
             </div>
 
+            {isLogin && (
+              <button
+                type="button"
+                onClick={async () => {
+                  const cleanEmail = sanitize(email);
+                  if (!cleanEmail) {
+                    toast.error(t('email'));
+                    return;
+                  }
+                  try {
+                    const { error } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
+                      redirectTo: `${window.location.origin}/reset-password`,
+                    });
+                    if (error) throw error;
+                    toast.success(t('resetLinkSent'));
+                  } catch (err: any) {
+                    toast.error(err.message || 'Error');
+                  }
+                }}
+                className="text-xs text-primary hover:underline w-full text-center"
+              >
+                {t('forgotPassword')}
+              </button>
+            )}
+
             <Button type="submit" disabled={loading} className="w-full bg-primary text-primary-foreground font-bold shadow-gold">
               {loading ? (
                 <Sparkles className="w-4 h-4 animate-spin" />

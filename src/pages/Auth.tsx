@@ -60,7 +60,17 @@ export default function Auth() {
         navigate('/');
       }
     } catch (error: any) {
-      toast.error(error.message);
+      const msg = error.message || '';
+      if (msg.includes('User already registered')) {
+        toast.error(t('userAlreadyExists'));
+        setIsLogin(true);
+      } else if (msg.includes('Invalid login credentials')) {
+        toast.error(t('invalidCredentials'));
+      } else if (msg.includes('Email not confirmed')) {
+        toast.error(t('emailNotConfirmed'));
+      } else {
+        toast.error(msg);
+      }
     } finally {
       setLoading(false);
     }

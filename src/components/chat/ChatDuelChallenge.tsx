@@ -37,7 +37,7 @@ interface Props {
   isRTL?: boolean;
 }
 
-export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
+export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Props) {
   const [phase, setPhase] = useState<Phase>("idle");
   const [searchTimer, setSearchTimer] = useState(40);
   const [opponentName, setOpponentName] = useState("");

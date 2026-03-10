@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Timer, Trophy, Search, Swords, Users, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { playDuelStart, playDuelClash, playDuelWin, playDuelLose } from "@/utils/sounds";
 import { useTranslation } from "@/hooks/useTranslation";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";

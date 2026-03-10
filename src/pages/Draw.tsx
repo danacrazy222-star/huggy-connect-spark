@@ -3,7 +3,7 @@ import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useDrawStore } from "@/store/useDrawStore";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trophy, Gift, ChevronRight, PartyPopper, X, Clock, Activity, ShoppingBag, Shield } from "lucide-react";
+import { Trophy, Gift, ChevronRight, PartyPopper, X, Activity, ShoppingBag, Shield, Info, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 
@@ -58,40 +58,14 @@ export default function Draw() {
   const {
     prizeAmount, entries, currentWinner, winningEntryId,
     drawHistory, isDrawActive, getProgressPercent, resetDraw,
-    drawStartedAt, drawDurationMs, checkTimerExpired, handleTimerEnd, wasExtended
   } = useDrawStore();
 
   const [showWinnerPopup, setShowWinnerPopup] = useState(!!currentWinner);
+  const [showMoreInfo, setShowMoreInfo] = useState(false);
   const percent = getProgressPercent();
 
   // User's entries (demo)
   const userEntries = entries.filter(e => e.username === "You").length;
-
-  // Countdown timer to draw end
-  const [countdown, setCountdown] = useState("");
-  useEffect(() => {
-    const updateCountdown = () => {
-      const endTime = drawStartedAt + drawDurationMs;
-      const diff = Math.max(0, endTime - Date.now());
-
-      if (diff <= 0 && isDrawActive) {
-        // Timer expired → handleTimerEnd checks minimum entries
-        if (entries.length > 0) {
-          handleTimerEnd();
-        }
-        setCountdown("00:00:00");
-        return;
-      }
-
-      const h = Math.floor(diff / 3600000).toString().padStart(2, "0");
-      const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, "0");
-      const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, "0");
-      setCountdown(`${h}:${m}:${s}`);
-    };
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
-  }, [drawStartedAt, drawDurationMs, isDrawActive, entries.length, handleTimerEnd]);
 
   // Live activity feed
   const [activityIndex, setActivityIndex] = useState(0);
@@ -104,7 +78,7 @@ export default function Draw() {
 
   return (
     <div className="min-h-screen bg-premium-gradient stars-bg pb-20" dir={isRTL ? "rtl" : "ltr"}>
-      <TopBar title={t("promotionalDraw")} />
+      <TopBar title={t("draw")} />
 
       {/* Winner Popup */}
       <AnimatePresence>
@@ -154,17 +128,22 @@ export default function Draw() {
       </AnimatePresence>
 
       <div className="px-4 space-y-5">
-        {/* Header */}
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/40 rounded-full px-4 py-1.5 mb-3">
+
+        {/* Hero Section - Main Title */}
+        <div className="text-center pt-2">
+          <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/40 rounded-full px-4 py-1.5 mb-4">
             <Gift className="w-4 h-4 text-primary" />
-            <span className="text-sm font-bold text-primary">{t("giftCardDraw")}</span>
+            <span className="text-sm font-bold text-primary">{t("promotionalDraw")}</span>
           </div>
-          <h2 className="font-display text-xl font-bold text-gold-gradient mb-1">{t("promotionalDraw")}</h2>
-          <p className="text-xs text-muted-foreground mb-3">{t("drawDescription")}</p>
+          <h1 className="font-display text-xl font-bold text-gold-gradient mb-3 leading-snug px-2">
+            {t("drawMainTitle")}
+          </h1>
+          <p className="text-xs text-muted-foreground leading-relaxed px-4">
+            {t("drawSubtitle")}
+          </p>
         </div>
 
-        {/* Gift Card Brands */}
+        {/* Prize Display */}
         <div className={cn("flex items-center justify-center gap-3", isRTL && "flex-row-reverse")}>
           {[
             { name: "Amazon", color: "border-blue-accent/60" },
@@ -199,7 +178,7 @@ export default function Draw() {
           </div>
         </div>
 
-        {/* Progress + Countdown Section */}
+        {/* Progress Section - Only % */}
         <div className="bg-card/80 border border-border rounded-2xl p-5 space-y-4">
           <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
             <h3 className="font-display text-sm font-bold text-foreground">{t("drawProgress")}</h3>
@@ -252,38 +231,15 @@ export default function Draw() {
             </div>
           </div>
 
-          {/* Countdown Timer */}
-          {isDrawActive && (
-            <div className="flex items-center justify-center gap-3 bg-muted/40 rounded-xl py-3 px-4">
-              <Clock className="w-5 h-5 text-primary" />
-              <div className="text-center">
-                <p className="text-[10px] text-muted-foreground">{t("nextDrawIn")}</p>
-                <p className="text-2xl font-display font-bold text-primary tracking-wider">{countdown}</p>
-              </div>
-            </div>
-          )}
-
-          {/* Extension notice */}
-          {wasExtended && isDrawActive && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-accent/10 border border-accent/30 rounded-xl p-3 text-center"
-            >
-              <p className="text-xs text-accent font-bold mb-0.5">🔄 {t("drawExtended")}</p>
-              <p className="text-[10px] text-muted-foreground">{t("drawExtendedMessage")}</p>
-            </motion.div>
-          )}
-
-          {/* Closing info text */}
+          {/* Closing condition text */}
           <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
-            {t("drawCloseInfo")}
+            {t("drawClosingCondition")}
           </p>
 
-          {/* Your Entries - only if user has entries */}
+          {/* User's Entries */}
           {userEntries > 0 && (
             <div className="bg-primary/10 border border-primary/30 rounded-xl p-3 text-center">
-              <p className="text-xs text-muted-foreground">{t("yourEntries")}</p>
+              <p className="text-xs text-muted-foreground">{t("yourCurrentEntries")}</p>
               <p className="text-2xl font-display font-bold text-primary">{userEntries}</p>
             </div>
           )}
@@ -296,32 +252,30 @@ export default function Draw() {
           </div>
         </div>
 
-        {/* Fair Draw System */}
-        <div className="bg-card/60 border border-primary/20 rounded-2xl p-4 space-y-3">
-          <h3 className="font-display text-sm font-bold text-gold-gradient flex items-center gap-2">
-            <Shield className="w-4 h-4 text-primary" />
-            {t("fairDrawSystem")}
-          </h3>
-          <p className="text-[11px] text-muted-foreground leading-relaxed">
-            {t("fairDrawDescription")}
-          </p>
-          <div className="bg-muted/30 rounded-xl p-3 space-y-1.5">
-            <p className="text-[10px] text-muted-foreground font-mono">Entry #1 — Sarah_M</p>
-            <p className="text-[10px] text-muted-foreground font-mono">Entry #2 — Ahmed_K</p>
-            <p className="text-[10px] text-muted-foreground font-mono">Entry #3 — Luna_Star</p>
-            <p className="text-[10px] text-primary font-mono font-bold">🎲 Random = #2 → Winner: Ahmed_K</p>
-          </div>
-        </div>
+        {/* CTA Button */}
+        {isDrawActive && (
+          <button
+            onClick={() => navigate("/shop")}
+            className="w-full py-3.5 rounded-xl font-display font-bold text-lg text-primary-foreground shadow-gold hover:brightness-110 transition-all flex items-center justify-center gap-2"
+            style={{
+              background: "linear-gradient(180deg, hsl(45 100% 50%), hsl(40 100% 40%))",
+              boxShadow: "0 0 25px rgba(255,215,0,0.25)",
+            }}
+          >
+            <ShoppingBag className="w-5 h-5" />
+            {t("buyAndEnter")}
+          </button>
+        )}
 
-        {/* How to Enter */}
+        {/* How It Works */}
         <div className="bg-card/60 border border-border rounded-2xl p-4 space-y-3">
-          <h3 className="font-display text-sm font-bold text-gold-gradient">{t("howToEnter")}</h3>
+          <h3 className="font-display text-sm font-bold text-gold-gradient">{t("howItWorks")}</h3>
           <div className="space-y-2">
             {[
-              { step: "1", text: t("buyBook"), icon: "📚" },
-              { step: "2", text: t("getUniqueEntry"), icon: "🎫" },
-              { step: "3", text: t("premiumTwoEntries"), icon: "🔥" },
-              { step: "4", text: t("randomPicksWinner"), icon: "🏆" },
+              { step: "1", text: t("howStep1"), icon: "📚" },
+              { step: "2", text: t("howStep2"), icon: "🎫" },
+              { step: "3", text: t("howStep3"), icon: "🔥" },
+              { step: "4", text: t("howStep4"), icon: "🏆" },
             ].map((item) => (
               <div key={item.step} className={cn("flex items-center gap-3", isRTL && "flex-row-reverse")}>
                 <div className="w-7 h-7 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center flex-shrink-0">
@@ -332,6 +286,53 @@ export default function Draw() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* More Information - Collapsible */}
+        <div className="bg-card/60 border border-primary/20 rounded-2xl p-4 space-y-3">
+          <button
+            onClick={() => setShowMoreInfo(!showMoreInfo)}
+            className={cn("w-full flex items-center justify-between", isRTL && "flex-row-reverse")}
+          >
+            <h3 className="font-display text-sm font-bold text-gold-gradient flex items-center gap-2">
+              <Info className="w-4 h-4 text-primary" />
+              {t("moreInfo")}
+            </h3>
+            <ChevronDown className={cn("w-4 h-4 text-primary transition-transform", showMoreInfo && "rotate-180")} />
+          </button>
+          <AnimatePresence>
+            {showMoreInfo && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden space-y-2"
+              >
+                {[
+                  t("moreInfo1"),
+                  t("moreInfo2"),
+                  t("moreInfo3"),
+                  t("moreInfo4"),
+                ].map((text, i) => (
+                  <div key={i} className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}>
+                    <span className="text-primary text-xs mt-0.5">•</span>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">{text}</p>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Fair Draw System */}
+        <div className="bg-card/60 border border-primary/20 rounded-2xl p-4 space-y-3">
+          <h3 className="font-display text-sm font-bold text-gold-gradient flex items-center gap-2">
+            <Shield className="w-4 h-4 text-primary" />
+            {t("fairDrawSystem")}
+          </h3>
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
+            {t("fairDrawDescription")}
+          </p>
         </div>
 
         {/* Past Winners */}
@@ -358,21 +359,6 @@ export default function Draw() {
               ))}
             </div>
           </div>
-        )}
-
-        {/* CTA Button */}
-        {isDrawActive && (
-          <button
-            onClick={() => navigate("/shop")}
-            className="w-full py-3.5 rounded-xl font-display font-bold text-lg text-primary-foreground shadow-gold hover:brightness-110 transition-all flex items-center justify-center gap-2"
-            style={{
-              background: "linear-gradient(180deg, hsl(45 100% 50%), hsl(40 100% 40%))",
-              boxShadow: "0 0 25px rgba(255,215,0,0.25)",
-            }}
-          >
-            <ShoppingBag className="w-5 h-5" />
-            {t("enterTheDraw")}
-          </button>
         )}
 
         {/* Winner banner */}

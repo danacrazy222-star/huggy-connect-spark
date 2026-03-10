@@ -31,7 +31,19 @@ import avatarFemale3 from "@/assets/avatar-female-3.png";
 
 // Bot conversation scripts - each room has bots chatting about the app
 const botScripts: Record<number, ChatMsg[]> = {
-  0: [ // Bronze (Lv 1-8)
+  0: [ // World
+    { user: "Luna", avatar: "L", message: "Welcome everyone! 🌍✨ This is the World Room — open for all levels!", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+    { user: "Omar", avatar: "O", message: "If you're new here — spin the wheel daily on the Home page for free rewards! 🎰", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12 },
+    { user: "Sara", avatar: "S", message: "You get XP, points, tickets, and even draw entries from the spin! 🎁", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+    { user: "Luna", avatar: "L", message: "Don't forget to check the Shop — buy a book pack and enter the $500 gift card draw! 💳", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+    { user: "Omar", avatar: "O", message: "The Draw page shows the prizes — Amazon, Google Play, or SHEIN gift cards! 🎉", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12 },
+    { user: "Noor", avatar: "N", message: "I love the Tarot feature! Madam Zara reads your cards with AI 🔮✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+    { user: "Sara", avatar: "S", message: "Level up to unlock VIP rooms — Bronze at Lv.1, Silver at Lv.9, Gold at Lv.17! 👑", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+    { user: "Omar", avatar: "O", message: "Challenge other players in the duel games to earn XP fast! ⚔️💪", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+    { user: "Luna", avatar: "L", message: "Who's here? Say hi! 👋 The more the merrier! 🎊", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+    { user: "Noor", avatar: "N", message: "Pro tip: the Premium book pack gives you the most XP + tarot tickets! 📚✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+  ],
+  1: [ // Bronze (Lv 1-8)
     { user: "Luna", avatar: "L", message: "Welcome to Bronze! 🥉🔥 You made it to Level 1!", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 6 },
     { user: "Omar", avatar: "O", message: "In this room we get XP Rain events every hour — tap fast to collect! ⚡", crown: false, gender: "male", avatarUrl: avatarMale2, level: 5 },
     { user: "Noor", avatar: "N", message: "XP Rain is so fun! Last time I got 27 XP in 10 seconds! 🎉", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 3 },
@@ -41,24 +53,24 @@ const botScripts: Record<number, ChatMsg[]> = {
     { user: "Noor", avatar: "N", message: "Reach Level 9 to unlock Silver room! 🥈✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 3 },
     { user: "Sara", avatar: "S", message: "Who wants to duel? Let's go! 🔥🎮", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 7 },
   ],
-  1: [ // Silver (Lv 9-16)
+  2: [ // Silver (Lv 9-16)
     { user: "Sara", avatar: "S", message: "Silver squad! 🥈✨ Level 9+ only!", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 14 },
     { user: "Luna", avatar: "L", message: "This room is getting more exclusive! Keep grinding XP! 🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 11 },
     { user: "Omar", avatar: "O", message: "Check your VIP page to see your progress to Gold! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 15 },
     { user: "Noor", avatar: "N", message: "The Crown page shows all VIP perks and mystery chests! 🎁", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 12 },
   ],
-  2: [ // Gold (Lv 17-24)
+  3: [ // Gold (Lv 17-24)
     { user: "Omar", avatar: "O", message: "Gold room! 🥇 Only the strong reach Level 17! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 22 },
     { user: "Sara", avatar: "S", message: "The XP rewards get bigger in higher rooms! 💎", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 19 },
     { user: "Luna", avatar: "L", message: "Diamond room at Level 25 is the next big goal! 💎🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 21 },
   ],
-  3: [ // Diamond (Lv 25-32)
+  4: [ // Diamond (Lv 25-32)
     { user: "Sara", avatar: "S", message: "Diamond room! 💎👑 Level 25+ elite club!", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 30 },
     { user: "Omar", avatar: "O", message: "You're at the top! The best rewards and events happen here! 🏆✨", crown: true, gender: "male", avatarUrl: avatarMale2, level: 28 },
     { user: "Luna", avatar: "L", message: "Legend room at Level 33 is the ULTIMATE goal! 🔥👑", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 27 },
     { user: "Noor", avatar: "N", message: "Diamond players get the best mystery chest drops! 🎁💎", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 26 },
   ],
-  4: [ // Legend (Lv 33-40)
+  5: [ // Legend (Lv 33-40)
     { user: "Sara", avatar: "S", message: "🔥 Legend room! Only true champions reach Level 33! 👑🏆", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 38 },
     { user: "Omar", avatar: "O", message: "Welcome to the hall of legends! The rewards here are INSANE! 💎⚡", crown: true, gender: "male", avatarUrl: avatarMale2, level: 36 },
     { user: "Luna", avatar: "L", message: "This is where the elite gather — XP Rain drops are HUGE here! 🌧️🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 35 },
@@ -69,6 +81,7 @@ const botScripts: Record<number, ChatMsg[]> = {
 };
 
 const rooms = [
+  { name: "🌍 World", level: 0, image: roomWorld, accent: "from-emerald-500/60", border: "border-emerald-400/50", glow: "hsl(160 80% 50%)", shape: "circle" as const },
   { name: "🥉 Bronze", level: 1, image: roomBronze, accent: "from-blue-500/60", border: "border-blue-400/50", glow: "hsl(185 100% 60%)", shape: "circle" as const },
   { name: "🥈 Silver", level: 9, image: roomSilver, accent: "from-pink-500/60", border: "border-pink-400/50", glow: "hsl(320 100% 65%)", shape: "circle" as const },
   { name: "🥇 Gold", level: 17, image: roomGold, accent: "from-purple-500/60", border: "border-purple-400/50", glow: "hsl(280 80% 65%)", shape: "diamond" as const },

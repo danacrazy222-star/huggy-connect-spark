@@ -281,8 +281,6 @@ export default function Chat() {
         )}
       </div>
 
-      {/* World room challenge promo button - only show if not yet unlocked */}
-      {activeRoom === 0 && canAccess && !worldChallengeUnlocked && <WorldChallengePromo />}
     </div>
   );
 }

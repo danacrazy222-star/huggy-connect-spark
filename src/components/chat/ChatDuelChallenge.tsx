@@ -46,6 +46,8 @@ interface Props {
 }
 
 export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isRTL }: Props) {
+  const { t } = useTranslation();
+  const MOVE_LABEL: Record<Move, string> = { rock: t("duelRock"), paper: t("duelPaper"), scissors: t("duelScissors") };
   const [phase, setPhase] = useState<Phase>("idle");
   const [searchTimer, setSearchTimer] = useState(40);
   const [opponentName, setOpponentName] = useState("");

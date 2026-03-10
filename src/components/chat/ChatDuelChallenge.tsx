@@ -40,7 +40,7 @@ const NameWithLevel = ({ name, level, className }: { name: string; level: number
 interface Props {
   playerName: string;
   playerLevel: number;
-  onEnd: (won: boolean) => void;
+  onEnd: (won: boolean, winnerName: string, loserName: string) => void;
   isRTL?: boolean;
 }
 
@@ -252,9 +252,10 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Pro
   };
 
   const handleFinish = () => {
-    // Won = voted correctly
     const won = votePick === finalWinner;
-    onEnd(won);
+    const winnerName = finalWinner === "player" ? playerName : opponentName;
+    const loserName = finalWinner === "player" ? opponentName : playerName;
+    onEnd(won, winnerName, loserName);
     setPhase("idle");
   };
 

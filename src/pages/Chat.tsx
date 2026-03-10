@@ -160,9 +160,21 @@ export default function Chat() {
     setMessage("");
   }, [message, activeRoom, addMessage, user, userProfile]);
 
-  const handleDuelEnd = useCallback((won: boolean) => {
+  const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
     addXP(won ? 300 : 80);
-  }, [addXP]);
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+    addMessage(activeRoom, {
+      user: "🏆 System",
+      avatar: "⚔️",
+      message: `🏆✨ البطل ${winnerName} فاز بالتحدي ضد ${loserName}! 🔥👏\n⚡ أسطورة الغرفة الجديدة! من يجرؤ على تحديه؟`,
+      crown: true,
+      gender: null,
+      level: 0,
+      time: timeStr,
+      isSystem: true,
+    });
+  }, [addXP, addMessage, activeRoom]);
 
   return (
     <div className="min-h-screen pb-20 flex flex-col relative" dir={isRTL ? "rtl" : "ltr"}>

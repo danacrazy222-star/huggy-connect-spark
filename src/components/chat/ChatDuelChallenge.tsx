@@ -623,7 +623,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       }
     };
     poll();
-    const interval = setInterval(poll, 3000);
+    const interval = setInterval(poll, 1500);
     return () => clearInterval(interval);
   }, [phase, roomId, user]);
 

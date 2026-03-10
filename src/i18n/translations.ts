@@ -298,6 +298,11 @@ export type TranslationKeys = {
   termsDisclaimer: string;
   termsDisclaimerDesc: string;
   termsLastUpdated: string;
+  // Private messages
+  privateChat: string;
+  privateMessages: string;
+  noMessages: string;
+  sendMessage: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

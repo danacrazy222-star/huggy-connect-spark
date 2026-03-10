@@ -303,8 +303,8 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
               <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
                 <Search className="w-8 h-8 text-accent mx-auto mb-2" />
               </motion.div>
-              <p className="text-sm font-bold text-foreground mb-1">🔍 البحث عن لاعب...</p>
-              <p className="text-xs text-muted-foreground mb-3">جاري إرسال دعوات للاعبين المتاحين</p>
+              <p className="text-sm font-bold text-foreground mb-1">{t("duelSearching")}</p>
+              <p className="text-xs text-muted-foreground mb-3">{t("duelSendingInvites")}</p>
 
               <div className="relative w-20 h-20 mx-auto mb-3">
                 <svg className="w-full h-full -rotate-90" viewBox="0 0 64 64">

@@ -440,7 +440,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Pro
                 </motion.span>
               </div>
               <p className="text-sm font-bold text-foreground mb-1">✊ الجولة {round + 1} — اختر حركتك!</p>
-              <p className="text-[11px] text-muted-foreground mb-4">ضد {opponentName}</p>
+              <p className="text-[11px] text-muted-foreground mb-4">ضد {opponentName} (Lv.{opponentLevel})</p>
 
               <div className="grid grid-cols-3 gap-2">
                 {MOVES.map((move) => (

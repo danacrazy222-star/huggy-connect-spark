@@ -133,6 +133,17 @@ export default function Chat() {
     return () => clearTimeout(welcomeTimeout);
   }, [activeRoom, canAccess]);
 
+  // Close emoji picker on outside click
+  useEffect(() => {
+    if (!showEmoji) return;
+    const handler = (e: MouseEvent) => {
+      if (emojiRef.current && !emojiRef.current.contains(e.target as Node)) {
+        setShowEmoji(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showEmoji]);
 
   const sendMessage = useCallback(() => {
     const trimmed = message.trim();

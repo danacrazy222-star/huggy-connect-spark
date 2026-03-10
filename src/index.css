@@ -97,7 +97,7 @@
   }
 
   .shadow-gold {
-    box-shadow: 0 0 20px hsl(45 100% 50% / 0.3), 0 0 40px hsl(45 100% 50% / 0.1);
+    box-shadow: 0 0 20px rgba(255,200,0,0.5), 0 0 40px rgba(255,170,0,0.3);
   }
 
   .shadow-purple {

@@ -10,18 +10,21 @@ const BRANDS = [
     image: giftcardAmazon,
     borderColor: "#ff9900",
     glowRgb: "255,153,0",
+    bgGradient: "linear-gradient(135deg, hsl(35 80% 30%) 0%, hsl(30 90% 20%) 100%)",
   },
   {
     name: "Google Play",
     image: giftcardGooglePlay,
     borderColor: "#4285f4",
     glowRgb: "66,133,244",
+    bgGradient: "linear-gradient(135deg, hsl(200 80% 35%) 0%, hsl(190 90% 25%) 100%)",
   },
   {
     name: "SHEIN",
     image: giftcardShein,
     borderColor: "#ec4899",
     glowRgb: "236,72,153",
+    bgGradient: "linear-gradient(135deg, hsl(330 70% 35%) 0%, hsl(340 80% 25%) 100%)",
   },
 ];
 
@@ -55,24 +58,30 @@ export function ShopGiftCards() {
               <span className="text-[9px] font-bold text-primary whitespace-nowrap">WIN $500</span>
             </div>
 
-            {/* Gift Card Image */}
+            {/* Card with brand background + logo image centered */}
             <div
-              className="w-full rounded-[14px] overflow-hidden"
+              className="w-full rounded-[14px] pt-5 pb-3 px-2 flex flex-col items-center"
               style={{
+                background: brand.bgGradient,
                 border: `2.5px solid ${brand.borderColor}`,
                 boxShadow: `0 0 20px rgba(${brand.glowRgb},0.4), 0 0 50px rgba(${brand.glowRgb},0.15)`,
               }}
             >
-              <img
-                src={brand.image}
-                alt={`${brand.name} $500 Gift Card`}
-                className="w-full h-auto object-cover"
-              />
-            </div>
+              {/* Brand logo/image - no white bg, blended into card */}
+              <div className="w-full flex items-center justify-center mb-2" style={{ height: "70px" }}>
+                <img
+                  src={brand.image}
+                  alt={brand.name}
+                  className="max-h-[70px] max-w-[90%] object-contain rounded-lg"
+                  style={{
+                    filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))",
+                  }}
+                />
+              </div>
 
-            {/* Brand Name + Prize */}
-            <span className="mt-2 text-[11px] font-bold text-foreground/90">{brand.name}</span>
-            <span className="text-[9px] text-muted-foreground">$500 Gift Card</span>
+              {/* Prize text */}
+              <span className="text-[11px] font-bold text-white/90">$500 Gift Card</span>
+            </div>
           </motion.div>
         ))}
       </div>

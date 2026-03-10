@@ -42,7 +42,7 @@ export const useGameStore = create<GameState>()(
       drawEntries: 2,
       lastSpinTime: null,
       canSpin: true,
-
+      worldChallengeUnlocked: false,
       addPoints: (amount) => set((s) => ({ points: s.points + amount })),
       
       addXP: (amount) => set((s) => {

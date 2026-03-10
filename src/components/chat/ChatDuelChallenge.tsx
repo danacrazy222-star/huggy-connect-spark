@@ -278,6 +278,23 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
   // ── START SEARCH ──
   const startSearch = async () => {
     if (!user) return;
+
+    // First check if there's already a waiting match to join
+    const { data: existingMatches } = await supabase
+      .from('rps_matches')
+      .select('*')
+      .eq('room_id', roomId)
+      .eq('status', 'waiting')
+      .neq('player1_id', user.id)
+      .order('created_at', { ascending: true })
+      .limit(1);
+
+    if (existingMatches && existingMatches.length > 0) {
+      // Auto-join the existing match instead of creating a new one
+      await joinMatch(existingMatches[0].id);
+      return;
+    }
+
     onStart?.();
 
     // Cleanup old matches from this user

@@ -1,6 +1,7 @@
 import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useGameStore } from "@/store/useGameStore";
+import { useNavigate } from "react-router-dom";
 import { useDrawStore } from "@/store/useDrawStore";
 import { motion } from "framer-motion";
 import { Star, Ticket, Sparkles, Flame, CheckCircle, Minus, Plus } from "lucide-react";

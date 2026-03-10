@@ -30,16 +30,25 @@ function resolveRPS(a: Move, b: Move): "a" | "b" | "draw" {
 
 const MOVES: Move[] = ["rock", "paper", "scissors"];
 
+const NameWithLevel = ({ name, level, className }: { name: string; level: number; className?: string }) => (
+  <div className={cn("flex items-center justify-center gap-1", className)}>
+    <span className="text-[11px] font-bold text-foreground truncate max-w-[70px]">{name}</span>
+    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">Lv.{level}</span>
+  </div>
+);
+
 interface Props {
   playerName: string;
+  playerLevel: number;
   onEnd: (won: boolean) => void;
   isRTL?: boolean;
 }
 
-export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
+export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Props) {
   const [phase, setPhase] = useState<Phase>("idle");
   const [searchTimer, setSearchTimer] = useState(40);
   const [opponentName, setOpponentName] = useState("");
+  const [opponentLevel, setOpponentLevel] = useState(1);
 
   // Vote phase
   const [voteTimer, setVoteTimer] = useState(15);
@@ -71,6 +80,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
           clearTimer();
           // No real player → bot with real name
           setOpponentName(getRandomName(playerName));
+          setOpponentLevel(Math.max(1, playerLevel + Math.floor(Math.random() * 7) - 3));
           setPhase("matched");
           return 0;
         }
@@ -88,6 +98,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
       if (phase === "searching") {
         clearTimer();
         setOpponentName(getRandomName(playerName));
+        setOpponentLevel(Math.max(1, playerLevel + Math.floor(Math.random() * 7) - 3));
         setSearchTimer(0);
         setPhase("matched");
       }
@@ -331,7 +342,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                   <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-blue-accent to-accent flex items-center justify-center text-xl font-bold text-accent-foreground mb-1 shadow-[0_0_15px_hsl(210_90%_55%/0.5)]">
                     {playerName.charAt(0).toUpperCase()}
                   </div>
-                  <p className="text-xs font-bold text-foreground truncate">{playerName}</p>
+                  <NameWithLevel name={playerName} level={playerLevel} />
                 </motion.div>
                 <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} transition={{ delay: 0.3, type: "spring", stiffness: 200 }}>
                   <span className="text-3xl font-black text-gold-gradient drop-shadow-lg">VS</span>
@@ -340,7 +351,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                   <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-destructive to-accent flex items-center justify-center text-xl font-bold text-accent-foreground mb-1 shadow-[0_0_15px_hsl(var(--destructive)/0.5)]">
                     {opponentName.charAt(0).toUpperCase()}
                   </div>
-                  <p className="text-xs font-bold text-foreground truncate">{opponentName}</p>
+                  <NameWithLevel name={opponentName} level={opponentLevel} />
                 </motion.div>
               </div>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="text-xs text-primary mt-3">
@@ -375,7 +386,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-accent to-accent flex items-center justify-center text-sm font-bold text-accent-foreground">
                     {playerName.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-[11px] font-bold text-foreground truncate max-w-full">{playerName}</span>
+                  <NameWithLevel name={playerName} level={playerLevel} />
                   {votePick === "player" && <span className="text-[10px] text-primary">✓ صوتك</span>}
                 </motion.button>
 
@@ -390,7 +401,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-destructive to-accent flex items-center justify-center text-sm font-bold text-accent-foreground">
                     {opponentName.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-[11px] font-bold text-foreground truncate max-w-full">{opponentName}</span>
+                  <NameWithLevel name={opponentName} level={opponentLevel} />
                   {votePick === "opponent" && <span className="text-[10px] text-primary">✓ صوتك</span>}
                 </motion.button>
               </div>
@@ -398,8 +409,8 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
               {/* Live vote bar */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground">
-                  <span>{playerName} {votePercent.player}%</span>
-                  <span>{votePercent.opponent}% {opponentName}</span>
+                  <span>{playerName} (Lv.{playerLevel}) {votePercent.player}%</span>
+                  <span>{votePercent.opponent}% {opponentName} (Lv.{opponentLevel})</span>
                 </div>
                 <div className="w-full h-3 rounded-full bg-muted/30 overflow-hidden flex">
                   <motion.div
@@ -429,7 +440,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                 </motion.span>
               </div>
               <p className="text-sm font-bold text-foreground mb-1">✊ الجولة {round + 1} — اختر حركتك!</p>
-              <p className="text-[11px] text-muted-foreground mb-4">ضد {opponentName}</p>
+              <p className="text-[11px] text-muted-foreground mb-4">ضد {opponentName} (Lv.{opponentLevel})</p>
 
               <div className="grid grid-cols-3 gap-2">
                 {MOVES.map((move) => (
@@ -458,7 +469,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                     transition={{ duration: 0.35, repeat: shakeIndex < 3 ? Infinity : 0 }}>
                     <span className="text-5xl">{shakeIndex >= 3 ? MOVE_EMOJI[playerMove!] : "✊"}</span>
                   </motion.div>
-                  <span className="text-[10px] font-bold text-muted-foreground">{playerName}</span>
+                  <NameWithLevel name={playerName} level={playerLevel} className="text-[10px]" />
                 </div>
                 <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 0.5, repeat: Infinity }}
                   className="text-xl font-black text-primary">⚔️</motion.span>
@@ -468,7 +479,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                     transition={{ duration: 0.35, repeat: shakeIndex < 3 ? Infinity : 0, delay: 0.15 }}>
                     <span className="text-5xl">{shakeIndex >= 3 ? MOVE_EMOJI[opponentMove!] : "✊"}</span>
                   </motion.div>
-                  <span className="text-[10px] font-bold text-muted-foreground">{opponentName}</span>
+                  <NameWithLevel name={opponentName} level={opponentLevel} className="text-[10px]" />
                 </div>
               </div>
               {shakeIndex >= 3 && (
@@ -489,7 +500,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                   )}>
                     {MOVE_EMOJI[playerMove]}
                   </div>
-                  <span className="text-[10px] font-bold text-muted-foreground">{playerName}</span>
+                  <NameWithLevel name={playerName} level={playerLevel} className="text-[10px]" />
                 </div>
                 <span className="text-lg font-black text-muted-foreground">vs</span>
                 <div className="flex flex-col items-center gap-1">
@@ -499,7 +510,7 @@ export function ChatDuelChallenge({ playerName, onEnd, isRTL }: Props) {
                   )}>
                     {MOVE_EMOJI[opponentMove]}
                   </div>
-                  <span className="text-[10px] font-bold text-muted-foreground">{opponentName}</span>
+                  <NameWithLevel name={opponentName} level={opponentLevel} className="text-[10px]" />
                 </div>
               </div>
               <motion.div initial={{ y: 10 }} animate={{ y: 0 }}>

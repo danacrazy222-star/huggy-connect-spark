@@ -182,6 +182,7 @@ export default function Chat() {
             {/* Duel challenge - embedded in chat */}
             <ChatDuelChallenge
               playerName={user?.email?.split("@")[0] || "You"}
+              playerLevel={level}
               onEnd={handleDuelEnd}
               isRTL={isRTL}
             />

@@ -234,12 +234,19 @@ export default function Chat() {
           </div>
         ) : (
           <div className="flex-1 flex flex-col px-4">
+            {/* World challenge promo - inline at top */}
+            {activeRoom === 0 && !worldChallengeUnlocked && !worldChallengeSessionActive && (
+              <div className="mb-2">
+                <WorldChallengePromo />
+              </div>
+            )}
+
             {/* Duel challenge - only in World room if unlocked, always in other rooms */}
             {activeRoom === 0 && !worldChallengeUnlocked && !worldChallengeSessionActive ? (
-              <div className="mx-auto my-3 w-full max-w-xs text-center">
-                <div className="flex flex-col items-center gap-2 py-4 px-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
-                  <Lock className="w-8 h-8 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">{t("worldLockMsg")}</p>
+              <div className="mx-auto my-2 w-full max-w-xs text-center">
+                <div className="flex flex-col items-center gap-2 py-3 px-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
+                  <Lock className="w-6 h-6 text-muted-foreground" />
+                  <p className="text-xs text-muted-foreground">{t("worldLockMsg")}</p>
                 </div>
               </div>
             ) : (

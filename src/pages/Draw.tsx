@@ -136,7 +136,7 @@ export default function Draw() {
                   <p className="text-xs text-primary mt-1">Entry #{winningEntryId}</p>
                 )}
               </div>
-              <p className="text-sm text-foreground mb-1">Won</p>
+              <p className="text-sm text-foreground mb-1">{t("won")}</p>
               <p className="text-2xl font-display font-bold text-gold-gradient">${prizeAmount} Gift Card</p>
               <div className="flex items-center justify-center gap-2 mt-3 text-xs text-muted-foreground">
                 <PartyPopper className="w-4 h-4 text-primary" />

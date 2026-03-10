@@ -37,11 +37,14 @@ export default function Games() {
   return <GamesList onSelectGame={setActiveGame} />;
 }
 
-function GamesList() {
+function GamesList({ onSelectGame }: { onSelectGame: (game: ActiveGame) => void }) {
   const { gameTickets } = useGameStore();
   const { t, isRTL } = useTranslation();
 
-  const games: { name: string; desc: string; icon: string; color: string; border: string; multiplayer?: boolean; onClick: () => void; locked?: boolean }[] = [];
+  const games: { name: string; desc: string; icon: string; color: string; border: string; multiplayer?: boolean; onClick: () => void; locked?: boolean }[] = [
+    { name: t("snakeAndLadder"), desc: t("classicBoardGame"), icon: "🐍🪜", color: "from-green-accent/20 to-green-accent/5", border: "border-green-accent/30", multiplayer: true, onClick: () => onSelectGame("snake") },
+    { name: t("scratchCard") || "Scratch & Win", desc: t("scratchAndReveal") || "Scratch to reveal prizes", icon: "🎰✨", color: "from-primary/20 to-primary/5", border: "border-primary/30", onClick: () => onSelectGame("scratch") },
+  ];
 
   return (
     <div className="min-h-screen bg-premium-gradient stars-bg pb-20" dir={isRTL ? "rtl" : "ltr"}>

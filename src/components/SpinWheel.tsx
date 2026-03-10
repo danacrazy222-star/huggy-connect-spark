@@ -82,6 +82,7 @@ export function SpinWheel() {
   const [winReward, setWinReward] = useState<{ type: string; label: string } | null>(null);
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
   const [lightPhase, setLightPhase] = useState(0);
+  const tickIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     checkSpinAvailability();

@@ -158,7 +158,7 @@ export default function Draw() {
         <div className="text-center">
           <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/40 rounded-full px-4 py-1.5 mb-3">
             <Gift className="w-4 h-4 text-primary" />
-            <span className="text-sm font-bold text-primary">${prizeAmount} Gift Card Draw</span>
+            <span className="text-sm font-bold text-primary">{t("giftCardDraw")}</span>
           </div>
           <h2 className="font-display text-xl font-bold text-gold-gradient mb-1">{t("promotionalDraw")}</h2>
           <p className="text-xs text-muted-foreground mb-3">{t("drawDescription")}</p>

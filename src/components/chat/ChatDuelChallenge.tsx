@@ -238,6 +238,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
         player1_id: user.id,
         player1_name: playerName,
         player1_level: playerLevel,
+        room_id: roomId,
         status: 'waiting',
       })
       .select()

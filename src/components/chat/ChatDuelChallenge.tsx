@@ -625,6 +625,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       if (newScores.p1 >= 2) {
         setFinalWinner("p1");
         setPhase("final_result");
+        playDuelWin();
         if (!isBotMatch && matchId && role === "player" && isPlayer1) {
           await supabase.from('rps_matches').update({
             status: 'finished',

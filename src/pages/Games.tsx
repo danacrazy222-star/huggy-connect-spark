@@ -109,7 +109,6 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
   const { user } = useAuth();
   const [phase, setPhase] = useState<GamePhase>("lobby");
   const [players, setPlayers] = useState<Player[]>([]);
-  const [players, setPlayers] = useState<Player[]>([]);
   const [currentTurn, setCurrentTurn] = useState(0);
   const [diceValue, setDiceValue] = useState(1);
   const [rolling, setRolling] = useState(false);

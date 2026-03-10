@@ -3,32 +3,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Timer, Trophy, Search, User, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
-
-const PLAYER_NAMES = [
-  "Ryuuki", "SakuraBlade", "KenX", "NovaStar", "ZeroHero", "Akira99",
-  "Luna_X", "DarkKnight", "MoonWalker", "Phoenix99", "SilverFox",
-  "StormRider", "BlazeFire", "IceQueen", "ShadowHunter", "DragonZ",
-  "NightOwl", "StarGazer", "ThunderBolt", "CrystalWave", "GhostRider",
-  "AlphaWolf", "NeonBlade", "CosmicRay", "VortexKing", "PixelDust",
-];
-
-function getRandomName(exclude: string): string {
-  const filtered = PLAYER_NAMES.filter((n) => n !== exclude);
-  return filtered[Math.floor(Math.random() * filtered.length)];
-}
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Move = "rock" | "paper" | "scissors";
 type Phase = "idle" | "searching" | "matched" | "vote" | "picking" | "clash" | "round_result" | "final_result";
 
 const MOVE_EMOJI: Record<Move, string> = { rock: "🪨", paper: "📄", scissors: "✂️" };
+const MOVES: Move[] = ["rock", "paper", "scissors"];
 
 function resolveRPS(a: Move, b: Move): "a" | "b" | "draw" {
   if (a === b) return "draw";
   if ((a === "rock" && b === "scissors") || (a === "scissors" && b === "paper") || (a === "paper" && b === "rock")) return "a";
   return "b";
 }
-
-const MOVES: Move[] = ["rock", "paper", "scissors"];
 
 const NameWithLevel = ({ name, level, className }: { name: string; level: number; className?: string }) => (
   <div className={cn("flex items-center justify-center gap-1", className)}>
@@ -47,11 +35,15 @@ interface Props {
 
 export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isRTL }: Props) {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const MOVE_LABEL: Record<Move, string> = { rock: t("duelRock"), paper: t("duelPaper"), scissors: t("duelScissors") };
+  
   const [phase, setPhase] = useState<Phase>("idle");
   const [searchTimer, setSearchTimer] = useState(40);
   const [opponentName, setOpponentName] = useState("");
   const [opponentLevel, setOpponentLevel] = useState(1);
+  const [matchId, setMatchId] = useState<string | null>(null);
+  const [isPlayer1, setIsPlayer1] = useState(true);
 
   // Vote phase
   const [voteTimer, setVoteTimer] = useState(15);
@@ -67,55 +59,217 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
   const [roundWinner, setRoundWinner] = useState<"player" | "opponent" | "draw" | null>(null);
   const [finalWinner, setFinalWinner] = useState<"player" | "opponent" | null>(null);
   const [shakeIndex, setShakeIndex] = useState(0);
+  const [waitingForOpponent, setWaitingForOpponent] = useState(false);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const channelRef = useRef<any>(null);
 
   const clearTimer = () => {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
   };
 
-  // ── SEARCHING: full 40s, bot joins if no one ──
+  // Cleanup on unmount
   useEffect(() => {
-    if (phase !== "searching") return;
-    timerRef.current = setInterval(() => {
-      setSearchTimer((t) => {
-        if (t <= 1) {
-          clearTimer();
-          // No real player → bot with real name
-          setOpponentName(getRandomName(playerName));
-          setOpponentLevel(Math.max(1, playerLevel + Math.floor(Math.random() * 7) - 3));
-          setPhase("matched");
-          return 0;
-        }
-        return t - 1;
-      });
-    }, 1000);
-    return clearTimer;
-  }, [phase, playerName]);
-
-  // Simulate a "real" player joining randomly between 5-30s
-  useEffect(() => {
-    if (phase !== "searching") return;
-    const joinDelay = (5 + Math.floor(Math.random() * 25)) * 1000;
-    const timeout = setTimeout(() => {
-      if (phase === "searching") {
-        clearTimer();
-        setOpponentName(getRandomName(playerName));
-        setOpponentLevel(Math.max(1, playerLevel + Math.floor(Math.random() * 7) - 3));
-        setSearchTimer(0);
-        setPhase("matched");
+    return () => {
+      clearTimer();
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
       }
-    }, joinDelay);
-    return () => clearTimeout(timeout);
-  }, [phase, playerName]);
+    };
+  }, []);
+
+  // Subscribe to match changes via realtime
+  const subscribeToMatch = useCallback((id: string) => {
+    if (channelRef.current) supabase.removeChannel(channelRef.current);
+    
+    const channel = supabase
+      .channel(`rps-match-${id}`)
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'rps_matches',
+        filter: `id=eq.${id}`,
+      }, (payload) => {
+        const match = payload.new as any;
+        handleMatchUpdate(match);
+      })
+      .subscribe();
+    
+    channelRef.current = channel;
+  }, []);
+
+  const handleMatchUpdate = useCallback((match: any) => {
+    if (!user) return;
+    const amPlayer1 = match.player1_id === user.id;
+    
+    // Opponent joined
+    if (match.status === 'matched' && phase === 'searching') {
+      if (amPlayer1) {
+        setOpponentName(match.player2_name);
+        setOpponentLevel(match.player2_level);
+      } else {
+        setOpponentName(match.player1_name);
+        setOpponentLevel(match.player1_level);
+      }
+      setPhase("matched");
+      return;
+    }
+
+    // Check if opponent submitted their move
+    const myMove = amPlayer1 ? match.player1_move : match.player2_move;
+    const oppMove = amPlayer1 ? match.player2_move : match.player1_move;
+    
+    if (myMove && oppMove && (phase === 'picking' || waitingForOpponent)) {
+      // Both moves submitted - resolve
+      setOpponentMove(oppMove as Move);
+      setPlayerMove(myMove as Move);
+      setWaitingForOpponent(false);
+      setPhase("clash");
+      setShakeIndex(0);
+    } else if (oppMove && !myMove && phase === 'picking') {
+      // Opponent picked, we haven't yet - no action needed, just keep picking
+    }
+  }, [user, phase, waitingForOpponent]);
+
+  // Re-register handler when phase changes
+  useEffect(() => {
+    if (!matchId || !user) return;
+    if (channelRef.current) supabase.removeChannel(channelRef.current);
+    
+    const channel = supabase
+      .channel(`rps-match-${matchId}-${phase}`)
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'rps_matches',
+        filter: `id=eq.${matchId}`,
+      }, (payload) => {
+        const match = payload.new as any;
+        if (!user) return;
+        const amPlayer1 = match.player1_id === user.id;
+
+        // Opponent joined
+        if (match.status === 'matched' && match.player2_id) {
+          if (amPlayer1) {
+            setOpponentName(match.player2_name);
+            setOpponentLevel(match.player2_level);
+          }
+          setPhase("matched");
+          return;
+        }
+
+        // Both moves in
+        const myMoveCol = amPlayer1 ? 'player1_move' : 'player2_move';
+        const oppMoveCol = amPlayer1 ? 'player2_move' : 'player1_move';
+        const myM = match[myMoveCol];
+        const oppM = match[oppMoveCol];
+        
+        if (myM && oppM) {
+          setPlayerMove(myM as Move);
+          setOpponentMove(oppM as Move);
+          setWaitingForOpponent(false);
+          setPhase("clash");
+          setShakeIndex(0);
+        }
+      })
+      .subscribe();
+    
+    channelRef.current = channel;
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [matchId, user, phase]);
+
+  // ── SEARCHING: look for existing match or create one ──
+  const startSearch = async () => {
+    if (!user) return;
+    onStart?.();
+    setPhase("searching");
+    setSearchTimer(40);
+    setOpponentName("");
+    setVotePick(null);
+    setRound(0);
+    setScores({ player: 0, opponent: 0 });
+    setRoundWinner(null);
+    setFinalWinner(null);
+    setPlayerMove(null);
+    setOpponentMove(null);
+
+    // Try to find a waiting match
+    const { data: waitingMatches } = await supabase
+      .from('rps_matches')
+      .select('*')
+      .eq('status', 'waiting')
+      .neq('player1_id', user.id)
+      .order('created_at', { ascending: true })
+      .limit(1);
+
+    if (waitingMatches && waitingMatches.length > 0) {
+      const match = waitingMatches[0];
+      // Join this match
+      const { error } = await supabase
+        .from('rps_matches')
+        .update({
+          player2_id: user.id,
+          player2_name: playerName,
+          player2_level: playerLevel,
+          status: 'matched',
+        })
+        .eq('id', match.id)
+        .eq('status', 'waiting');
+
+      if (!error) {
+        setMatchId(match.id);
+        setIsPlayer1(false);
+        setOpponentName(match.player1_name);
+        setOpponentLevel(match.player1_level);
+        setPhase("matched");
+        return;
+      }
+    }
+
+    // No match found - create one
+    const { data: newMatch, error } = await supabase
+      .from('rps_matches')
+      .insert({
+        player1_id: user.id,
+        player1_name: playerName,
+        player1_level: playerLevel,
+        status: 'waiting',
+      })
+      .select()
+      .single();
+
+    if (newMatch && !error) {
+      setMatchId(newMatch.id);
+      setIsPlayer1(true);
+      startSearchTimer(newMatch.id);
+    }
+  };
+
+  const startSearchTimer = (id: string) => {
+    let timer = 40;
+    timerRef.current = setInterval(() => {
+      timer--;
+      setSearchTimer(timer);
+      if (timer <= 0) {
+        clearTimer();
+        // No one joined - cleanup and go back to idle
+        supabase.from('rps_matches').delete().eq('id', id).then(() => {});
+        setPhase("idle");
+        setMatchId(null);
+      }
+    }, 1000);
+  };
 
   // ── MATCHED → VOTE after 3s ──
   useEffect(() => {
     if (phase !== "matched") return;
+    clearTimer();
     const t = setTimeout(() => {
       setVoteTimer(15);
       setVotePick(null);
-      // Random vote percentages
       const p = 35 + Math.floor(Math.random() * 30);
       setVotePercent({ player: p, opponent: 100 - p });
       setPhase("vote");
@@ -123,12 +277,11 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
     return () => clearTimeout(t);
   }, [phase]);
 
-  // ── VOTE: 15s to choose who wins ──
+  // ── VOTE: 15s ──
   useEffect(() => {
     if (phase !== "vote") return;
     timerRef.current = setInterval(() => {
       setVoteTimer((t) => {
-        // Simulate vote % shifting
         setVotePercent((prev) => {
           const shift = Math.floor(Math.random() * 5) - 2;
           const np = Math.max(20, Math.min(80, prev.player + shift));
@@ -136,8 +289,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
         });
         if (t <= 1) {
           clearTimer();
-          // Start round 1
-          startFirstRound();
+          startRound();
           return 0;
         }
         return t - 1;
@@ -150,14 +302,26 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
     setVotePick(pick);
   };
 
-  const startFirstRound = () => {
-    setRound(0);
-    setScores({ player: 0, opponent: 0 });
+  const startRound = async () => {
     setRoundWinner(null);
-    setFinalWinner(null);
     setPlayerMove(null);
     setOpponentMove(null);
     setRoundTimer(10);
+    setWaitingForOpponent(false);
+    
+    // Clear moves in DB
+    if (matchId) {
+      await supabase
+        .from('rps_matches')
+        .update({
+          player1_move: null,
+          player2_move: null,
+          current_round: round,
+          status: 'playing',
+        })
+        .eq('id', matchId);
+    }
+    
     setPhase("picking");
   };
 
@@ -165,14 +329,14 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
   useEffect(() => {
     if (phase !== "picking") return;
     setRoundTimer(10);
-    setPlayerMove(null);
-    setOpponentMove(null);
     timerRef.current = setInterval(() => {
       setRoundTimer((t) => {
         if (t <= 1) {
           clearTimer();
-          // Auto-pick random
-          executeMove(MOVES[Math.floor(Math.random() * 3)]);
+          // Auto-pick random if didn't pick
+          if (!playerMove) {
+            handlePick(MOVES[Math.floor(Math.random() * 3)]);
+          }
           return 0;
         }
         return t - 1;
@@ -181,19 +345,36 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
     return clearTimer;
   }, [phase, round]);
 
-  const executeMove = useCallback((move: Move) => {
-    clearTimer();
-    const opp = MOVES[Math.floor(Math.random() * 3)];
+  const handlePick = useCallback(async (move: Move) => {
+    if (playerMove || !matchId || !user) return;
     setPlayerMove(move);
-    setOpponentMove(opp);
-    setPhase("clash");
-    setShakeIndex(0);
-  }, []);
+    
+    const moveCol = isPlayer1 ? 'player1_move' : 'player2_move';
+    const oppCol = isPlayer1 ? 'player2_move' : 'player1_move';
+    
+    // Submit move to DB
+    await supabase
+      .from('rps_matches')
+      .update({ [moveCol]: move })
+      .eq('id', matchId);
 
-  const handlePick = useCallback((move: Move) => {
-    if (playerMove) return;
-    executeMove(move);
-  }, [playerMove, executeMove]);
+    // Check if opponent already submitted
+    const { data } = await supabase
+      .from('rps_matches')
+      .select('*')
+      .eq('id', matchId)
+      .single();
+
+    if (data && data[oppCol]) {
+      // Both moves are in
+      setOpponentMove(data[oppCol] as Move);
+      setPhase("clash");
+      setShakeIndex(0);
+    } else {
+      // Wait for opponent
+      setWaitingForOpponent(true);
+    }
+  }, [playerMove, matchId, user, isPlayer1]);
 
   // ── CLASH animation ──
   useEffect(() => {
@@ -223,37 +404,50 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
     else if (roundWinner === "opponent") newScores.opponent++;
     setScores(newScores);
 
-    const t = setTimeout(() => {
+    const timeout = setTimeout(async () => {
       if (newScores.player >= 2) {
         setFinalWinner("player");
         setPhase("final_result");
+        // Update match in DB
+        if (matchId && user) {
+          await supabase.from('rps_matches').update({
+            status: 'finished',
+            player1_score: isPlayer1 ? newScores.player : newScores.opponent,
+            player2_score: isPlayer1 ? newScores.opponent : newScores.player,
+            winner_id: user.id,
+          }).eq('id', matchId);
+        }
       } else if (newScores.opponent >= 2) {
         setFinalWinner("opponent");
         setPhase("final_result");
+        if (matchId) {
+          const oppId = isPlayer1 ? 'player2_id' : 'player1_id';
+          const { data } = await supabase.from('rps_matches').select(oppId).eq('id', matchId).single();
+          await supabase.from('rps_matches').update({
+            status: 'finished',
+            player1_score: isPlayer1 ? newScores.player : newScores.opponent,
+            player2_score: isPlayer1 ? newScores.opponent : newScores.player,
+            winner_id: data?.[oppId],
+          }).eq('id', matchId);
+        }
       } else {
         setRound((r) => r + 1);
         setRoundWinner(null);
         setPlayerMove(null);
         setOpponentMove(null);
+        // Clear moves for next round
+        if (matchId) {
+          await supabase.from('rps_matches').update({
+            player1_move: null,
+            player2_move: null,
+            current_round: round + 1,
+          }).eq('id', matchId);
+        }
         setPhase("picking");
       }
     }, 2500);
-    return () => clearTimeout(t);
+    return () => clearTimeout(timeout);
   }, [phase, roundWinner]);
-
-  const startSearch = () => {
-    onStart?.();
-    setPhase("searching");
-    setSearchTimer(40);
-    setOpponentName("");
-    setVotePick(null);
-    setRound(0);
-    setScores({ player: 0, opponent: 0 });
-    setRoundWinner(null);
-    setFinalWinner(null);
-    setPlayerMove(null);
-    setOpponentMove(null);
-  };
 
   const handleFinish = () => {
     const playerWon = finalWinner === "player";
@@ -261,14 +455,15 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
     const loserName = playerWon ? opponentName : playerName;
     onEnd(playerWon, winnerName, loserName);
     setPhase("idle");
+    setMatchId(null);
   };
 
   // ═══════ IDLE ═══════
   if (phase === "idle") {
     return (
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mx-auto my-3 w-full max-w-xs">
-        <button onClick={startSearch}
-          className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-gradient-to-r from-accent via-blue-accent to-accent text-accent-foreground font-bold text-sm border border-accent/30 shadow-purple hover:shadow-[0_0_30px_hsl(270_80%_55%/0.5)] transition-all">
+        <button onClick={startSearch} disabled={!user}
+          className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-gradient-to-r from-accent via-blue-accent to-accent text-accent-foreground font-bold text-sm border border-accent/30 shadow-purple hover:shadow-[0_0_30px_hsl(270_80%_55%/0.5)] transition-all disabled:opacity-50">
           {t("duelRPS")}
         </button>
       </motion.div>
@@ -280,7 +475,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
       <div className="relative rounded-2xl border border-accent/30 bg-gradient-to-b from-purple-deep via-background to-purple-deep backdrop-blur-lg overflow-hidden">
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-accent/5 via-blue-accent/5 to-accent/5 pointer-events-none" />
 
-        {/* Round dots — show during game rounds */}
+        {/* Round dots */}
         {["picking", "clash", "round_result", "final_result"].includes(phase) && (
           <div className="relative flex items-center justify-center gap-2 pt-3 pb-1">
             {[0, 1, 2].map((r) => (
@@ -316,18 +511,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                 <span className="absolute inset-0 flex items-center justify-center text-2xl font-black text-accent">{searchTimer}</span>
               </div>
 
-              {/* Scrolling player names */}
-              <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground">
-                <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 2, repeat: Infinity }} className="flex items-center gap-1">
-                  <User className="w-3 h-3" />
-                  <span>{PLAYER_NAMES[searchTimer % PLAYER_NAMES.length]}</span>
-                </motion.div>
-                <span className="text-muted">•</span>
-                <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 2, repeat: Infinity, delay: 0.7 }} className="flex items-center gap-1">
-                  <User className="w-3 h-3" />
-                  <span>{PLAYER_NAMES[(searchTimer * 3) % PLAYER_NAMES.length]}</span>
-                </motion.div>
-              </div>
+              <p className="text-[10px] text-muted-foreground">{t("duelWaitingReal") || "Waiting for a real player..."}</p>
             </motion.div>
           )}
 
@@ -365,7 +549,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
             </motion.div>
           )}
 
-          {/* ═══ VOTE: 15s choose who wins + live vote bar ═══ */}
+          {/* ═══ VOTE ═══ */}
           {phase === "vote" && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
@@ -375,10 +559,9 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                   {voteTimer}
                 </motion.span>
               </div>
-               <p className="text-sm font-bold text-foreground mb-1">{t("duelChooseWinner")}</p>
-               <p className="text-[11px] text-muted-foreground mb-3">{t("duelVoteBefore")}</p>
+              <p className="text-sm font-bold text-foreground mb-1">{t("duelChooseWinner")}</p>
+              <p className="text-[11px] text-muted-foreground mb-3">{t("duelVoteBefore")}</p>
 
-              {/* Vote buttons */}
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.93 }}
                   onClick={() => handleVote("player")}
@@ -411,31 +594,24 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                 </motion.button>
               </div>
 
-              {/* Live vote bar */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground">
-                  <span>{playerName} (Lv.{playerLevel}) {votePercent.player}%</span>
-                  <span>{votePercent.opponent}% {opponentName} (Lv.{opponentLevel})</span>
+                  <span>{playerName} {votePercent.player}%</span>
+                  <span>{votePercent.opponent}% {opponentName}</span>
                 </div>
                 <div className="w-full h-3 rounded-full bg-muted/30 overflow-hidden flex">
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-blue-accent to-accent rounded-l-full"
-                    animate={{ width: `${votePercent.player}%` }}
-                    transition={{ duration: 0.5 }}
-                  />
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-destructive/80 to-destructive rounded-r-full"
-                    animate={{ width: `${votePercent.opponent}%` }}
-                    transition={{ duration: 0.5 }}
-                  />
+                  <motion.div className="h-full bg-gradient-to-r from-blue-accent to-accent rounded-l-full"
+                    animate={{ width: `${votePercent.player}%` }} transition={{ duration: 0.5 }} />
+                  <motion.div className="h-full bg-gradient-to-r from-destructive/80 to-destructive rounded-r-full"
+                    animate={{ width: `${votePercent.opponent}%` }} transition={{ duration: 0.5 }} />
                 </div>
                 <p className="text-[10px] text-muted-foreground">{t("duelLiveVote")}</p>
               </div>
             </motion.div>
           )}
 
-          {/* ═══ PICKING: 10s per round ═══ */}
-          {phase === "picking" && (
+          {/* ═══ PICKING ═══ */}
+          {phase === "picking" && !waitingForOpponent && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Timer className="w-4 h-4 text-primary" />
@@ -451,7 +627,12 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                 {MOVES.map((move) => (
                   <motion.button key={move} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.88 }}
                     onClick={() => handlePick(move)}
-                    className="flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 border-accent/20 bg-accent/5 hover:border-primary/50 hover:bg-primary/10 transition-all">
+                    className={cn(
+                      "flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all",
+                      playerMove === move
+                        ? "border-primary bg-primary/15"
+                        : "border-accent/20 bg-accent/5 hover:border-primary/50 hover:bg-primary/10"
+                    )}>
                     <motion.span className="text-3xl" animate={{ y: [0, -4, 0] }}
                       transition={{ duration: 1.5, repeat: Infinity, delay: MOVES.indexOf(move) * 0.2 }}>
                       {MOVE_EMOJI[move]}
@@ -460,6 +641,17 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                   </motion.button>
                 ))}
               </div>
+            </motion.div>
+          )}
+
+          {/* ═══ WAITING FOR OPPONENT ═══ */}
+          {(phase === "picking" && waitingForOpponent) && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-4">
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
+                <Search className="w-6 h-6 text-accent mx-auto mb-2" />
+              </motion.div>
+              <p className="text-sm font-bold text-foreground">{t("duelWaitingOpponent") || "Waiting for opponent..."}</p>
+              <p className="text-xs text-muted-foreground mt-1">{t("duelYouPicked") || "You picked"}: {playerMove ? MOVE_EMOJI[playerMove] : ""}</p>
             </motion.div>
           )}
 
@@ -533,7 +725,6 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
           {/* ═══ FINAL RESULT ═══ */}
           {phase === "final_result" && finalWinner && (
             <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-3">
-              {/* Confetti */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 {[...Array(14)].map((_, i) => (
                   <motion.div key={i} className="absolute w-2 h-2 rounded-full"
@@ -545,7 +736,6 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                 ))}
               </div>
 
-              {/* Winner announcement */}
               <motion.div animate={{ rotate: [0, -5, 5, 0], scale: [1, 1.15, 1] }} transition={{ duration: 0.6 }}>
                 <Trophy className="w-12 h-12 text-primary mx-auto mb-2 glow-gold" />
               </motion.div>
@@ -554,7 +744,6 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
               </p>
               <p className="text-xs text-muted-foreground mb-2">{t("duelScore")}: {scores.player} - {scores.opponent}</p>
 
-              {/* Your vote result */}
               {votePick ? (
                 votePick === finalWinner ? (
                   <div className="bg-green-accent/10 border border-green-accent/30 rounded-xl p-2 mb-3">

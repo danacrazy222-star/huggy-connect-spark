@@ -2,6 +2,7 @@ import { Home, ShoppingBag, MessageCircle, Crown, Sparkles, Gamepad2, Gift, User
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { playNavTap } from "@/utils/sounds";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useChatStore } from "@/store/useChatStore";
 

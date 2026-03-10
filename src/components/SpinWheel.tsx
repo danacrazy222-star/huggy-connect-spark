@@ -6,14 +6,14 @@ import { Gift, Zap, Ticket, Trophy, Sparkles, X, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const SEGMENTS = [
-  { label: "50\nXP", color: "#14532D", colorEnd: "#16A34A", reward: { type: "xp50" }, icon: "⚡" },
-  { label: "Try\nAgain", color: "#166534", colorEnd: "#22C55E", reward: { type: "none" }, icon: "🔄" },
-  { label: "Surprise\nGift", color: "#86198F", colorEnd: "#C026D3", reward: { type: "surprise" }, icon: "🎁" },
-  { label: "Game\nTicket", color: "#15803D", colorEnd: "#22C55E", reward: { type: "gameTicket" }, icon: "🎮" },
-  { label: "15 Pts\n+50 XP", color: "#B8860B", colorEnd: "#FFD700", reward: { type: "pointsXp" }, icon: "💎" },
-  { label: "100\nXP", color: "#1D4ED8", colorEnd: "#3B82F6", reward: { type: "xp100" }, icon: "⚡" },
-  { label: "Tarot\nTicket", color: "#7E22CE", colorEnd: "#A855F7", reward: { type: "tarotTicket" }, icon: "🔮" },
-  { label: "Game &\nTarot", color: "#B91C1C", colorEnd: "#DC2626", reward: { type: "ticketCombo" }, icon: "🎟️" },
+  { label: "50\nXP", color: "#1a8a4a", colorEnd: "#2ecc71", reward: { type: "xp50" }, icon: "⚡" },
+  { label: "Try\nAgain", color: "#6b6b6b", colorEnd: "#95a5a6", reward: { type: "none" }, icon: "🔄" },
+  { label: "Surprise\nGift", color: "#7b3fa0", colorEnd: "#9b59b6", reward: { type: "surprise" }, icon: "🎁" },
+  { label: "Game\nTicket", color: "#1a8a4a", colorEnd: "#2ecc71", reward: { type: "gameTicket" }, icon: "🎮" },
+  { label: "15 Pts\n+50 XP", color: "#c9950a", colorEnd: "#f1c40f", reward: { type: "pointsXp" }, icon: "💎" },
+  { label: "100\nXP", color: "#2270b8", colorEnd: "#3498db", reward: { type: "xp100" }, icon: "⚡" },
+  { label: "Tarot\nTicket", color: "#7b3fa0", colorEnd: "#9b59b6", reward: { type: "tarotTicket" }, icon: "🔮" },
+  { label: "Game &\nTarot", color: "#c0392b", colorEnd: "#e74c3c", reward: { type: "ticketCombo" }, icon: "🎟️" },
 ];
 
 const REWARD_LABELS: Record<string, string> = {
@@ -145,7 +145,7 @@ export function SpinWheel() {
       <div className="relative w-[300px] h-[300px] mx-auto">
         <div className="absolute -inset-6 rounded-full" 
           style={{ 
-            background: "radial-gradient(circle, hsl(var(--primary) / 0.15) 40%, hsl(var(--accent) / 0.08) 70%, transparent 100%)",
+            background: "radial-gradient(circle, rgba(255,215,0,0.12) 30%, rgba(155,89,182,0.08) 60%, transparent 100%)",
             filter: "blur(20px)"
           }} 
         />
@@ -165,13 +165,13 @@ export function SpinWheel() {
                 transform: "translate(-50%, -50%)",
                 background: isLit
                   ? i % 2 === 0
-                    ? "radial-gradient(circle, hsl(45 100% 70%), hsl(45 100% 50%))"
-                    : "radial-gradient(circle, hsl(330 80% 65%), hsl(270 80% 55%))"
+                    ? "radial-gradient(circle, #FFD700, #FFC300)"
+                    : "radial-gradient(circle, #9b59b6, #7b3fa0)"
                   : "hsl(var(--muted))",
                 boxShadow: isLit
                   ? i % 2 === 0
-                    ? "0 0 6px hsl(45 100% 50%), 0 0 12px hsl(45 100% 50% / 0.5)"
-                    : "0 0 6px hsl(270 80% 55%), 0 0 12px hsl(270 80% 55% / 0.5)"
+                    ? "0 0 6px #FFD700, 0 0 12px rgba(255,215,0,0.5)"
+                    : "0 0 6px #9b59b6, 0 0 12px rgba(155,89,182,0.5)"
                   : "none",
               }}
             />
@@ -181,7 +181,7 @@ export function SpinWheel() {
         {/* Gold outer ring */}
         <div className="absolute inset-0 rounded-full z-10"
           style={{
-            background: "conic-gradient(from 0deg, hsl(35 100% 40%), hsl(45 100% 50%), hsl(35 80% 45%), hsl(45 100% 60%), hsl(35 100% 40%), hsl(45 100% 50%), hsl(35 80% 45%), hsl(45 100% 60%), hsl(35 100% 40%))",
+            background: "conic-gradient(from 0deg, #FF9F00, #FFD700, #FFC300, #FFD700, #FF9F00, #FFD700, #FFC300, #FFD700, #FF9F00)",
             padding: "5px",
           }}
         >
@@ -227,8 +227,8 @@ export function SpinWheel() {
               return (
                 <g key={i}>
                   <path d={`M100,100 L${x1},${y1} A95,95 0 0,1 ${x2},${y2} Z`}
-                    fill={`url(#seg-grad-${i})`} stroke="hsl(45 100% 50% / 0.4)" strokeWidth="0.8" filter="url(#seg-shadow)" />
-                  <line x1="100" y1="100" x2={x1} y2={y1} stroke="hsl(45 100% 50% / 0.15)" strokeWidth="0.5" />
+                    fill={`url(#seg-grad-${i})`} stroke="rgba(255,215,0,0.4)" strokeWidth="0.8" filter="url(#seg-shadow)" />
+                  <line x1="100" y1="100" x2={x1} y2={y1} stroke="rgba(255,215,0,0.15)" strokeWidth="0.5" />
                   <text x={iconX} y={iconY} textAnchor="middle" dominantBaseline="middle" fontSize="13"
                     transform={`rotate(${textRotation}, ${iconX}, ${iconY})`}>{seg.icon}</text>
                   <text x={textX} y={textY} textAnchor="middle" dominantBaseline="middle"
@@ -242,10 +242,10 @@ export function SpinWheel() {
               );
             })}
 
-            <circle cx="100" cy="100" r="24" fill="url(#center-grad)" stroke="hsl(45 100% 50%)" strokeWidth="2.5" />
-            <circle cx="100" cy="100" r="20" fill="none" stroke="hsl(45 100% 50% / 0.3)" strokeWidth="0.8" />
-            <text x="100" y="96" textAnchor="middle" fill="hsl(45 100% 70%)" fontSize="7" fontWeight="700" fontFamily="Cinzel, serif" opacity="0.9">SPIN</text>
-            <text x="100" y="106" textAnchor="middle" fill="hsl(45 100% 70%)" fontSize="5.5" fontWeight="600" fontFamily="Cinzel, serif" opacity="0.7">THE WHEEL</text>
+            <circle cx="100" cy="100" r="24" fill="url(#center-grad)" stroke="#FFD700" strokeWidth="2.5" />
+            <circle cx="100" cy="100" r="20" fill="none" stroke="rgba(255,215,0,0.3)" strokeWidth="0.8" />
+            <text x="100" y="96" textAnchor="middle" fill="#FFD700" fontSize="7" fontWeight="700" fontFamily="Cinzel, serif" opacity="0.9">SPIN</text>
+            <text x="100" y="106" textAnchor="middle" fill="#FFD700" fontSize="5.5" fontWeight="600" fontFamily="Cinzel, serif" opacity="0.7">THE WHEEL</text>
           </svg>
         </motion.div>
 
@@ -254,15 +254,15 @@ export function SpinWheel() {
           <svg width="28" height="32" viewBox="0 0 28 32">
             <defs>
               <linearGradient id="pointer-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(45 100% 60%)" />
-                <stop offset="100%" stopColor="hsl(35 100% 40%)" />
+                <stop offset="0%" stopColor="#FFD700" />
+                <stop offset="100%" stopColor="#FF9F00" />
               </linearGradient>
               <filter id="pointer-shadow">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="hsl(45 100% 50%)" floodOpacity="0.5" />
+                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#FFD700" floodOpacity="0.5" />
               </filter>
             </defs>
-            <polygon points="14,28 2,4 14,10 26,4" fill="url(#pointer-grad)" filter="url(#pointer-shadow)" stroke="hsl(45 100% 70%)" strokeWidth="0.5" />
-            <circle cx="14" cy="10" r="3" fill="hsl(0 80% 50%)" stroke="hsl(45 100% 50%)" strokeWidth="0.5" />
+            <polygon points="14,28 2,4 14,10 26,4" fill="url(#pointer-grad)" filter="url(#pointer-shadow)" stroke="#FFD700" strokeWidth="0.5" />
+            <circle cx="14" cy="10" r="3" fill="#e74c3c" stroke="#FFD700" strokeWidth="0.5" />
           </svg>
         </div>
       </div>
@@ -278,14 +278,14 @@ export function SpinWheel() {
         )}
         style={{
           background: canSpin && !spinning
-            ? "linear-gradient(135deg, hsl(35 100% 40%), hsl(45 100% 50%), hsl(40 100% 45%))"
-            : "linear-gradient(135deg, hsl(260 20% 15%), hsl(260 15% 20%), hsl(260 20% 15%))",
-          color: canSpin && !spinning ? "hsl(260 60% 8%)" : "hsl(260 15% 40%)",
+            ? "linear-gradient(180deg, #FFD700, #FFB000)"
+            : "rgba(120, 80, 160, 0.35)",
+          color: canSpin && !spinning ? "#0b0220" : "rgba(255,255,255,0.6)",
           boxShadow: canSpin && !spinning
-            ? "0 4px 20px hsl(45 100% 50% / 0.35), inset 0 1px 0 hsl(0 0% 100% / 0.15)"
-            : "inset 0 2px 4px hsl(0 0% 0% / 0.3)",
-          opacity: isDisabled && !spinning ? 0.7 : 1,
-          border: canSpin && !spinning ? "1px solid hsl(45 100% 50% / 0.3)" : "1px solid hsl(260 15% 25%)",
+            ? "0 0 20px rgba(255,200,0,0.5), 0 0 40px rgba(255,170,0,0.3)"
+            : "none",
+          opacity: isDisabled && !spinning ? 0.85 : 1,
+          border: canSpin && !spinning ? "none" : "1px solid rgba(255,200,0,0.3)",
         }}
       >
         <span className="flex items-center justify-center gap-2">

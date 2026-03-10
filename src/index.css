@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 260 60% 8%;
+    --background: 270 80% 7%;
     --foreground: 45 100% 90%;
 
     --card: 260 50% 12%;
@@ -73,24 +73,14 @@
 
 @layer utilities {
   .text-gold-gradient {
-    background: linear-gradient(
-      180deg,
-      hsl(45 100% 70%) 0%,
-      hsl(45 100% 50%) 50%,
-      hsl(35 100% 40%) 100%
-    );
+    background: linear-gradient(180deg, #FFD700, #FFC300, #FF9F00);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .bg-premium-gradient {
-    background: linear-gradient(
-      180deg,
-      hsl(260 60% 12%) 0%,
-      hsl(260 60% 8%) 50%,
-      hsl(260 50% 5%) 100%
-    );
+    background: radial-gradient(circle at top, #2a0a55 0%, #1a0038 40%, #0b0220 100%);
   }
 
   .bg-card-gradient {
@@ -107,7 +97,7 @@
   }
 
   .shadow-gold {
-    box-shadow: 0 0 20px hsl(45 100% 50% / 0.3), 0 0 40px hsl(45 100% 50% / 0.1);
+    box-shadow: 0 0 20px rgba(255,200,0,0.5), 0 0 40px rgba(255,170,0,0.3);
   }
 
   .shadow-purple {
@@ -124,11 +114,11 @@
 
   .stars-bg {
     background-image: 
-      radial-gradient(2px 2px at 20px 30px, hsl(0 0% 100% / 0.3), transparent),
-      radial-gradient(2px 2px at 40px 70px, hsl(0 0% 100% / 0.2), transparent),
-      radial-gradient(1px 1px at 90px 40px, hsl(0 0% 100% / 0.4), transparent),
-      radial-gradient(1px 1px at 130px 80px, hsl(0 0% 100% / 0.2), transparent),
-      radial-gradient(2px 2px at 160px 30px, hsl(0 0% 100% / 0.3), transparent);
+      radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.6), transparent),
+      radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.4), transparent),
+      radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.5), transparent);
     background-size: 200px 100px;
   }
 }

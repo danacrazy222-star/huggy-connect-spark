@@ -224,21 +224,36 @@ export default function Chat() {
   const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
     setDuelActive(false);
     addXP(won ? 300 : 80);
-    // Local styled announcement — no System account
     const now = new Date();
     const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-    setAnnouncements(prev => [...prev, {
-      user: "",
-      avatar: "",
-      message: `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
-      crown: false,
-      isSystem: true,
-      time: timeStr,
-      roomId: activeRoom,
-    }]);
+    
     if (activeRoom === 0) {
+      // World challenge — announce in ALL rooms
+      const allRoomIds = [0, 1, 2, 3, 4, 5];
+      allRoomIds.forEach(roomId => {
+        setAnnouncements(prev => [...prev, {
+          user: "",
+          avatar: "",
+          message: `🌍🏆 ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
+          crown: false,
+          isSystem: true,
+          time: timeStr,
+          roomId,
+        }]);
+      });
       setWorldChallengeSessionActive(false);
       useGameStore.getState().lockWorldChallenge();
+    } else {
+      // Normal room — announce only in current room
+      setAnnouncements(prev => [...prev, {
+        user: "",
+        avatar: "",
+        message: `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
+        crown: false,
+        isSystem: true,
+        time: timeStr,
+        roomId: activeRoom,
+      }]);
     }
   }, [addXP, activeRoom, t]);
 
@@ -291,16 +306,21 @@ export default function Chat() {
           </div>
         ) : (
           <div className="flex-1 flex flex-col px-4">
-            {/* World challenge promo */}
-            {/* Duel challenge */}
-            <ChatDuelChallenge
-              playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
-              playerLevel={level}
-              roomId={activeRoom}
-              onEnd={handleDuelEnd}
-              onStart={handleWorldChallengeStart}
-              isRTL={isRTL}
-            />
+            {/* World challenge promo — only in World room, only if not yet unlocked */}
+            {activeRoom === 0 && !worldChallengeUnlocked && (
+              <WorldChallengePromo />
+            )}
+            {/* Duel challenge — in World room only if unlocked, in other rooms always */}
+            {(activeRoom !== 0 || worldChallengeUnlocked) && (
+              <ChatDuelChallenge
+                playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
+                playerLevel={level}
+                roomId={activeRoom}
+                onEnd={handleDuelEnd}
+                onStart={handleWorldChallengeStart}
+                isRTL={isRTL}
+              />
+            )}
 
             {/* Chat messages */}
             <div className="flex-1 min-h-0" />

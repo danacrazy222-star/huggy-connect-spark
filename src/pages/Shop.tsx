@@ -107,7 +107,7 @@ export default function Shop() {
         else if (r.type === "drawEntry") {
           addDrawEntry(r.amount);
           for (let i = 0; i < r.amount; i++) {
-            addPurchase("You");
+            addPurchase("You", selectedPkg.priceNum);
           }
         }
       });

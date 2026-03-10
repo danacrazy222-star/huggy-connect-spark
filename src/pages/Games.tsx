@@ -339,11 +339,13 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
                 <DiceIcon className="w-8 h-8 text-primary" />
               </motion.div>
               <div>
-                <p className="text-xs text-muted-foreground">{currentTurn === 0 ? t("yourTurn") : t("botsTurn")}</p>
+                <p className="text-xs text-muted-foreground">
+                  {players[currentTurn]?.isBot ? `${players[currentTurn]?.name}...` : t("yourTurn")}
+                </p>
                 <p className="text-lg font-bold text-foreground">{diceValue}</p>
               </div>
             </div>
-            <button onClick={rollDice} disabled={rolling || currentTurn !== 0}
+            <button onClick={rollDice} disabled={rolling || players[currentTurn]?.isBot}
               className="px-6 py-3 rounded-xl font-display font-bold bg-gradient-to-r from-gold-dark via-primary to-gold-dark text-primary-foreground shadow-gold hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
               🎲 {t("roll")}
             </button>

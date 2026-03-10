@@ -10,6 +10,7 @@ import { containsProfanity, censorMessage } from "@/utils/profanityFilter";
 import { ChatMessageBubble, type ChatMsg } from "@/components/ChatMessageBubble";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { CrystalReactor } from "@/components/chat/CrystalReactor";
 
 import roomWorld from "@/assets/room-world.jpg";
 import roomBronze from "@/assets/room-bronze.jpg";

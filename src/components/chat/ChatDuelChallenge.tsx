@@ -407,7 +407,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                     {opponentName.charAt(0).toUpperCase()}
                   </div>
                   <NameWithLevel name={opponentName} level={opponentLevel} />
-                  {votePick === "opponent" && <span className="text-[10px] text-primary">✓ صوتك</span>}
+                  {votePick === "opponent" && <span className="text-[10px] text-primary">{t("duelYourVote")}</span>}
                 </motion.button>
               </div>
 

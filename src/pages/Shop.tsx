@@ -14,7 +14,7 @@ import { ShopGiftCards } from "@/components/shop/ShopGiftCards";
 import { ShopSuccessPopup } from "@/components/shop/ShopSuccessPopup";
 import { ShopConfirmPopup } from "@/components/shop/ShopConfirmPopup";
 
-const BOOK_IMAGES = [book1, book2, book3];
+const BOOK_IMAGES = [book1, book2, book3, book3];
 
 export interface BookPackage {
   nameKey: string;

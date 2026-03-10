@@ -258,11 +258,11 @@ export function SpinWheel() {
                 <stop offset="100%" stopColor="#FF9F00" />
               </linearGradient>
               <filter id="pointer-shadow">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="hsl(45 100% 50%)" floodOpacity="0.5" />
+                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#FFD700" floodOpacity="0.5" />
               </filter>
             </defs>
-            <polygon points="14,28 2,4 14,10 26,4" fill="url(#pointer-grad)" filter="url(#pointer-shadow)" stroke="hsl(45 100% 70%)" strokeWidth="0.5" />
-            <circle cx="14" cy="10" r="3" fill="hsl(0 80% 50%)" stroke="hsl(45 100% 50%)" strokeWidth="0.5" />
+            <polygon points="14,28 2,4 14,10 26,4" fill="url(#pointer-grad)" filter="url(#pointer-shadow)" stroke="#FFD700" strokeWidth="0.5" />
+            <circle cx="14" cy="10" r="3" fill="#e74c3c" stroke="#FFD700" strokeWidth="0.5" />
           </svg>
         </div>
       </div>

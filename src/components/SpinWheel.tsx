@@ -278,14 +278,14 @@ export function SpinWheel() {
         )}
         style={{
           background: canSpin && !spinning
-            ? "linear-gradient(135deg, hsl(35 100% 40%), hsl(45 100% 50%), hsl(40 100% 45%))"
-            : "linear-gradient(135deg, hsl(260 20% 15%), hsl(260 15% 20%), hsl(260 20% 15%))",
-          color: canSpin && !spinning ? "hsl(260 60% 8%)" : "hsl(260 15% 40%)",
+            ? "linear-gradient(180deg, #FFD700, #FFB000)"
+            : "rgba(120, 80, 160, 0.35)",
+          color: canSpin && !spinning ? "#0b0220" : "rgba(255,255,255,0.6)",
           boxShadow: canSpin && !spinning
-            ? "0 4px 20px hsl(45 100% 50% / 0.35), inset 0 1px 0 hsl(0 0% 100% / 0.15)"
-            : "inset 0 2px 4px hsl(0 0% 0% / 0.3)",
-          opacity: isDisabled && !spinning ? 0.7 : 1,
-          border: canSpin && !spinning ? "1px solid hsl(45 100% 50% / 0.3)" : "1px solid hsl(260 15% 25%)",
+            ? "0 0 20px rgba(255,200,0,0.5), 0 0 40px rgba(255,170,0,0.3)"
+            : "none",
+          opacity: isDisabled && !spinning ? 0.85 : 1,
+          border: canSpin && !spinning ? "none" : "1px solid rgba(255,200,0,0.3)",
         }}
       >
         <span className="flex items-center justify-center gap-2">

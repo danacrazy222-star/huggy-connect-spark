@@ -15,6 +15,7 @@ import Tarot from "./pages/Tarot";
 import Games from "./pages/Games";
 import Draw from "./pages/Draw";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 import UserProfile from "./pages/UserProfile";
 import PrivateChat from "./pages/PrivateChat";

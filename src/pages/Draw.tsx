@@ -202,7 +202,7 @@ export default function Draw() {
         {/* Progress + Countdown Section */}
         <div className="bg-card/80 border border-border rounded-2xl p-5 space-y-4">
           <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
-            <h3 className="font-display text-sm font-bold text-foreground">Draw Progress</h3>
+            <h3 className="font-display text-sm font-bold text-foreground">{t("drawProgress")}</h3>
             <span className={cn("flex items-center gap-1 text-xs", isDrawActive ? "text-green-accent" : "text-red-accent")}>
               <span className={`w-2 h-2 rounded-full ${isDrawActive ? "bg-green-accent" : "bg-red-accent"} animate-pulse`} />
               {isDrawActive ? t("drawActive") : t("drawComplete")}

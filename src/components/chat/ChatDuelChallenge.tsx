@@ -186,7 +186,17 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
 
     if (match.status === 'waiting') {
       if (amP1) {
+        // Calculate remaining time from creation
+        const elapsed = Math.floor((Date.now() - new Date(match.created_at).getTime()) / 1000);
+        const remaining = Math.max(0, 40 - elapsed);
+        if (remaining <= 0) {
+          // Match expired, clean it up
+          supabase.from('rps_matches').delete().eq('id', match.id).then(() => {});
+          return;
+        }
         setPhase("searching");
+        setSearchTimer(remaining);
+        startSearchTimer(match.id, remaining);
       }
       // If not the creator, they'll see the "Join" button in idle
     } else if (match.status === 'matched') {
@@ -327,8 +337,9 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     }
   };
 
-  const startSearchTimer = (id: string) => {
-    let timer = 40;
+  const startSearchTimer = (id: string, initialTime = 40) => {
+    clearTimer();
+    let timer = initialTime;
     timerRef.current = setInterval(async () => {
       timer--;
       setSearchTimer(timer);

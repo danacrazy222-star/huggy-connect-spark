@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DiamondFrame } from "@/components/DiamondFrame";
 
@@ -18,6 +19,7 @@ export interface ChatMsg {
   level?: number;
   time?: string;
   isSystem?: boolean;
+  _userId?: string;
 }
 
 const getLevelIcon = (level: number) => {
@@ -39,7 +41,8 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
   const [loading, setLoading] = useState(false);
   const [localTranslated, setLocalTranslated] = useState<string | null>(null);
   const { language } = useTranslation();
-  const isOwn = currentUserId ? (msg as any)._userId === currentUserId : msg.user === "You";
+  const navigate = useNavigate();
+  const isOwn = currentUserId ? msg._userId === currentUserId : msg.user === "You";
   const translated = msg.translated || localTranslated;
 
   const translate = async () => {
@@ -175,7 +178,12 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
       <div className={cn("max-w-[75%]", isRTL ? "text-right" : "")}>
         {/* Username + Level badge */}
         <div className={cn("flex items-center gap-1.5 mb-0.5", isRTL && "flex-row-reverse")}>
-          <span className="text-xs font-medium text-foreground">{msg.user}</span>
+          <span
+            className="text-xs font-medium text-foreground cursor-pointer hover:text-primary transition-colors"
+            onClick={() => {
+              if (msg._userId && !isOwn) navigate(`/user/${msg._userId}`);
+            }}
+          >{msg.user}</span>
           {msg.crown && <Crown className="w-3 h-3 text-primary" />}
           {msg.level && msg.level > 0 && !msg.isSystem && (
             <span className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">

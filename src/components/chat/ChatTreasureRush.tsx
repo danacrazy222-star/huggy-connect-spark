@@ -433,7 +433,7 @@ export function ChatTreasureRush({ playerName, playerLevel, onEnd, onStart, isRT
 
         <button onClick={handleFinish}
           className="w-full py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-gold-dark via-primary to-gold-dark text-primary-foreground shadow-gold hover:brightness-110 transition-all">
-          {t("continue")}
+          ✅ {t("treasurePlayAgain")}
         </button>
       </div>
     </motion.div>

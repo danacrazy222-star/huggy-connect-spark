@@ -156,16 +156,18 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
       transition={{ delay: Math.min(index * 0.1, 0.5) }}
       className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}
     >
-      {/* Avatar with gender ring */}
+      {/* Avatar with gender ring + diamond frame for lv15+ */}
       <div className="relative shrink-0">
-        <Avatar className={cn("w-9 h-9 border-2", genderColor)}>
-          {msg.avatarUrl ? (
-            <AvatarImage src={msg.avatarUrl} alt={msg.user} />
-          ) : null}
-          <AvatarFallback className="bg-white/20 backdrop-blur-sm text-xs font-bold text-foreground">
-            {msg.avatar}
-          </AvatarFallback>
-        </Avatar>
+        <DiamondFrame size="sm" active={!!msg.level && msg.level >= 15}>
+          <Avatar className={cn("w-9 h-9 border-2", msg.level && msg.level >= 15 ? "border-transparent" : genderColor)}>
+            {msg.avatarUrl ? (
+              <AvatarImage src={msg.avatarUrl} alt={msg.user} />
+            ) : null}
+            <AvatarFallback className="bg-white/20 backdrop-blur-sm text-xs font-bold text-foreground">
+              {msg.avatar}
+            </AvatarFallback>
+          </Avatar>
+        </DiamondFrame>
         {/* Online dot */}
         <div className={cn("absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background", genderDot || "bg-green-400")} />
       </div>

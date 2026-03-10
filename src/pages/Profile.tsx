@@ -125,10 +125,12 @@ export default function Profile() {
       <div className="px-4 space-y-5">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center gap-3 pt-2">
           <div className="relative">
-            <Avatar className="w-24 h-24 border-2 border-primary shadow-gold">
-              <AvatarImage src={profile?.avatar_url || undefined} key={profile?.avatar_url} />
-              <AvatarFallback className="bg-muted text-foreground text-2xl font-bold" delayMs={600}>{initials}</AvatarFallback>
-            </Avatar>
+            <DiamondFrame size="lg" active={level >= 15}>
+              <Avatar className={cn("w-24 h-24 border-2", level >= 15 ? "border-transparent" : "border-primary shadow-gold")}>
+                <AvatarImage src={profile?.avatar_url || undefined} key={profile?.avatar_url} />
+                <AvatarFallback className="bg-muted text-foreground text-2xl font-bold" delayMs={600}>{initials}</AvatarFallback>
+              </Avatar>
+            </DiamondFrame>
             <button onClick={() => fileInputRef.current?.click()} disabled={uploading}
               className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center border-2 border-background shadow-lg">
               {uploading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}

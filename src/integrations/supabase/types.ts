@@ -14,6 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
+      game_matches: {
+        Row: {
+          bet_amount: number
+          created_at: string
+          game_type: string
+          id: string
+          player_ids: string[]
+          player_names: string[]
+          status: string
+        }
+        Insert: {
+          bet_amount?: number
+          created_at?: string
+          game_type?: string
+          id?: string
+          player_ids?: string[]
+          player_names?: string[]
+          status?: string
+        }
+        Update: {
+          bet_amount?: number
+          created_at?: string
+          game_type?: string
+          id?: string
+          player_ids?: string[]
+          player_names?: string[]
+          status?: string
+        }
+        Relationships: []
+      }
+      game_queue: {
+        Row: {
+          avatar_url: string | null
+          bet_amount: number
+          display_name: string
+          game_type: string
+          id: string
+          joined_at: string
+          match_id: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bet_amount?: number
+          display_name?: string
+          game_type?: string
+          id?: string
+          joined_at?: string
+          match_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bet_amount?: number
+          display_name?: string
+          game_type?: string
+          id?: string
+          joined_at?: string
+          match_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -49,7 +118,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cleanup_stale_queue: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

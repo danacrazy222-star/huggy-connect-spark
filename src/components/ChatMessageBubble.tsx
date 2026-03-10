@@ -58,6 +58,33 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
 
   const now = msg.time || "";
 
+  // ═══ System announcement (winner) ═══
+  if (msg.isSystem) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: "spring", damping: 15 }}
+        className="w-full my-2"
+      >
+        <div className="relative rounded-2xl border-2 border-primary/50 overflow-hidden px-4 py-3 text-center"
+          style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--accent) / 0.15))" }}>
+          {/* Glow */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 pointer-events-none" />
+          <motion.div
+            animate={{ opacity: [0.3, 0.8, 0.3] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-16 rounded-full bg-primary/20 blur-[30px] pointer-events-none"
+          />
+          <div className="relative">
+            <p className="text-sm font-bold text-foreground leading-relaxed whitespace-pre-line">{msg.message}</p>
+            {now && <span className="text-[10px] text-muted-foreground mt-1 block">{now}</span>}
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -80,7 +107,7 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
       </div>
 
       <div className={cn("max-w-[75%]", isRTL ? "text-right" : "")}>
-        {/* Username + Level badge - ABOVE the bubble */}
+        {/* Username + Level badge */}
         <div className={cn("flex items-center gap-1.5 mb-0.5", isRTL && "flex-row-reverse")}>
           <span className="text-xs font-medium text-foreground">{msg.user}</span>
           {msg.crown && <Crown className="w-3 h-3 text-primary" />}

@@ -202,6 +202,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       .from('rps_matches')
       .select('*')
       .eq('status', 'waiting')
+      .eq('room_id', roomId)
       .neq('player1_id', user.id)
       .order('created_at', { ascending: true })
       .limit(1);

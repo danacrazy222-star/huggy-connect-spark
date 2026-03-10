@@ -10,6 +10,8 @@ import madamZaraImg from "@/assets/madam-zara.png";
 import cardBackImg from "@/assets/tarot-card-back.png";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/tarot-reading`;
 const MAX_CARDS = 3;
@@ -27,10 +29,18 @@ export default function Tarot() {
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [shuffledDeck, setShuffledDeck] = useState<TarotCard[]>([]);
+  const [userGender, setUserGender] = useState<string>("male");
   const { tarotTickets, addTarotTicket } = useGameStore();
   const { t, isRTL, language } = useTranslation();
   const chatEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("gender").eq("user_id", user.id).single()
+      .then(({ data }) => { if (data?.gender) setUserGender(data.gender); });
+  }, [user]);
 
   useEffect(() => {
     setShuffledDeck([...fullTarotDeck].sort(() => Math.random() - 0.5).slice(0, DISPLAY_CARDS));
@@ -97,7 +107,7 @@ export default function Tarot() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ messages: allMessages, selectedCards, language }),
+        body: JSON.stringify({ messages: allMessages, selectedCards, language, gender: userGender }),
       });
 
       if (!resp.ok) {

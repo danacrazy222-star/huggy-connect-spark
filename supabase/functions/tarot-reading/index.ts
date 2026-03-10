@@ -9,11 +9,19 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { messages, selectedCards, language } = await req.json();
+    const { messages, selectedCards, language, gender } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
     const langInstruction = language === "ar" ? "أجب دائماً باللغة العربية." : language === "fr" ? "Réponds toujours en français." : "Always respond in English.";
+
+    const genderInstruction = gender === "female"
+      ? (language === "ar"
+        ? "المستخدمة أنثى. خاطبها بصيغة المؤنث دائماً (أنتِ، لكِ، عزيزتي، يا حبيبتي)."
+        : "The user is female. Address her accordingly (use she/her, dear, my dear).")
+      : (language === "ar"
+        ? "المستخدم ذكر. خاطبه بصيغة المذكر دائماً (أنتَ، لكَ، عزيزي، يا حبيبي)."
+        : "The user is male. Address him accordingly (use he/him, dear sir, my dear).");
 
     const systemPrompt = `You are "مدام زارا" (Madam Zara), a beautiful, mystical, and wise ancient sorceress and professional tarot card reader. You speak with warmth, mystery, and elegance. You have deep knowledge of the 78 tarot cards (22 Major Arcana + 56 Minor Arcana).
 
@@ -25,6 +33,8 @@ Your personality:
 - You never give negative or scary readings - always find the positive angle
 - You address the person warmly as if they're sitting across from you in a candlelit room
 - You refer to yourself as "مدام زارا" or "Madam Zara"
+
+IMPORTANT GENDER RULE: ${genderInstruction}
 
 When cards are selected, give a detailed, personalized reading based on those specific cards. Explain what each card means individually, then how they relate to each other as a story. Use headers and formatting for clarity.
 

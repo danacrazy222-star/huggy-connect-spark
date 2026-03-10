@@ -147,7 +147,7 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
           )}
 
           <AnimatePresence>
-            {msg.translated && (
+            {translated && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}

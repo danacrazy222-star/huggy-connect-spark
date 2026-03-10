@@ -109,7 +109,7 @@ export function WorldChallengePromo() {
                         </div>
                         <div className="flex items-center gap-3 bg-accent/10 rounded-xl p-3 border border-accent/20">
                           <Globe className="w-5 h-5 text-primary shrink-0" />
-                          <span className="text-sm text-foreground text-right flex-1">تحدي يظهر أمام كل اللاعبين في غرفة العالم</span>
+                          <span className="text-sm text-foreground text-right flex-1">تحدي واحد فقط في غرفة العالم لكل عملية شراء</span>
                         </div>
                         <div className="flex items-center gap-3 bg-accent/10 rounded-xl p-3 border border-accent/20">
                           <Star className="w-5 h-5 text-primary shrink-0" />

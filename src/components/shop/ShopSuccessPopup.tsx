@@ -16,6 +16,10 @@ interface ShopSuccessPopupProps {
 export function ShopSuccessPopup({ showSuccess, selectedPkg, quantity, isRTL, t }: ShopSuccessPopupProps) {
   const qty = quantity || 1;
 
+  useEffect(() => {
+    if (showSuccess) playPurchaseSuccess();
+  }, [showSuccess]);
+
   return (
     <AnimatePresence>
       {showSuccess && selectedPkg && (

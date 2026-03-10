@@ -24,14 +24,14 @@ export interface BookPackage {
   color: string;
   borderColor: string;
   glowColor: string;
-  rewards: { icon: React.ReactNode; label: string; type: "xp" | "gameTicket" | "tarotTicket" | "drawEntry"; amount: number }[];
+  rewards: { icon: React.ReactNode; label: string; type: "xp" | "points" | "gameTicket" | "tarotTicket" | "drawEntry"; amount: number }[];
   tag: string | null;
   includes: string[];
 }
 
 export default function Shop() {
   const { t, isRTL } = useTranslation();
-  const { addXP, addGameTicket, addTarotTicket, addDrawEntry } = useGameStore();
+  const { addXP, addPoints, addGameTicket, addTarotTicket, addDrawEntry } = useGameStore();
   const { addPurchase } = useDrawStore();
   const [selectedPkg, setSelectedPkg] = useState<BookPackage | null>(null);
   const [purchasing, setPurchasing] = useState(false);
@@ -91,12 +91,13 @@ export default function Shop() {
       glowColor: "shadow-[0_0_20px_rgba(168,85,247,0.2)]",
       rewards: [
         { icon: <Star className="w-4 h-4 text-primary" />, label: "6,000 VIP XP", type: "xp", amount: 6000 },
+        { icon: <Sparkles className="w-4 h-4 text-primary" />, label: "20 Points", type: "points", amount: 20 },
         { icon: <Ticket className="w-4 h-4 text-red-accent" />, label: "1 Game Ticket", type: "gameTicket", amount: 1 },
         { icon: <Sparkles className="w-4 h-4 text-accent" />, label: "1 Tarot Ticket", type: "tarotTicket", amount: 1 },
         { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: "2 Draw Entries", type: "drawEntry", amount: 2 },
       ],
       tag: "Most Popular",
-      includes: ["1 Digital Book", "6,000 VIP XP", "1 Game Ticket", "1 Tarot Ticket", "2 Draw Entries"],
+      includes: ["1 Digital Book", "6,000 VIP XP", "20 Points", "1 Game Ticket", "1 Tarot Ticket", "2 Draw Entries"],
     },
   ];
 
@@ -117,6 +118,7 @@ export default function Shop() {
       selectedPkg.rewards.forEach((r) => {
         const totalAmount = r.amount * qty;
         if (r.type === "xp") addXP(totalAmount);
+        else if (r.type === "points") addPoints(totalAmount);
         else if (r.type === "gameTicket") addGameTicket(totalAmount);
         else if (r.type === "tarotTicket") addTarotTicket(totalAmount);
         else if (r.type === "drawEntry") {

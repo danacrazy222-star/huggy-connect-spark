@@ -73,6 +73,7 @@ export default function Tarot() {
 
   const startReading = async () => {
     if (selectedCards.length < MAX_CARDS || tarotTickets <= 0) return;
+    playMysticReveal();
     addTarotTicket(-1);
     setPhase("reading");
 

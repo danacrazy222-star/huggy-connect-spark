@@ -388,9 +388,9 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
     const timerColor = timeLeft <= 10 ? "text-destructive" : timeLeft <= 20 ? "text-primary" : "text-green-accent";
 
     return (
-      <div className="min-h-screen bg-premium-gradient stars-bg pb-4" dir={isRTL ? "rtl" : "ltr"}>
+      <div className="h-screen bg-premium-gradient stars-bg flex flex-col overflow-hidden fixed inset-0 z-50" dir={isRTL ? "rtl" : "ltr"}>
         {/* Header with timer */}
-        <div className="px-3 py-2">
+        <div className="px-3 py-2 shrink-0">
           <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
             <button onClick={onBack} className="text-muted-foreground hover:text-foreground">
               <ArrowLeft className={cn("w-4 h-4", isRTL && "rotate-180")} />
@@ -418,7 +418,7 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* Scoreboard */}
-        <div className={cn("flex gap-2 px-3 py-2 overflow-x-auto", isRTL && "flex-row-reverse")}>
+        <div className={cn("flex gap-2 px-3 py-2 overflow-x-auto shrink-0", isRTL && "flex-row-reverse")}>
           {[...players].sort((a, b) => b.score - a.score).map((p, i) => (
             <motion.div key={p.name} layout
               className={cn("flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold shrink-0",
@@ -457,8 +457,8 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
         </AnimatePresence>
 
         {/* Box Grid */}
-        <div className="px-3">
-          <div className="grid grid-cols-4 gap-2">
+        <div className="px-3 flex-1 flex items-center">
+          <div className="grid grid-cols-4 gap-2 w-full">
             {boxes.map((box) => {
               const info = getContentInfo(box.content);
               return (
@@ -514,7 +514,7 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* Round indicator */}
-        <div className="text-center mt-3">
+        <div className="text-center py-2 shrink-0">
           <span className="text-[10px] text-muted-foreground">{t("treasureRound")} {roundNumber}</span>
         </div>
       </div>

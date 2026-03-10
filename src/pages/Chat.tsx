@@ -43,6 +43,8 @@ type ChatMessage = ChatMsg;
 export default function Chat() {
   const [activeRoom, setActiveRoom] = useState(0);
   const [message, setMessage] = useState("");
+  const [showEmoji, setShowEmoji] = useState(false);
+  const emojiRef = useRef<HTMLDivElement>(null);
   
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<{ avatar_url: string | null; gender: string | null } | null>(null);

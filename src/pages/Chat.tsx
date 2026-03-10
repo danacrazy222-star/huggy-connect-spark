@@ -208,7 +208,7 @@ export default function Chat() {
         ) : (
           <div className="flex-1 flex flex-col px-4">
             {/* Duel challenge - only in World room if unlocked, always in other rooms */}
-            {(activeRoom !== 0 || useGameStore.getState().worldChallengeUnlocked) && (
+            {(activeRoom !== 0 || worldChallengeUnlocked) && (
               <ChatDuelChallenge
                 playerName={user?.email?.split("@")[0] || "You"}
                 playerLevel={level}

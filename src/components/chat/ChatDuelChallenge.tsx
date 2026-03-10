@@ -28,12 +28,13 @@ const NameWithLevel = ({ name, level, className }: { name: string; level: number
 interface Props {
   playerName: string;
   playerLevel: number;
+  roomId: number;
   onEnd: (won: boolean, winnerName: string, loserName: string) => void;
   onStart?: () => void;
   isRTL?: boolean;
 }
 
-export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isRTL }: Props) {
+export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onStart, isRTL }: Props) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const MOVE_LABEL: Record<Move, string> = { rock: t("duelRock"), paper: t("duelPaper"), scissors: t("duelScissors") };

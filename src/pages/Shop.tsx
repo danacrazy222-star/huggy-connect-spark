@@ -118,6 +118,7 @@ export default function Shop() {
       selectedPkg.rewards.forEach((r) => {
         const totalAmount = r.amount * qty;
         if (r.type === "xp") addXP(totalAmount);
+        else if (r.type === "points") addPoints(totalAmount);
         else if (r.type === "gameTicket") addGameTicket(totalAmount);
         else if (r.type === "tarotTicket") addTarotTicket(totalAmount);
         else if (r.type === "drawEntry") {

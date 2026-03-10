@@ -92,6 +92,7 @@ export default function Chat() {
   const { clearUnread } = useChatStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [botMessages, setBotMessages] = useState<ChatMsg[]>([]);
+  const [announcements, setAnnouncements] = useState<ChatMsg[]>([]);
   const botIndexRef = useRef(0);
 
   const { messages: realtimeMessages, sendMessage: sendRealtimeMessage } = useChatRealtime(activeRoom);
@@ -113,7 +114,7 @@ export default function Chat() {
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [realtimeMessages, botMessages]);
+  }, [realtimeMessages, botMessages, announcements]);
 
   // Clear unread when entering
   useEffect(() => { clearUnread(); }, [clearUnread]);
@@ -212,7 +213,7 @@ export default function Chat() {
     // Local styled announcement — no System account
     const now = new Date();
     const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-    setBotMessages(prev => [...prev, {
+    setAnnouncements(prev => [...prev, {
       user: "",
       avatar: "",
       message: `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
@@ -313,6 +314,9 @@ export default function Chat() {
               ))}
               {realtimeMessages.map((msg, i) => (
                 <ChatMessageBubble key={(msg as any)._id || i} msg={msg} index={i} isRTL={isRTL} currentUserId={user?.id} />
+              ))}
+              {announcements.map((msg, i) => (
+                <ChatMessageBubble key={`announce-${i}`} msg={msg} index={0} isRTL={isRTL} />
               ))}
               <div ref={messagesEndRef} />
             </div>

@@ -146,7 +146,6 @@ export default function Chat() {
 
   // XP Rain event - triggers every 30 minutes in Bronze room (index 1)
   // Delayed enough so it doesn't interfere with duel games
-  const [duelActive, setDuelActive] = useState(false);
   useEffect(() => {
     if (activeRoom !== 1 || !canAccess) return;
     const triggerRain = () => {

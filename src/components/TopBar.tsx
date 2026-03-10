@@ -33,6 +33,9 @@ export function TopBar({ title = "WINLINE" }: { title?: string }) {
         
         <div className="flex items-center gap-2">
           <h1 className="font-display text-lg font-bold text-gold-gradient">{title}</h1>
+          <button onClick={handleToggleMute} className={cn("text-muted-foreground hover:text-foreground", muted && "text-destructive/70")}>
+            {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+          </button>
           <button onClick={() => setShowLangPicker(!showLangPicker)} className="text-muted-foreground hover:text-foreground">
             <Globe className="w-4 h-4" />
           </button>

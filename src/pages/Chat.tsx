@@ -14,6 +14,7 @@ import { ChatDuelChallenge } from "@/components/chat/ChatDuelChallenge";
 import { WorldChallengePromo } from "@/components/chat/WorldChallengePromo";
 import { XPRainEvent } from "@/components/chat/XPRainEvent";
 import { useChatRealtime } from "@/hooks/useChatRealtime";
+import { playChatSend } from "@/utils/sounds";
 
 import roomWorld from "@/assets/room-world.jpg";
 import roomBronze from "@/assets/room-bronze.jpg";

@@ -68,12 +68,12 @@ export function ShopGiftCards() {
               }}
             >
               {/* Brand Logo */}
-              <div className="flex items-center justify-center mb-3" style={{ height: "45px" }}>
+              <div className="flex items-center justify-center mb-3" style={{ height: "60px" }}>
                 <img
                   src={brand.logo}
                   alt={brand.name}
-                  className="max-h-[45px] max-w-full object-contain"
-                  style={{ filter: "brightness(1.1)" }}
+                  className="max-h-[60px] w-full object-contain"
+                  style={{ filter: "brightness(1.2)" }}
                 />
               </div>
 

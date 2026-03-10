@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Smile, Lock } from "lucide-react";
+import { Send, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGameStore } from "@/store/useGameStore";
 import { useChatStore } from "@/store/useChatStore";

@@ -520,10 +520,10 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
               </div>
               <motion.div initial={{ y: 10 }} animate={{ y: 0 }}>
                 {roundWinner === "draw" ? (
-                  <p className="text-sm font-bold text-primary">🤝 تعادل! إعادة الجولة...</p>
+                  <p className="text-sm font-bold text-primary">{t("duelDraw")}</p>
                 ) : (
                   <p className="text-sm font-bold text-green-accent">
-                    🏆 {roundWinner === "player" ? playerName : opponentName} فاز بالجولة!
+                    🏆 {roundWinner === "player" ? playerName : opponentName} {t("duelWonRound")}
                   </p>
                 )}
               </motion.div>

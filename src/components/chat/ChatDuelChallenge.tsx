@@ -10,7 +10,25 @@ type Move = "rock" | "paper" | "scissors";
 type Phase = "idle" | "searching" | "matched" | "vote" | "picking" | "clash" | "round_result" | "final_result";
 type Role = "idle" | "player" | "spectator";
 
-const BOT_NAMES = ["Nova", "Blaze", "Shadow", "Pixel", "Storm", "Echo", "Viper", "Luna", "Rex", "Zara"];
+import avatarMale1 from "@/assets/avatar-male-1.png";
+import avatarMale2 from "@/assets/avatar-male-2.png";
+import avatarMale3 from "@/assets/avatar-male-3.png";
+import avatarFemale1 from "@/assets/avatar-female-1.png";
+import avatarFemale2 from "@/assets/avatar-female-2.png";
+import avatarFemale3 from "@/assets/avatar-female-3.png";
+
+const BOT_PROFILES = [
+  { name: "Ahmed", avatar: avatarMale1, gender: "male" },
+  { name: "Sara", avatar: avatarFemale1, gender: "female" },
+  { name: "Omar", avatar: avatarMale2, gender: "male" },
+  { name: "Noor", avatar: avatarFemale2, gender: "female" },
+  { name: "Khalid", avatar: avatarMale3, gender: "male" },
+  { name: "Lina", avatar: avatarFemale3, gender: "female" },
+  { name: "Youssef", avatar: avatarMale1, gender: "male" },
+  { name: "Mira", avatar: avatarFemale1, gender: "female" },
+  { name: "Rami", avatar: avatarMale2, gender: "male" },
+  { name: "Dana", avatar: avatarFemale3, gender: "female" },
+];
 const BOT_ID = "bot-00000000-0000-0000-0000-000000000000";
 
 const MOVE_EMOJI: Record<Move, string> = { rock: "🪨", paper: "📄", scissors: "✂️" };
@@ -390,11 +408,11 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
 
   // ── BOT FALLBACK ──
   const startBotMatch = (id: string) => {
-    const botName = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
+    const botProfile = BOT_PROFILES[Math.floor(Math.random() * BOT_PROFILES.length)];
     const botLevel = Math.max(1, playerLevel + Math.floor(Math.random() * 5) - 2);
 
     setIsBotMatch(true);
-    setP2Name(`🤖 ${botName}`);
+    setP2Name(botProfile.name);
     setP2Level(botLevel);
     setP2Id(BOT_ID);
     setPhase("matched");

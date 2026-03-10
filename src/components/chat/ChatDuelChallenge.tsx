@@ -605,7 +605,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       if (newScores.p1 >= 2) {
         setFinalWinner("p1");
         setPhase("final_result");
-        if (matchId && role === "player" && isPlayer1) {
+        if (!isBotMatch && matchId && role === "player" && isPlayer1) {
           await supabase.from('rps_matches').update({
             status: 'finished',
             player1_score: newScores.p1,
@@ -616,7 +616,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       } else if (newScores.p2 >= 2) {
         setFinalWinner("p2");
         setPhase("final_result");
-        if (matchId && role === "player" && isPlayer1) {
+        if (!isBotMatch && matchId && role === "player" && isPlayer1) {
           await supabase.from('rps_matches').update({
             status: 'finished',
             player1_score: newScores.p1,
@@ -630,7 +630,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
         setPlayerMove(null);
         setP1Move(null);
         setP2Move(null);
-        if (matchId && role === "player" && isPlayer1) {
+        if (!isBotMatch && matchId && role === "player" && isPlayer1) {
           await supabase.from('rps_matches').update({
             player1_move: null,
             player2_move: null,

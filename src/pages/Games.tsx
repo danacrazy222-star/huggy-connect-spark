@@ -122,8 +122,8 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
     setSearchTimer(60);
     const timeout = setTimeout(() => {
       setPlayers([
-        { name: "You", pos: 0, isBot: false, color: "bg-primary" },
-        { name: "Bot 🤖", pos: 0, isBot: true, color: "bg-accent" },
+        { name: t("playerYou"), pos: 0, isBot: false, color: "bg-primary" },
+        { name: t("botPlayer"), pos: 0, isBot: true, color: "bg-accent" },
       ]);
       setPhase("playing");
       setCurrentTurn(0);
@@ -139,7 +139,7 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
     setPlayers((prev) => {
       const updated = [...prev];
       let newPos = updated[playerIdx].pos + dice;
-      if (newPos > BOARD_SIZE) { setMessage(`${updated[playerIdx].name} needs exact roll!`); return updated; }
+      if (newPos > BOARD_SIZE) { setMessage(`${updated[playerIdx].name} ${t("needsExactRoll")}`); return updated; }
       if (newPos === BOARD_SIZE) { updated[playerIdx] = { ...updated[playerIdx], pos: newPos }; return updated; }
       if (SNAKES[newPos]) { const from = newPos; newPos = SNAKES[newPos]; setMessage(`🐍 ${from} → ${newPos}`); }
       else if (LADDERS[newPos]) { const from = newPos; newPos = LADDERS[newPos]; setMessage(`🪜 ${from} → ${newPos}`); }
@@ -323,15 +323,15 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="inline-block">
               <Trophy className="w-12 h-12 text-primary mx-auto" />
             </motion.div>
-            <h3 className="font-display text-xl text-gold-gradient">{winner === "You" ? t("youWin") : t("botWins")}</h3>
+            <h3 className="font-display text-xl text-gold-gradient">{winner === t("playerYou") ? t("youWin") : t("botWins")}</h3>
             <div className="flex gap-3 justify-center">
-              {winner === "You" && (
+              {winner === t("playerYou") && (
                 <div className="bg-card border border-border rounded-lg px-4 py-2">
                   <Zap className="w-4 h-4 text-primary mx-auto" />
                   <span className="text-xs text-foreground">+{getGameXPReward().win} XP</span>
                 </div>
               )}
-              {winner === "You" && (
+              {winner === t("playerYou") && (
                 <div className="bg-card border border-border rounded-lg px-4 py-2">
                   <Trophy className="w-4 h-4 text-primary mx-auto" />
                   <span className="text-xs text-foreground">+{betAmount * 2} Pts</span>
@@ -591,7 +591,7 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
 
             <div className="bg-card/60 border border-border rounded-xl p-4 space-y-2">
               <p className="text-xs text-muted-foreground">🎫 {t("scratchCardCost")}</p>
-              <p className="text-xs text-muted-foreground">💰 {t("winnerGets")}: Points, XP, Tickets</p>
+              <p className="text-xs text-muted-foreground">💰 {t("winnerGets")}: {t("scratchWinTypes")}</p>
             </div>
 
             <button onClick={startGame} disabled={gameTickets <= 0}
@@ -643,7 +643,7 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
               onClick={() => setPhase("revealed")}
               className="w-full py-2.5 rounded-xl font-bold bg-card/80 border border-border text-foreground hover:bg-muted/40 transition-all"
             >
-              Reveal reward now
+              {t("revealRewardNow")}
             </button>
           </motion.div>
         )}

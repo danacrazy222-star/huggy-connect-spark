@@ -242,6 +242,9 @@ export default function Chat() {
           </div>
         )}
       </div>
+
+      {/* World room challenge promo button */}
+      {activeRoom === 0 && canAccess && <WorldChallengePromo />}
     </div>
   );
 }

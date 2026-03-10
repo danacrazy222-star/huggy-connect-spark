@@ -121,6 +121,23 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
 
     roomChannelRef.current = channel;
 
+    // Reset state on room change
+    setPhase("idle");
+    setRole("idle");
+    setMatchId(null);
+    setRound(0);
+    setScores({ p1: 0, p2: 0 });
+    setFinalWinner(null);
+    setPlayerMove(null);
+    setP1Move(null);
+    setP2Move(null);
+    setWaitingForOpponent(false);
+    clearTimer();
+
+    // Clean stale matches older than 2 min
+    const twoMinAgo = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+    supabase.from('rps_matches').delete().eq('status', 'waiting').lt('created_at', twoMinAgo).then(() => {});
+
     // Check for existing active match on mount
     checkExistingMatch();
 

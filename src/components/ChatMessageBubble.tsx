@@ -14,7 +14,16 @@ export interface ChatMsg {
   translated?: string;
   avatarUrl?: string;
   gender?: "male" | "female" | null;
+  level?: number;
+  time?: string;
 }
+
+const getLevelIcon = (level: number) => {
+  if (level >= 15) return "💎";
+  if (level >= 10) return "🥇";
+  if (level >= 5) return "🥈";
+  return "🥉";
+};
 
 interface Props {
   msg: ChatMsg;
@@ -46,6 +55,8 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
   const genderColor = msg.gender === "female" ? "border-pink-400 shadow-[0_0_6px_rgba(236,72,153,0.4)]" : msg.gender === "male" ? "border-blue-400 shadow-[0_0_6px_rgba(59,130,246,0.4)]" : "border-white/20";
   const genderDot = msg.gender === "female" ? "bg-pink-400" : msg.gender === "male" ? "bg-blue-400" : null;
 
+  const now = msg.time || "";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -55,7 +66,7 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
     >
       {/* Avatar with gender ring */}
       <div className="relative shrink-0">
-        <Avatar className={cn("w-8 h-8 border-2", genderColor)}>
+        <Avatar className={cn("w-9 h-9 border-2", genderColor)}>
           {msg.avatarUrl ? (
             <AvatarImage src={msg.avatarUrl} alt={msg.user} />
           ) : null}
@@ -63,25 +74,16 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
             {msg.avatar}
           </AvatarFallback>
         </Avatar>
-        {genderDot && (
-          <div className={cn("absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background", genderDot)} />
-        )}
+        {/* Online dot */}
+        <div className={cn("absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background", genderDot || "bg-green-400")} />
       </div>
 
       <div className={cn("max-w-[75%]", isRTL ? "text-right" : "")}>
-        {/* Username */}
-        <div className={cn("flex items-center gap-1 mb-0.5", isRTL && "flex-row-reverse")}>
-          <span className="text-xs font-medium text-foreground">{msg.user}</span>
-          {msg.crown && <Crown className="w-3 h-3 text-primary" />}
-          {msg.gender === "female" && <span className="text-[10px]">♀</span>}
-          {msg.gender === "male" && <span className="text-[10px]">♂</span>}
-        </div>
-
         {/* Message bubble */}
         <div
           onClick={translate}
           className={cn(
-            "bg-black/40 backdrop-blur-md rounded-2xl rounded-tl-sm px-3 py-1.5 border border-white/10",
+            "bg-black/40 backdrop-blur-md rounded-2xl rounded-tl-sm px-3 py-2 border border-white/10",
             !isOwn && !msg.translated && "cursor-pointer active:scale-[0.98] transition-transform"
           )}
         >
@@ -114,6 +116,20 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+
+        {/* Time stamp */}
+        {now && <span className="text-[10px] text-muted-foreground mt-0.5 block">{now}</span>}
+
+        {/* Username + Level badge */}
+        <div className={cn("flex items-center gap-1.5 mt-0.5", isRTL && "flex-row-reverse")}>
+          <span className="text-xs font-medium text-foreground">{msg.user}</span>
+          {msg.crown && <Crown className="w-3 h-3 text-primary" />}
+          {msg.level && (
+            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">
+              {getLevelIcon(msg.level)} Lv.{msg.level}
+            </span>
+          )}
         </div>
       </div>
     </motion.div>

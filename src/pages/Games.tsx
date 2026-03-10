@@ -104,11 +104,11 @@ function GamesList({ onPlaySnake, onPlayScratch }: { onPlaySnake: () => void; on
 }
 
 function SnakeAndLadder({ onBack }: { onBack: () => void }) {
-  const { gameTickets, addGameTicket, addXP, addPoints, points } = useGameStore();
+  const { gameTickets, addGameTicket, addXP, addPoints } = useGameStore();
   const { t, isRTL } = useTranslation();
   const { user } = useAuth();
   const [phase, setPhase] = useState<GamePhase>("lobby");
-  const [betAmount, setBetAmount] = useState(50);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentTurn, setCurrentTurn] = useState(0);
   const [diceValue, setDiceValue] = useState(1);

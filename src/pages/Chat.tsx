@@ -88,8 +88,8 @@ export default function Chat() {
   const worldChallengeUnlocked = useGameStore((s) => s.worldChallengeUnlocked);
   const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
-  const { clearUnread } = useChatStore();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [botMessages, setBotMessages] = useState<ChatMsg[]>([]);
+  const botIndexRef = useRef(0);
 
   const { messages: realtimeMessages, sendMessage: sendRealtimeMessage } = useChatRealtime(activeRoom);
 

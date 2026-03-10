@@ -277,7 +277,7 @@ export default function Draw() {
 
           {/* Closing info text */}
           <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
-            The draw will close when progress reaches <span className="text-primary font-bold">100%</span> or when the countdown timer ends.
+            {t("drawCloseInfo")}
           </p>
 
           {/* Your Entries - only if user has entries */}

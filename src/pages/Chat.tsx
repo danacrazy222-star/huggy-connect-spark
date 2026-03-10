@@ -47,8 +47,8 @@ const botScripts: Record<number, ChatMsg[]> = {
     { user: "Omar", avatar: "O", message: "Check your VIP page to see your progress to Gold! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
     { user: "Noor", avatar: "N", message: "The Crown page shows all VIP perks and mystery chests! 🎁", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
   ],
-  3: [ // Gold
-    { user: "Omar", avatar: "O", message: "Gold room! 🥇 Only legends reach Level 10! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+  2: [ // Gold
+    { user: "Omar", avatar: "O", message: "Gold room! 🥇 Only legends reach Level 17! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 20 },
     { user: "Sara", avatar: "S", message: "The XP rewards get bigger in higher rooms! 💎", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
     { user: "Luna", avatar: "L", message: "Diamond room at Level 20 is the next big goal! 💎🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
   ],

@@ -358,14 +358,6 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
                 </div>
               )}
               {winner === t("playerYou") && (
-                <div className="bg-card border border-border rounded-lg px-4 py-2">
-                  <Trophy className="w-4 h-4 text-primary mx-auto" />
-                  <span className="text-xs text-foreground">+{betAmount * 2} Pts</span>
-                </div>
-              )}
-            </div>
-            <button onClick={onBack} className="px-8 py-3 rounded-xl font-display font-bold bg-gradient-to-r from-gold-dark via-primary to-gold-dark text-primary-foreground shadow-gold">
-              {t("backToGames")}
             </button>
           </div>
         )}

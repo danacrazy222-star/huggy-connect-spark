@@ -39,6 +39,8 @@ const App = () => (
               <Route path="/draw" element={<Draw />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/promotion-rules" element={<PromotionRules />} />
+              <Route path="/terms" element={<Terms />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />

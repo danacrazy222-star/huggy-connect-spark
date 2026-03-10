@@ -254,6 +254,7 @@ export default function Shop() {
 
       <div className="text-center px-4 space-y-1 pb-4">
         <p className="text-xs text-muted-foreground">{t("purchasesProvideAccess")}</p>
+        <p className="text-[10px] text-muted-foreground">{t("shopPackDisclaimer")}</p>
         <p className="text-[10px] text-muted-foreground">{t("shopDisclaimer2")}</p>
       </div>
 

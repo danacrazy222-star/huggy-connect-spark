@@ -16,7 +16,7 @@ import {
   Diamond, Coins, Gamepad2, Sparkles, Gift,
   LogIn, LogOut, Star, TrendingUp, Camera,
   Globe, Trash2, ChevronRight, Edit3, Check, X,
-  Settings, RefreshCw,
+  Settings, RefreshCw, Shield, FileText,
 } from "lucide-react";
 
 export default function Profile() {

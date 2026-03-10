@@ -36,18 +36,24 @@ interface Props {
 
 export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUserId }: Props) {
   const [loading, setLoading] = useState(false);
+  const [localTranslated, setLocalTranslated] = useState<string | null>(null);
   const { language } = useTranslation();
   const isOwn = currentUserId ? (msg as any)._userId === currentUserId : msg.user === "You";
+  const translated = msg.translated || localTranslated;
 
   const translate = async () => {
-    if (msg.translated || loading || isOwn) return;
+    if (translated || loading || isOwn) return;
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("translate", {
         body: { text: msg.message, targetLang: language },
       });
       if (!error && data?.translated) {
-        onTranslated(data.translated);
+        if (onTranslated) {
+          onTranslated(data.translated);
+        } else {
+          setLocalTranslated(data.translated);
+        }
       }
     } finally {
       setLoading(false);
@@ -112,7 +118,7 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
         <div className={cn("flex items-center gap-1.5 mb-0.5", isRTL && "flex-row-reverse")}>
           <span className="text-xs font-medium text-foreground">{msg.user}</span>
           {msg.crown && <Crown className="w-3 h-3 text-primary" />}
-          {msg.level && (
+          {msg.level && msg.level > 0 && !msg.isSystem && (
             <span className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">
               {getLevelIcon(msg.level)} Lv.{msg.level}
             </span>
@@ -141,7 +147,7 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
           )}
 
           <AnimatePresence>
-            {msg.translated && (
+            {translated && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
@@ -151,7 +157,7 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
                 <div className="border-t border-white/15 my-1.5" />
                 <div className={cn("flex items-start gap-1", isRTL && "flex-row-reverse")}>
                   <span className="text-[10px] text-primary mt-0.5">➡️</span>
-                  <p className="text-sm text-primary/80 italic">{msg.translated}</p>
+                  <p className="text-sm text-primary/80 italic">{translated}</p>
                 </div>
               </motion.div>
             )}

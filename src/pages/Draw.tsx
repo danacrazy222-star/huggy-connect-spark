@@ -129,7 +129,7 @@ export default function Draw() {
               <motion.div animate={{ rotate: [0, -10, 10, -10, 10, 0] }} transition={{ duration: 0.6, delay: 0.3 }}>
                 <Trophy className="w-16 h-16 text-primary mx-auto mb-3" style={{ filter: "drop-shadow(0 0 20px rgba(255,215,0,0.5))" }} />
               </motion.div>
-              <h2 className="font-display text-2xl font-bold text-gold-gradient mb-2">🎉 Winner Announced!</h2>
+              <h2 className="font-display text-2xl font-bold text-gold-gradient mb-2">🎉 {t("winnerAnnounced")}</h2>
               <div className="bg-primary/10 border border-primary/30 rounded-xl px-4 py-3 mb-3">
                 <p className="text-xl font-bold text-foreground">{currentWinner}</p>
                 {winningEntryId && (

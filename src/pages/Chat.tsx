@@ -47,6 +47,7 @@ export default function Chat() {
   const [activeRoom, setActiveRoom] = useState(0);
   const [message, setMessage] = useState("");
   
+  const [worldChallengeSessionActive, setWorldChallengeSessionActive] = useState(false);
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<{ avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);
@@ -156,6 +157,13 @@ export default function Chat() {
     setMessage("");
   }, [message, activeRoom, addMessage, user, userProfile]);
 
+  const handleWorldChallengeStart = useCallback(() => {
+    if (activeRoom === 0) {
+      useGameStore.getState().lockWorldChallenge();
+      setWorldChallengeSessionActive(true);
+    }
+  }, [activeRoom]);
+
   const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
     addXP(won ? 300 : 80);
     const now = new Date();
@@ -170,6 +178,11 @@ export default function Chat() {
       time: timeStr,
       isSystem: true,
     });
+
+    if (activeRoom === 0) {
+      setWorldChallengeSessionActive(false);
+      useGameStore.getState().lockWorldChallenge();
+    }
   }, [addXP, addMessage, activeRoom]);
 
   return (
@@ -222,7 +235,7 @@ export default function Chat() {
         ) : (
           <div className="flex-1 flex flex-col px-4">
             {/* Duel challenge - only in World room if unlocked, always in other rooms */}
-            {activeRoom === 0 && !worldChallengeUnlocked ? (
+            {activeRoom === 0 && !worldChallengeUnlocked && !worldChallengeSessionActive ? (
               <div className="mx-auto my-3 w-full max-w-xs text-center">
                 <div className="flex flex-col items-center gap-2 py-4 px-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
                   <Lock className="w-8 h-8 text-muted-foreground" />
@@ -234,6 +247,7 @@ export default function Chat() {
                 playerName={user?.email?.split("@")[0] || "You"}
                 playerLevel={level}
                 onEnd={handleDuelEnd}
+                onStart={activeRoom === 0 ? handleWorldChallengeStart : undefined}
                 isRTL={isRTL}
               />
             )}

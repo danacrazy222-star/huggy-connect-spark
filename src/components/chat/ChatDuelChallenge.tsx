@@ -41,10 +41,11 @@ interface Props {
   playerName: string;
   playerLevel: number;
   onEnd: (won: boolean, winnerName: string, loserName: string) => void;
+  onStart?: () => void;
   isRTL?: boolean;
 }
 
-export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Props) {
+export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isRTL }: Props) {
   const [phase, setPhase] = useState<Phase>("idle");
   const [searchTimer, setSearchTimer] = useState(40);
   const [opponentName, setOpponentName] = useState("");
@@ -239,6 +240,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Pro
   }, [phase, roundWinner]);
 
   const startSearch = () => {
+    onStart?.();
     setPhase("searching");
     setSearchTimer(40);
     setOpponentName("");

@@ -41,8 +41,8 @@ const botScripts: Record<number, ChatMsg[]> = {
     { user: "Noor", avatar: "N", message: "Reach Level 5 to unlock Silver room! It has even cooler features 🥈✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
     { user: "Sara", avatar: "S", message: "Who wants to duel? Let's go! 🔥🎮", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
   ],
-  2: [ // Silver
-    { user: "Sara", avatar: "S", message: "Silver squad! 🥈✨ Level 5+ only!", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+  1: [ // Silver
+    { user: "Sara", avatar: "S", message: "Silver squad! 🥈✨ Level 9+ only!", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
     { user: "Luna", avatar: "L", message: "This room is getting more exclusive! Keep grinding XP! 🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
     { user: "Omar", avatar: "O", message: "Check your VIP page to see your progress to Gold! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
     { user: "Noor", avatar: "N", message: "The Crown page shows all VIP perks and mystery chests! 🎁", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },

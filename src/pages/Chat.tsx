@@ -20,6 +20,7 @@ import roomBronze from "@/assets/room-bronze.jpg";
 import roomSilver from "@/assets/room-silver.jpg";
 import roomGold from "@/assets/room-gold.jpg";
 import roomDiamond from "@/assets/room-diamond.jpg";
+import roomLegendary from "@/assets/room-legendary.jpg";
 
 import avatarMale1 from "@/assets/avatar-male-1.png";
 import avatarMale2 from "@/assets/avatar-male-2.png";

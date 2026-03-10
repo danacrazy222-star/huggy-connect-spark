@@ -382,13 +382,46 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
 
       if (timer <= 0) {
         clearTimer();
-        supabase.from('rps_matches').delete().eq('id', id).then(() => {});
-        setPhase("idle");
-        setRole("idle");
-        setMatchId(null);
+        // Bot fallback — simulate a bot joining
+        startBotMatch(id);
       }
     }, 1000);
   };
+
+  // ── BOT FALLBACK ──
+  const startBotMatch = (id: string) => {
+    const botName = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
+    const botLevel = Math.max(1, playerLevel + Math.floor(Math.random() * 5) - 2);
+
+    setIsBotMatch(true);
+    setP2Name(`🤖 ${botName}`);
+    setP2Level(botLevel);
+    setP2Id(BOT_ID);
+    setPhase("matched");
+
+    // No DB update needed for bot — it's all local
+  };
+
+  // Bot auto-pick move after a delay during picking phase
+  useEffect(() => {
+    if (!isBotMatch || phase !== "picking" || role !== "player") return;
+    
+    const delay = 2000 + Math.random() * 4000; // 2-6 seconds
+    botTimerRef.current = setTimeout(() => {
+      const botMove = MOVES[Math.floor(Math.random() * 3)];
+      setP2Move(botMove);
+      
+      // If player already picked, go to clash
+      if (playerMove) {
+        setP1Move(playerMove);
+        setWaitingForOpponent(false);
+        setPhase("clash");
+        setShakeIndex(0);
+      }
+    }, delay);
+    
+    return () => { if (botTimerRef.current) clearTimeout(botTimerRef.current); };
+  }, [isBotMatch, phase, round, role]);
 
   // ── MATCHED → VOTE after 3s ──
   useEffect(() => {

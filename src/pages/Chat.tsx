@@ -228,35 +228,12 @@ export default function Chat() {
               ))}
             </div>
 
-            {/* Emoji picker - above input */}
-            <AnimatePresence>
-              {showEmoji && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="mb-2 flex justify-end"
-                  ref={emojiRef}
-                >
-                  <EmojiPicker
-                    onEmojiClick={(emojiData) => {
-                      setMessage((prev) => prev + emojiData.emoji);
-                    }}
-                    theme={"dark" as any}
-                    width={300}
-                    height={350}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-
             {/* Message input */}
             <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
               <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
                 <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   className={cn("flex-1 bg-transparent text-sm text-foreground placeholder:text-white/40 outline-none", isRTL && "text-right")} />
-                <button onClick={() => setShowEmoji(!showEmoji)} className="text-primary/70 hover:text-primary transition-colors"><Smile className="w-5 h-5" /></button>
                 <button onClick={sendMessage} className="text-primary hover:text-primary/80 transition-colors"><Send className="w-5 h-5" /></button>
               </div>
             </div>

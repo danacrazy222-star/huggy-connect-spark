@@ -418,7 +418,7 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* Scoreboard */}
-        <div className={cn("flex gap-2 px-3 py-2 overflow-x-auto", isRTL && "flex-row-reverse")}>
+        <div className={cn("flex gap-2 px-3 py-2 overflow-x-auto shrink-0", isRTL && "flex-row-reverse")}>
           {[...players].sort((a, b) => b.score - a.score).map((p, i) => (
             <motion.div key={p.name} layout
               className={cn("flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold shrink-0",

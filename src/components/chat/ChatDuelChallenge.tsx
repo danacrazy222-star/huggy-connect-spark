@@ -403,6 +403,9 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
   };
 
   // Bot auto-pick move after a delay during picking phase
+  const playerMoveRef = useRef<Move | null>(null);
+  playerMoveRef.current = playerMove;
+
   useEffect(() => {
     if (!isBotMatch || phase !== "picking" || role !== "player") return;
     
@@ -412,8 +415,9 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       setP2Move(botMove);
       
       // If player already picked, go to clash
-      if (playerMove) {
-        setP1Move(playerMove);
+      const currentPlayerMove = playerMoveRef.current;
+      if (currentPlayerMove) {
+        setP1Move(currentPlayerMove);
         setWaitingForOpponent(false);
         setPhase("clash");
         setShakeIndex(0);
@@ -422,6 +426,15 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     
     return () => { if (botTimerRef.current) clearTimeout(botTimerRef.current); };
   }, [isBotMatch, phase, round, role]);
+
+  // When player is waiting for bot opponent and bot picks, trigger clash
+  useEffect(() => {
+    if (!isBotMatch || !waitingForOpponent || !playerMove || !p2Move) return;
+    setP1Move(playerMove);
+    setWaitingForOpponent(false);
+    setPhase("clash");
+    setShakeIndex(0);
+  }, [isBotMatch, waitingForOpponent, playerMove, p2Move]);
 
   // ── MATCHED → VOTE after 3s ──
   useEffect(() => {

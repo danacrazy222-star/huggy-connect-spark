@@ -79,6 +79,17 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
       </div>
 
       <div className={cn("max-w-[75%]", isRTL ? "text-right" : "")}>
+        {/* Username + Level badge - ABOVE the bubble */}
+        <div className={cn("flex items-center gap-1.5 mb-0.5", isRTL && "flex-row-reverse")}>
+          <span className="text-xs font-medium text-foreground">{msg.user}</span>
+          {msg.crown && <Crown className="w-3 h-3 text-primary" />}
+          {msg.level && (
+            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">
+              {getLevelIcon(msg.level)} Lv.{msg.level}
+            </span>
+          )}
+        </div>
+
         {/* Message bubble */}
         <div
           onClick={translate}
@@ -120,17 +131,6 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
 
         {/* Time stamp */}
         {now && <span className="text-[10px] text-muted-foreground mt-0.5 block">{now}</span>}
-
-        {/* Username + Level badge */}
-        <div className={cn("flex items-center gap-1.5 mt-0.5", isRTL && "flex-row-reverse")}>
-          <span className="text-xs font-medium text-foreground">{msg.user}</span>
-          {msg.crown && <Crown className="w-3 h-3 text-primary" />}
-          {msg.level && (
-            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">
-              {getLevelIcon(msg.level)} Lv.{msg.level}
-            </span>
-          )}
-        </div>
       </div>
     </motion.div>
   );

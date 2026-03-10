@@ -118,7 +118,7 @@ export function WorldChallengePromo() {
                       </div>
 
                       <div className="mb-4">
-                        <span className="text-3xl font-black text-primary font-display">$20</span>
+                        <span className="text-3xl font-black text-primary font-display">$5</span>
                         <span className="text-sm text-muted-foreground mr-2">/ كتاب رقمي</span>
                       </div>
 

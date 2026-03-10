@@ -4,6 +4,7 @@ import { useGameStore } from "@/store/useGameStore";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Gift, Zap, Ticket, Trophy, Sparkles, X, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { playTick, playSpinStart, playWinSound, playLoseSound } from "@/utils/spinSounds";
 
 const SEGMENT_COLORS = [
   { color: "#1a8a4a", colorEnd: "#2ecc71" },

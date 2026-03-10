@@ -457,8 +457,8 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
         </AnimatePresence>
 
         {/* Box Grid */}
-        <div className="px-3">
-          <div className="grid grid-cols-4 gap-2">
+        <div className="px-3 flex-1 flex items-center">
+          <div className="grid grid-cols-4 gap-2 w-full">
             {boxes.map((box) => {
               const info = getContentInfo(box.content);
               return (

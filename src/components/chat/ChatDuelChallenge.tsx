@@ -375,22 +375,6 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       timer--;
       setSearchTimer(timer);
 
-      if (timer % 2 === 0 && timer > 0) {
-        const { data } = await supabase
-          .from('rps_matches')
-          .select('*')
-          .eq('id', id)
-          .single();
-        if (data && data.status === 'matched' && data.player2_id) {
-          clearTimer();
-          setP2Name(data.player2_name ?? 'Player');
-          setP2Level(data.player2_level ?? 1);
-          setP2Id(data.player2_id);
-          setPhase("matched");
-          return;
-        }
-      }
-
       if (timer <= 0) {
         clearTimer();
         supabase.from('rps_matches').delete().eq('id', id).then(() => {});

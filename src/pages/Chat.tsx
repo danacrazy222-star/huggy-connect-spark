@@ -209,11 +209,22 @@ export default function Chat() {
   const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
     setDuelActive(false);
     addXP(won ? 300 : 80);
+    // Local styled announcement — no System account
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+    setBotMessages(prev => [...prev, {
+      user: "",
+      avatar: "",
+      message: `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
+      crown: false,
+      isSystem: true,
+      time: timeStr,
+    }]);
     if (activeRoom === 0) {
       setWorldChallengeSessionActive(false);
       useGameStore.getState().lockWorldChallenge();
     }
-  }, [addXP, activeRoom]);
+  }, [addXP, activeRoom, t]);
 
   return (
     <div className="min-h-screen pb-20 flex flex-col relative" dir={isRTL ? "rtl" : "ltr"}>

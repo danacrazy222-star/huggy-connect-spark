@@ -1,30 +1,30 @@
 import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
-import brandAmazon from "@/assets/brand-amazon.png";
-import brandGooglePlay from "@/assets/brand-google-play.png";
-import brandShein from "@/assets/brand-shein.png";
 
 const BRANDS = [
   {
     name: "Amazon",
-    image: brandAmazon,
-    borderColor: "hsl(35, 100%, 50%)",
-    glowShadow: "0 0 20px rgba(255,165,0,0.4)",
-    glowShadowActive: "0 0 40px rgba(255,165,0,0.7)",
+    logoText: "amazon",
+    logoStyle: "font-bold italic tracking-tight",
+    borderColor: "#ff9900",
+    glowRgb: "255,153,0",
+    bgHue: "35",
   },
   {
     name: "Google Play",
-    image: brandGooglePlay,
-    borderColor: "hsl(210, 100%, 55%)",
-    glowShadow: "0 0 20px rgba(59,130,246,0.4)",
-    glowShadowActive: "0 0 40px rgba(59,130,246,0.7)",
+    logoText: "Google Play",
+    logoStyle: "font-bold tracking-tight",
+    borderColor: "#4285f4",
+    glowRgb: "66,133,244",
+    bgHue: "210",
   },
   {
     name: "SHEIN",
-    image: brandShein,
-    borderColor: "hsl(330, 80%, 55%)",
-    glowShadow: "0 0 20px rgba(236,72,153,0.4)",
-    glowShadowActive: "0 0 40px rgba(236,72,153,0.7)",
+    logoText: "SHEIN",
+    logoStyle: "font-bold tracking-[0.15em]",
+    borderColor: "#ec4899",
+    glowRgb: "236,72,153",
+    bgHue: "330",
   },
 ];
 
@@ -42,46 +42,52 @@ export function ShopGiftCards() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.12, type: "spring", bounce: 0.4 }}
-            whileTap={{ scale: 1.05, boxShadow: brand.glowShadowActive }}
-            className="relative flex flex-col items-center rounded-[18px] p-6 pb-3 cursor-pointer"
-            style={{
-              background: "hsl(260 60% 6%)",
-              border: `2.5px solid ${brand.borderColor}`,
-              boxShadow: brand.glowShadow,
-            }}
+            whileTap={{ scale: 1.05 }}
+            className="relative flex flex-col items-center cursor-pointer"
           >
-            {/* 🏆 $500 Prize Badge */}
+            {/* WIN $500 Badge - positioned on top of card */}
             <div
-              className="rounded-full px-3 py-1 mb-4 flex items-center gap-1.5"
+              className="relative z-10 rounded-full px-3 py-1.5 flex items-center gap-1.5 mb-[-14px]"
               style={{
-                background: "hsl(260 60% 4% / 0.95)",
-                border: "1.5px solid hsl(45 100% 50% / 0.7)",
+                background: "linear-gradient(180deg, hsl(30 20% 15%) 0%, hsl(30 10% 8%) 100%)",
+                border: "2px solid hsl(45 100% 45%)",
+                boxShadow: "0 0 12px rgba(255,200,0,0.3)",
               }}
             >
               <Trophy className="w-3.5 h-3.5 text-primary" />
-              <span className="text-[10px] font-bold text-primary whitespace-nowrap">$500 Prize</span>
+              <span className="text-[9px] font-bold text-primary whitespace-nowrap">WIN $500</span>
             </div>
 
-            {/* Brand Logo - 60px, full brightness, no dark overlay */}
-            <div className="flex items-center justify-center mb-4" style={{ height: "60px" }}>
-              <img
-                src={brand.image}
-                alt={brand.name}
-                className="object-contain"
-                style={{ 
-                  height: "60px",
-                  width: "auto",
-                  opacity: 1,
-                  filter: "brightness(1)",
+            {/* Card body */}
+            <div
+              className="w-full rounded-[16px] pt-6 pb-3 px-3 flex flex-col items-center"
+              style={{
+                background: `radial-gradient(ellipse at 50% 30%, hsla(${brand.bgHue}, 60%, 20%, 0.8) 0%, hsl(260, 60%, 6%) 70%)`,
+                border: `2.5px solid ${brand.borderColor}`,
+                boxShadow: `0 0 25px rgba(${brand.glowRgb},0.4), 0 0 60px rgba(${brand.glowRgb},0.15), inset 0 0 30px rgba(${brand.glowRgb},0.05)`,
+              }}
+            >
+              {/* Brand Name as Logo - large & prominent */}
+              <span
+                className={`text-xl text-foreground mb-3 ${brand.logoStyle}`}
+                style={{
+                  textShadow: `0 0 20px rgba(${brand.glowRgb},0.5)`,
                 }}
-              />
+              >
+                {brand.logoText}
+              </span>
+
+              {/* $500 Gift Card */}
+              <span className="text-xs font-semibold text-foreground/80 mb-3">$500 Gift Card</span>
+
+              {/* Brand Name footer */}
+              <div
+                className="w-full pt-2 mt-1"
+                style={{ borderTop: `1px solid rgba(${brand.glowRgb},0.2)` }}
+              >
+                <span className="font-display text-[10px] font-bold text-muted-foreground">{brand.name}</span>
+              </div>
             </div>
-
-            {/* $500 Gift Card */}
-            <span className="text-xs font-bold text-foreground leading-tight mb-2">$500 Gift Card</span>
-
-            {/* Brand Name */}
-            <span className="font-display text-[10px] font-bold text-muted-foreground">{brand.name}</span>
           </motion.div>
         ))}
       </div>

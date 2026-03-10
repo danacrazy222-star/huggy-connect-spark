@@ -82,6 +82,7 @@ export default function Chat() {
   const [worldChallengeSessionActive, setWorldChallengeSessionActive] = useState(false);
   const [xpRainActive, setXpRainActive] = useState(false);
   const [xpRainCountdown, setXpRainCountdown] = useState(false);
+  const [duelActive, setDuelActive] = useState(false);
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<{ display_name: string | null; avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);
@@ -144,19 +145,22 @@ export default function Chat() {
   }, [activeRoom, canAccess]);
 
   // XP Rain event - triggers every 30 minutes in Bronze room (index 1)
+  // Delayed enough so it doesn't interfere with duel games
   useEffect(() => {
     if (activeRoom !== 1 || !canAccess) return;
     const triggerRain = () => {
+      if (duelActive) return; // Don't trigger during active duels
       setXpRainCountdown(true);
       setTimeout(() => {
         setXpRainCountdown(false);
         setXpRainActive(true);
       }, 3000);
     };
-    const initialTimeout = setTimeout(triggerRain, 20000);
+    // First rain after 3 minutes, then every 30 minutes
+    const initialTimeout = setTimeout(triggerRain, 3 * 60 * 1000);
     const interval = setInterval(triggerRain, 30 * 60 * 1000);
     return () => { clearTimeout(initialTimeout); clearInterval(interval); };
-  }, [activeRoom, canAccess]);
+  }, [activeRoom, canAccess, duelActive]);
 
   const handleXPRainEnd = useCallback((collected: number) => {
     setXpRainActive(false);
@@ -190,6 +194,7 @@ export default function Chat() {
   }, [message, user, userProfile, level, sendRealtimeMessage]);
 
   const handleWorldChallengeStart = useCallback(() => {
+    setDuelActive(true);
     if (activeRoom === 0) {
       useGameStore.getState().lockWorldChallenge();
       setWorldChallengeSessionActive(true);
@@ -197,6 +202,7 @@ export default function Chat() {
   }, [activeRoom]);
 
   const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
+    setDuelActive(false);
     addXP(won ? 300 : 80);
     if (user) {
       sendRealtimeMessage(
@@ -277,7 +283,7 @@ export default function Chat() {
                 playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
                 playerLevel={level}
                 onEnd={handleDuelEnd}
-                onStart={activeRoom === 0 ? handleWorldChallengeStart : undefined}
+                onStart={handleWorldChallengeStart}
                 isRTL={isRTL}
               />
             )}

@@ -73,6 +73,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Pro
           clearTimer();
           // No real player → bot with real name
           setOpponentName(getRandomName(playerName));
+          setOpponentLevel(Math.max(1, playerLevel + Math.floor(Math.random() * 7) - 3));
           setPhase("matched");
           return 0;
         }

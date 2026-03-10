@@ -254,8 +254,8 @@ export function SpinWheel() {
           <svg width="28" height="32" viewBox="0 0 28 32">
             <defs>
               <linearGradient id="pointer-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(45 100% 60%)" />
-                <stop offset="100%" stopColor="hsl(35 100% 40%)" />
+                <stop offset="0%" stopColor="#FFD700" />
+                <stop offset="100%" stopColor="#FF9F00" />
               </linearGradient>
               <filter id="pointer-shadow">
                 <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="hsl(45 100% 50%)" floodOpacity="0.5" />

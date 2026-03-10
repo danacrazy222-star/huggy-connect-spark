@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Send, RotateCcw } from "lucide-react";
 import { useGameStore } from "@/store/useGameStore";
 import { cn } from "@/lib/utils";
+import { playCardFlip, playMysticReveal } from "@/utils/sounds";
 import { fullTarotDeck, type TarotCard } from "@/data/tarotDeck";
 import madamZaraImg from "@/assets/madam-zara.png";
 import cardBackImg from "@/assets/tarot-card-back.png";

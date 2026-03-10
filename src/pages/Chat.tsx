@@ -92,7 +92,7 @@ export default function Chat() {
   const { clearUnread } = useChatStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [botMessages, setBotMessages] = useState<ChatMsg[]>([]);
-  const [announcements, setAnnouncements] = useState<ChatMsg[]>([]);
+  const [announcements, setAnnouncements] = useState<(ChatMsg & { roomId: number })[]>([]);
   const botIndexRef = useRef(0);
 
   const { messages: realtimeMessages, sendMessage: sendRealtimeMessage } = useChatRealtime(activeRoom);
@@ -220,6 +220,7 @@ export default function Chat() {
       crown: false,
       isSystem: true,
       time: timeStr,
+      roomId: activeRoom,
     }]);
     if (activeRoom === 0) {
       setWorldChallengeSessionActive(false);
@@ -315,7 +316,7 @@ export default function Chat() {
               {realtimeMessages.map((msg, i) => (
                 <ChatMessageBubble key={(msg as any)._id || i} msg={msg} index={i} isRTL={isRTL} currentUserId={user?.id} />
               ))}
-              {announcements.map((msg, i) => (
+              {announcements.filter(a => a.roomId === activeRoom).map((msg, i) => (
                 <ChatMessageBubble key={`announce-${i}`} msg={msg} index={0} isRTL={isRTL} />
               ))}
               <div ref={messagesEndRef} />

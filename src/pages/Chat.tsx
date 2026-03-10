@@ -157,6 +157,13 @@ export default function Chat() {
     setMessage("");
   }, [message, activeRoom, addMessage, user, userProfile]);
 
+  const handleWorldChallengeStart = useCallback(() => {
+    if (activeRoom === 0) {
+      useGameStore.getState().lockWorldChallenge();
+      setWorldChallengeSessionActive(true);
+    }
+  }, [activeRoom]);
+
   const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
     addXP(won ? 300 : 80);
     const now = new Date();
@@ -173,6 +180,7 @@ export default function Chat() {
     });
 
     if (activeRoom === 0) {
+      setWorldChallengeSessionActive(false);
       useGameStore.getState().lockWorldChallenge();
     }
   }, [addXP, addMessage, activeRoom]);

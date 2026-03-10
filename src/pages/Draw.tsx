@@ -300,7 +300,7 @@ export default function Draw() {
         <div className="bg-card/60 border border-primary/20 rounded-2xl p-4 space-y-3">
           <h3 className="font-display text-sm font-bold text-gold-gradient flex items-center gap-2">
             <Shield className="w-4 h-4 text-primary" />
-            Fair Draw System
+            {t("fairDrawSystem")}
           </h3>
           <p className="text-[11px] text-muted-foreground leading-relaxed">
             Winner is selected randomly from all entries using a secure random generator. Every entry has an equal chance to win.

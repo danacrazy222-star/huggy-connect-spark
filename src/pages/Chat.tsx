@@ -144,19 +144,23 @@ export default function Chat() {
   }, [activeRoom, canAccess]);
 
   // XP Rain event - triggers every 30 minutes in Bronze room (index 1)
+  // Delayed enough so it doesn't interfere with duel games
+  const [duelActive, setDuelActive] = useState(false);
   useEffect(() => {
     if (activeRoom !== 1 || !canAccess) return;
     const triggerRain = () => {
+      if (duelActive) return; // Don't trigger during active duels
       setXpRainCountdown(true);
       setTimeout(() => {
         setXpRainCountdown(false);
         setXpRainActive(true);
       }, 3000);
     };
-    const initialTimeout = setTimeout(triggerRain, 20000);
+    // First rain after 3 minutes, then every 30 minutes
+    const initialTimeout = setTimeout(triggerRain, 3 * 60 * 1000);
     const interval = setInterval(triggerRain, 30 * 60 * 1000);
     return () => { clearTimeout(initialTimeout); clearInterval(interval); };
-  }, [activeRoom, canAccess]);
+  }, [activeRoom, canAccess, duelActive]);
 
   const handleXPRainEnd = useCallback((collected: number) => {
     setXpRainActive(false);

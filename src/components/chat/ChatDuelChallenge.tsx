@@ -375,8 +375,8 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                   {voteTimer}
                 </motion.span>
               </div>
-              <p className="text-sm font-bold text-foreground mb-1">🎯 اختر من الرابح!</p>
-              <p className="text-[11px] text-muted-foreground mb-3">صوّت قبل ما يبدأ التحدي</p>
+               <p className="text-sm font-bold text-foreground mb-1">{t("duelChooseWinner")}</p>
+               <p className="text-[11px] text-muted-foreground mb-3">{t("duelVoteBefore")}</p>
 
               {/* Vote buttons */}
               <div className="grid grid-cols-2 gap-3 mb-4">

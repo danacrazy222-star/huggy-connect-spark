@@ -11,6 +11,7 @@ import { ChatMessageBubble, type ChatMsg } from "@/components/ChatMessageBubble"
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatDuelChallenge } from "@/components/chat/ChatDuelChallenge";
+import { WorldChallengePromo } from "@/components/chat/WorldChallengePromo";
 
 
 import roomBronze from "@/assets/room-bronze.jpg";
@@ -241,6 +242,9 @@ export default function Chat() {
           </div>
         )}
       </div>
+
+      {/* World room challenge promo button */}
+      {activeRoom === 0 && canAccess && <WorldChallengePromo />}
     </div>
   );
 }

@@ -256,6 +256,11 @@ export type TranslationKeys = {
   // SpinWheel reward labels
   reward_xp50: string; reward_xp100: string; reward_gameTicket: string; reward_tarotTicket: string;
   reward_ticketCombo: string; reward_pointsXp: string; reward_surprise: string; reward_tryAgain: string;
+  // Matchmaking Queue
+  matchmaking: string; joiningQueue: string; yourPosition: string; inQueue: string; estimatedWait: string;
+  playersInQueue: string; betAmount: string; points: string; leaveQueue: string; matchFound: string;
+  getReady: string; startingGame: string; botLabel: string; you: string; realPlayer: string;
+  loginToPlay: string; queueBotFallback: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

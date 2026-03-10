@@ -95,7 +95,7 @@ export default function UserProfile() {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col items-center gap-3"
         >
-          <DiamondFrame size="lg" active={userLevel >= 15} level={userLevel}>
+          <DiamondFrame size="lg" active={userLevel >= 20} level={userLevel}>
             <Avatar
               className={cn(
                 "w-24 h-24 border-2",

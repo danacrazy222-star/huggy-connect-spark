@@ -409,8 +409,8 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Pro
               {/* Live vote bar */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground">
-                  <span>{playerName} {votePercent.player}%</span>
-                  <span>{votePercent.opponent}% {opponentName}</span>
+                  <span>{playerName} (Lv.{playerLevel}) {votePercent.player}%</span>
+                  <span>{votePercent.opponent}% {opponentName} (Lv.{opponentLevel})</span>
                 </div>
                 <div className="w-full h-3 rounded-full bg-muted/30 overflow-hidden flex">
                   <motion.div

@@ -130,7 +130,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     };
   }, [roomId, user?.id]);
 
-  const checkExistingMatch = async () => {
+  const checkExistingMatch = useCallback(async () => {
     if (!user) return;
     const { data } = await supabase
       .from('rps_matches')

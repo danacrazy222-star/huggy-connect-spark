@@ -162,14 +162,20 @@ export default function Shop() {
               pkg.color,
               `border ${pkg.borderColor}`,
               pkg.glowColor,
-              pkg.tag && "scale-[1.02]"
+              pkg.tag && "scale-[1.05]"
             )}
           >
-            {/* Most Popular Tag */}
+            {/* Most Popular + Best Value Tags */}
             {pkg.tag && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-600 to-orange-500 rounded-full px-4 py-1 flex items-center gap-1.5 z-10">
-                <Flame className="w-3.5 h-3.5 text-yellow-300" />
-                <span className="text-[10px] font-bold text-white whitespace-nowrap">{pkg.tag}</span>
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
+                <div className="bg-gradient-to-r from-red-600 to-orange-500 rounded-full px-3 py-1 flex items-center gap-1">
+                  <Flame className="w-3 h-3 text-yellow-300" />
+                  <span className="text-[9px] font-bold text-white whitespace-nowrap">Most Popular</span>
+                </div>
+                <div className="bg-gradient-to-r from-primary to-gold-dark rounded-full px-3 py-1 flex items-center gap-1">
+                  <Star className="w-3 h-3 text-primary-foreground" />
+                  <span className="text-[9px] font-bold text-primary-foreground whitespace-nowrap">Best Value</span>
+                </div>
               </div>
             )}
 

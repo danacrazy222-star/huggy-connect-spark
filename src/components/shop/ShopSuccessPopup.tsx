@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { playPurchaseSuccess } from "@/utils/sounds";
 import type { BookPackage } from "@/pages/Shop";
 
 interface ShopSuccessPopupProps {

@@ -203,6 +203,14 @@ export default function Chat() {
           </div>
         ) : (
           <div className="flex-1 flex flex-col px-4">
+            {/* Duel challenge - at top */}
+            <ChatDuelChallenge
+              playerName={user?.email?.split("@")[0] || "You"}
+              playerLevel={level}
+              onEnd={handleDuelEnd}
+              isRTL={isRTL}
+            />
+
             {/* Chat messages area */}
             <div className="flex-1" />
             <div className="space-y-3 mb-3 overflow-y-auto max-h-[30vh]">
@@ -218,14 +226,6 @@ export default function Chat() {
                 />
               ))}
             </div>
-
-            {/* Duel challenge - embedded in chat */}
-            <ChatDuelChallenge
-              playerName={user?.email?.split("@")[0] || "You"}
-              playerLevel={level}
-              onEnd={handleDuelEnd}
-              isRTL={isRTL}
-            />
 
             {/* Message input */}
             <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>

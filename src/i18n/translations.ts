@@ -250,6 +250,12 @@ export type TranslationKeys = {
   noTicketsTarot: string; selectCardsHeart: string; tapAnyCard: string;
   revealReadTarot: string; askMadamZara: string; liveLabel: string;
   bonusEntriesLabel: string;
+  // SpinWheel segment labels
+  seg_xp50: string; seg_tryAgain: string; seg_surprise: string; seg_gameTicket: string;
+  seg_pointsXp: string; seg_xp100: string; seg_tarotTicket: string; seg_ticketCombo: string;
+  // SpinWheel reward labels
+  reward_xp50: string; reward_xp100: string; reward_gameTicket: string; reward_tarotTicket: string;
+  reward_ticketCombo: string; reward_pointsXp: string; reward_surprise: string; reward_tryAgain: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

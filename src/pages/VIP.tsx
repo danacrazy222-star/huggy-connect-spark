@@ -83,7 +83,7 @@ export default function VIP() {
             <span className="text-muted-foreground">
               {xp.toLocaleString()} / {xpNeededForNext.toLocaleString()} XP
             </span>
-            {level < 20 && (
+            {level < 30 && (
               <span className="text-primary font-semibold">
                 {xpRemaining.toLocaleString()} XP ⬅️
               </span>

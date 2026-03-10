@@ -24,6 +24,7 @@ const MAX_DROPS = 80;
 
 export function XPRainEvent({ onEnd }: XPRainEventProps) {
   const [active, setActive] = useState(true);
+  useEffect(() => { playXPRainStart(); }, []);
   const [timeLeft, setTimeLeft] = useState(DURATION);
   const [collected, setCollected] = useState(0);
   const [drops, setDrops] = useState<XPDrop[]>([]);

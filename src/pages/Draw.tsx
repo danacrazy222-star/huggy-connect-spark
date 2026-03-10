@@ -303,7 +303,7 @@ export default function Draw() {
             {t("fairDrawSystem")}
           </h3>
           <p className="text-[11px] text-muted-foreground leading-relaxed">
-            Winner is selected randomly from all entries using a secure random generator. Every entry has an equal chance to win.
+            {t("fairDrawDescription")}
           </p>
           <div className="bg-muted/30 rounded-xl p-3 space-y-1.5">
             <p className="text-[10px] text-muted-foreground font-mono">Entry #1 — Sarah_M</p>

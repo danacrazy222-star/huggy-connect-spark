@@ -69,7 +69,7 @@ const botScripts: Record<number, ChatMsg[]> = {
     { user: "Omar", avatar: "O", message: "You're at the top! The best rewards and events happen here! 🏆✨", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
   ],
   5: [ // Legend
-    { user: "Sara", avatar: "S", message: "🔥 Legend room! Only true champions reach Level 20! 👑🏆", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 25 },
+    { user: "Sara", avatar: "S", message: "🔥 Legend room! Only true champions reach Level 40! 👑🏆", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 42 },
     { user: "Omar", avatar: "O", message: "Welcome to the hall of legends! The rewards here are INSANE! 💎⚡", crown: true, gender: "male", avatarUrl: avatarMale2, level: 22 },
     { user: "Luna", avatar: "L", message: "This is where the elite gather — XP Rain drops are HUGE here! 🌧️🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 28 },
     { user: "Noor", avatar: "N", message: "I grinded for months to get here — totally worth it! 💪✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 21 },

@@ -29,7 +29,12 @@ type Player = { name: string; pos: number; isBot: boolean; color: string };
 type ActiveGame = "none" | "snake" | "scratch";
 
 export default function Games() {
-  return <GamesList />;
+  const [activeGame, setActiveGame] = useState<ActiveGame>("none");
+
+  if (activeGame === "snake") return <SnakeAndLadder onBack={() => setActiveGame("none")} />;
+  if (activeGame === "scratch") return <ScratchCard onBack={() => setActiveGame("none")} />;
+
+  return <GamesList onSelectGame={setActiveGame} />;
 }
 
 function GamesList() {

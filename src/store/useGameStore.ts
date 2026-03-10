@@ -20,6 +20,7 @@ interface GameState {
   setLastSpinTime: (time: number) => void;
   checkSpinAvailability: () => boolean;
   unlockWorldChallenge: () => void;
+  lockWorldChallenge: () => void;
 }
 
 // XP required to advance FROM each level (index = level)
@@ -62,6 +63,7 @@ export const useGameStore = create<GameState>()(
       
       setLastSpinTime: (time) => set({ lastSpinTime: time, canSpin: false }),
       unlockWorldChallenge: () => set({ worldChallengeUnlocked: true }),
+      lockWorldChallenge: () => set({ worldChallengeUnlocked: false }),
       
       checkSpinAvailability: () => {
         const { lastSpinTime } = get();

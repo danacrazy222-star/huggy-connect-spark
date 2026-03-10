@@ -54,6 +54,11 @@ export default function Chat() {
   const { t, isRTL } = useTranslation();
   const { roomMessages, addMessage, initRoom, addUnread, clearUnread, updateMessageInRoom } = useChatStore();
 
+  // Reset world challenge (one-time fix for persisted test data)
+  useEffect(() => {
+    useGameStore.getState().lockWorldChallenge();
+  }, []);
+
   // Initialize room with default messages
   useEffect(() => {
     initRoom(activeRoom, mockMessages);
@@ -253,8 +258,8 @@ export default function Chat() {
         )}
       </div>
 
-      {/* World room challenge promo button */}
-      {activeRoom === 0 && canAccess && <WorldChallengePromo />}
+      {/* World room challenge promo button - only show if not yet unlocked */}
+      {activeRoom === 0 && canAccess && !worldChallengeUnlocked && <WorldChallengePromo />}
     </div>
   );
 }

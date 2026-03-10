@@ -213,7 +213,7 @@ export default function Chat() {
     // Local styled announcement — no System account
     const now = new Date();
     const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-    setBotMessages(prev => [...prev, {
+    setAnnouncements(prev => [...prev, {
       user: "",
       avatar: "",
       message: `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,

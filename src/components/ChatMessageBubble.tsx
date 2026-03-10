@@ -19,6 +19,7 @@ export interface ChatMsg {
   level?: number;
   time?: string;
   isSystem?: boolean;
+  _userId?: string;
 }
 
 const getLevelIcon = (level: number) => {

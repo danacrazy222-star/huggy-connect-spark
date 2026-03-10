@@ -263,6 +263,18 @@ export default function Draw() {
             </div>
           )}
 
+          {/* Extension notice */}
+          {wasExtended && isDrawActive && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-accent/10 border border-accent/30 rounded-xl p-3 text-center"
+            >
+              <p className="text-xs text-accent font-bold mb-0.5">🔄 Draw Extended</p>
+              <p className="text-[10px] text-muted-foreground">The draw has been extended due to high demand. All entries remain active.</p>
+            </motion.div>
+          )}
+
           {/* Closing info text */}
           <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
             The draw will close when progress reaches <span className="text-primary font-bold">100%</span> or when the countdown timer ends.

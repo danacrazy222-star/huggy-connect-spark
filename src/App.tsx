@@ -15,6 +15,7 @@ import Tarot from "./pages/Tarot";
 import Games from "./pages/Games";
 import Draw from "./pages/Draw";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 import UserProfile from "./pages/UserProfile";
 import PrivateChat from "./pages/PrivateChat";
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/games" element={<Games />} />
               <Route path="/draw" element={<Draw />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/user/:userId" element={<UserProfile />} />
               <Route path="/dm/:recipientId" element={<PrivateChat />} />

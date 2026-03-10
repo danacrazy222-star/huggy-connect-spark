@@ -100,8 +100,27 @@ export default function Shop() {
         { icon: <Sparkles className="w-4 h-4 text-accent" />, label: `1 ${t("tarotTicket")}`, type: "tarotTicket", amount: 1 },
         { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: `2 ${t("drawEntry")}`, type: "drawEntry", amount: 2 },
       ],
-      tag: t("mostPopular"),
+      tag: null,
       includes: [`1 ${t("digitalBook")}`, `6,000 ${t("vipXP")}`, `20 ${t("xpPoints")}`, `1 ${t("gameTicket")}`, `1 ${t("tarotTicket")}`, `2 ${t("drawEntry")}`],
+    },
+    {
+      nameKey: "elitePack",
+      name: t("elitePack") || "Elite Pack",
+      price: "$5",
+      priceNum: 5,
+      number: 3,
+      color: "from-amber-900/50 to-yellow-950/70",
+      borderColor: "border-yellow-500/40",
+      glowColor: "shadow-[0_0_25px_rgba(234,179,8,0.25)]",
+      rewards: [
+        { icon: <Star className="w-4 h-4 text-primary" />, label: `12,000 ${t("vipXP")}`, type: "xp", amount: 12000 },
+        { icon: <Sparkles className="w-4 h-4 text-primary" />, label: `50 ${t("xpPoints")}`, type: "points", amount: 50 },
+        { icon: <Ticket className="w-4 h-4 text-red-accent" />, label: `2 ${t("gameTicket")}`, type: "gameTicket", amount: 2 },
+        { icon: <Sparkles className="w-4 h-4 text-accent" />, label: `2 ${t("tarotTicket")}`, type: "tarotTicket", amount: 2 },
+        { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: `3 ${t("drawEntry")}`, type: "drawEntry", amount: 3 },
+      ],
+      tag: t("mostPopular"),
+      includes: [`1 ${t("digitalBook")}`, `12,000 ${t("vipXP")}`, `50 ${t("xpPoints")}`, `2 ${t("gameTicket")}`, `2 ${t("tarotTicket")}`, `3 ${t("drawEntry")}`],
     },
   ];
 

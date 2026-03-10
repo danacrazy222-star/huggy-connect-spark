@@ -139,6 +139,57 @@ export default function Chat() {
     return () => clearTimeout(welcomeTimeout);
   }, [activeRoom, canAccess]);
 
+  // XP Rain event - triggers every 30 minutes in Bronze room (index 1)
+  useEffect(() => {
+    if (activeRoom !== 1 || !canAccess) return;
+
+    const triggerRain = () => {
+      // Show countdown message first
+      const now = new Date();
+      const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+      addMessage(1, {
+        user: "⚡ System",
+        avatar: "⚡",
+        message: t("xpRainStarting"),
+        crown: true,
+        gender: null,
+        level: 0,
+        time: timeStr,
+        isSystem: true,
+      });
+      setXpRainCountdown(true);
+      setTimeout(() => {
+        setXpRainCountdown(false);
+        setXpRainActive(true);
+      }, 3000);
+    };
+
+    // First trigger after 20 seconds (demo), then every 30 min
+    const initialTimeout = setTimeout(triggerRain, 20000);
+    const interval = setInterval(triggerRain, 30 * 60 * 1000);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
+  }, [activeRoom, canAccess, addMessage, t]);
+
+  const handleXPRainEnd = useCallback((collected: number) => {
+    setXpRainActive(false);
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+    const userName = user?.email?.split("@")[0] || "Player";
+    addMessage(1, {
+      user: "⚡ System",
+      avatar: "⚡",
+      message: `🎉 ${userName} ${t("xpRainAnnounce")} ${collected} XP! ⚡`,
+      crown: true,
+      gender: null,
+      level: 0,
+      time: timeStr,
+      isSystem: true,
+    });
+  }, [addMessage, user, t]);
 
   const sendMessage = useCallback(() => {
     const trimmed = message.trim();

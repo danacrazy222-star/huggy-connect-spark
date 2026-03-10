@@ -244,7 +244,7 @@ export default function Chat() {
               </div>
             )}
 
-            {/* Duel challenge - only in World room if unlocked, always in other rooms */}
+            {/* Game selector / active game */}
             {activeRoom === 0 && !worldChallengeUnlocked && !worldChallengeSessionActive ? (
               <div className="mx-auto my-2 w-full max-w-xs text-center">
                 <div className="flex flex-col items-center gap-2 py-3 px-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
@@ -252,12 +252,31 @@ export default function Chat() {
                   <p className="text-xs text-muted-foreground">{t("worldLockMsg")}</p>
                 </div>
               </div>
-            ) : (
+            ) : selectedGame === "duel" ? (
               <ChatDuelChallenge
                 playerName={user?.email?.split("@")[0] || "You"}
                 playerLevel={level}
-                onEnd={handleDuelEnd}
+                onEnd={(won, winnerName, loserName) => {
+                  handleDuelEnd(won, winnerName, loserName);
+                  setSelectedGame(null);
+                }}
                 onStart={activeRoom === 0 ? handleWorldChallengeStart : undefined}
+                isRTL={isRTL}
+              />
+            ) : selectedGame === "treasure" ? (
+              <ChatTreasureRush
+                playerName={user?.email?.split("@")[0] || "You"}
+                playerLevel={level}
+                onEnd={(won, winnerName, loserName) => {
+                  handleDuelEnd(won, winnerName, loserName);
+                  setSelectedGame(null);
+                }}
+                onStart={activeRoom === 0 ? handleWorldChallengeStart : undefined}
+                isRTL={isRTL}
+              />
+            ) : (
+              <ChatGameSelector
+                onSelect={(game) => setSelectedGame(game)}
                 isRTL={isRTL}
               />
             )}

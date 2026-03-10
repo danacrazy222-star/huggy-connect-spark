@@ -464,18 +464,15 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
               return (
                 <motion.button
                   key={`${roundNumber}-${box.id}`}
-                  initial={{ scale: 0, rotateY: 180 }}
+                  initial={false}
                   animate={{
-                    scale: 1,
-                    rotateY: 0,
-                    x: shakeBox === box.id ? [0, -5, 5, -5, 0] : 0,
+                    x: shakeBox === box.id ? [0, -4, 4, -4, 0] : 0,
                   }}
-                  transition={{ delay: box.id * 0.03, duration: 0.3 }}
-                  whileTap={!box.opened ? { scale: 0.9 } : undefined}
+                  transition={{ duration: 0.3 }}
                   onClick={() => !box.opened && handlePlayerClick(box.id)}
                   disabled={box.opened}
                   className={cn(
-                    "aspect-square rounded-xl border-2 flex items-center justify-center text-2xl transition-all relative overflow-hidden",
+                    "aspect-square rounded-xl border-2 flex items-center justify-center text-2xl relative overflow-hidden",
                     box.opened
                       ? box.content === "trap"
                         ? "bg-destructive/10 border-destructive/30"
@@ -492,14 +489,9 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
                   )}
                 >
                   {box.opened ? (
-                    <motion.span initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }}
-                      transition={{ type: "spring", bounce: 0.5 }}>
-                      {info.emoji}
-                    </motion.span>
+                    <span>{info.emoji}</span>
                   ) : (
-                    <motion.span animate={{ y: [0, -2, 0] }} transition={{ repeat: Infinity, duration: 1.5, delay: box.id * 0.1 }}>
-                      📦
-                    </motion.span>
+                    <span>📦</span>
                   )}
                   {/* Player indicator who opened */}
                   {box.opened && box.openedBy !== null && (

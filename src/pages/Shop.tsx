@@ -106,9 +106,8 @@ export default function Shop() {
         else if (r.type === "tarotTicket") addTarotTicket(r.amount);
         else if (r.type === "drawEntry") {
           addDrawEntry(r.amount);
-          // Add one draw store entry per draw entry
           for (let i = 0; i < r.amount; i++) {
-            addPurchase("You", Math.ceil(selectedPkg.priceNum / r.amount));
+            addPurchase("You");
           }
         }
       });

@@ -1,9 +1,9 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useDrawStore } from "@/store/useDrawStore";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trophy, Gift, Users, ChevronRight, PartyPopper, X, Hash, Ticket, Clock, Percent, Activity, ShoppingBag } from "lucide-react";
+import { Trophy, Gift, ChevronRight, PartyPopper, X, Clock, Activity, ShoppingBag, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +21,6 @@ const ACTIVITY_MESSAGES = [
   "CryptoKing bought Premium Pack 🔥",
 ];
 
-// Simple confetti component
 function Confetti() {
   const pieces = Array.from({ length: 30 }, (_, i) => ({
     id: i,
@@ -56,24 +55,34 @@ function Confetti() {
 export default function Draw() {
   const { t, isRTL } = useTranslation();
   const navigate = useNavigate();
-  const { poolAmount, targetAmount, prizeAmount, entries, currentWinner, winningEntryId, winnerAnnouncedAt, drawHistory, isDrawActive, getProgressPercent, resetDraw } = useDrawStore();
+  const {
+    prizeAmount, entries, currentWinner, winningEntryId,
+    drawHistory, isDrawActive, getProgressPercent, resetDraw,
+    drawStartedAt, drawDurationMs, checkTimerExpired, triggerDraw
+  } = useDrawStore();
+
   const [showWinnerPopup, setShowWinnerPopup] = useState(!!currentWinner);
   const percent = getProgressPercent();
-  const totalParticipants = new Set(entries.map(e => e.username)).size;
-  const totalEntries = entries.length;
 
-  // User's entries (demo: count entries by "You")
+  // User's entries (demo)
   const userEntries = entries.filter(e => e.username === "You").length;
-  const chanceToWin = totalEntries > 0 ? Math.round((userEntries / totalEntries) * 100) : 0;
 
-  // Countdown timer (next draw resets daily at midnight or when pool fills)
+  // Countdown timer to draw end
   const [countdown, setCountdown] = useState("");
   useEffect(() => {
     const updateCountdown = () => {
-      const now = new Date();
-      const tomorrow = new Date(now);
-      tomorrow.setHours(23, 59, 59, 0);
-      const diff = tomorrow.getTime() - now.getTime();
+      const endTime = drawStartedAt + drawDurationMs;
+      const diff = Math.max(0, endTime - Date.now());
+
+      if (diff <= 0 && isDrawActive) {
+        // Timer expired → trigger draw
+        if (entries.length > 0) {
+          triggerDraw();
+        }
+        setCountdown("00:00:00");
+        return;
+      }
+
       const h = Math.floor(diff / 3600000).toString().padStart(2, "0");
       const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, "0");
       const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, "0");
@@ -82,7 +91,7 @@ export default function Draw() {
     updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [drawStartedAt, drawDurationMs, isDrawActive, entries.length, triggerDraw]);
 
   // Live activity feed
   const [activityIndex, setActivityIndex] = useState(0);
@@ -93,16 +102,11 @@ export default function Draw() {
     return () => clearInterval(interval);
   }, []);
 
-  const recentEntries = useMemo(() =>
-    [...entries].sort((a, b) => b.timestamp - a.timestamp).slice(0, 10),
-    [entries]
-  );
-
   return (
     <div className="min-h-screen bg-premium-gradient stars-bg pb-20" dir={isRTL ? "rtl" : "ltr"}>
       <TopBar title={t("promotionalDraw")} />
 
-      {/* Winner Popup with Confetti */}
+      {/* Winner Popup */}
       <AnimatePresence>
         {showWinnerPopup && currentWinner && (
           <motion.div
@@ -129,13 +133,11 @@ export default function Draw() {
               <div className="bg-primary/10 border border-primary/30 rounded-xl px-4 py-3 mb-3">
                 <p className="text-xl font-bold text-foreground">{currentWinner}</p>
                 {winningEntryId && (
-                  <p className="text-xs text-primary mt-1">
-                    Entry #{winningEntryId} of {totalEntries} entries
-                  </p>
+                  <p className="text-xs text-primary mt-1">Entry #{winningEntryId}</p>
                 )}
               </div>
               <p className="text-sm text-foreground mb-1">Won</p>
-              <p className="text-2xl font-display font-bold text-gold-gradient">${prizeAmount} Amazon Gift Card</p>
+              <p className="text-2xl font-display font-bold text-gold-gradient">${prizeAmount} Gift Card</p>
               <div className="flex items-center justify-center gap-2 mt-3 text-xs text-muted-foreground">
                 <PartyPopper className="w-4 h-4 text-primary" />
                 <span>{t("congratulations")}!</span>
@@ -152,7 +154,7 @@ export default function Draw() {
       </AnimatePresence>
 
       <div className="px-4 space-y-5">
-        {/* Header + Countdown */}
+        {/* Header */}
         <div className="text-center">
           <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/40 rounded-full px-4 py-1.5 mb-3">
             <Gift className="w-4 h-4 text-primary" />
@@ -160,23 +162,6 @@ export default function Draw() {
           </div>
           <h2 className="font-display text-xl font-bold text-gold-gradient mb-1">{t("promotionalDraw")}</h2>
           <p className="text-xs text-muted-foreground mb-3">{t("drawDescription")}</p>
-
-          {/* Countdown Timer */}
-          {isDrawActive && (
-            <div className="inline-flex items-center gap-2 bg-card/80 border border-border rounded-xl px-4 py-2.5">
-              <Clock className="w-4 h-4 text-primary" />
-              <div>
-                <p className="text-[10px] text-muted-foreground">Next Draw In</p>
-                <p className="text-lg font-display font-bold text-primary tracking-wider">{countdown}</p>
-              </div>
-            </div>
-          )}
-          {!isDrawActive && currentWinner && (
-            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-xl px-4 py-2.5">
-              <Trophy className="w-4 h-4 text-primary" />
-              <p className="text-sm font-bold text-primary">Winner announced!</p>
-            </div>
-          )}
         </div>
 
         {/* Gift Card Brands */}
@@ -214,17 +199,17 @@ export default function Draw() {
           </div>
         </div>
 
-        {/* Progress Section */}
+        {/* Progress + Countdown Section */}
         <div className="bg-card/80 border border-border rounded-2xl p-5 space-y-4">
           <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
-            <h3 className="font-display text-sm font-bold text-foreground">{t("drawProgress")}</h3>
+            <h3 className="font-display text-sm font-bold text-foreground">Draw Progress</h3>
             <span className={cn("flex items-center gap-1 text-xs", isDrawActive ? "text-green-accent" : "text-red-accent")}>
               <span className={`w-2 h-2 rounded-full ${isDrawActive ? "bg-green-accent" : "bg-red-accent"} animate-pulse`} />
               {isDrawActive ? t("drawActive") : t("drawComplete")}
             </span>
           </div>
 
-          {/* Progress Display */}
+          {/* Big Progress % */}
           <div className="text-center">
             <motion.p
               key={percent}
@@ -234,7 +219,6 @@ export default function Draw() {
             >
               {percent}%
             </motion.p>
-            <p className="text-xs text-muted-foreground mt-1">{t("towardsDraw")}</p>
           </div>
 
           {/* Progress Bar */}
@@ -268,47 +252,42 @@ export default function Draw() {
             </div>
           </div>
 
-          {/* Stats - 4 cards now */}
-          <div className={cn("grid grid-cols-2 gap-2", isRTL && "direction-rtl")}>
-            <div className="bg-muted/40 rounded-xl p-2.5 text-center">
-              <Trophy className="w-4 h-4 text-primary mx-auto mb-1" />
-              <p className="text-lg font-bold text-primary">${prizeAmount}</p>
-              <p className="text-[9px] text-muted-foreground">{t("prize")}</p>
-            </div>
-            <div className="bg-muted/40 rounded-xl p-2.5 text-center">
-              <Ticket className="w-4 h-4 text-accent mx-auto mb-1" />
-              <p className="text-lg font-bold text-foreground">{totalEntries}</p>
-              <p className="text-[9px] text-muted-foreground">{t("totalEntries")}</p>
-            </div>
-            <div className="bg-muted/40 rounded-xl p-2.5 text-center">
-              <Users className="w-4 h-4 text-blue-accent mx-auto mb-1" />
-              <p className="text-lg font-bold text-foreground">{totalParticipants}</p>
-              <p className="text-[9px] text-muted-foreground">{t("participants")}</p>
-            </div>
-            <div className="bg-primary/10 border border-primary/20 rounded-xl p-2.5 text-center">
-              <Hash className="w-4 h-4 text-primary mx-auto mb-1" />
-              <p className="text-lg font-bold text-primary">{userEntries}</p>
-              <p className="text-[9px] text-muted-foreground">Your Entries</p>
-            </div>
-          </div>
-
-          {/* Chance to Win */}
-          {userEntries > 0 && (
-            <div className="bg-primary/10 border border-primary/30 rounded-xl p-3 text-center">
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <Percent className="w-4 h-4 text-primary" />
-                <span className="text-xs font-bold text-foreground">Chance to Win</span>
+          {/* Countdown Timer */}
+          {isDrawActive && (
+            <div className="flex items-center justify-center gap-3 bg-muted/40 rounded-xl py-3 px-4">
+              <Clock className="w-5 h-5 text-primary" />
+              <div className="text-center">
+                <p className="text-[10px] text-muted-foreground">Next Draw In</p>
+                <p className="text-2xl font-display font-bold text-primary tracking-wider">{countdown}</p>
               </div>
-              <p className="text-2xl font-display font-bold text-primary">{chanceToWin}%</p>
-              <p className="text-[9px] text-muted-foreground mt-0.5">{userEntries} / {totalEntries} entries</p>
             </div>
           )}
+
+          {/* Closing info text */}
+          <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
+            The draw will close when progress reaches <span className="text-primary font-bold">100%</span> or when the countdown timer ends.
+          </p>
+
+          {/* Your Entries - only if user has entries */}
+          {userEntries > 0 && (
+            <div className="bg-primary/10 border border-primary/30 rounded-xl p-3 text-center">
+              <p className="text-xs text-muted-foreground">Your Entries</p>
+              <p className="text-2xl font-display font-bold text-primary">{userEntries}</p>
+            </div>
+          )}
+
+          {/* Prize */}
+          <div className="bg-muted/40 rounded-xl p-3 text-center">
+            <Trophy className="w-5 h-5 text-primary mx-auto mb-1" />
+            <p className="text-xl font-bold text-primary">${prizeAmount}</p>
+            <p className="text-[9px] text-muted-foreground">{t("prize")}</p>
+          </div>
         </div>
 
         {/* Fair Draw System */}
         <div className="bg-card/60 border border-primary/20 rounded-2xl p-4 space-y-3">
           <h3 className="font-display text-sm font-bold text-gold-gradient flex items-center gap-2">
-            <Hash className="w-4 h-4 text-primary" />
+            <Shield className="w-4 h-4 text-primary" />
             Fair Draw System
           </h3>
           <p className="text-[11px] text-muted-foreground leading-relaxed">
@@ -343,32 +322,6 @@ export default function Draw() {
           </div>
         </div>
 
-        {/* Recent Entries */}
-        <div className="bg-card/60 border border-border rounded-2xl p-4">
-          <h3 className="font-display text-sm font-bold text-gold-gradient mb-3">{t("recentEntries")}</h3>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
-            {recentEntries.map((entry, i) => (
-              <motion.div
-                key={`${entry.entryId}-${entry.timestamp}`}
-                initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className={cn("flex items-center justify-between bg-muted/30 rounded-lg px-3 py-2", isRTL && "flex-row-reverse")}
-              >
-                <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
-                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary font-mono">
-                    #{entry.entryId}
-                  </div>
-                  <span className="text-xs text-foreground">{entry.username}</span>
-                </div>
-                <span className="text-[10px] text-muted-foreground">
-                  {new Date(entry.timestamp).toLocaleDateString()}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
         {/* Past Winners */}
         {drawHistory.length > 0 && (
           <div className="bg-card/60 border border-primary/20 rounded-2xl p-4">
@@ -380,7 +333,7 @@ export default function Draw() {
                     <Trophy className="w-4 h-4 text-primary" />
                     <div>
                       <span className="text-xs font-bold text-foreground">{w.winner}</span>
-                      <p className="text-[9px] text-primary">Entry #{w.entryId} of {w.totalEntries}</p>
+                      <p className="text-[9px] text-primary">Entry #{w.entryId}</p>
                     </div>
                   </div>
                   <div className={cn("flex flex-col items-end gap-0.5", isRTL && "items-start")}>
@@ -395,7 +348,7 @@ export default function Draw() {
           </div>
         )}
 
-        {/* CTA Button - navigates to Shop */}
+        {/* CTA Button */}
         {isDrawActive && (
           <button
             onClick={() => navigate("/shop")}
@@ -406,11 +359,11 @@ export default function Draw() {
             }}
           >
             <ShoppingBag className="w-5 h-5" />
-            Buy Book & Enter Draw
+            Enter the ${prizeAmount} Draw
           </button>
         )}
 
-        {/* Winner announcement banner */}
+        {/* Winner banner */}
         {currentWinner && !showWinnerPopup && (
           <motion.button
             onClick={() => setShowWinnerPopup(true)}

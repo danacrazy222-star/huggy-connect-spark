@@ -202,6 +202,7 @@ export default function Chat() {
   }, [activeRoom]);
 
   const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
+    setDuelActive(false);
     addXP(won ? 300 : 80);
     if (user) {
       sendRealtimeMessage(

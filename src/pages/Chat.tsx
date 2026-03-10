@@ -254,6 +254,10 @@ export default function Chat() {
                   <p className="text-sm text-muted-foreground">{t("loginToChat") || "Login to chat with others"}</p>
                 </div>
               )}
+              {/* Show welcome messages when room is empty */}
+              {realtimeMessages.length === 0 && getWelcomeMessages(activeRoom).map((msg, i) => (
+                <ChatMessageBubble key={`welcome-${i}`} msg={msg} index={i} isRTL={isRTL} />
+              ))}
               {realtimeMessages.map((msg, i) => (
                 <ChatMessageBubble key={(msg as any)._id || i} msg={msg} index={i} isRTL={isRTL} currentUserId={user?.id} />
               ))}

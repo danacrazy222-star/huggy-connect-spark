@@ -392,6 +392,27 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
     }
   }, [playerMove, matchId, user, isPlayer1]);
 
+  // Poll for opponent's move when waiting
+  useEffect(() => {
+    if (!waitingForOpponent || !matchId || !user) return;
+    const oppCol = isPlayer1 ? 'player2_move' : 'player1_move';
+    const pollInterval = setInterval(async () => {
+      const { data } = await supabase
+        .from('rps_matches')
+        .select('*')
+        .eq('id', matchId)
+        .single();
+      if (data && data[oppCol]) {
+        clearInterval(pollInterval);
+        setOpponentMove(data[oppCol] as Move);
+        setWaitingForOpponent(false);
+        setPhase("clash");
+        setShakeIndex(0);
+      }
+    }, 2000);
+    return () => clearInterval(pollInterval);
+  }, [waitingForOpponent, matchId, user, isPlayer1]);
+
   // ── CLASH animation ──
   useEffect(() => {
     if (phase !== "clash") return;

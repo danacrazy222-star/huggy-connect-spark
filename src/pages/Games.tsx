@@ -162,10 +162,10 @@ function SnakeAndLadder({ onBack }: { onBack: () => void }) {
       setWinner(w.name);
       setPhase("finished");
       const rewards = getGameXPReward();
-      if (!w.isBot) { addXP(rewards.win); addPoints(betAmount * 2); }
+      if (!w.isBot) { addXP(rewards.win); }
       else { addXP(rewards.lose); }
     }
-  }, [players, phase, addXP, addPoints, betAmount, getGameXPReward]);
+  }, [players, phase, addXP, getGameXPReward]);
 
   // Bot turns — handle all bot players sequentially
   useEffect(() => {

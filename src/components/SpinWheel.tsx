@@ -145,7 +145,7 @@ export function SpinWheel() {
       <div className="relative w-[300px] h-[300px] mx-auto">
         <div className="absolute -inset-6 rounded-full" 
           style={{ 
-            background: "radial-gradient(circle, hsl(var(--primary) / 0.15) 40%, hsl(var(--accent) / 0.08) 70%, transparent 100%)",
+            background: "radial-gradient(circle, rgba(255,215,0,0.12) 30%, rgba(155,89,182,0.08) 60%, transparent 100%)",
             filter: "blur(20px)"
           }} 
         />

@@ -114,6 +114,35 @@ export const useDrawStore = create<DrawState>()(
         return Date.now() >= drawStartedAt + drawDurationMs;
       },
 
+      // Called when timer expires - checks minimum entries before picking winner
+      handleTimerEnd: () => {
+        const state = get();
+        if (!state.isDrawActive || state.entries.length === 0) return;
+
+        if (state.entries.length >= state.minimumEntries) {
+          // Minimum met → pick winner
+          const winnerIdx = Math.floor(Math.random() * state.entries.length);
+          const winnerEntry = state.entries[winnerIdx];
+          set({
+            currentWinner: winnerEntry.username,
+            winningEntryId: winnerEntry.entryId,
+            winnerAnnouncedAt: Date.now(),
+            isDrawActive: false,
+            drawHistory: [
+              { winner: winnerEntry.username, date: Date.now(), prize: `$${state.prizeAmount} Gift Card`, entryId: winnerEntry.entryId },
+              ...state.drawHistory,
+            ],
+          });
+        } else {
+          // Minimum NOT met → extend draw, keep all entries
+          set({
+            wasExtended: true,
+            drawStartedAt: Date.now(), // reset timer for another cycle
+          });
+        }
+      },
+
+      // Called when progress reaches 100% (target entries reached)
       triggerDraw: () => {
         const state = get();
         if (!state.isDrawActive || state.entries.length === 0) return;
@@ -140,6 +169,7 @@ export const useDrawStore = create<DrawState>()(
         winningEntryId: null,
         winnerAnnouncedAt: null,
         isDrawActive: true,
+        wasExtended: false,
         drawStartedAt: Date.now(),
       }),
     }),

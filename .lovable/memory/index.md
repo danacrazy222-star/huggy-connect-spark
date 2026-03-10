@@ -8,13 +8,13 @@
 
 ## Pages
 - Home: Daily Spin wheel
-- Shop: 3 book packages ($1/$2/$3) + gift card draw
-- Chat: 5 rooms (Bronze/Silver/Gold/Diamond/Legend)
+- Shop: 4 book packages ($1/$2/$3/$5) + gift card draw
+- Chat: 6 rooms (World/Bronze/Silver/Gold/Diamond/Legend)
 - VIP: XP progression, mystery chests
 - Tarot: AI tarot card reading
 
 ## Room Level Requirements
-- Bronze: Lv1-8, Silver: Lv9-16, Gold: Lv17-24, Diamond: Lv25-32, Legend: Lv33-40
+- World: open (Lv0), Bronze: Lv1-8, Silver: Lv9-16, Gold: Lv17-24, Diamond: Lv25-32, Legend: Lv33-40
 
 ## State: Zustand (useGameStore) with persist
 - Points, XP, Level, GameTickets, TarotTickets, DrawEntries
@@ -26,6 +26,6 @@
 
 ## Economy
 - Spin: 1x per 24h, rewards: XP/Points/Tickets/Entries
-- Books: Basic($1)=50XP+entry, Plus($2)=120XP+ticket+entry, Premium($3)=250XP+tickets+entry
+- Books: Basic($1)=1500XP+entry, Plus($2)=3500XP+ticket+entry, Premium($3)=6000XP+20pts+tickets+entries, Elite($5)=12000XP+50pts+2tickets+2tarot+3entries
 - Games: 1 ticket entry, bet with points only
-- Winner gets 40XP, loser max 5XP
+- Winner gets 300XP, loser 80XP

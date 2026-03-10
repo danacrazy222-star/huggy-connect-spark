@@ -250,12 +250,28 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
 
   const startSearchTimer = (id: string) => {
     let timer = 40;
-    timerRef.current = setInterval(() => {
+    timerRef.current = setInterval(async () => {
       timer--;
       setSearchTimer(timer);
+      
+      // Poll every 3 seconds to check if someone joined
+      if (timer % 3 === 0 && timer > 0) {
+        const { data } = await supabase
+          .from('rps_matches')
+          .select('*')
+          .eq('id', id)
+          .single();
+        if (data && data.status === 'matched' && data.player2_id) {
+          clearTimer();
+          setOpponentName(data.player2_name);
+          setOpponentLevel(data.player2_level);
+          setPhase("matched");
+          return;
+        }
+      }
+      
       if (timer <= 0) {
         clearTimer();
-        // No one joined - cleanup and go back to idle
         supabase.from('rps_matches').delete().eq('id', id).then(() => {});
         setPhase("idle");
         setMatchId(null);

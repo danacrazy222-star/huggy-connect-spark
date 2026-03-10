@@ -144,9 +144,9 @@ export default function Chat() {
     return () => clearInterval(interval);
   }, [activeRoom, canAccess]);
 
-  // XP Rain event - triggers every 1 hour in Bronze room (index 1)
+  // XP Rain event - triggers every hour in ALL rooms, synced to clock
   useEffect(() => {
-    if (activeRoom !== 1 || !canAccess) return;
+    if (!canAccess) return;
     const triggerRain = () => {
       if (duelActive) return;
       setXpRainCountdown(true);
@@ -155,10 +155,17 @@ export default function Chat() {
         setXpRainActive(true);
       }, 3000);
     };
-    const initialTimeout = setTimeout(triggerRain, 5 * 60 * 1000);
-    const interval = setInterval(triggerRain, 60 * 60 * 1000);
-    return () => { clearTimeout(initialTimeout); clearInterval(interval); };
-  }, [activeRoom, canAccess, duelActive]);
+    // Calculate ms until next full hour
+    const now = new Date();
+    const msUntilNextHour = (60 - now.getMinutes()) * 60 * 1000 - now.getSeconds() * 1000 - now.getMilliseconds();
+    const initialTimeout = setTimeout(() => {
+      triggerRain();
+      // Then every 60 minutes
+      const interval = setInterval(triggerRain, 60 * 60 * 1000);
+      return () => clearInterval(interval);
+    }, msUntilNextHour);
+    return () => clearTimeout(initialTimeout);
+  }, [canAccess, duelActive]);
 
   const handleXPRainEnd = useCallback((collected: number) => {
     setXpRainActive(false);

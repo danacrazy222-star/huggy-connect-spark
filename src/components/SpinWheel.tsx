@@ -111,12 +111,35 @@ export function SpinWheel() {
     setShowWinModal(false);
     setWinReward(null);
 
+    // Play spin start sound
+    playSpinStart();
+
+    // Tick sounds that slow down over time
+    let tickSpeed = 60;
+    const startTicking = () => {
+      if (tickIntervalRef.current) clearInterval(tickIntervalRef.current);
+      tickIntervalRef.current = setInterval(() => {
+        playTick();
+        tickSpeed += 15;
+        if (tickSpeed > 500) {
+          if (tickIntervalRef.current) clearInterval(tickIntervalRef.current);
+          return;
+        }
+        if (tickIntervalRef.current) clearInterval(tickIntervalRef.current);
+        tickIntervalRef.current = setInterval(() => {
+          playTick();
+        }, tickSpeed);
+      }, tickSpeed);
+    };
+    startTicking();
+
     const segmentIndex = getWeightedSegment();
     const extraSpins = 6 * 360;
     const targetAngle = extraSpins + (360 - segmentIndex * SEGMENT_ANGLE - SEGMENT_ANGLE / 2);
     setRotation((prev) => prev + targetAngle);
 
     setTimeout(() => {
+      if (tickIntervalRef.current) clearInterval(tickIntervalRef.current);
       const rewardType = SEGMENT_REWARDS[segmentIndex].type;
       setSpinning(false);
       setLastSpinTime(Date.now());
@@ -128,6 +151,12 @@ export function SpinWheel() {
         case "ticketCombo": addGameTicket(1); addTarotTicket(1); break;
         case "pointsXp": addPoints(15); addXP(50); break;
         case "surprise": addXP(50); addTarotTicket(1); break;
+      }
+      // Play result sound
+      if (rewardType === "none") {
+        playLoseSound();
+      } else {
+        playWinSound();
       }
       setWinReward({
         type: rewardType,

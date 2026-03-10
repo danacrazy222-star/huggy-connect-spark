@@ -78,21 +78,57 @@ export default function Chat() {
     clearUnread();
   }, [clearUnread]);
 
-  // Simulate incoming messages with notification sound
+  // Simulate active chat with varied messages
   useEffect(() => {
     if (!canAccess) return;
-    const fakeMessages: ChatMsg[] = [
-      { user: "Sara", avatar: "S", message: "مرحبا! 👋", crown: false, gender: "female", avatarUrl: avatarFemale3 },
-      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮", crown: true, gender: "male", avatarUrl: avatarMale2 },
-      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2 },
+
+    const chatMessages: ChatMsg[] = [
+      { user: "Sara", avatar: "S", message: "مرحبا! 👋 أهلاً بالجميع", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+      { user: "Omar", avatar: "O", message: "يلا نلعب! 🎮 مين جاهز؟", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+      { user: "Noor", avatar: "N", message: "حظ سعيد للجميع 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+      { user: "Sara", avatar: "S", message: "فزت بالسحب اليوم! 🎉🎉", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+      { user: "Omar", avatar: "O", message: "مبروك يا سارة 🥳👏", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+      { user: "Noor", avatar: "N", message: "مين يبي يلعب تحدي؟ ⚔️", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+      { user: "Sara", avatar: "S", message: "الغرفة اليوم حماسية 🔥🔥", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+      { user: "Omar", avatar: "O", message: "أنا وصلت لفل 12! 💪", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+      { user: "Noor", avatar: "N", message: "شدوا حيلكم يا شباب 💪🏆", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+      { user: "Omar", avatar: "O", message: "مين جرب التاروت اليوم؟ 🔮", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+      { user: "Sara", avatar: "S", message: "أنا بعمل سبين كل يوم ✨", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+      { user: "Noor", avatar: "N", message: "Good luck everyone 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
     ];
+
+    let msgIndex = 0;
     const interval = setInterval(() => {
-      const msg = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];
+      const now = new Date();
+      const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+      const msg = { ...chatMessages[msgIndex % chatMessages.length], time: timeStr };
       addMessage(activeRoom, msg);
       addUnread();
-    }, 15000 + Math.random() * 10000);
+      msgIndex++;
+    }, 8000 + Math.random() * 7000);
     return () => clearInterval(interval);
   }, [canAccess, activeRoom, addMessage, addUnread]);
+
+  // Welcome message when user enters
+  useEffect(() => {
+    if (!canAccess || !user) return;
+    const userName = user.email?.split("@")[0] || "Player";
+    const welcomeTimeout = setTimeout(() => {
+      const now = new Date();
+      const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+      addMessage(activeRoom, {
+        user: "Luna",
+        avatar: "L",
+        message: `أهلاً ${userName}! 👋🎉 نورت الغرفة`,
+        crown: true,
+        gender: "female",
+        avatarUrl: avatarFemale1,
+        level: 7,
+        time: timeStr,
+      });
+    }, 2000);
+    return () => clearTimeout(welcomeTimeout);
+  }, [activeRoom, canAccess]);
 
 
   const sendMessage = useCallback(() => {

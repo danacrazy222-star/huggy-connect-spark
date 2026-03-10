@@ -239,7 +239,7 @@ export default function Chat() {
               <div className="mx-auto my-3 w-full max-w-xs text-center">
                 <div className="flex flex-col items-center gap-2 py-4 px-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
                   <Lock className="w-8 h-8 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">🔒 اشترِ الكتاب لفتح التحدي أمام العالم</p>
+                  <p className="text-sm text-muted-foreground">{t("worldLockMsg")}</p>
                 </div>
               </div>
             ) : (

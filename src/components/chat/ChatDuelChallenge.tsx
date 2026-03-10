@@ -212,13 +212,29 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     const amP2 = match.player2_id === user.id;
     const amPlayer = amP1 || amP2;
 
+    // CRITICAL: Only process matches I'm involved in, or that I'm actively tracking
+    // Don't let random room matches corrupt my state
+    if (!amPlayer && matchId !== match.id) {
+      // It's a new waiting match from someone else — update the join button
+      if (match.status === 'waiting' && phase === 'idle') {
+        setActiveWaitingMatch(match);
+      }
+      return;
+    }
+
+    // If I'm searching and someone else's match changed, but it's not mine, ignore
+    if (!amPlayer && phase === 'searching') {
+      return;
+    }
+
     setMatchId(match.id);
     setP1Name(match.player1_name);
     setP1Level(match.player1_level ?? 1);
     setP1Id(match.player1_id);
 
-    // Someone joined
+    // Someone joined MY match
     if (match.status === 'matched' && match.player2_id) {
+      clearTimer(); // Stop search timer
       setP2Name(match.player2_name ?? 'Player');
       setP2Level(match.player2_level ?? 1);
       setP2Id(match.player2_id);
@@ -241,7 +257,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       }
     }
 
-    // Both moves in - resolve for spectators
+    // Both moves in - resolve
     if (match.player1_move && match.player2_move) {
       setP1Move(match.player1_move as Move);
       setP2Move(match.player2_move as Move);
@@ -252,12 +268,10 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
         setPhase("clash");
         setShakeIndex(0);
       } else {
-        // Spectator sees clash
         setPhase("clash");
         setShakeIndex(0);
       }
     } else if (amPlayer) {
-      // Check if MY move is there but opponent's isn't
       const myMove = amP1 ? match.player1_move : match.player2_move;
       const oppMove = amP1 ? match.player2_move : match.player1_move;
       if (myMove && !oppMove) {
@@ -273,7 +287,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       setFinalWinner(match.winner_id === match.player1_id ? "p1" : "p2");
       setPhase("final_result");
     }
-  }, [user, role]);
+  }, [user, role, matchId, phase]);
 
   // ── START SEARCH ──
   const startSearch = async () => {

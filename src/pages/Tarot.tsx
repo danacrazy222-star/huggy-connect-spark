@@ -10,6 +10,8 @@ import madamZaraImg from "@/assets/madam-zara.png";
 import cardBackImg from "@/assets/tarot-card-back.png";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/tarot-reading`;
 const MAX_CARDS = 3;

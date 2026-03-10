@@ -42,6 +42,9 @@ const App = () => (
               <Route path="/draw" element={<Draw />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/user/:userId" element={<UserProfile />} />
+              <Route path="/dm/:recipientId" element={<PrivateChat />} />
+              <Route path="/messages" element={<Messages />} />
               <Route path="/promotion-rules" element={<PromotionRules />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="*" element={<NotFound />} />

@@ -555,7 +555,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
 
   // Poll for opponent's move when waiting
   useEffect(() => {
-    if (!waitingForOpponent || !matchId || !user || role !== "player") return;
+    if (!waitingForOpponent || !matchId || !user || role !== "player" || isBotMatch) return;
     const oppCol = isPlayer1 ? 'player2_move' : 'player1_move';
     const pollInterval = setInterval(async () => {
       const { data } = await supabase.from('rps_matches').select('*').eq('id', matchId).single();

@@ -189,6 +189,50 @@ export type TranslationKeys = {
   tryAnotherCard: string;
   noReward: string;
   scratchCardCost: string;
+  // Duel Challenge
+  duelRPS: string;
+  duelSearching: string;
+  duelSendingInvites: string;
+  duelFoundOpponent: string;
+  duelChooseWinner: string;
+  duelVoteBefore: string;
+  duelYourVote: string;
+  duelLiveVote: string;
+  duelRound: string;
+  duelChooseMove: string;
+  duelVs: string;
+  duelRockPaperScissors: string;
+  duelDraw: string;
+  duelWonRound: string;
+  duelIsWinner: string;
+  duelScore: string;
+  duelVoteCorrect: string;
+  duelVoteWrong: string;
+  duelDidntVote: string;
+  duelDone: string;
+  duelRock: string;
+  duelPaper: string;
+  duelScissors: string;
+  // World Challenge
+  worldChallengeTitle: string;
+  worldChallengeDesc: string;
+  worldChallengePurchased: string;
+  worldChallengeUnlockedMsg: string;
+  worldBookExclusive: string;
+  worldOneChallenge: string;
+  worldNameShown: string;
+  worldGameTicket: string;
+  worldDrawEntry: string;
+  worldPerBook: string;
+  worldBuyBook: string;
+  worldAfterChallenge: string;
+  worldLockMsg: string;
+  // System messages
+  systemChampion: string;
+  systemNewLegend: string;
+  systemWhoChallenge: string;
+  welcomeMsg: string;
+  welcomeLitRoom: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

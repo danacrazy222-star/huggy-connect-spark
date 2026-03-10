@@ -21,7 +21,6 @@ type Move = "rock" | "paper" | "scissors";
 type Phase = "idle" | "searching" | "matched" | "vote" | "picking" | "clash" | "round_result" | "final_result";
 
 const MOVE_EMOJI: Record<Move, string> = { rock: "🪨", paper: "📄", scissors: "✂️" };
-const MOVE_LABEL: Record<Move, string> = { rock: "حجر", paper: "ورقة", scissors: "مقص" };
 
 function resolveRPS(a: Move, b: Move): "a" | "b" | "draw" {
   if (a === b) return "draw";

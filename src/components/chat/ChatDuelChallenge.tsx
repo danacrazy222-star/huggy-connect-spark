@@ -74,6 +74,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const roomChannelRef = useRef<any>(null);
+  const handleUpdateRef = useRef<(match: any) => void>(() => {});
 
   const clearTimer = () => {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
@@ -83,18 +84,29 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
   useEffect(() => {
     return () => {
       clearTimer();
-      if (roomChannelRef.current) supabase.removeChannel(roomChannelRef.current);
+      if (roomChannelRef.current) {
+        supabase.removeChannel(roomChannelRef.current);
+        roomChannelRef.current = null;
+      }
     };
   }, []);
 
+  // Keep handler ref updated
+  useEffect(() => {
+    handleUpdateRef.current = handleRoomMatchUpdate;
+  });
+
   // ══════ ROOM-LEVEL SUBSCRIPTION ══════
-  // Everyone in the room subscribes to see active matches
   useEffect(() => {
     if (!user) return;
-    if (roomChannelRef.current) supabase.removeChannel(roomChannelRef.current);
+    if (roomChannelRef.current) {
+      supabase.removeChannel(roomChannelRef.current);
+      roomChannelRef.current = null;
+    }
 
+    const channelName = `room-rps-${roomId}-${user.id.slice(0, 8)}`;
     const channel = supabase
-      .channel(`room-rps-${roomId}-${Date.now()}`)
+      .channel(channelName)
       .on('postgres_changes', {
         event: '*',
         schema: 'public',
@@ -103,17 +115,20 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       }, (payload) => {
         const match = payload.new as any;
         if (!match || !match.id) return;
-        handleRoomMatchUpdate(match);
+        handleUpdateRef.current(match);
       })
       .subscribe();
 
     roomChannelRef.current = channel;
 
-    // Also poll for existing active match in room on mount
+    // Check for existing active match on mount
     checkExistingMatch();
 
-    return () => { supabase.removeChannel(channel); };
-  }, [roomId, user]);
+    return () => {
+      supabase.removeChannel(channel);
+      roomChannelRef.current = null;
+    };
+  }, [roomId, user?.id]);
 
   const checkExistingMatch = async () => {
     if (!user) return;

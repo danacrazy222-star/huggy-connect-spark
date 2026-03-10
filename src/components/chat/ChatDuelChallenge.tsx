@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Timer, Trophy, Search, User, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const PLAYER_NAMES = [
   "Ryuuki", "SakuraBlade", "KenX", "NovaStar", "ZeroHero", "Akira99",

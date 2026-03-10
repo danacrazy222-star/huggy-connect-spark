@@ -28,12 +28,13 @@ const NameWithLevel = ({ name, level, className }: { name: string; level: number
 interface Props {
   playerName: string;
   playerLevel: number;
+  roomId: number;
   onEnd: (won: boolean, winnerName: string, loserName: string) => void;
   onStart?: () => void;
   isRTL?: boolean;
 }
 
-export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isRTL }: Props) {
+export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onStart, isRTL }: Props) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const MOVE_LABEL: Record<Move, string> = { rock: t("duelRock"), paper: t("duelPaper"), scissors: t("duelScissors") };
@@ -201,6 +202,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
       .from('rps_matches')
       .select('*')
       .eq('status', 'waiting')
+      .eq('room_id', roomId)
       .neq('player1_id', user.id)
       .order('created_at', { ascending: true })
       .limit(1);
@@ -236,6 +238,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
         player1_id: user.id,
         player1_name: playerName,
         player1_level: playerLevel,
+        room_id: roomId,
         status: 'waiting',
       })
       .select()

@@ -168,6 +168,7 @@ export type Database = {
           player2_move: string | null
           player2_name: string | null
           player2_score: number
+          room_id: number
           status: string
           updated_at: string
           winner_id: string | null
@@ -187,6 +188,7 @@ export type Database = {
           player2_move?: string | null
           player2_name?: string | null
           player2_score?: number
+          room_id?: number
           status?: string
           updated_at?: string
           winner_id?: string | null
@@ -206,6 +208,7 @@ export type Database = {
           player2_move?: string | null
           player2_name?: string | null
           player2_score?: number
+          room_id?: number
           status?: string
           updated_at?: string
           winner_id?: string | null

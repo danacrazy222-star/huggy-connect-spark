@@ -135,6 +135,8 @@ export default function Chat() {
     const trimmed = message.trim();
     if (!trimmed) return;
     const filtered = containsProfanity(trimmed) ? censorMessage(trimmed) : trimmed;
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
     addMessage(activeRoom, {
       user: "You",
       avatar: user?.email?.charAt(0).toUpperCase() || "Y",
@@ -142,6 +144,8 @@ export default function Chat() {
       crown: false,
       avatarUrl: userProfile?.avatar_url || undefined,
       gender: (userProfile?.gender as "male" | "female" | null) || null,
+      level,
+      time: timeStr,
     });
     setMessage("");
   }, [message, activeRoom, addMessage, user, userProfile]);

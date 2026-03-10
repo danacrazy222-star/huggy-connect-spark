@@ -5,13 +5,16 @@ import type { BookPackage } from "@/pages/Shop";
 interface ShopConfirmPopupProps {
   show: boolean;
   pkg: BookPackage | null;
+  quantity: number;
   onConfirm: () => void;
   onCancel: () => void;
   isRTL: boolean;
 }
 
-export function ShopConfirmPopup({ show, pkg, onConfirm, onCancel, isRTL }: ShopConfirmPopupProps) {
+export function ShopConfirmPopup({ show, pkg, quantity, onConfirm, onCancel, isRTL }: ShopConfirmPopupProps) {
   if (!pkg) return null;
+
+  const totalPrice = pkg.priceNum * quantity;
 
   return (
     <AnimatePresence>
@@ -37,26 +40,48 @@ export function ShopConfirmPopup({ show, pkg, onConfirm, onCancel, isRTL }: Shop
               </button>
             </div>
 
-            <p className="text-sm text-muted-foreground mb-3">You will receive:</p>
+            {/* Quantity Badge */}
+            {quantity > 1 && (
+              <div className="bg-primary/10 border border-primary/30 rounded-xl px-3 py-2 mb-3 text-center">
+                <span className="text-sm font-bold text-primary">{quantity}x {pkg.name}</span>
+              </div>
+            )}
+
+            <p className="text-sm text-muted-foreground mb-3">
+              {quantity > 1 ? `You will receive (×${quantity}):` : "You will receive:"}
+            </p>
 
             <ul className="space-y-2 mb-5">
-              {pkg.includes.map((item, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm text-foreground">
-                  <CheckCircle className="w-4 h-4 text-green-accent flex-shrink-0" />
-                  <span>{item}</span>
-                </li>
-              ))}
+              {pkg.includes.map((item, i) => {
+                // Show multiplied amounts for quantity > 1
+                let displayItem = item;
+                if (quantity > 1) {
+                  // Parse number from beginning of string and multiply
+                  const match = item.match(/^(\d[\d,]*)\s+(.+)$/);
+                  if (match) {
+                    const num = parseInt(match[1].replace(/,/g, ''));
+                    const total = num * quantity;
+                    displayItem = `${total.toLocaleString()} ${match[2]}`;
+                  }
+                }
+                return (
+                  <li key={i} className="flex items-center gap-2 text-sm text-foreground">
+                    <CheckCircle className="w-4 h-4 text-green-accent flex-shrink-0" />
+                    <span>{displayItem}</span>
+                  </li>
+                );
+              })}
             </ul>
 
             <button
               onClick={onConfirm}
               className="w-full py-3 rounded-xl font-display font-bold text-sm text-primary-foreground hover:brightness-110 transition-all"
               style={{
-                background: "linear-gradient(180deg, #FFD700, #FFB000)",
+                background: "linear-gradient(180deg, hsl(45 100% 50%), hsl(40 100% 40%))",
                 boxShadow: "0 0 20px rgba(255,200,0,0.2)",
               }}
             >
-              Confirm Purchase — {pkg.price}
+              Confirm Purchase — ${totalPrice}
             </button>
           </motion.div>
         </motion.div>

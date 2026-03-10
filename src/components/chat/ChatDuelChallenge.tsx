@@ -486,7 +486,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     setRoundTimer(10);
     setWaitingForOpponent(false);
 
-    if (matchId && role === "player" && isPlayer1) {
+    if (!isBotMatch && matchId && role === "player" && isPlayer1) {
       await supabase.from('rps_matches').update({
         player1_move: null,
         player2_move: null,

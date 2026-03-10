@@ -30,7 +30,7 @@ interface Props {
   msg: ChatMsg;
   index: number;
   isRTL: boolean;
-  onTranslated: (translated: string) => void;
+  onTranslated?: (translated: string) => void;
 }
 
 export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {

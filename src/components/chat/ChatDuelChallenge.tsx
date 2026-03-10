@@ -91,6 +91,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Pro
       if (phase === "searching") {
         clearTimer();
         setOpponentName(getRandomName(playerName));
+        setOpponentLevel(Math.max(1, playerLevel + Math.floor(Math.random() * 7) - 3));
         setSearchTimer(0);
         setPhase("matched");
       }

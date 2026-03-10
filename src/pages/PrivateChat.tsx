@@ -212,7 +212,7 @@ export default function PrivateChat() {
       </div>
 
       {/* Input */}
-      <div className="sticky bottom-0 bg-card/95 backdrop-blur-md border-t border-border px-4 py-3">
+      <div className="sticky bottom-16 bg-card/95 backdrop-blur-md border-t border-border px-4 py-3">
         <div className="flex items-center gap-2">
           <input
             value={input}

@@ -4,7 +4,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { cn } from "@/lib/utils";
 
 const Index = () => {
-  const { isRTL } = useTranslation();
+  const { t, isRTL } = useTranslation();
 
   return (
     <div className={cn("min-h-screen bg-premium-gradient stars-bg pb-24", isRTL && "dir-rtl")} dir={isRTL ? "rtl" : "ltr"}>
@@ -13,10 +13,10 @@ const Index = () => {
       {/* Hero Section */}
       <div className="text-center px-4 pt-1 pb-3">
         <h1 className="font-display text-2xl font-bold text-gold-gradient tracking-wider">
-          WINLINE DAILY SPIN
+          {t("winlineDailySpin")}
         </h1>
         <p className="text-foreground/70 text-sm mt-0.5">
-          Win a <span className="text-primary font-semibold">$500</span> Gift Card
+          {t("winGiftCard")}
         </p>
       </div>
 

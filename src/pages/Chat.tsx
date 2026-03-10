@@ -52,8 +52,8 @@ const botScripts: Record<number, ChatMsg[]> = {
     { user: "Sara", avatar: "S", message: "The XP rewards get bigger in higher rooms! 💎", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
     { user: "Luna", avatar: "L", message: "Diamond room at Level 20 is the next big goal! 💎🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
   ],
-  4: [ // Diamond
-    { user: "Sara", avatar: "S", message: "Diamond room! 💎👑 The elite club! Welcome champion!", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+  3: [ // Diamond
+    { user: "Sara", avatar: "S", message: "Diamond room! 💎👑 Level 25+ elite club!", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 28 },
     { user: "Omar", avatar: "O", message: "You're at the top! The best rewards and events happen here! 🏆✨", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
   ],
   5: [ // Legend

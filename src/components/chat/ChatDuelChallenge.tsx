@@ -558,18 +558,18 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
               {votePick ? (
                 votePick === finalWinner ? (
                   <div className="bg-green-accent/10 border border-green-accent/30 rounded-xl p-2 mb-3">
-                    <p className="text-sm font-bold text-green-accent">🎉 صوتك صحيح!</p>
+                    <p className="text-sm font-bold text-green-accent">{t("duelVoteCorrect")}</p>
                     <p className="text-xs text-green-accent/80 font-bold">+300 XP</p>
                   </div>
                 ) : (
                   <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-2 mb-3">
-                    <p className="text-sm font-bold text-destructive">😔 صوتك خاطئ</p>
+                    <p className="text-sm font-bold text-destructive">{t("duelVoteWrong")}</p>
                     <p className="text-xs text-muted-foreground font-bold">+80 XP</p>
                   </div>
                 )
               ) : (
                 <div className="bg-muted/20 border border-muted/30 rounded-xl p-2 mb-3">
-                  <p className="text-sm font-bold text-muted-foreground">لم تصوّت</p>
+                  <p className="text-sm font-bold text-muted-foreground">{t("duelDidntVote")}</p>
                   <p className="text-xs text-muted-foreground font-bold">+80 XP</p>
                 </div>
               )}

@@ -342,7 +342,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, isRTL }: Pro
                   <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-blue-accent to-accent flex items-center justify-center text-xl font-bold text-accent-foreground mb-1 shadow-[0_0_15px_hsl(210_90%_55%/0.5)]">
                     {playerName.charAt(0).toUpperCase()}
                   </div>
-                  <p className="text-xs font-bold text-foreground truncate">{playerName}</p>
+                  <NameWithLevel name={playerName} level={playerLevel} />
                 </motion.div>
                 <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} transition={{ delay: 0.3, type: "spring", stiffness: 200 }}>
                   <span className="text-3xl font-black text-gold-gradient drop-shadow-lg">VS</span>

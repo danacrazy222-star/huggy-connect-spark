@@ -67,15 +67,15 @@ export function ShopGiftCards() {
                 boxShadow: `0 0 25px rgba(${brand.glowRgb},0.4), 0 0 60px rgba(${brand.glowRgb},0.15), inset 0 0 30px rgba(${brand.glowRgb},0.05)`,
               }}
             >
-              {/* Brand Name as Logo - large & prominent */}
-              <span
-                className={`text-xl text-foreground mb-3 ${brand.logoStyle}`}
-                style={{
-                  textShadow: `0 0 20px rgba(${brand.glowRgb},0.5)`,
-                }}
-              >
-                {brand.logoText}
-              </span>
+              {/* Brand Logo */}
+              <div className="flex items-center justify-center mb-3" style={{ height: "45px" }}>
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  className="max-h-[45px] max-w-full object-contain"
+                  style={{ filter: "brightness(1.1)" }}
+                />
+              </div>
 
               {/* $500 Gift Card */}
               <span className="text-xs font-semibold text-foreground/80 mb-3">$500 Gift Card</span>

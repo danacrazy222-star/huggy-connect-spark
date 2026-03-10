@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BottomNav } from "@/components/BottomNav";
 import { WelcomePopup } from "@/components/WelcomePopup";
+import { DmNotificationBubble } from "@/components/DmNotificationBubble";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
@@ -51,6 +52,7 @@ const App = () => (
             </Routes>
             <BottomNav />
             <WelcomePopup />
+            <DmNotificationBubble />
           </div>
         </BrowserRouter>
       </AuthProvider>

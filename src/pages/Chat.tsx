@@ -115,6 +115,32 @@ export default function Chat() {
   // Clear unread when entering
   useEffect(() => { clearUnread(); }, [clearUnread]);
 
+  // Bot simulation — posts a message every 6-12 seconds
+  useEffect(() => {
+    if (!canAccess) return;
+    const scripts = botScripts[activeRoom] || botScripts[0];
+    // Reset bot messages when switching rooms
+    setBotMessages([]);
+    botIndexRef.current = 0;
+
+    // Post first 2 messages immediately
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+    const initial = scripts.slice(0, 2).map(m => ({ ...m, time: timeStr }));
+    setBotMessages(initial);
+    botIndexRef.current = 2;
+
+    const interval = setInterval(() => {
+      const idx = botIndexRef.current % scripts.length;
+      const t = new Date();
+      const ts = `${t.getHours().toString().padStart(2, "0")}:${t.getMinutes().toString().padStart(2, "0")}`;
+      setBotMessages(prev => [...prev.slice(-20), { ...scripts[idx], time: ts }]);
+      botIndexRef.current++;
+    }, 6000 + Math.random() * 6000);
+
+    return () => clearInterval(interval);
+  }, [activeRoom, canAccess]);
+
   // XP Rain event - triggers every 30 minutes in Bronze room (index 1)
   useEffect(() => {
     if (activeRoom !== 1 || !canAccess) return;

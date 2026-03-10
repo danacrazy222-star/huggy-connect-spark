@@ -27,37 +27,45 @@ import avatarFemale1 from "@/assets/avatar-female-1.png";
 import avatarFemale2 from "@/assets/avatar-female-2.png";
 import avatarFemale3 from "@/assets/avatar-female-3.png";
 
-const getWelcomeMessages = (roomIndex: number): ChatMsg[] => {
-  const baseMessages: ChatMsg[][] = [
-    // World room
-    [
-      { user: "Luna", avatar: "L", message: "Welcome to the World Room! 🌍✨ Say hello!", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7, time: "12:00" },
-      { user: "Omar", avatar: "O", message: "Hey everyone! Let's have fun 🎮", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12, time: "12:01" },
-      { user: "Sara", avatar: "S", message: "Good vibes only! 🍀💖", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15, time: "12:02" },
-    ],
-    // Bronze room
-    [
-      { user: "Luna", avatar: "L", message: "Welcome to Bronze! 🥉🔥 Who's spinning today?", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7, time: "12:00" },
-      { user: "Noor", avatar: "N", message: "Just got here! Good luck everyone 🍀", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8, time: "12:01" },
-      { user: "Omar", avatar: "O", message: "Let's play! 🎰 Who's ready for a duel?", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12, time: "12:02" },
-    ],
-    // Silver room
-    [
-      { user: "Sara", avatar: "S", message: "Silver squad! 🥈✨ Welcome!", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15, time: "12:00" },
-      { user: "Luna", avatar: "L", message: "This room is getting lit 🔥🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7, time: "12:01" },
-    ],
-    // Gold room
-    [
-      { user: "Omar", avatar: "O", message: "Gold room! 🥇 Only legends here 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12, time: "12:00" },
-      { user: "Sara", avatar: "S", message: "Level 10+ gang! 💪🏆", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15, time: "12:01" },
-    ],
-    // Diamond room
-    [
-      { user: "Sara", avatar: "S", message: "Diamond room! 💎👑 The elite club!", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 15, time: "12:00" },
-      { user: "Omar", avatar: "O", message: "Welcome to the top! 🏆✨", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12, time: "12:01" },
-    ],
-  ];
-  return baseMessages[roomIndex] || baseMessages[0];
+// Bot conversation scripts - each room has bots chatting about the app
+const botScripts: Record<number, ChatMsg[]> = {
+  0: [ // World
+    { user: "Luna", avatar: "L", message: "Welcome everyone! 🌍✨ This is the World Room — open for all levels!", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+    { user: "Omar", avatar: "O", message: "If you're new here — spin the wheel daily on the Home page for free rewards! 🎰", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12 },
+    { user: "Sara", avatar: "S", message: "You get XP, points, tickets, and even draw entries from the spin! 🎁", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+    { user: "Luna", avatar: "L", message: "Don't forget to check the Shop — buy a book pack and enter the $500 gift card draw! 💳", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+    { user: "Omar", avatar: "O", message: "The Draw page shows the prizes — Amazon, Google Play, or SHEIN gift cards! 🎉", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12 },
+    { user: "Noor", avatar: "N", message: "I love the Tarot feature! Madam Zara reads your cards with AI 🔮✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+    { user: "Sara", avatar: "S", message: "Level up to unlock VIP rooms — Bronze at Lv.1, Silver at Lv.5, Gold at Lv.10! 👑", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+    { user: "Omar", avatar: "O", message: "Challenge other players in the duel games to earn XP fast! ⚔️💪", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+    { user: "Luna", avatar: "L", message: "Who's here? Say hi! 👋 The more the merrier! 🎊", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+    { user: "Noor", avatar: "N", message: "Pro tip: the Premium book pack gives you the most XP + 2 tarot tickets! 📚✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+  ],
+  1: [ // Bronze
+    { user: "Luna", avatar: "L", message: "Welcome to Bronze! 🥉🔥 You made it to Level 1!", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+    { user: "Omar", avatar: "O", message: "In this room we get XP Rain events every 30 mins — tap fast to collect! ⚡", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12 },
+    { user: "Noor", avatar: "N", message: "XP Rain is so fun! Last time I got 27 XP in 10 seconds! 🎉", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+    { user: "Sara", avatar: "S", message: "Keep spinning daily and buying books to level up faster! 📈", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+    { user: "Luna", avatar: "L", message: "The duel challenge above ☝️ — tap it and compete for XP! ⚔️", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+    { user: "Omar", avatar: "O", message: "Winner gets 40 XP, loser gets 5 XP — always worth playing! 💪", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+    { user: "Noor", avatar: "N", message: "Reach Level 5 to unlock Silver room! It has even cooler features 🥈✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+    { user: "Sara", avatar: "S", message: "Who wants to duel? Let's go! 🔥🎮", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+  ],
+  2: [ // Silver
+    { user: "Sara", avatar: "S", message: "Silver squad! 🥈✨ Level 5+ only!", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+    { user: "Luna", avatar: "L", message: "This room is getting more exclusive! Keep grinding XP! 🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+    { user: "Omar", avatar: "O", message: "Check your VIP page to see your progress to Gold! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+    { user: "Noor", avatar: "N", message: "The Crown page shows all VIP perks and mystery chests! 🎁", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+  ],
+  3: [ // Gold
+    { user: "Omar", avatar: "O", message: "Gold room! 🥇 Only legends reach Level 10! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+    { user: "Sara", avatar: "S", message: "The XP rewards get bigger in higher rooms! 💎", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+    { user: "Luna", avatar: "L", message: "Diamond room at Level 15 is the ultimate goal! 💎🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+  ],
+  4: [ // Diamond
+    { user: "Sara", avatar: "S", message: "Diamond room! 💎👑 The elite club! Welcome champion!", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+    { user: "Omar", avatar: "O", message: "You're at the top! The best rewards and events happen here! 🏆✨", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+  ],
 };
 
 const rooms = [

@@ -36,18 +36,24 @@ interface Props {
 
 export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUserId }: Props) {
   const [loading, setLoading] = useState(false);
+  const [localTranslated, setLocalTranslated] = useState<string | null>(null);
   const { language } = useTranslation();
   const isOwn = currentUserId ? (msg as any)._userId === currentUserId : msg.user === "You";
+  const translated = msg.translated || localTranslated;
 
   const translate = async () => {
-    if (msg.translated || loading || isOwn) return;
+    if (translated || loading || isOwn) return;
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("translate", {
         body: { text: msg.message, targetLang: language },
       });
       if (!error && data?.translated) {
-        onTranslated(data.translated);
+        if (onTranslated) {
+          onTranslated(data.translated);
+        } else {
+          setLocalTranslated(data.translated);
+        }
       }
     } finally {
       setLoading(false);

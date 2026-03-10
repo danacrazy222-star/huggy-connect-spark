@@ -1,6 +1,7 @@
 import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useGameStore } from "@/store/useGameStore";
+import { useNavigate } from "react-router-dom";
 import { useDrawStore } from "@/store/useDrawStore";
 import { motion } from "framer-motion";
 import { Star, Ticket, Sparkles, Flame, CheckCircle, Minus, Plus } from "lucide-react";
@@ -32,8 +33,9 @@ export interface BookPackage {
 
 export default function Shop() {
   const { t, isRTL } = useTranslation();
-  const { addXP, addPoints, addGameTicket, addTarotTicket, addDrawEntry } = useGameStore();
+  const { addXP, addPoints, addGameTicket, addTarotTicket, addDrawEntry, unlockWorldChallenge, worldChallengeUnlocked } = useGameStore();
   const { addPurchase } = useDrawStore();
+  const navigate = useNavigate();
   const [selectedPkg, setSelectedPkg] = useState<BookPackage | null>(null);
   const [purchasing, setPurchasing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -250,6 +252,73 @@ export default function Shop() {
             </motion.div>
           );
         })}
+      </div>
+
+      {/* World Challenge Book */}
+      <div className="px-4 mb-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={cn(
+            "relative bg-gradient-to-b from-emerald-900/50 to-emerald-950/70 rounded-2xl p-4 border border-emerald-500/40",
+            "shadow-[0_0_20px_rgba(16,185,129,0.15)]"
+          )}
+        >
+          <div className="flex items-start gap-3">
+            <div className="w-16 h-16 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-3xl shrink-0">
+              🌍
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="font-display text-base font-bold text-foreground">{t("worldChallengeTitle")}</h3>
+                <span className="font-display text-lg font-bold text-primary">$5</span>
+              </div>
+              <p className="text-[10px] text-muted-foreground mb-2">{t("worldChallengeDesc")}</p>
+              <ul className="space-y-1 mb-3">
+                <li className={cn("flex items-center gap-1.5 text-xs text-foreground/85", isRTL && "flex-row-reverse")}>
+                  <CheckCircle className="w-3 h-3 text-green-accent flex-shrink-0" />
+                  <span>{t("worldBookExclusive")}</span>
+                </li>
+                <li className={cn("flex items-center gap-1.5 text-xs text-foreground/85", isRTL && "flex-row-reverse")}>
+                  <CheckCircle className="w-3 h-3 text-green-accent flex-shrink-0" />
+                  <span>{t("worldOneChallenge")}</span>
+                </li>
+                <li className={cn("flex items-center gap-1.5 text-xs text-foreground/85", isRTL && "flex-row-reverse")}>
+                  <CheckCircle className="w-3 h-3 text-green-accent flex-shrink-0" />
+                  <span>{t("worldNameShown")}</span>
+                </li>
+                <li className={cn("flex items-center gap-1.5 text-xs text-foreground/85", isRTL && "flex-row-reverse")}>
+                  <CheckCircle className="w-3 h-3 text-green-accent flex-shrink-0" />
+                  <span>{t("worldGameTicket")}</span>
+                </li>
+                <li className={cn("flex items-center gap-1.5 text-xs text-foreground/85", isRTL && "flex-row-reverse")}>
+                  <CheckCircle className="w-3 h-3 text-green-accent flex-shrink-0" />
+                  <span>{t("worldDrawEntry")}</span>
+                </li>
+              </ul>
+              <button
+                onClick={() => {
+                  unlockWorldChallenge();
+                  addXP(3000);
+                  addGameTicket(1);
+                  addDrawEntry(1);
+                  toast.success(t("worldChallengePurchased"));
+                  setTimeout(() => navigate("/chat"), 1000);
+                }}
+                disabled={worldChallengeUnlocked}
+                className="w-full py-2.5 rounded-xl font-display font-bold text-sm text-primary-foreground shadow-gold hover:brightness-110 transition-all disabled:opacity-40"
+                style={{
+                  background: worldChallengeUnlocked
+                    ? "hsl(var(--muted))"
+                    : "linear-gradient(180deg, hsl(160 80% 40%), hsl(160 80% 30%))",
+                }}
+              >
+                {worldChallengeUnlocked ? "✅ " + t("worldChallengeUnlockedMsg") : t("worldBuyBook")}
+              </button>
+              <p className="text-[9px] text-muted-foreground mt-1.5 text-center">{t("worldAfterChallenge")}</p>
+            </div>
+          </div>
+        </motion.div>
       </div>
 
       <div className="text-center px-4 space-y-1 pb-4">

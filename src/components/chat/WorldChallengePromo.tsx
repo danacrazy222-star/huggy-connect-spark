@@ -12,8 +12,8 @@ export function WorldChallengePromo() {
   const handleBuy = () => {
     setPurchased(true);
     unlockWorldChallenge();
-    // Give 1 draw entry with purchase
     useGameStore.getState().addDrawEntry(1);
+    useGameStore.getState().addGameTicket(1);
     setTimeout(() => {
       setPurchased(false);
       setOpen(false);

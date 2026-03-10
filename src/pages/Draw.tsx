@@ -257,7 +257,7 @@ export default function Draw() {
             <div className="flex items-center justify-center gap-3 bg-muted/40 rounded-xl py-3 px-4">
               <Clock className="w-5 h-5 text-primary" />
               <div className="text-center">
-                <p className="text-[10px] text-muted-foreground">Next Draw In</p>
+                <p className="text-[10px] text-muted-foreground">{t("nextDrawIn")}</p>
                 <p className="text-2xl font-display font-bold text-primary tracking-wider">{countdown}</p>
               </div>
             </div>

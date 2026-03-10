@@ -233,6 +233,23 @@ export type TranslationKeys = {
   systemWhoChallenge: string;
   welcomeMsg: string;
   welcomeLitRoom: string;
+  // Full i18n keys
+  winlineDailySpin: string; winGiftCard: string; spinTheWheelBtn: string; comeBackSpin: string;
+  dailySpinReward: string; nextFreeSpin: string; freeSpinAvailable: string;
+  betterLuckNextTime: string; wonAmazingReward: string; addedToAccount: string;
+  tryAgainTomorrow: string; awesomeBtn: string; comeBackTomorrowChance: string;
+  shopHeroTitle: string; shopHeroSubtitle: string; chooseBookPack: string;
+  basicPack: string; plusPack: string; premiumPack: string; bestValueTag: string;
+  includesLabel: string; digitalBook: string; buyForPrice: string;
+  shopDisclaimer2: string; purchasedToast: string;
+  chooseGiftCardPrize: string; winBadge: string;
+  confirmPurchaseTitle: string; youWillReceive: string; confirmPurchaseBtn: string;
+  male: string; female: string; playerYou: string; botPlayer: string;
+  needsExactRoll: string; revealRewardNow: string; scratchWinTypes: string;
+  madamZaraTitle: string; mysteryReaderLabel: string; startTarotBtn: string;
+  noTicketsTarot: string; selectCardsHeart: string; tapAnyCard: string;
+  revealReadTarot: string; askMadamZara: string; liveLabel: string;
+  bonusEntriesLabel: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

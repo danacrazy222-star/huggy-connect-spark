@@ -44,6 +44,7 @@ function GamesList({ onPlaySnake, onPlayScratch, onPlayTreasure }: { onPlaySnake
   const { t, isRTL } = useTranslation();
 
   const games = [
+    { name: t("treasureRush"), desc: t("treasureRushDesc"), icon: "🏴‍☠️", color: "from-primary/30 to-amber-500/5", border: "border-amber-500/40", multiplayer: true, onClick: onPlayTreasure },
     { name: t("snakeAndLadder"), desc: t("classicBoardGame"), icon: "🐍", color: "from-green-accent/30 to-green-accent/5", border: "border-green-accent/40", multiplayer: true, onClick: onPlaySnake },
     { name: t("scratchCard"), desc: t("scratchCardDesc"), icon: "🎫", color: "from-primary/30 to-primary/5", border: "border-primary/40", multiplayer: false, onClick: onPlayScratch },
     { name: t("tapFrenzy"), desc: t("tapAsFast"), icon: "👆", color: "from-blue-accent/30 to-blue-accent/5", border: "border-blue-accent/40", multiplayer: false, onClick: () => {}, locked: true },

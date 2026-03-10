@@ -514,7 +514,7 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* Round indicator */}
-        <div className="text-center mt-3">
+        <div className="text-center py-2 shrink-0">
           <span className="text-[10px] text-muted-foreground">{t("treasureRound")} {roundNumber}</span>
         </div>
       </div>

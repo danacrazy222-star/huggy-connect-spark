@@ -75,9 +75,9 @@ export default function Draw() {
       const diff = Math.max(0, endTime - Date.now());
 
       if (diff <= 0 && isDrawActive) {
-        // Timer expired → trigger draw
+        // Timer expired → handleTimerEnd checks minimum entries
         if (entries.length > 0) {
-          triggerDraw();
+          handleTimerEnd();
         }
         setCountdown("00:00:00");
         return;
@@ -91,7 +91,7 @@ export default function Draw() {
     updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
-  }, [drawStartedAt, drawDurationMs, isDrawActive, entries.length, triggerDraw]);
+  }, [drawStartedAt, drawDurationMs, isDrawActive, entries.length, handleTimerEnd]);
 
   // Live activity feed
   const [activityIndex, setActivityIndex] = useState(0);

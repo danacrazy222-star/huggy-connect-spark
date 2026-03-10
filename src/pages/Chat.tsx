@@ -16,7 +16,7 @@ import { XPRainEvent } from "@/components/chat/XPRainEvent";
 import { useChatRealtime } from "@/hooks/useChatRealtime";
 import { playChatSend } from "@/utils/sounds";
 
-import roomWorld from "@/assets/room-world.jpg";
+
 import roomBronze from "@/assets/room-bronze.jpg";
 import roomSilver from "@/assets/room-silver.jpg";
 import roomGold from "@/assets/room-gold.jpg";

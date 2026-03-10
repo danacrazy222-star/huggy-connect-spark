@@ -260,6 +260,14 @@ export type TranslationKeys = {
   welcomeTitle: string;
   welcomeMessage: string;
   welcomeButton: string;
+  // XP Rain
+  xpRainTitle: string;
+  xpRainCollected: string;
+  xpRainOver: string;
+  xpRainYouGot: string;
+  xpRainAddedToAccount: string;
+  xpRainStarting: string;
+  xpRainAnnounce: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

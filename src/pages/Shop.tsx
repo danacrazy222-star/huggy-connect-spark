@@ -223,6 +223,10 @@ export default function Shop() {
                     ))}
                   </ul>
 
+                  <p className="text-[9px] text-muted-foreground mb-2 leading-relaxed italic">
+                    {t("shopPackDisclaimer")}
+                  </p>
+
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-0 bg-background/40 border border-border rounded-xl overflow-hidden">
                       <button onClick={() => setQty(pkg.nameKey, -1)} disabled={qty <= 1}

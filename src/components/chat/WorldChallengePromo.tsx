@@ -80,7 +80,7 @@ export function WorldChallengePromo() {
                         <CheckCircle className="w-16 h-16 text-green-400" />
                       </motion.div>
                       <h2 className="text-xl font-bold text-foreground font-display">🎉 تم الشراء بنجاح!</h2>
-                      <p className="text-sm text-muted-foreground">التحدي مفتوح الآن أمام جميع اللاعبين!</p>
+                      <p className="text-sm text-muted-foreground">انفتح لك تحدي واحد الآن في غرفة العالم!</p>
                       <motion.div
                         animate={{ rotate: [0, 10, -10, 0] }}
                         transition={{ duration: 1, repeat: Infinity }}

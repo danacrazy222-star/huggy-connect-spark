@@ -61,6 +61,7 @@ export const useGameStore = create<GameState>()(
       addDrawEntry: (amount) => set((s) => ({ drawEntries: s.drawEntries + amount })),
       
       setLastSpinTime: (time) => set({ lastSpinTime: time, canSpin: false }),
+      unlockWorldChallenge: () => set({ worldChallengeUnlocked: true }),
       
       checkSpinAvailability: () => {
         const { lastSpinTime } = get();

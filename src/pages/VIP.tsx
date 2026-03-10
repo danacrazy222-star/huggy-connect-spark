@@ -59,7 +59,7 @@ export default function VIP() {
             <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
               <TrendingUp className="w-4 h-4 text-primary" />
               <span className="text-sm font-bold text-foreground">
-                {t("level")} {level} → {Math.min(level + 1, 20)}
+                {t("level")} {level} → {Math.min(level + 1, 30)}
               </span>
             </div>
             <span className="text-xs text-muted-foreground">{Math.round(progress)}%</span>

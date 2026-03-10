@@ -371,7 +371,7 @@ export default function Draw() {
             }}
           >
             <ShoppingBag className="w-5 h-5" />
-            Enter the ${prizeAmount} Draw
+            {t("enterTheDraw")}
           </button>
         )}
 

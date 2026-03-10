@@ -171,7 +171,7 @@ export default function Chat() {
     addMessage(activeRoom, {
       user: "🏆 System",
       avatar: "⚔️",
-      message: `🏆✨ البطل ${winnerName} فاز بالتحدي ضد ${loserName}! 🔥👏\n⚡ أسطورة الغرفة الجديدة! من يجرؤ على تحديه؟`,
+      message: `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
       crown: true,
       gender: null,
       level: 0,

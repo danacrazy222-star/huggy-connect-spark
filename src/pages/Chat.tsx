@@ -55,10 +55,6 @@ export default function Chat() {
   const { t, isRTL } = useTranslation();
   const { roomMessages, addMessage, initRoom, addUnread, clearUnread, updateMessageInRoom } = useChatStore();
 
-  // Reset world challenge (one-time fix for persisted test data)
-  useEffect(() => {
-    useGameStore.getState().lockWorldChallenge();
-  }, []);
 
   // Initialize room with default messages
   useEffect(() => {

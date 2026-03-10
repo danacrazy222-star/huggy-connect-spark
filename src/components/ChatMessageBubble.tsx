@@ -31,12 +31,13 @@ interface Props {
   index: number;
   isRTL: boolean;
   onTranslated?: (translated: string) => void;
+  currentUserId?: string;
 }
 
-export function ChatMessageBubble({ msg, index, isRTL, onTranslated }: Props) {
+export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUserId }: Props) {
   const [loading, setLoading] = useState(false);
   const { language } = useTranslation();
-  const isOwn = msg.user === "You";
+  const isOwn = currentUserId ? (msg as any)._userId === currentUserId : msg.user === "You";
 
   const translate = async () => {
     if (msg.translated || loading || isOwn) return;

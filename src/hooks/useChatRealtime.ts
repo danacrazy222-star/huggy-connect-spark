@@ -78,11 +78,12 @@ export function useChatRealtime(roomId: number) {
   return { messages, loading, sendMessage };
 }
 
-function dbToMsg(row: any): ChatMsg & { _id: string } {
+function dbToMsg(row: any): ChatMsg & { _id: string; _userId: string } {
   const time = new Date(row.created_at);
   const timeStr = `${time.getHours().toString().padStart(2, "0")}:${time.getMinutes().toString().padStart(2, "0")}`;
   return {
     _id: row.id,
+    _userId: row.user_id,
     user: row.display_name || "Player",
     avatar: (row.display_name || "P").charAt(0).toUpperCase(),
     message: row.message,

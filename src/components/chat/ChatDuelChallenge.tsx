@@ -254,10 +254,10 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
   };
 
   const handleFinish = () => {
-    const won = votePick === finalWinner;
-    const winnerName = finalWinner === "player" ? playerName : opponentName;
-    const loserName = finalWinner === "player" ? opponentName : playerName;
-    onEnd(won, winnerName, loserName);
+    const playerWon = finalWinner === "player";
+    const winnerName = playerWon ? playerName : opponentName;
+    const loserName = playerWon ? opponentName : playerName;
+    onEnd(playerWon, winnerName, loserName);
     setPhase("idle");
   };
 

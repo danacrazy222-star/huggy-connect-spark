@@ -59,7 +59,7 @@ export default function Chat() {
 
   // Initialize room with default messages
   useEffect(() => {
-    initRoom(activeRoom, mockMessages);
+    initRoom(activeRoom, getMockMessages(t));
   }, [activeRoom, initRoom]);
 
   const messages = roomMessages[activeRoom] || [];

@@ -32,7 +32,7 @@ export default function Games() {
   return <GamesList />;
 }
 
-function GamesList({ onPlaySnake, onPlayScratch }: { onPlaySnake: () => void; onPlayScratch: () => void }) {
+function GamesList() {
   const { gameTickets } = useGameStore();
   const { t, isRTL } = useTranslation();
 

@@ -397,10 +397,9 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
             </button>
             <div className="flex items-center gap-2">
               <Clock className={cn("w-4 h-4", timerColor)} />
-              <motion.span key={timeLeft} initial={{ scale: 1.3 }} animate={{ scale: 1 }}
-                className={cn("text-xl font-mono font-bold", timerColor)}>
+              <span className={cn("text-xl font-mono font-bold", timerColor)}>
                 {timeLeft}s
-              </motion.span>
+              </span>
             </div>
             {doubleActive && (
               <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 0.5 }}

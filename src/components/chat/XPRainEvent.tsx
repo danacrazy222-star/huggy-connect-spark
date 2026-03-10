@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useGameStore } from "@/store/useGameStore";
 import { cn } from "@/lib/utils";
+import { playXPCollect, playXPRainStart } from "@/utils/sounds";
 
 interface XPDrop {
   id: number;

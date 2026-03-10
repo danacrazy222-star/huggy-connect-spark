@@ -82,10 +82,10 @@ export default function Shop() {
         { icon: <Star className="w-4 h-4 text-primary" />, label: "6,000 VIP XP", type: "xp", amount: 6000 },
         { icon: <Ticket className="w-4 h-4 text-red-accent" />, label: "1 Game Ticket", type: "gameTicket", amount: 1 },
         { icon: <Sparkles className="w-4 h-4 text-accent" />, label: "1 Tarot Ticket", type: "tarotTicket", amount: 1 },
-        { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: "1 Draw Entry", type: "drawEntry", amount: 1 },
+        { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: "2 Draw Entries", type: "drawEntry", amount: 2 },
       ],
       tag: "Most Popular",
-      includes: ["1 Digital Book", "6,000 VIP XP", "1 Game Ticket", "1 Tarot Ticket", "1 Draw Entry"],
+      includes: ["1 Digital Book", "6,000 VIP XP", "1 Game Ticket", "1 Tarot Ticket", "2 Draw Entries"],
     },
   ];
 
@@ -106,7 +106,10 @@ export default function Shop() {
         else if (r.type === "tarotTicket") addTarotTicket(r.amount);
         else if (r.type === "drawEntry") {
           addDrawEntry(r.amount);
-          addPurchase("You", selectedPkg.priceNum);
+          // Add one draw store entry per draw entry
+          for (let i = 0; i < r.amount; i++) {
+            addPurchase("You", Math.ceil(selectedPkg.priceNum / r.amount));
+          }
         }
       });
 
@@ -159,14 +162,20 @@ export default function Shop() {
               pkg.color,
               `border ${pkg.borderColor}`,
               pkg.glowColor,
-              pkg.tag && "scale-[1.02]"
+              pkg.tag && "scale-[1.05]"
             )}
           >
-            {/* Most Popular Tag */}
+            {/* Most Popular + Best Value Tags */}
             {pkg.tag && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-600 to-orange-500 rounded-full px-4 py-1 flex items-center gap-1.5 z-10">
-                <Flame className="w-3.5 h-3.5 text-yellow-300" />
-                <span className="text-[10px] font-bold text-white whitespace-nowrap">{pkg.tag}</span>
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
+                <div className="bg-gradient-to-r from-red-600 to-orange-500 rounded-full px-3 py-1 flex items-center gap-1">
+                  <Flame className="w-3 h-3 text-yellow-300" />
+                  <span className="text-[9px] font-bold text-white whitespace-nowrap">Most Popular</span>
+                </div>
+                <div className="bg-gradient-to-r from-primary to-gold-dark rounded-full px-3 py-1 flex items-center gap-1">
+                  <Star className="w-3 h-3 text-primary-foreground" />
+                  <span className="text-[9px] font-bold text-primary-foreground whitespace-nowrap">Best Value</span>
+                </div>
               </div>
             )}
 

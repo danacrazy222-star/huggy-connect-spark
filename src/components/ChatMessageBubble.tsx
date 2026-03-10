@@ -69,23 +69,79 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
   if (msg.isSystem) {
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ type: "spring", damping: 15 }}
-        className="w-full my-2"
+        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: "spring", damping: 12, stiffness: 200 }}
+        className="w-full my-3"
       >
-        <div className="relative rounded-2xl border-2 border-primary/50 overflow-hidden px-4 py-3 text-center"
-          style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--accent) / 0.15))" }}>
-          {/* Glow */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 pointer-events-none" />
+        <div className="relative rounded-2xl border-2 border-primary/60 overflow-hidden px-5 py-4 text-center shadow-[0_0_30px_hsl(var(--primary)/0.3)]"
+          style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--accent) / 0.15), hsl(var(--primary) / 0.2))" }}>
+          
+          {/* Confetti particles */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {[...Array(20)].map((_, i) => {
+              const colors = [
+                "hsl(var(--primary))",
+                "hsl(var(--accent))",
+                "hsl(45 100% 60%)",
+                "hsl(140 70% 50%)",
+                "hsl(320 80% 60%)",
+                "hsl(200 90% 55%)",
+              ];
+              const size = 4 + Math.random() * 6;
+              const isCircle = Math.random() > 0.5;
+              return (
+                <motion.div
+                  key={i}
+                  className="absolute"
+                  style={{
+                    width: isCircle ? size : size * 0.6,
+                    height: isCircle ? size : size * 1.5,
+                    borderRadius: isCircle ? "50%" : "2px",
+                    background: colors[i % colors.length],
+                    left: `${5 + Math.random() * 90}%`,
+                    top: "-10%",
+                  }}
+                  animate={{
+                    y: ["0%", `${300 + Math.random() * 200}%`],
+                    x: [0, (Math.random() - 0.5) * 60],
+                    rotate: [0, Math.random() * 720 - 360],
+                    opacity: [1, 1, 0],
+                  }}
+                  transition={{
+                    duration: 1.8 + Math.random() * 1.2,
+                    delay: i * 0.08,
+                    ease: "easeOut",
+                  }}
+                />
+              );
+            })}
+          </div>
+
+          {/* Glow pulses */}
           <motion.div
-            animate={{ opacity: [0.3, 0.8, 0.3] }}
+            animate={{ opacity: [0.2, 0.6, 0.2], scale: [1, 1.1, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-16 rounded-full bg-primary/20 blur-[30px] pointer-events-none"
+            className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/20 to-primary/10 pointer-events-none"
           />
+          <motion.div
+            animate={{ opacity: [0.1, 0.4, 0.1] }}
+            transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-20 rounded-full bg-primary/30 blur-[40px] pointer-events-none"
+          />
+
+          {/* Trophy icon */}
+          <motion.div
+            animate={{ rotate: [0, -8, 8, -4, 0], scale: [1, 1.15, 1] }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-3xl mb-1"
+          >
+            🏆
+          </motion.div>
+
           <div className="relative">
             <p className="text-sm font-bold text-foreground leading-relaxed whitespace-pre-line">{msg.message}</p>
-            {now && <span className="text-[10px] text-muted-foreground mt-1 block">{now}</span>}
+            {now && <span className="text-[10px] text-muted-foreground mt-1.5 block">{now}</span>}
           </div>
         </div>
       </motion.div>

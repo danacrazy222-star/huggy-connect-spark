@@ -126,7 +126,7 @@ export default function Chat() {
       addMessage(activeRoom, {
         user: "Luna",
         avatar: "L",
-        message: `أهلاً ${userName}! 👋🎉 نورت الغرفة`,
+        message: `${t("welcomeMsg")} ${userName}! 👋🎉 ${t("welcomeLitRoom")}`,
         crown: true,
         gender: "female",
         avatarUrl: avatarFemale1,

@@ -360,7 +360,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                 </motion.div>
               </div>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="text-xs text-primary mt-3">
-                ⚡ تم العثور على خصم! استعد... ⚡
+                ⚡ {t("duelFoundOpponent")} ⚡
               </motion.p>
             </motion.div>
           )}

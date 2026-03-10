@@ -269,7 +269,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mx-auto my-3 w-full max-w-xs">
         <button onClick={startSearch}
           className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-gradient-to-r from-accent via-blue-accent to-accent text-accent-foreground font-bold text-sm border border-accent/30 shadow-purple hover:shadow-[0_0_30px_hsl(270_80%_55%/0.5)] transition-all">
-          ✊✋✌️ تحدي حجر ورقة مقص
+          {t("duelRPS")}
         </button>
       </motion.div>
     );

@@ -10,6 +10,7 @@ import { containsProfanity, censorMessage } from "@/utils/profanityFilter";
 import { ChatMessageBubble, type ChatMsg } from "@/components/ChatMessageBubble";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { CrystalReactor } from "@/components/chat/CrystalReactor";
 
 import roomWorld from "@/assets/room-world.jpg";
 import roomBronze from "@/assets/room-bronze.jpg";
@@ -179,9 +180,15 @@ export default function Chat() {
             </p>
           </div>
         ) : (
-          <div className="flex-1 flex flex-col px-4">
-            <div className="flex-1" />
-            <div className="space-y-3 mb-3 overflow-y-auto max-h-[50vh]">
+          <div className="flex-1 flex flex-col px-4 overflow-hidden">
+            {/* Crystal Reactor Game */}
+            <CrystalReactor
+              playerName={user?.email?.split("@")[0] || "Player"}
+              isRTL={isRTL}
+            />
+
+            {/* Chat messages */}
+            <div className="space-y-3 mb-3 overflow-y-auto flex-1 min-h-0 max-h-[28vh]">
               {messages.map((msg, i) => (
                 <ChatMessageBubble
                   key={i}

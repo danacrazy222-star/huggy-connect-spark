@@ -14,11 +14,11 @@ export default function VIP() {
   const xpRemaining = Math.max(xpNeededForNext - xp, 0);
 
   const milestones: { name: string; lvl: number; stars?: number; icon?: "diamond" | "flame" }[] = [
-    { name: `${t("level")} 1`, lvl: 1, stars: 1 },
-    { name: `${t("level")} 5`, lvl: 5, stars: 2 },
-    { name: `${t("level")} 10`, lvl: 10, stars: 3 },
-    { name: t("elite"), lvl: 20, icon: "diamond" },
-    { name: t("legend"), lvl: 40, icon: "flame" },
+    { name: "Bronze", lvl: 1, stars: 1 },
+    { name: "Silver", lvl: 9, stars: 2 },
+    { name: "Gold", lvl: 17, stars: 3 },
+    { name: t("elite"), lvl: 25, icon: "diamond" },
+    { name: t("legend"), lvl: 33, icon: "flame" },
   ];
 
   const chests = [

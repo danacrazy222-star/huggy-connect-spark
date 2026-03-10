@@ -257,6 +257,14 @@ export default function Profile() {
                   </motion.div>
                 )}
               </AnimatePresence>
+              <button onClick={() => navigate("/messages")}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <MessageCircle className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">{t("privateMessages")}</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
               <button onClick={() => navigate("/promotion-rules")}
                 className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
                 <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>

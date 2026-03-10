@@ -57,6 +57,7 @@ export default function Tarot() {
   };
 
   const handleCardSelect = (card: TarotCard) => {
+    playCardFlip();
     if (selectedCards.find((c) => c.id === card.id)) {
       setSelectedCards((prev) => prev.filter((c) => c.id !== card.id));
       return;

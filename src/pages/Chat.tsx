@@ -207,6 +207,7 @@ export default function Chat() {
       gender: userProfile?.gender,
       level,
     });
+    playChatSend();
     setMessage("");
   }, [message, user, userProfile, level, sendRealtimeMessage]);
 

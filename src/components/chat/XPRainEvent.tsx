@@ -102,6 +102,7 @@ export function XPRainEvent({ onEnd }: XPRainEventProps) {
         prev.map((d) => (d.id === id ? { ...d, collected: true } : d))
       );
       setCollected((c) => c + 1);
+      playXPCollect();
     },
     [active]
   );

@@ -125,8 +125,8 @@ export default function Profile() {
       <div className="px-4 space-y-5">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center gap-3 pt-2">
           <div className="relative">
-            <DiamondFrame size="lg" active={level >= 20} level={level}>
-              <Avatar className={cn("w-24 h-24 border-2", level >= 20 ? "border-transparent" : "border-primary shadow-gold")}>
+            <DiamondFrame size="lg" active={level >= 25} level={level}>
+              <Avatar className={cn("w-24 h-24 border-2", level >= 25 ? "border-transparent" : "border-primary shadow-gold")}>
                 <AvatarImage src={profile?.avatar_url || undefined} key={profile?.avatar_url} />
                 <AvatarFallback className="bg-muted text-foreground text-2xl font-bold" delayMs={600}>{initials}</AvatarFallback>
               </Avatar>

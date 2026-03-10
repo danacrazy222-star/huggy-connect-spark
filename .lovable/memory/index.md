@@ -9,12 +9,12 @@
 ## Pages
 - Home: Daily Spin wheel
 - Shop: 3 book packages ($1/$2/$3) + gift card draw
-- Chat: 6 rooms (World/Bronze/Silver/Gold/Diamond/Legend)
+- Chat: 5 rooms (Bronze/Silver/Gold/Diamond/Legend)
 - VIP: XP progression, mystery chests
 - Tarot: AI tarot card reading
 
 ## Room Level Requirements
-- World: open (Lv0), Bronze: Lv1, Silver: Lv5, Gold: Lv10, Diamond: Lv20, Legend: Lv40
+- Bronze: Lv1-8, Silver: Lv9-16, Gold: Lv17-24, Diamond: Lv25-32, Legend: Lv33-40
 
 ## State: Zustand (useGameStore) with persist
 - Points, XP, Level, GameTickets, TarotTickets, DrawEntries
@@ -22,7 +22,7 @@
 - 40 max level, XP thresholds scale exponentially
 
 ## Frame System
-- DiamondFrame activates at level 20+ (elite), legend effects at level 40+
+- DiamondFrame activates at level 25+ (elite), legend effects at level 33+
 
 ## Economy
 - Spin: 1x per 24h, rewards: XP/Points/Tickets/Entries

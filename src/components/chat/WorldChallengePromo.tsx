@@ -117,7 +117,11 @@ export function WorldChallengePromo() {
                         </div>
                         <div className="flex items-center gap-3 bg-accent/10 rounded-xl p-3 border border-accent/20">
                           <Star className="w-5 h-5 text-primary shrink-0" />
-                          <span className="text-sm text-foreground text-right flex-1">🎟️ دخول سحب مرة واحدة مجاناً</span>
+                          <span className="text-sm text-foreground text-right flex-1">🎮 بطاقة لعبة واحدة</span>
+                        </div>
+                        <div className="flex items-center gap-3 bg-accent/10 rounded-xl p-3 border border-accent/20">
+                          <Star className="w-5 h-5 text-primary shrink-0" />
+                          <span className="text-sm text-foreground text-right flex-1">🎟️ قسيمة دخول سحب واحدة</span>
                         </div>
                       </div>
 

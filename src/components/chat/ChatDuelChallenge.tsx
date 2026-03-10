@@ -593,6 +593,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
   // ── CLASH animation ──
   useEffect(() => {
     if (phase !== "clash") return;
+    playDuelClash();
     let count = 0;
     const interval = setInterval(() => {
       count++;

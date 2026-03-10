@@ -10,6 +10,9 @@ type Move = "rock" | "paper" | "scissors";
 type Phase = "idle" | "searching" | "matched" | "vote" | "picking" | "clash" | "round_result" | "final_result";
 type Role = "idle" | "player" | "spectator";
 
+const BOT_NAMES = ["Nova", "Blaze", "Shadow", "Pixel", "Storm", "Echo", "Viper", "Luna", "Rex", "Zara"];
+const BOT_ID = "bot-00000000-0000-0000-0000-000000000000";
+
 const MOVE_EMOJI: Record<Move, string> = { rock: "🪨", paper: "📄", scissors: "✂️" };
 const MOVES: Move[] = ["rock", "paper", "scissors"];
 

@@ -16,7 +16,7 @@ import {
   Diamond, Coins, Gamepad2, Sparkles, Gift,
   LogIn, LogOut, Star, TrendingUp, Camera,
   Globe, Trash2, ChevronRight, Edit3, Check, X,
-  Settings, RefreshCw, Shield, FileText,
+  Settings, RefreshCw, Shield, FileText, MessageCircle,
 } from "lucide-react";
 import { DiamondFrame } from "@/components/DiamondFrame";
 

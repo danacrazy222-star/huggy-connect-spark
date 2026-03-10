@@ -170,6 +170,9 @@ export type TranslationKeys = {
   passwordMinLength: string;
   welcomeBack: string;
   accountCreated: string;
+  userAlreadyExists: string;
+  invalidCredentials: string;
+  emailNotConfirmed: string;
   logout: string;
   // Profile
   loginToViewProfile: string;

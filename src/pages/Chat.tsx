@@ -291,8 +291,12 @@ export default function Chat() {
           </div>
         ) : (
           <div className="flex-1 flex flex-col px-4">
-            {/* World challenge promo */}
-            {/* Duel challenge */}
+            {/* World challenge promo — only in World room, only if not yet unlocked */}
+            {activeRoom === 0 && !worldChallengeUnlocked && (
+              <WorldChallengePromo />
+            )}
+            {/* Duel challenge — in World room only if unlocked, in other rooms always */}
+            {(activeRoom !== 0 || worldChallengeUnlocked) && (
             <ChatDuelChallenge
               playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
               playerLevel={level}

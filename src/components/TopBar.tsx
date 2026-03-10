@@ -1,4 +1,4 @@
-import { Diamond, Coins, Globe, LogIn, LogOut } from "lucide-react";
+import { Diamond, Coins, Globe, LogIn, LogOut, Volume2, VolumeX } from "lucide-react";
 import { useGameStore } from "@/store/useGameStore";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useState } from "react";
@@ -6,14 +6,21 @@ import { LANGUAGES, useLanguageStore } from "@/store/useLanguageStore";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { isMuted, toggleMute } from "@/utils/sounds";
 
 export function TopBar({ title = "WINLINE" }: { title?: string }) {
   const { points, xp } = useGameStore();
   const { isRTL } = useTranslation();
   const [showLangPicker, setShowLangPicker] = useState(false);
+  const [muted, setMutedState] = useState(isMuted());
   const { language, setLanguage } = useLanguageStore();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+
+  const handleToggleMute = () => {
+    toggleMute();
+    setMutedState(isMuted());
+  };
 
   return (
     <>
@@ -26,6 +33,9 @@ export function TopBar({ title = "WINLINE" }: { title?: string }) {
         
         <div className="flex items-center gap-2">
           <h1 className="font-display text-lg font-bold text-gold-gradient">{title}</h1>
+          <button onClick={handleToggleMute} className={cn("text-muted-foreground hover:text-foreground", muted && "text-destructive/70")}>
+            {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+          </button>
           <button onClick={() => setShowLangPicker(!showLangPicker)} className="text-muted-foreground hover:text-foreground">
             <Globe className="w-4 h-4" />
           </button>

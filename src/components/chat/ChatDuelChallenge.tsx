@@ -550,9 +550,9 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
                 <Trophy className="w-12 h-12 text-primary mx-auto mb-2 glow-gold" />
               </motion.div>
               <p className="text-lg font-black text-primary mb-1">
-                🏆 {finalWinner === "player" ? playerName : opponentName} هو الفائز!
+                🏆 {finalWinner === "player" ? playerName : opponentName} {t("duelIsWinner")}
               </p>
-              <p className="text-xs text-muted-foreground mb-2">النتيجة: {scores.player} - {scores.opponent}</p>
+              <p className="text-xs text-muted-foreground mb-2">{t("duelScore")}: {scores.player} - {scores.opponent}</p>
 
               {/* Your vote result */}
               {votePick ? (

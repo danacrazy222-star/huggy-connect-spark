@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { DiamondFrame } from "@/components/DiamondFrame";
 
 export interface ChatMsg {
   user: string;

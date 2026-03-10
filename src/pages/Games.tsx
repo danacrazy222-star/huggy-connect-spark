@@ -643,7 +643,7 @@ function ScratchCard({ onBack }: { onBack: () => void }) {
               onClick={() => setPhase("revealed")}
               className="w-full py-2.5 rounded-xl font-bold bg-card/80 border border-border text-foreground hover:bg-muted/40 transition-all"
             >
-              Reveal reward now
+              {t("revealRewardNow")}
             </button>
           </motion.div>
         )}

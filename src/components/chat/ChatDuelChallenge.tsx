@@ -664,6 +664,12 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     setP2Move(null);
     setVotePick(null);
     setWaitingForOpponent(false);
+    setIsBotMatch(false);
+    if (botTimerRef.current) { clearTimeout(botTimerRef.current); botTimerRef.current = null; }
+    // Clean up DB match if it was a bot match
+    if (isBotMatch && matchId) {
+      supabase.from('rps_matches').delete().eq('id', matchId).then(() => {});
+    }
   };
 
   // Check for active match to show join button

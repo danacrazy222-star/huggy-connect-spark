@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { playLevelUp } from '@/utils/sounds';
 
 interface GameState {
   points: number;

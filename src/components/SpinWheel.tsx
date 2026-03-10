@@ -142,7 +142,7 @@ export function SpinWheel() {
     <div className={cn("flex flex-col items-center gap-5", isRTL && "direction-rtl")}>
       
       {/* === WHEEL === */}
-      <div className="relative w-[300px] h-[300px] mx-auto">
+      <div className="relative w-[300px] h-[300px] mx-auto" style={{ filter: "drop-shadow(0 0 25px rgba(255,200,0,0.35))" }}>
         <div className="absolute -inset-6 rounded-full" 
           style={{ 
             background: "radial-gradient(circle, rgba(255,215,0,0.12) 30%, rgba(155,89,182,0.08) 60%, transparent 100%)",

@@ -10,7 +10,7 @@ export default function VIP() {
   const { t, isRTL } = useTranslation();
 
   const xpNeededForNext = XP_FOR_LEVEL[level] || 0;
-  const progress = level >= 20 ? 100 : xpNeededForNext > 0 ? Math.min((xp / xpNeededForNext) * 100, 100) : 100;
+  const progress = level >= 30 ? 100 : xpNeededForNext > 0 ? Math.min((xp / xpNeededForNext) * 100, 100) : 100;
   const xpRemaining = Math.max(xpNeededForNext - xp, 0);
 
   const milestones: { name: string; lvl: number; stars?: number; icon?: "diamond" | "flame" }[] = [

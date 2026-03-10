@@ -82,6 +82,7 @@ export default function Chat() {
   const [worldChallengeSessionActive, setWorldChallengeSessionActive] = useState(false);
   const [xpRainActive, setXpRainActive] = useState(false);
   const [xpRainCountdown, setXpRainCountdown] = useState(false);
+  const [duelActive, setDuelActive] = useState(false);
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<{ display_name: string | null; avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);

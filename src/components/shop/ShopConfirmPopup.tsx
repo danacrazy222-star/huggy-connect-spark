@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle, X } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { playPurchaseConfirm } from "@/utils/sounds";
 import type { BookPackage } from "@/pages/Shop";
 
 interface ShopConfirmPopupProps {

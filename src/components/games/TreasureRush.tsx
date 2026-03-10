@@ -431,9 +431,10 @@ export function TreasureRush({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* Last opened feedback */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {lastOpened && (
-            <motion.div key={`${lastOpened.box.id}-${Date.now()}`} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+            <motion.div key={`feedback`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               className="mx-3 mb-2">
               <div className={cn("text-center text-xs py-1.5 rounded-lg",
                 lastOpened.content === "trap" ? "bg-destructive/20 text-destructive" :

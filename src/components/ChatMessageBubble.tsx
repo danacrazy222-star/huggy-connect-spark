@@ -41,7 +41,8 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
   const [loading, setLoading] = useState(false);
   const [localTranslated, setLocalTranslated] = useState<string | null>(null);
   const { language } = useTranslation();
-  const isOwn = currentUserId ? (msg as any)._userId === currentUserId : msg.user === "You";
+  const navigate = useNavigate();
+  const isOwn = currentUserId ? msg._userId === currentUserId : msg.user === "You";
   const translated = msg.translated || localTranslated;
 
   const translate = async () => {

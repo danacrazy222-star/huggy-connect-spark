@@ -10,6 +10,8 @@ import { containsProfanity, censorMessage } from "@/utils/profanityFilter";
 import { ChatMessageBubble, type ChatMsg } from "@/components/ChatMessageBubble";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { ChatDuelChallenge } from "@/components/chat/ChatDuelChallenge";
+import { WorldChallengePromo } from "@/components/chat/WorldChallengePromo";
 import { CrystalReactor } from "@/components/chat/CrystalReactor";
 
 import roomWorld from "@/assets/room-world.jpg";
@@ -42,9 +44,12 @@ const getMockMessages = (t: (key: string) => string): ChatMsg[] => [
 export default function Chat() {
   const [activeRoom, setActiveRoom] = useState(0);
   const [message, setMessage] = useState("");
+  const [worldChallengeSessionActive, setWorldChallengeSessionActive] = useState(false);
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<{ avatar_url: string | null; gender: string | null } | null>(null);
   const level = useGameStore((s) => s.level);
+  const worldChallengeUnlocked = useGameStore((s) => s.worldChallengeUnlocked);
+  const addXP = useGameStore((s) => s.addXP);
   const { t, isRTL } = useTranslation();
   const { roomMessages, addMessage, initRoom, addUnread, clearUnread, updateMessageInRoom } = useChatStore();
 
@@ -134,6 +139,37 @@ export default function Chat() {
     setMessage("");
   }, [message, activeRoom, addMessage, user, userProfile]);
 
+  const handleWorldChallengeStart = useCallback(() => {
+    if (activeRoom === 0) {
+      useGameStore.getState().lockWorldChallenge();
+      setWorldChallengeSessionActive(true);
+    }
+  }, [activeRoom]);
+
+  const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
+    addXP(won ? 300 : 80);
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+    addMessage(activeRoom, {
+      user: "🏆 System",
+      avatar: "⚔️",
+      message: `🏆✨ ${t("systemChampion")} ${winnerName} ${t("systemWhoChallenge")} ${loserName}! 🔥👏\n⚡ ${t("systemNewLegend")}`,
+      crown: true,
+      gender: null,
+      level: 0,
+      time: timeStr,
+      isSystem: true,
+    });
+
+    if (activeRoom === 0) {
+      setWorldChallengeSessionActive(false);
+      useGameStore.getState().lockWorldChallenge();
+    }
+  }, [addXP, addMessage, activeRoom, t]);
+
+  // World room: locked unless worldChallengeUnlocked
+  const isWorldRoomLocked = activeRoom === 0 && !worldChallengeUnlocked && !worldChallengeSessionActive;
+
   return (
     <div className="min-h-screen pb-20 flex flex-col relative" dir={isRTL ? "rtl" : "ltr"}>
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -181,14 +217,40 @@ export default function Chat() {
           </div>
         ) : (
           <div className="flex-1 flex flex-col px-4 overflow-hidden">
-            {/* Crystal Reactor Game */}
-            <CrystalReactor
-              playerName={user?.email?.split("@")[0] || "Player"}
-              isRTL={isRTL}
-            />
+            {/* World room promo when locked */}
+            {activeRoom === 0 && !worldChallengeUnlocked && !worldChallengeSessionActive && (
+              <div className="mb-2">
+                <WorldChallengePromo />
+              </div>
+            )}
+
+            {/* Game area */}
+            {isWorldRoomLocked ? (
+              <div className="mx-auto my-2 w-full max-w-xs text-center">
+                <div className="flex flex-col items-center gap-2 py-3 px-3 rounded-2xl bg-card/40 backdrop-blur-md border border-border">
+                  <Lock className="w-6 h-6 text-muted-foreground" />
+                  <p className="text-xs text-muted-foreground">{t("worldLockMsg")}</p>
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* RPS Duel + Crystal Reactor */}
+                <ChatDuelChallenge
+                  playerName={user?.email?.split("@")[0] || "You"}
+                  playerLevel={level}
+                  onEnd={(won, winnerName, loserName) => handleDuelEnd(won, winnerName, loserName)}
+                  onStart={activeRoom === 0 ? handleWorldChallengeStart : undefined}
+                  isRTL={isRTL}
+                />
+                <CrystalReactor
+                  playerName={user?.email?.split("@")[0] || "Player"}
+                  isRTL={isRTL}
+                />
+              </>
+            )}
 
             {/* Chat messages */}
-            <div className="space-y-3 mb-3 overflow-y-auto flex-1 min-h-0 max-h-[28vh]">
+            <div className="space-y-3 mb-3 overflow-y-auto flex-1 min-h-0 max-h-[22vh]">
               {messages.map((msg, i) => (
                 <ChatMessageBubble
                   key={i}
@@ -202,6 +264,7 @@ export default function Chat() {
               ))}
             </div>
 
+            {/* Message input */}
             <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
               <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
                 <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}

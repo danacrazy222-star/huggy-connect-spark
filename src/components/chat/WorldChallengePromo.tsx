@@ -100,7 +100,7 @@ export function WorldChallengePromo() {
                       </motion.div>
 
                       <h2 className="text-xl font-bold text-foreground mb-1 font-display">⚔️ تحدي أمام العالم</h2>
-                      <p className="text-sm text-muted-foreground mb-5">اشترِ الكتاب الرقمي وافتح تحدي حصري يظهر لجميع اللاعبين!</p>
+                      <p className="text-sm text-muted-foreground mb-5">اشترِ الكتاب الرقمي لتحصل على محاولة واحدة وتفتح تحدي حصري في غرفة العالم!</p>
 
                       <div className="w-full space-y-3 mb-6">
                         <div className="flex items-center gap-3 bg-accent/10 rounded-xl p-3 border border-accent/20">

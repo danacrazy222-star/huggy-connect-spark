@@ -1,8 +1,17 @@
 // Global sound effects system using Web Audio API — no external files
 
 let audioCtx: AudioContext | null = null;
+let _muted = localStorage.getItem("winline-muted") === "true";
+
+export function isMuted() { return _muted; }
+export function setMuted(val: boolean) {
+  _muted = val;
+  localStorage.setItem("winline-muted", String(val));
+}
+export function toggleMute() { setMuted(!_muted); return _muted; }
 
 function getCtx() {
+  if (_muted) return null;
   if (!audioCtx) audioCtx = new AudioContext();
   if (audioCtx.state === "suspended") audioCtx.resume();
   return audioCtx;

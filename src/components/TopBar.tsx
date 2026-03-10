@@ -1,4 +1,4 @@
-import { Diamond, Coins, Globe, LogIn, LogOut } from "lucide-react";
+import { Diamond, Coins, Globe, LogIn, LogOut, Volume2, VolumeX } from "lucide-react";
 import { useGameStore } from "@/store/useGameStore";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useState } from "react";
@@ -6,14 +6,21 @@ import { LANGUAGES, useLanguageStore } from "@/store/useLanguageStore";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { isMuted, toggleMute } from "@/utils/sounds";
 
 export function TopBar({ title = "WINLINE" }: { title?: string }) {
   const { points, xp } = useGameStore();
   const { isRTL } = useTranslation();
   const [showLangPicker, setShowLangPicker] = useState(false);
+  const [muted, setMutedState] = useState(isMuted());
   const { language, setLanguage } = useLanguageStore();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+
+  const handleToggleMute = () => {
+    toggleMute();
+    setMutedState(isMuted());
+  };
 
   return (
     <>

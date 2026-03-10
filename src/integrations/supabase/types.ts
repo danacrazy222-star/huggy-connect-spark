@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      chat_messages: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string
+          gender: string | null
+          id: string
+          is_system: boolean
+          level: number
+          message: string
+          room_id: number
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          gender?: string | null
+          id?: string
+          is_system?: boolean
+          level?: number
+          message: string
+          room_id?: number
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          gender?: string | null
+          id?: string
+          is_system?: boolean
+          level?: number
+          message?: string
+          room_id?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       game_matches: {
         Row: {
           bet_amount: number

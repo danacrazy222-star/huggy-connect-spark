@@ -80,12 +80,7 @@
   }
 
   .bg-premium-gradient {
-    background: linear-gradient(
-      180deg,
-      hsl(260 60% 12%) 0%,
-      hsl(260 60% 8%) 50%,
-      hsl(260 50% 5%) 100%
-    );
+    background: radial-gradient(circle at top, #2a0a55 0%, #1a0038 40%, #0b0220 100%);
   }
 
   .bg-card-gradient {

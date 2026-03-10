@@ -282,6 +282,7 @@ export default function Chat() {
               <ChatDuelChallenge
                 playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
                 playerLevel={level}
+                roomId={activeRoom}
                 onEnd={handleDuelEnd}
                 onStart={handleWorldChallengeStart}
                 isRTL={isRTL}

@@ -9,20 +9,23 @@ interface DrawEntry {
 }
 
 interface DrawState {
-  poolAmount: number;
-  targetAmount: number;
-  prizeAmount: number;
   entries: DrawEntry[];
   nextEntryId: number;
+  targetEntries: number; // INTERNAL ONLY - never show to users
+  prizeAmount: number;
   currentWinner: string | null;
   winningEntryId: number | null;
   winnerAnnouncedAt: number | null;
-  drawHistory: { winner: string; date: number; prize: string; entryId: number; totalEntries: number }[];
+  drawHistory: { winner: string; date: number; prize: string; entryId: number }[];
   isDrawActive: boolean;
+  drawStartedAt: number; // timestamp when current draw started
+  drawDurationMs: number; // duration in ms (24h default)
 
-  addPurchase: (username: string, amount: number) => void;
+  addPurchase: (username: string) => void;
   getProgressPercent: () => number;
   resetDraw: () => void;
+  checkTimerExpired: () => boolean;
+  triggerDraw: () => void;
 }
 
 // Simulated entries for demo
@@ -37,26 +40,30 @@ const DEMO_ENTRIES: DrawEntry[] = [
   { entryId: 8, userId: "8", username: "DiamondQ", timestamp: Date.now() - 10800000 },
 ];
 
+const DRAW_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+
 export const useDrawStore = create<DrawState>()(
   persist(
     (set, get) => ({
-      poolAmount: 680,
-      targetAmount: 1000,
-      prizeAmount: 500,
       entries: DEMO_ENTRIES,
       nextEntryId: 9,
+      targetEntries: 500, // HIDDEN from users
+      prizeAmount: 500,
       currentWinner: null,
       winningEntryId: null,
       winnerAnnouncedAt: null,
       drawHistory: [
-        { winner: "CryptoKing_99", date: Date.now() - 86400000 * 30, prize: "$500 Amazon", entryId: 12, totalEntries: 25 },
-        { winner: "Lucky_Luna", date: Date.now() - 86400000 * 60, prize: "$500 Google Play", entryId: 8, totalEntries: 20 },
+        { winner: "CryptoKing_99", date: Date.now() - 86400000 * 30, prize: "$500 Amazon", entryId: 12 },
+        { winner: "Lucky_Luna", date: Date.now() - 86400000 * 60, prize: "$500 Google Play", entryId: 8 },
       ],
       isDrawActive: true,
+      drawStartedAt: Date.now() - 12 * 60 * 60 * 1000, // started 12h ago for demo
+      drawDurationMs: DRAW_DURATION,
 
-      addPurchase: (username, amount) => {
+      addPurchase: (username) => {
         const state = get();
-        const newPool = state.poolAmount + amount;
+        if (!state.isDrawActive) return;
+
         const newEntry: DrawEntry = {
           entryId: state.nextEntryId,
           userId: Math.random().toString(36).slice(2),
@@ -64,14 +71,14 @@ export const useDrawStore = create<DrawState>()(
           timestamp: Date.now(),
         };
 
-        if (newPool >= state.targetAmount) {
-          const allEntries = [...state.entries, newEntry];
-          // Fair random: pick random entry by index (each entry = equal chance)
+        const allEntries = [...state.entries, newEntry];
+
+        // Check if target entries reached → trigger draw
+        if (allEntries.length >= state.targetEntries) {
           const winnerIdx = Math.floor(Math.random() * allEntries.length);
           const winnerEntry = allEntries[winnerIdx];
 
           set({
-            poolAmount: newPool,
             entries: allEntries,
             nextEntryId: state.nextEntryId + 1,
             currentWinner: winnerEntry.username,
@@ -79,32 +86,56 @@ export const useDrawStore = create<DrawState>()(
             winnerAnnouncedAt: Date.now(),
             isDrawActive: false,
             drawHistory: [
-              { winner: winnerEntry.username, date: Date.now(), prize: `$${state.prizeAmount} Gift Card`, entryId: winnerEntry.entryId, totalEntries: allEntries.length },
+              { winner: winnerEntry.username, date: Date.now(), prize: `$${state.prizeAmount} Gift Card`, entryId: winnerEntry.entryId },
               ...state.drawHistory,
             ],
           });
         } else {
           set({
-            poolAmount: newPool,
-            entries: [...state.entries, newEntry],
+            entries: allEntries,
             nextEntryId: state.nextEntryId + 1,
           });
         }
       },
 
       getProgressPercent: () => {
-        const { poolAmount, targetAmount } = get();
-        return Math.min(Math.round((poolAmount / targetAmount) * 100), 100);
+        const { entries, targetEntries } = get();
+        return Math.min(Math.round((entries.length / targetEntries) * 100), 100);
+      },
+
+      checkTimerExpired: () => {
+        const { drawStartedAt, drawDurationMs, isDrawActive } = get();
+        if (!isDrawActive) return false;
+        return Date.now() >= drawStartedAt + drawDurationMs;
+      },
+
+      triggerDraw: () => {
+        const state = get();
+        if (!state.isDrawActive || state.entries.length === 0) return;
+
+        const winnerIdx = Math.floor(Math.random() * state.entries.length);
+        const winnerEntry = state.entries[winnerIdx];
+
+        set({
+          currentWinner: winnerEntry.username,
+          winningEntryId: winnerEntry.entryId,
+          winnerAnnouncedAt: Date.now(),
+          isDrawActive: false,
+          drawHistory: [
+            { winner: winnerEntry.username, date: Date.now(), prize: `$${state.prizeAmount} Gift Card`, entryId: winnerEntry.entryId },
+            ...state.drawHistory,
+          ],
+        });
       },
 
       resetDraw: () => set({
-        poolAmount: 0,
         entries: [],
         nextEntryId: 1,
         currentWinner: null,
         winningEntryId: null,
         winnerAnnouncedAt: null,
         isDrawActive: true,
+        drawStartedAt: Date.now(),
       }),
     }),
     { name: 'winline-draw-store' }

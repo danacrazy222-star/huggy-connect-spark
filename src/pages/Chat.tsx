@@ -206,13 +206,15 @@ export default function Chat() {
           </div>
         ) : (
           <div className="flex-1 flex flex-col px-4">
-            {/* Duel challenge - at top */}
-            <ChatDuelChallenge
-              playerName={user?.email?.split("@")[0] || "You"}
-              playerLevel={level}
-              onEnd={handleDuelEnd}
-              isRTL={isRTL}
-            />
+            {/* Duel challenge - only in World room if unlocked, always in other rooms */}
+            {(activeRoom !== 0 || useGameStore.getState().worldChallengeUnlocked) && (
+              <ChatDuelChallenge
+                playerName={user?.email?.split("@")[0] || "You"}
+                playerLevel={level}
+                onEnd={handleDuelEnd}
+                isRTL={isRTL}
+              />
+            )}
 
             {/* Chat messages area */}
             <div className="flex-1" />

@@ -11,6 +11,7 @@ export function WorldChallengePromo() {
 
   const handleBuy = () => {
     setPurchased(true);
+    unlockWorldChallenge();
     setTimeout(() => {
       setPurchased(false);
       setOpen(false);

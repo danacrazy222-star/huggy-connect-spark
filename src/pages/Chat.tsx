@@ -31,38 +31,40 @@ import avatarFemale3 from "@/assets/avatar-female-3.png";
 
 // Bot conversation scripts - each room has bots chatting about the app
 const botScripts: Record<number, ChatMsg[]> = {
-  0: [ // Bronze
-    { user: "Luna", avatar: "L", message: "Welcome to Bronze! 🥉🔥 You made it to Level 1!", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
-    { user: "Omar", avatar: "O", message: "In this room we get XP Rain events every 30 mins — tap fast to collect! ⚡", crown: false, gender: "male", avatarUrl: avatarMale2, level: 12 },
-    { user: "Noor", avatar: "N", message: "XP Rain is so fun! Last time I got 27 XP in 10 seconds! 🎉", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-    { user: "Sara", avatar: "S", message: "Keep spinning daily and buying books to level up faster! 📈", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-    { user: "Luna", avatar: "L", message: "The duel challenge above ☝️ — tap it and compete for XP! ⚔️", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
-    { user: "Omar", avatar: "O", message: "Winner gets 40 XP, loser gets 5 XP — always worth playing! 💪", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
-    { user: "Noor", avatar: "N", message: "Reach Level 5 to unlock Silver room! It has even cooler features 🥈✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
-    { user: "Sara", avatar: "S", message: "Who wants to duel? Let's go! 🔥🎮", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
+  0: [ // Bronze (Lv 1-8)
+    { user: "Luna", avatar: "L", message: "Welcome to Bronze! 🥉🔥 You made it to Level 1!", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 6 },
+    { user: "Omar", avatar: "O", message: "In this room we get XP Rain events every hour — tap fast to collect! ⚡", crown: false, gender: "male", avatarUrl: avatarMale2, level: 5 },
+    { user: "Noor", avatar: "N", message: "XP Rain is so fun! Last time I got 27 XP in 10 seconds! 🎉", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 3 },
+    { user: "Sara", avatar: "S", message: "Keep spinning daily and buying books to level up faster! 📈", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 7 },
+    { user: "Luna", avatar: "L", message: "The duel challenge above ☝️ — tap it and compete for XP! ⚔️", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 6 },
+    { user: "Omar", avatar: "O", message: "Winner gets 300 XP, loser gets 80 XP — always worth playing! 💪", crown: true, gender: "male", avatarUrl: avatarMale2, level: 5 },
+    { user: "Noor", avatar: "N", message: "Reach Level 9 to unlock Silver room! 🥈✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 3 },
+    { user: "Sara", avatar: "S", message: "Who wants to duel? Let's go! 🔥🎮", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 7 },
   ],
-  1: [ // Silver
-    { user: "Sara", avatar: "S", message: "Silver squad! 🥈✨ Level 9+ only!", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-    { user: "Luna", avatar: "L", message: "This room is getting more exclusive! Keep grinding XP! 🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
-    { user: "Omar", avatar: "O", message: "Check your VIP page to see your progress to Gold! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
-    { user: "Noor", avatar: "N", message: "The Crown page shows all VIP perks and mystery chests! 🎁", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 8 },
+  1: [ // Silver (Lv 9-16)
+    { user: "Sara", avatar: "S", message: "Silver squad! 🥈✨ Level 9+ only!", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 14 },
+    { user: "Luna", avatar: "L", message: "This room is getting more exclusive! Keep grinding XP! 🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 11 },
+    { user: "Omar", avatar: "O", message: "Check your VIP page to see your progress to Gold! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 15 },
+    { user: "Noor", avatar: "N", message: "The Crown page shows all VIP perks and mystery chests! 🎁", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 12 },
   ],
-  2: [ // Gold
-    { user: "Omar", avatar: "O", message: "Gold room! 🥇 Only legends reach Level 17! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 20 },
-    { user: "Sara", avatar: "S", message: "The XP rewards get bigger in higher rooms! 💎", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 15 },
-    { user: "Luna", avatar: "L", message: "Diamond room at Level 20 is the next big goal! 💎🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 7 },
+  2: [ // Gold (Lv 17-24)
+    { user: "Omar", avatar: "O", message: "Gold room! 🥇 Only the strong reach Level 17! 👑", crown: true, gender: "male", avatarUrl: avatarMale2, level: 22 },
+    { user: "Sara", avatar: "S", message: "The XP rewards get bigger in higher rooms! 💎", crown: false, gender: "female", avatarUrl: avatarFemale3, level: 19 },
+    { user: "Luna", avatar: "L", message: "Diamond room at Level 25 is the next big goal! 💎🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 21 },
   ],
-  3: [ // Diamond
-    { user: "Sara", avatar: "S", message: "Diamond room! 💎👑 Level 25+ elite club!", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 28 },
-    { user: "Omar", avatar: "O", message: "You're at the top! The best rewards and events happen here! 🏆✨", crown: true, gender: "male", avatarUrl: avatarMale2, level: 12 },
+  3: [ // Diamond (Lv 25-32)
+    { user: "Sara", avatar: "S", message: "Diamond room! 💎👑 Level 25+ elite club!", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 30 },
+    { user: "Omar", avatar: "O", message: "You're at the top! The best rewards and events happen here! 🏆✨", crown: true, gender: "male", avatarUrl: avatarMale2, level: 28 },
+    { user: "Luna", avatar: "L", message: "Legend room at Level 33 is the ULTIMATE goal! 🔥👑", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 27 },
+    { user: "Noor", avatar: "N", message: "Diamond players get the best mystery chest drops! 🎁💎", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 26 },
   ],
-  4: [ // Legend
-    { user: "Sara", avatar: "S", message: "🔥 Legend room! Only true champions reach Level 33! 👑🏆", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 35 },
-    { user: "Omar", avatar: "O", message: "Welcome to the hall of legends! The rewards here are INSANE! 💎⚡", crown: true, gender: "male", avatarUrl: avatarMale2, level: 22 },
-    { user: "Luna", avatar: "L", message: "This is where the elite gather — XP Rain drops are HUGE here! 🌧️🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 28 },
-    { user: "Noor", avatar: "N", message: "I grinded for months to get here — totally worth it! 💪✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 21 },
-    { user: "Sara", avatar: "S", message: "Legend players get the best mystery chest drops! 🎁👑", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 25 },
-    { user: "Omar", avatar: "O", message: "Keep pushing — Level 40 is the ultimate achievement! 🏅🔥", crown: true, gender: "male", avatarUrl: avatarMale2, level: 38 },
+  4: [ // Legend (Lv 33-40)
+    { user: "Sara", avatar: "S", message: "🔥 Legend room! Only true champions reach Level 33! 👑🏆", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 38 },
+    { user: "Omar", avatar: "O", message: "Welcome to the hall of legends! The rewards here are INSANE! 💎⚡", crown: true, gender: "male", avatarUrl: avatarMale2, level: 36 },
+    { user: "Luna", avatar: "L", message: "This is where the elite gather — XP Rain drops are HUGE here! 🌧️🔥", crown: true, gender: "female", avatarUrl: avatarFemale1, level: 35 },
+    { user: "Noor", avatar: "N", message: "I grinded for months to get here — totally worth it! 💪✨", crown: false, gender: "female", avatarUrl: avatarFemale2, level: 34 },
+    { user: "Sara", avatar: "S", message: "Legend players are the kings of Winline! 👑🔥", crown: true, gender: "female", avatarUrl: avatarFemale3, level: 40 },
+    { user: "Omar", avatar: "O", message: "Level 40 is the ultimate achievement! We made it! 🏅🔥", crown: true, gender: "male", avatarUrl: avatarMale2, level: 40 },
   ],
 };
 

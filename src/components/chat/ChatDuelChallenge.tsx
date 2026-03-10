@@ -10,6 +10,9 @@ type Move = "rock" | "paper" | "scissors";
 type Phase = "idle" | "searching" | "matched" | "vote" | "picking" | "clash" | "round_result" | "final_result";
 type Role = "idle" | "player" | "spectator";
 
+const BOT_NAMES = ["Nova", "Blaze", "Shadow", "Pixel", "Storm", "Echo", "Viper", "Luna", "Rex", "Zara"];
+const BOT_ID = "bot-00000000-0000-0000-0000-000000000000";
+
 const MOVE_EMOJI: Record<Move, string> = { rock: "🪨", paper: "📄", scissors: "✂️" };
 const MOVES: Move[] = ["rock", "paper", "scissors"];
 
@@ -71,6 +74,8 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
   const [finalWinner, setFinalWinner] = useState<"p1" | "p2" | null>(null);
   const [shakeIndex, setShakeIndex] = useState(0);
   const [waitingForOpponent, setWaitingForOpponent] = useState(false);
+  const [isBotMatch, setIsBotMatch] = useState(false);
+  const botTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const roomChannelRef = useRef<any>(null);
@@ -377,13 +382,59 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
 
       if (timer <= 0) {
         clearTimer();
-        supabase.from('rps_matches').delete().eq('id', id).then(() => {});
-        setPhase("idle");
-        setRole("idle");
-        setMatchId(null);
+        // Bot fallback — simulate a bot joining
+        startBotMatch(id);
       }
     }, 1000);
   };
+
+  // ── BOT FALLBACK ──
+  const startBotMatch = (id: string) => {
+    const botName = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
+    const botLevel = Math.max(1, playerLevel + Math.floor(Math.random() * 5) - 2);
+
+    setIsBotMatch(true);
+    setP2Name(`🤖 ${botName}`);
+    setP2Level(botLevel);
+    setP2Id(BOT_ID);
+    setPhase("matched");
+
+    // No DB update needed for bot — it's all local
+  };
+
+  // Bot auto-pick move after a delay during picking phase
+  const playerMoveRef = useRef<Move | null>(null);
+  playerMoveRef.current = playerMove;
+
+  useEffect(() => {
+    if (!isBotMatch || phase !== "picking" || role !== "player") return;
+    
+    const delay = 2000 + Math.random() * 4000; // 2-6 seconds
+    botTimerRef.current = setTimeout(() => {
+      const botMove = MOVES[Math.floor(Math.random() * 3)];
+      setP2Move(botMove);
+      
+      // If player already picked, go to clash
+      const currentPlayerMove = playerMoveRef.current;
+      if (currentPlayerMove) {
+        setP1Move(currentPlayerMove);
+        setWaitingForOpponent(false);
+        setPhase("clash");
+        setShakeIndex(0);
+      }
+    }, delay);
+    
+    return () => { if (botTimerRef.current) clearTimeout(botTimerRef.current); };
+  }, [isBotMatch, phase, round, role]);
+
+  // When player is waiting for bot opponent and bot picks, trigger clash
+  useEffect(() => {
+    if (!isBotMatch || !waitingForOpponent || !playerMove || !p2Move) return;
+    setP1Move(playerMove);
+    setWaitingForOpponent(false);
+    setPhase("clash");
+    setShakeIndex(0);
+  }, [isBotMatch, waitingForOpponent, playerMove, p2Move]);
 
   // ── MATCHED → VOTE after 3s ──
   useEffect(() => {
@@ -435,7 +486,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     setRoundTimer(10);
     setWaitingForOpponent(false);
 
-    if (matchId && role === "player" && isPlayer1) {
+    if (!isBotMatch && matchId && role === "player" && isPlayer1) {
       await supabase.from('rps_matches').update({
         player1_move: null,
         player2_move: null,
@@ -468,9 +519,23 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
   }, [phase, round]);
 
   const handlePick = useCallback(async (move: Move) => {
-    if (playerMove || !matchId || !user || role !== "player") return;
+    if (playerMove || !user || role !== "player") return;
     setPlayerMove(move);
 
+    if (isBotMatch) {
+      setP1Move(move);
+      // If bot already picked, go to clash
+      if (p2Move) {
+        setWaitingForOpponent(false);
+        setPhase("clash");
+        setShakeIndex(0);
+      } else {
+        setWaitingForOpponent(true);
+      }
+      return;
+    }
+
+    if (!matchId) return;
     const moveCol = isPlayer1 ? 'player1_move' : 'player2_move';
     const oppCol = isPlayer1 ? 'player2_move' : 'player1_move';
 
@@ -486,11 +551,11 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     } else {
       setWaitingForOpponent(true);
     }
-  }, [playerMove, matchId, user, isPlayer1, role]);
+  }, [playerMove, matchId, user, isPlayer1, role, isBotMatch, p2Move]);
 
   // Poll for opponent's move when waiting
   useEffect(() => {
-    if (!waitingForOpponent || !matchId || !user || role !== "player") return;
+    if (!waitingForOpponent || !matchId || !user || role !== "player" || isBotMatch) return;
     const oppCol = isPlayer1 ? 'player2_move' : 'player1_move';
     const pollInterval = setInterval(async () => {
       const { data } = await supabase.from('rps_matches').select('*').eq('id', matchId).single();
@@ -540,7 +605,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       if (newScores.p1 >= 2) {
         setFinalWinner("p1");
         setPhase("final_result");
-        if (matchId && role === "player" && isPlayer1) {
+        if (!isBotMatch && matchId && role === "player" && isPlayer1) {
           await supabase.from('rps_matches').update({
             status: 'finished',
             player1_score: newScores.p1,
@@ -551,7 +616,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
       } else if (newScores.p2 >= 2) {
         setFinalWinner("p2");
         setPhase("final_result");
-        if (matchId && role === "player" && isPlayer1) {
+        if (!isBotMatch && matchId && role === "player" && isPlayer1) {
           await supabase.from('rps_matches').update({
             status: 'finished',
             player1_score: newScores.p1,
@@ -565,7 +630,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
         setPlayerMove(null);
         setP1Move(null);
         setP2Move(null);
-        if (matchId && role === "player" && isPlayer1) {
+        if (!isBotMatch && matchId && role === "player" && isPlayer1) {
           await supabase.from('rps_matches').update({
             player1_move: null,
             player2_move: null,
@@ -599,6 +664,12 @@ export function ChatDuelChallenge({ playerName, playerLevel, roomId, onEnd, onSt
     setP2Move(null);
     setVotePick(null);
     setWaitingForOpponent(false);
+    setIsBotMatch(false);
+    if (botTimerRef.current) { clearTimeout(botTimerRef.current); botTimerRef.current = null; }
+    // Clean up DB match if it was a bot match
+    if (isBotMatch && matchId) {
+      supabase.from('rps_matches').delete().eq('id', matchId).then(() => {});
+    }
   };
 
   // Check for active match to show join button

@@ -240,6 +240,7 @@ export function ChatDuelChallenge({ playerName, playerLevel, onEnd, onStart, isR
   }, [phase, roundWinner]);
 
   const startSearch = () => {
+    onStart?.();
     setPhase("searching");
     setSearchTimer(40);
     setOpponentName("");

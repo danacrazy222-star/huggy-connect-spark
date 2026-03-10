@@ -247,6 +247,7 @@ export default function Chat() {
                 playerName={user?.email?.split("@")[0] || "You"}
                 playerLevel={level}
                 onEnd={handleDuelEnd}
+                onStart={activeRoom === 0 ? handleWorldChallengeStart : undefined}
                 isRTL={isRTL}
               />
             )}

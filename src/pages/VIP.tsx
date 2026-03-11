@@ -9,9 +9,12 @@ export default function VIP() {
   const { xp, level } = useGameStore();
   const { t, isRTL } = useTranslation();
 
-  const xpNeededForNext = XP_FOR_LEVEL[level] || 0;
-  const progress = level >= 40 ? 100 : xpNeededForNext > 0 ? Math.min((xp / xpNeededForNext) * 100, 100) : 100;
-  const xpRemaining = Math.max(xpNeededForNext - xp, 0);
+  const currentThreshold = XP_FOR_LEVEL[level] || 0;
+  const nextThreshold = XP_FOR_LEVEL[level + 1] || currentThreshold;
+  const xpInLevel = xp - currentThreshold;
+  const xpNeededForLevel = nextThreshold - currentThreshold;
+  const progress = level >= 40 ? 100 : xpNeededForLevel > 0 ? Math.min((xpInLevel / xpNeededForLevel) * 100, 100) : 100;
+  const xpRemaining = Math.max(nextThreshold - xp, 0);
 
   const milestones: { name: string; lvl: number; stars?: number; icon?: "diamond" | "flame" }[] = [
     { name: "Bronze", lvl: 1, stars: 1 },

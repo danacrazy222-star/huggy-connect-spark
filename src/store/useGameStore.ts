@@ -80,6 +80,7 @@ export const useGameStore = create<GameState>()(
       setLastSpinTime: (time) => set({ lastSpinTime: time, canSpin: false }),
       unlockWorldChallenge: () => set({ worldChallengeUnlocked: true }),
       lockWorldChallenge: () => set({ worldChallengeUnlocked: false }),
+      setDuelActive: (active) => set({ duelActive: active }),
       
       canOpenChest: () => {
         const { lastChestTime } = get();

@@ -54,6 +54,8 @@ const App = () => (
               <Route path="/messages" element={<Messages />} />
               <Route path="/promotion-rules" element={<PromotionRules />} />
               <Route path="/terms" element={<Terms />} />
+              <Route path="/help-center" element={<HelpCenter />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />

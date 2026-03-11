@@ -1,6 +1,18 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { useChatStore } from './useChatStore';
+import { supabase } from '@/integrations/supabase/client';
+
+function saveWinnerToDB(winnerName: string, prizeAmount: number) {
+  supabase.from('draw_winners').insert({
+    winner_name: winnerName,
+    prize_type: 'Gift Card',
+    prize_amount: prizeAmount,
+    draw_round_id: `round_${Date.now()}`,
+  }).then(({ error }) => {
+    if (error) console.error('Failed to save winner:', error);
+  });
+}
 
 function broadcastDrawWinner(winnerName: string, entryId: number, prizeAmount: number) {
   const chatStore = useChatStore.getState();

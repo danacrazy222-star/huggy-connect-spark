@@ -879,7 +879,7 @@ export const translations: Record<Language, TranslationKeys> = {
     giftCard: "Подарочная карта $500", promotionalDraw: "ПРОМО РОЗЫГРЫШ", dailySpin: "ЕЖЕДНЕВНОЕ ВРАЩЕНИЕ",
     oneFreeAttempt: "У вас ОДНА БЕСПЛАТНАЯ ПОПЫТКА сегодня!", nextSpinIn: "Следующее бесплатное вращение через:",
     hours: "ЧАСЫ", minutes: "МИНУТЫ", seconds: "СЕКУНДЫ",
-    xpPoints: "Очки XP", gameTickets: "Игровые билеты", extraEntries: "Доп. входы", surpriseRewards: "Сюрпризы",
+    xpPoints: "Очки", gameTickets: "Игровые билеты", extraEntries: "Доп. входы", surpriseRewards: "Сюрпризы",
     allRewardsPromotional: "Все награды являются промо", noCashValue: "Без денежной стоимости",
     spinNow: "КРУТИТЬ", spinning: "ВРАЩЕНИЕ...", comeBackTomorrow: "ПРИХОДИТЕ ЗАВТРА",
     youWon: "Вы выиграли!", maybeLater: "МОЖЕТ ПОЗЖЕ",

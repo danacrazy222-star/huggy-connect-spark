@@ -130,50 +130,59 @@ export default function Shop() {
     setShowConfirm(true);
   };
 
-  const handleConfirmPurchase = () => {
+  
+
+  const handleConfirmPurchase = (useWallet: boolean) => {
     if (!selectedPkg) return;
     const qty = purchaseQty;
-    const totalPointsCost = selectedPkg.priceNum * 1000 * qty;
-    const { points } = useGameStore.getState();
 
-    if (points < totalPointsCost) {
-      toast.error(t("notEnoughPoints") || `Not enough points! You need ${totalPointsCost.toLocaleString()} points.`);
+    if (useWallet) {
+      const totalPointsCost = selectedPkg.priceNum * 1000 * qty;
+      const { points } = useGameStore.getState();
+      if (points < totalPointsCost) {
+        toast.error(t("notEnoughPoints") || "Not enough points!");
+        return;
+      }
       setShowConfirm(false);
-      return;
+      setPurchasing(true);
+      setTimeout(() => {
+        useGameStore.getState().addPoints(-totalPointsCost);
+        applyRewards(selectedPkg, qty);
+      }, 1500);
+    } else {
+      // External payment - simulate for now
+      setShowConfirm(false);
+      setPurchasing(true);
+      setTimeout(() => {
+        applyRewards(selectedPkg, qty);
+      }, 1500);
     }
+  };
 
-    setShowConfirm(false);
-    setPurchasing(true);
+  const applyRewards = (pkg: BookPackage, qty: number) => {
+    pkg.rewards.forEach((r) => {
+      const totalAmount = r.amount * qty;
+      if (r.type === "xp") addXP(totalAmount);
+      else if (r.type === "points") addPoints(totalAmount);
+      else if (r.type === "gameTicket") addGameTicket(totalAmount);
+      else if (r.type === "tarotTicket") addTarotTicket(totalAmount);
+      else if (r.type === "drawEntry") {
+        addDrawEntry(totalAmount);
+        for (let i = 0; i < totalAmount; i++) {
+          addPurchase(t("playerYou"), pkg.priceNum);
+        }
+      }
+    });
+
+    setPurchasing(false);
+    setShowSuccess(true);
+    toast.success(`${qty}x ${pkg.name} ${t("purchasedToast")} 🎉`);
+    setQuantities(prev => ({ ...prev, [pkg.nameKey]: 1 }));
 
     setTimeout(() => {
-      // Deduct points from wallet
-      useGameStore.getState().addPoints(-totalPointsCost);
-
-      selectedPkg.rewards.forEach((r) => {
-        const totalAmount = r.amount * qty;
-        if (r.type === "xp") addXP(totalAmount);
-        else if (r.type === "points") addPoints(totalAmount);
-        else if (r.type === "gameTicket") addGameTicket(totalAmount);
-        else if (r.type === "tarotTicket") addTarotTicket(totalAmount);
-        else if (r.type === "drawEntry") {
-          addDrawEntry(totalAmount);
-          for (let i = 0; i < totalAmount; i++) {
-            addPurchase(t("playerYou"), selectedPkg.priceNum);
-          }
-        }
-      });
-
-      setPurchasing(false);
-      setShowSuccess(true);
-      toast.success(`${qty}x ${selectedPkg.name} ${t("purchasedToast")} 🎉`);
-
-      setQuantities(prev => ({ ...prev, [selectedPkg.nameKey]: 1 }));
-
-      setTimeout(() => {
-        setShowSuccess(false);
-        setSelectedPkg(null);
-      }, 2500);
-    }, 1500);
+      setShowSuccess(false);
+      setSelectedPkg(null);
+    }, 2500);
   };
 
   return (
@@ -277,7 +286,7 @@ export default function Shop() {
                         background: "linear-gradient(180deg, hsl(45 100% 50%), hsl(40 100% 40%))",
                         boxShadow: "0 0 20px rgba(255,200,0,0.2)",
                       }}>
-                      {qty > 1 ? `${qty}x — ${(totalPrice * 1000).toLocaleString()} pts` : `${t("buyForPrice")} ${(pkg.priceNum * 1000).toLocaleString()} pts`}
+                      {qty > 1 ? `${qty}x — $${totalPrice}` : `${t("buyForPrice")} ${pkg.price}`}
                     </button>
                   </div>
                 </div>

@@ -12,6 +12,9 @@ Winline design system, economy rules, and architecture overview
 - Chat: 6 rooms (World/Bronze/Silver/Gold/Diamond/Legend)
 - VIP: XP progression, mystery chests
 - Tarot: AI tarot card reading
+- Draw: $500 gift card giveaway with progress tracking
+- Games: Duel games (RPS etc.)
+- Profile, UserProfile, Messages (DMs)
 
 ## Room Level Requirements
 - World: open (Lv0), Bronze: Lv1-8, Silver: Lv9-16, Gold: Lv17-24, Diamond: Lv25-32, Legend: Lv33-40
@@ -27,12 +30,42 @@ Winline design system, economy rules, and architecture overview
 - Lv21:295K, Lv22:350K, Lv23:420K, Lv24:500K, Lv25:550K, Lv26:610K, Lv27:680K, Lv28:755K, Lv29:835K, Lv30:920K
 - Lv31:1.01M, Lv32:1.1M, Lv33:1.195M, Lv34:1.295M, Lv35:1.4M, Lv36:1.51M, Lv37:1.625M, Lv38:1.745M, Lv39:1.87M, Lv40:2M
 
-## Frame System
-- DiamondFrame activates at level 25+ (elite), legend effects at level 33+
+## DiamondFrame Component (DO NOT DELETE)
+- File: src/components/DiamondFrame.tsx
+- Activates at level 25+ (elite) with gold rotating gradient ring
+- Legend effects at level 33+ with blue diamond gradient, sparkle particles, counter-rotating ring, 💎 ornament
+- Used in: Chat avatars (ChatMessageBubble), Profile page, UserProfile page
+- Props: children, size(sm/lg), active, level, className
 
 ## Economy
 - Spin: 1x per 24h (resets 11AM Beirut), rewards: XP/Points/Tickets/Entries
 - Books: Basic($1)=1500XP+entry, Plus($2)=3500XP+ticket+entry, Premium($3)=6000XP+20pts+tickets+entries, Elite($5)=12000XP+50pts+2tickets+2tarot+3entries
 - Games: 1 ticket entry, bet with points only
 - Winner gets 300XP, loser 80XP
-- World Challenge: $5 book unlocks duel in World room, winner announced in all rooms
+
+## World Challenge Feature (DO NOT DELETE)
+- $5 Elite book unlocks duel in World room (worldChallengeUnlocked in useGameStore)
+- WorldChallengePromo shown when locked, ChatDuelChallenge shown when unlocked
+- Winner announced as system message in ALL 6 rooms
+- Challenge re-locks after duel ends (lockWorldChallenge)
+
+## Draw Winner Broadcast (DO NOT DELETE)
+- When draw winner picked (addPurchase hitting revenue target OR triggerDraw), broadcast to all 6 chat rooms
+- Uses broadcastDrawWinner() in useDrawStore.ts → useChatStore.addMessage to all rooms
+- System message format: "🎉🏆 DRAW WINNER! {name} (Entry #{id}) won a ${amount} Gift Card! 🎁💰"
+
+## Key Components (DO NOT DELETE)
+- TopBar: Shows XP/Points, language switcher
+- BottomNav: Navigation tabs
+- SpinWheel: Daily spin with rewards
+- ChatMessageBubble: Chat messages with DiamondFrame for high-level users
+- ChatDuelChallenge: Duel challenge in chat rooms
+- WorldChallengePromo: Promo for $5 book to unlock World duel
+- XPRainEvent: XP rain mini-game in chat
+- WelcomePopup: First-visit popup with Madam Zara
+
+## Stores (DO NOT DELETE)
+- useGameStore: points, xp, level, tickets, spin, worldChallenge
+- useChatStore: roomMessages, unreadCount
+- useDrawStore: entries, revenue, winner, broadcast
+- useLanguageStore: language preference

@@ -348,7 +348,7 @@ export default function Chat() {
               </div>
             ) : (
               <div className="flex-1 flex flex-col px-4">
-                {activeRoom === 0 && !worldChallengeUnlocked && <WorldChallengePromo />}
+                {activeRoom === 0 && <WorldChallengePromo />}
                 {(activeRoom !== 0 || worldChallengeUnlocked) && (
                   <ChatDuelChallenge
                     playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}

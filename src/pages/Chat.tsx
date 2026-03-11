@@ -497,7 +497,7 @@ export default function Chat() {
                 {user ? (
                   <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
                     <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
-                      <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}
+                      <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")} maxLength={1000}
                         onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                         className={cn("flex-1 bg-transparent text-sm text-foreground placeholder:text-white/40 outline-none", isRTL && "text-right")} />
                       <button onClick={handleSendMessage} className="text-primary hover:text-primary/80 transition-colors"><Send className="w-5 h-5" /></button>

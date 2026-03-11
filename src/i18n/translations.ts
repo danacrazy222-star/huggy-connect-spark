@@ -92,6 +92,13 @@ export type TranslationKeys = {
   bronzeChest: string;
   silverChest: string;
   goldChest: string;
+  eliteChest: string;
+  legendChest: string;
+  dailyChest: string;
+  openChest: string;
+  chestOpened: string;
+  chestLocked: string;
+  xpRange: string;
   level: string;
   elite: string;
   legend: string;

@@ -92,6 +92,13 @@ export type TranslationKeys = {
   bronzeChest: string;
   silverChest: string;
   goldChest: string;
+  eliteChest: string;
+  legendChest: string;
+  dailyChest: string;
+  openChest: string;
+  chestOpened: string;
+  chestLocked: string;
+  xpRange: string;
   level: string;
   elite: string;
   legend: string;
@@ -350,6 +357,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Each day you join brings you", closerToFew: "closer to where few can reach.",
     mysteryReward: "MYSTERY REWARD", bronzeChest: "Bronze Chest",
     silverChest: "Silver Chest", goldChest: "Gold Chest",
+    eliteChest: "Elite Chest", legendChest: "Legend Chest",
+    dailyChest: "Daily Chest", openChest: "Open", chestOpened: "Opened!", chestLocked: "Locked", xpRange: "XP",
     level: "Level", elite: "Elite", legend: "Legend",
     aiTarotReading: "AI Tarot Reading", selectCardReveal: "Select a card to reveal your destiny",
     ticketsRemaining: "tickets remaining", readAgain: "Read Again",
@@ -418,6 +427,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "كل يوم تنضم يقربك", closerToFew: "إلى حيث لا يصل إلا القليل.",
     mysteryReward: "مكافأة غامضة", bronzeChest: "صندوق برونزي",
     silverChest: "صندوق فضي", goldChest: "صندوق ذهبي",
+    eliteChest: "صندوق النخبة", legendChest: "صندوق الأسطوري",
+    dailyChest: "صندوق يومي", openChest: "افتح", chestOpened: "تم الفتح!", chestLocked: "مقفل", xpRange: "XP",
     level: "المستوى", elite: "النخبة", legend: "الأسطوري",
     aiTarotReading: "قراءة تاروت بالذكاء الاصطناعي", selectCardReveal: "اختر بطاقة لكشف مصيرك",
     ticketsRemaining: "تذاكر متبقية", readAgain: "اقرأ مجدداً",
@@ -486,6 +497,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Chaque jour vous rapproche", closerToFew: "de là où peu arrivent.",
     mysteryReward: "RÉCOMPENSE MYSTÈRE", bronzeChest: "Coffre Bronze",
     silverChest: "Coffre Argent", goldChest: "Coffre Or",
+    eliteChest: "Coffre Élite", legendChest: "Coffre Légende",
+    dailyChest: "Coffre Quotidien", openChest: "Ouvrir", chestOpened: "Ouvert!", chestLocked: "Verrouillé", xpRange: "XP",
     level: "Niveau", elite: "Élite", legend: "Légende",
     aiTarotReading: "Lecture Tarot IA", selectCardReveal: "Choisissez une carte pour révéler votre destin",
     ticketsRemaining: "tickets restants", readAgain: "Relire",
@@ -553,6 +566,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Cada día que te unes te acerca", closerToFew: "a donde pocos llegan.",
     mysteryReward: "RECOMPENSA MISTERIOSA", bronzeChest: "Cofre Bronce",
     silverChest: "Cofre Plata", goldChest: "Cofre Oro",
+    eliteChest: "Cofre Élite", legendChest: "Cofre Leyenda",
+    dailyChest: "Cofre Diario", openChest: "Abrir", chestOpened: "¡Abierto!", chestLocked: "Bloqueado", xpRange: "XP",
     level: "Nivel", elite: "Élite", legend: "Leyenda",
     aiTarotReading: "Lectura Tarot IA", selectCardReveal: "Elige una carta para revelar tu destino",
     ticketsRemaining: "boletos restantes", readAgain: "Leer de nuevo",
@@ -620,6 +635,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Her gün katıldığınızda sizi yaklaştırır", closerToFew: "çok azının ulaşabildiği yere.",
     mysteryReward: "GİZEMLİ ÖDÜL", bronzeChest: "Bronz Sandık",
     silverChest: "Gümüş Sandık", goldChest: "Altın Sandık",
+    eliteChest: "Elit Sandık", legendChest: "Efsane Sandık",
+    dailyChest: "Günlük Sandık", openChest: "Aç", chestOpened: "Açıldı!", chestLocked: "Kilitli", xpRange: "XP",
     level: "Seviye", elite: "Elit", legend: "Efsane",
     aiTarotReading: "AI Tarot Okuma", selectCardReveal: "Kaderinizi ortaya çıkarmak için bir kart seçin",
     ticketsRemaining: "bilet kaldı", readAgain: "Tekrar Oku",
@@ -687,6 +704,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Jeder Tag bringt Sie näher", closerToFew: "dorthin, wo nur wenige gelangen.",
     mysteryReward: "MYSTERY-BELOHNUNG", bronzeChest: "Bronze-Truhe",
     silverChest: "Silber-Truhe", goldChest: "Gold-Truhe",
+    eliteChest: "Elite-Truhe", legendChest: "Legenden-Truhe",
+    dailyChest: "Tägliche Truhe", openChest: "Öffnen", chestOpened: "Geöffnet!", chestLocked: "Gesperrt", xpRange: "XP",
     level: "Level", elite: "Elite", legend: "Legende",
     aiTarotReading: "KI-Tarot-Lesung", selectCardReveal: "Wählen Sie eine Karte",
     ticketsRemaining: "Tickets übrig", readAgain: "Nochmal lesen",
@@ -754,6 +773,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Ogni giorno ti avvicina", closerToFew: "a dove pochi arrivano.",
     mysteryReward: "PREMIO MISTERIOSO", bronzeChest: "Forziere Bronzo",
     silverChest: "Forziere Argento", goldChest: "Forziere Oro",
+    eliteChest: "Forziere Élite", legendChest: "Forziere Leggenda",
+    dailyChest: "Forziere Giornaliero", openChest: "Apri", chestOpened: "Aperto!", chestLocked: "Bloccato", xpRange: "XP",
     level: "Livello", elite: "Élite", legend: "Leggenda",
     aiTarotReading: "Lettura Tarocchi IA", selectCardReveal: "Scegli una carta per rivelare il tuo destino",
     ticketsRemaining: "biglietti rimasti", readAgain: "Leggi di nuovo",
@@ -821,6 +842,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Cada dia te aproxima", closerToFew: "de onde poucos chegam.",
     mysteryReward: "RECOMPENSA MISTERIOSA", bronzeChest: "Baú de Bronze",
     silverChest: "Baú de Prata", goldChest: "Baú de Ouro",
+    eliteChest: "Baú de Elite", legendChest: "Baú de Lenda",
+    dailyChest: "Baú Diário", openChest: "Abrir", chestOpened: "Aberto!", chestLocked: "Bloqueado", xpRange: "XP",
     level: "Nível", elite: "Elite", legend: "Lenda",
     aiTarotReading: "Leitura Tarot IA", selectCardReveal: "Escolha uma carta para revelar seu destino",
     ticketsRemaining: "ingressos restantes", readAgain: "Ler novamente",
@@ -888,6 +911,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Каждый день приближает вас", closerToFew: "туда, куда доходят немногие.",
     mysteryReward: "ТАЙНАЯ НАГРАДА", bronzeChest: "Бронзовый сундук",
     silverChest: "Серебряный сундук", goldChest: "Золотой сундук",
+    eliteChest: "Элитный сундук", legendChest: "Легендарный сундук",
+    dailyChest: "Ежедневный сундук", openChest: "Открыть", chestOpened: "Открыто!", chestLocked: "Заблокировано", xpRange: "XP",
     level: "Уровень", elite: "Элита", legend: "Легенда",
     aiTarotReading: "ИИ Таро", selectCardReveal: "Выберите карту, чтобы узнать судьбу",
     ticketsRemaining: "билетов осталось", readAgain: "Читать снова",
@@ -955,6 +980,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "हर दिन आपको करीब लाता है", closerToFew: "जहां कुछ ही पहुंचते हैं।",
     mysteryReward: "रहस्य पुरस्कार", bronzeChest: "कांस्य संदूक",
     silverChest: "रजत संदूक", goldChest: "स्वर्ण संदूक",
+    eliteChest: "एलीट संदूक", legendChest: "लीजेंड संदूक",
+    dailyChest: "दैनिक संदूक", openChest: "खोलें", chestOpened: "खुला!", chestLocked: "बंद", xpRange: "XP",
     level: "स्तर", elite: "एलीट", legend: "लीजेंड",
     aiTarotReading: "AI टैरो रीडिंग", selectCardReveal: "अपना भाग्य जानने के लिए कार्ड चुनें",
     ticketsRemaining: "टिकट शेष", readAgain: "फिर से पढ़ें",

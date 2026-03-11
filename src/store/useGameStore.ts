@@ -12,6 +12,8 @@ interface GameState {
   lastSpinTime: number | null;
   canSpin: boolean;
   worldChallengeUnlocked: boolean;
+  lastChestTime: number | null;
+  lastChestReward: number | null;
   
   addPoints: (amount: number) => void;
   addXP: (amount: number) => void;
@@ -22,6 +24,8 @@ interface GameState {
   checkSpinAvailability: () => boolean;
   unlockWorldChallenge: () => void;
   lockWorldChallenge: () => void;
+  canOpenChest: () => boolean;
+  openDailyChest: () => number;
 }
 
 // Cumulative XP thresholds to REACH each level
@@ -48,6 +52,8 @@ export const useGameStore = create<GameState>()(
       lastSpinTime: null,
       canSpin: true,
       worldChallengeUnlocked: false,
+      lastChestTime: null,
+      lastChestReward: null,
       addPoints: (amount) => set((s) => ({ points: s.points + amount })),
       
       addXP: (amount) => set((s) => {
@@ -72,24 +78,46 @@ export const useGameStore = create<GameState>()(
       unlockWorldChallenge: () => set({ worldChallengeUnlocked: true }),
       lockWorldChallenge: () => set({ worldChallengeUnlocked: false }),
       
+      canOpenChest: () => {
+        const { lastChestTime } = get();
+        if (!lastChestTime) return true;
+        const now = new Date();
+        const beirutNow = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Beirut' }));
+        const beirutChest = new Date(new Date(lastChestTime).toLocaleString('en-US', { timeZone: 'Asia/Beirut' }));
+        const todayReset = new Date(beirutNow);
+        todayReset.setHours(11, 0, 0, 0);
+        const currentReset = beirutNow.getHours() < 11
+          ? new Date(todayReset.getTime() - 24 * 60 * 60 * 1000)
+          : todayReset;
+        return beirutChest < currentReset;
+      },
+
+      openDailyChest: () => {
+        const { level } = get();
+        let min: number, max: number;
+        if (level >= 33) { min = 450; max = 800; }
+        else if (level >= 25) { min = 250; max = 450; }
+        else if (level >= 17) { min = 120; max = 250; }
+        else if (level >= 9) { min = 60; max = 120; }
+        else { min = 20; max = 60; }
+        const reward = Math.floor(Math.random() * (max - min + 1)) + min;
+        set({ lastChestTime: Date.now(), lastChestReward: reward });
+        // Add the XP via the addXP action
+        get().addXP(reward);
+        return reward;
+      },
+
       checkSpinAvailability: () => {
         const { lastSpinTime } = get();
         if (!lastSpinTime) { set({ canSpin: true }); return true; }
-        // Lebanon timezone (Asia/Beirut) daily reset at 11:00 AM
         const now = new Date();
         const beirutNow = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Beirut' }));
         const beirutSpin = new Date(new Date(lastSpinTime).toLocaleString('en-US', { timeZone: 'Asia/Beirut' }));
-        
-        // Find the current day's 11:00 AM reset boundary in Beirut time
         const todayReset = new Date(beirutNow);
         todayReset.setHours(11, 0, 0, 0);
-        
-        // If current Beirut time is before 11 AM, the relevant reset was yesterday's 11 AM
         const currentReset = beirutNow.getHours() < 11 
           ? new Date(todayReset.getTime() - 24 * 60 * 60 * 1000)
           : todayReset;
-        
-        // User can spin if the last spin was before the current reset boundary
         const canSpin = beirutSpin < currentReset;
         set({ canSpin });
         return canSpin;

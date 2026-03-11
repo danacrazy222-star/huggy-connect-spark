@@ -1,5 +1,21 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useChatStore } from './useChatStore';
+
+function broadcastDrawWinner(winnerName: string, entryId: number, prizeAmount: number) {
+  const chatStore = useChatStore.getState();
+  const allRoomIds = [0, 1, 2, 3, 4, 5];
+  const msg = {
+    id: `draw-winner-${Date.now()}`,
+    text: `🎉🏆 DRAW WINNER! ${winnerName} (Entry #${entryId}) won a $${prizeAmount} Gift Card! 🎁💰`,
+    sender: "System",
+    isSystem: true,
+    timestamp: new Date(),
+  };
+  allRoomIds.forEach(roomId => {
+    chatStore.addMessage(roomId, msg);
+  });
+}
 
 interface DrawEntry {
   entryId: number;

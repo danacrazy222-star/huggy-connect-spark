@@ -297,7 +297,7 @@ export default function Chat() {
   }, [sendRealtimeMessage, user, userProfile, t]);
 
   const handleSendMessage = useCallback(() => {
-    const trimmed = message.trim();
+    const trimmed = message.trim().slice(0, 1000);
     if (!trimmed || !user) return;
     const filtered = containsProfanity(trimmed) ? censorMessage(trimmed) : trimmed;
     const displayName = userProfile?.display_name || user.email?.split("@")[0] || "Player";

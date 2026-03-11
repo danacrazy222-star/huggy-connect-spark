@@ -136,13 +136,58 @@ export default function Chat() {
   // Clear unread when entering
   useEffect(() => { clearUnread(); }, [clearUnread]);
 
-  // Bot simulation — posts a message every 6-12 seconds
+  // Welcome bots list for greeting new users
+  const welcomeBots = [
+    { user: "Luna", avatar: "L", gender: "female" as const, avatarUrl: avatarFemale1, level: 7 },
+    { user: "Omar", avatar: "O", gender: "male" as const, avatarUrl: avatarMale2, level: 12 },
+    { user: "Sara", avatar: "S", gender: "female" as const, avatarUrl: avatarFemale3, level: 15 },
+    { user: "Noor", avatar: "N", gender: "female" as const, avatarUrl: avatarFemale2, level: 8 },
+  ];
+
+  const welcomeMessages = [
+    (name: string) => `Welcome ${name}! 👋🎉 Glad to have you here!`,
+    (name: string) => `Hey ${name}! 🌟 Welcome to the room!`,
+    (name: string) => `${name} just joined! Welcome! 🔥✨`,
+    (name: string) => `Hi ${name}! 👋 Enjoy your time here! 🎊`,
+  ];
+
+  // Track welcomed users to avoid duplicate welcomes
+  const welcomedUsersRef = useRef<Set<string>>(new Set());
+
+  // Welcome new users when they send their first message
+  useEffect(() => {
+    if (!canAccess) return;
+    const latestMsg = realtimeMessages[realtimeMessages.length - 1];
+    if (!latestMsg) return;
+    const msgUserId = (latestMsg as any)._userId;
+    if (!msgUserId || msgUserId === user?.id) return; // Don't welcome self
+    if (welcomedUsersRef.current.has(msgUserId)) return; // Already welcomed
+    welcomedUsersRef.current.add(msgUserId);
+
+    const userName = latestMsg.user || "Player";
+    const bot = welcomeBots[Math.floor(Math.random() * welcomeBots.length)];
+    const welcomeText = welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)](userName);
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+
+    setTimeout(() => {
+      setBotMessages(prev => [...prev.slice(-20), {
+        ...bot,
+        message: welcomeText,
+        crown: false,
+        time: timeStr,
+      }]);
+    }, 1500 + Math.random() * 2000);
+  }, [realtimeMessages, canAccess, user?.id]);
+
+  // Bot simulation — posts a message every 10 minutes
   useEffect(() => {
     if (!canAccess) return;
     const scripts = botScripts[activeRoom] || botScripts[0];
     // Reset bot messages when switching rooms
     setBotMessages([]);
     botIndexRef.current = 0;
+    welcomedUsersRef.current = new Set();
 
     // Post first 2 messages immediately
     const now = new Date();
@@ -157,7 +202,7 @@ export default function Chat() {
       const ts = `${t.getHours().toString().padStart(2, "0")}:${t.getMinutes().toString().padStart(2, "0")}`;
       setBotMessages(prev => [...prev.slice(-20), { ...scripts[idx], time: ts }]);
       botIndexRef.current++;
-    }, 6000 + Math.random() * 6000);
+    }, 10 * 60 * 1000); // Every 10 minutes
 
     return () => clearInterval(interval);
   }, [activeRoom, canAccess]);

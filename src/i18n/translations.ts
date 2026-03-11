@@ -635,6 +635,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Her gün katıldığınızda sizi yaklaştırır", closerToFew: "çok azının ulaşabildiği yere.",
     mysteryReward: "GİZEMLİ ÖDÜL", bronzeChest: "Bronz Sandık",
     silverChest: "Gümüş Sandık", goldChest: "Altın Sandık",
+    eliteChest: "Elit Sandık", legendChest: "Efsane Sandık",
+    dailyChest: "Günlük Sandık", openChest: "Aç", chestOpened: "Açıldı!", chestLocked: "Kilitli", xpRange: "XP",
     level: "Seviye", elite: "Elit", legend: "Efsane",
     aiTarotReading: "AI Tarot Okuma", selectCardReveal: "Kaderinizi ortaya çıkarmak için bir kart seçin",
     ticketsRemaining: "bilet kaldı", readAgain: "Tekrar Oku",

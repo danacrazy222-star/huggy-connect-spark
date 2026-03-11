@@ -68,9 +68,9 @@ export default function Draw() {
   // User's entries (demo)
   const userEntries = entries.filter(e => e.username === "You").length;
 
-  // Last winner from DB
+  // Last winner from DB - refetch when a new winner is drawn
   const [lastWinner, setLastWinner] = useState<{ winner_name: string; prize_type: string; prize_amount: number; created_at: string } | null>(null);
-  useEffect(() => {
+  const fetchLastWinner = () => {
     supabase
       .from("draw_winners")
       .select("winner_name, prize_type, prize_amount, created_at")
@@ -78,7 +78,10 @@ export default function Draw() {
       .limit(1)
       .maybeSingle()
       .then(({ data }) => { if (data) setLastWinner(data as any); });
-  }, []);
+  };
+  useEffect(() => {
+    fetchLastWinner();
+  }, [currentWinner]);
 
   // Live activity feed
   const [activityIndex, setActivityIndex] = useState(0);

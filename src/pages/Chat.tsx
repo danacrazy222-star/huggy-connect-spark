@@ -337,77 +337,83 @@ export default function Chat() {
               })}
             </div>
 
-        {!canAccess ? (
-          <div className="flex-1 flex flex-col items-center justify-center gap-3 px-4">
-            <Lock className="w-12 h-12 text-muted-foreground" />
-            <p className="text-muted-foreground text-center">
-              {t("reachLevel")} <span className="text-primary font-bold">{t("level")} {currentRoom.level}</span> {t("toUnlockRoom")}
-            </p>
-          </div>
-        ) : (
-          <div className="flex-1 flex flex-col px-4">
-            {/* World challenge promo — only in World room, only if not yet unlocked */}
-            {activeRoom === 0 && !worldChallengeUnlocked && (
-              <WorldChallengePromo />
-            )}
-            {/* Duel challenge — in World room only if unlocked, in other rooms always */}
-            {(activeRoom !== 0 || worldChallengeUnlocked) && (
-              <ChatDuelChallenge
-                playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
-                playerLevel={level}
-                roomId={activeRoom}
-                onEnd={handleDuelEnd}
-                onStart={handleWorldChallengeStart}
-                isRTL={isRTL}
-              />
-            )}
-
-            {/* Chat messages */}
-            <div className="flex-1 min-h-0" />
-            <div className="space-y-3 mb-3 overflow-y-auto max-h-[50vh]">
-              {!user && (
-                <div className="text-center py-4">
-                  <p className="text-sm text-muted-foreground">{t("loginToChat") || "Login to chat with others"}</p>
-                </div>
-              )}
-              {/* Bot messages — always show */}
-              {botMessages.map((msg, i) => (
-                <ChatMessageBubble key={`bot-${i}`} msg={msg} index={i} isRTL={isRTL} />
-              ))}
-              {realtimeMessages.map((msg, i) => (
-                <ChatMessageBubble key={(msg as any)._id || i} msg={msg} index={i} isRTL={isRTL} currentUserId={user?.id} />
-              ))}
-              {announcements.filter(a => a.roomId === 0 || a.roomId === activeRoom).map((msg, i) => (
-                <ChatMessageBubble key={`announce-${i}`} msg={msg} index={0} isRTL={isRTL} />
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
-
-            {/* Message input */}
-            {user ? (
-              <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
-                <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
-                  <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}
-                    onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                    className={cn("flex-1 bg-transparent text-sm text-foreground placeholder:text-white/40 outline-none", isRTL && "text-right")} />
-                  <button onClick={handleSendMessage} className="text-primary hover:text-primary/80 transition-colors"><Send className="w-5 h-5" /></button>
-                </div>
+            {!canAccess ? (
+              <div className="flex-1 flex flex-col items-center justify-center gap-3 px-4">
+                <Lock className="w-12 h-12 text-muted-foreground" />
+                <p className="text-muted-foreground text-center">
+                  {t("reachLevel")} <span className="text-primary font-bold">{t("level")} {currentRoom.level}</span> {t("toUnlockRoom")}
+                </p>
               </div>
             ) : (
-              <div className="text-center mb-2 py-2">
-                <button onClick={() => window.location.href = "/auth"} className="text-sm text-primary underline">
-                  {t("loginToChat") || "Login to chat"}
-                </button>
+              <div className="flex-1 flex flex-col px-4">
+                {activeRoom === 0 && !worldChallengeUnlocked && <WorldChallengePromo />}
+                {(activeRoom !== 0 || worldChallengeUnlocked) && (
+                  <ChatDuelChallenge
+                    playerName={userProfile?.display_name || user?.email?.split("@")[0] || "You"}
+                    playerLevel={level}
+                    roomId={activeRoom}
+                    onEnd={handleDuelEnd}
+                    onStart={handleWorldChallengeStart}
+                    isRTL={isRTL}
+                  />
+                )}
+
+                <div className="flex-1 min-h-0" />
+                <div className="space-y-3 mb-3 overflow-y-auto max-h-[50vh]">
+                  {!user && (
+                    <div className="text-center py-4">
+                      <p className="text-sm text-muted-foreground">{t("loginToChat") || "Login to chat with others"}</p>
+                    </div>
+                  )}
+                  {botMessages.map((msg, i) => (
+                    <ChatMessageBubble key={`bot-${i}`} msg={msg} index={i} isRTL={isRTL} onUserClick={handleUserClick} />
+                  ))}
+                  {realtimeMessages.map((msg, i) => (
+                    <ChatMessageBubble key={(msg as any)._id || i} msg={msg} index={i} isRTL={isRTL} currentUserId={user?.id} onUserClick={handleUserClick} />
+                  ))}
+                  {announcements.filter(a => a.roomId === 0 || a.roomId === activeRoom).map((msg, i) => (
+                    <ChatMessageBubble key={`announce-${i}`} msg={msg} index={0} isRTL={isRTL} />
+                  ))}
+                  <div ref={messagesEndRef} />
+                </div>
+
+                {user ? (
+                  <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
+                    <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
+                      <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}
+                        onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                        className={cn("flex-1 bg-transparent text-sm text-foreground placeholder:text-white/40 outline-none", isRTL && "text-right")} />
+                      <button onClick={handleSendMessage} className="text-primary hover:text-primary/80 transition-colors"><Send className="w-5 h-5" /></button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center mb-2 py-2">
+                    <button onClick={() => window.location.href = "/auth"} className="text-sm text-primary underline">
+                      {t("loginToChat") || "Login to chat"}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
 
-      {/* XP Rain overlay */}
+      {/* User popup */}
+      {popupUser && (
+        <ChatUserPopup
+          open={!!popupUser}
+          onClose={() => setPopupUser(null)}
+          userId={popupUser.userId}
+          displayName={popupUser.displayName}
+          avatarUrl={popupUser.avatarUrl}
+          gender={popupUser.gender}
+          level={popupUser.level}
+        />
+      )}
+
       {xpRainActive && <XPRainEvent onEnd={handleXPRainEnd} />}
 
-      {/* Countdown overlay */}
       {xpRainCountdown && (
         <div className="fixed inset-0 z-[85] flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="text-center space-y-2 animate-pulse">

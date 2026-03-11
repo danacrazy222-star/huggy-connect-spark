@@ -96,6 +96,57 @@ export default function Profile() {
     setEditingName(false);
   };
 
+  const handleContactSubmit = async () => {
+    if (!contactSubject.trim() || !contactMessage.trim()) {
+      toast.error("Please fill all fields");
+      return;
+    }
+    setSendingContact(true);
+    try {
+      await supabase.from("chat_messages").insert({
+        room_id: 99,
+        user_id: user?.id || "anonymous",
+        display_name: displayName || "User",
+        message: `[SUPPORT] Subject: ${contactSubject.trim()}\n${contactMessage.trim()}`,
+        level: 0,
+        is_system: true,
+      });
+      toast.success("Message sent! We'll get back to you soon.");
+      setContactSubject("");
+      setContactMessage("");
+      setShowContactForm(false);
+    } catch {
+      toast.error("Failed to send. Please try again.");
+    } finally {
+      setSendingContact(false);
+    }
+  };
+
+  const handleReportSubmit = async () => {
+    if (!reportMessage.trim()) {
+      toast.error("Please describe the problem");
+      return;
+    }
+    setSendingReport(true);
+    try {
+      await supabase.from("chat_messages").insert({
+        room_id: 99,
+        user_id: user?.id || "anonymous",
+        display_name: displayName || "User",
+        message: `[BUG REPORT] ${reportMessage.trim()}`,
+        level: 0,
+        is_system: true,
+      });
+      toast.success("Report submitted! Thank you.");
+      setReportMessage("");
+      setShowReportForm(false);
+    } catch {
+      toast.error("Failed to send. Please try again.");
+    } finally {
+      setSendingReport(false);
+    }
+  };
+
   const handleClearData = () => {
     localStorage.clear();
     toast.success(t("dataCleared"));

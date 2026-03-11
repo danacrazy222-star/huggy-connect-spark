@@ -35,7 +35,7 @@ export default function Tarot() {
   const { t, isRTL, language } = useTranslation();
   const chatEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, session } = useAuth();
 
   useEffect(() => {
     if (!user) return;

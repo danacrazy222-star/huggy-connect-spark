@@ -39,7 +39,7 @@ Winline design system, economy rules, and architecture overview
 
 ## Economy
 - Spin: 1x per 24h (resets 11AM Beirut), rewards: XP/Points/Tickets/Entries
-- Books: Basic($1)=1500XP+entry, Plus($2)=3500XP+ticket+entry, Premium($3)=6000XP+20pts+tickets+entries, Elite($5)=12000XP+50pts+2tickets+2tarot+3entries
+- Books: Basic($1)=300XP+entry, Plus($2)=700XP+ticket+entry, Premium($3)=1100XP+20pts+tickets+entries, Elite($5)=1800XP+50pts+2tickets+2tarot+3entries
 - Games: 1 ticket entry, bet with points only
 - Winner gets 300XP, loser 80XP
 

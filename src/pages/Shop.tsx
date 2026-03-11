@@ -130,7 +130,7 @@ export default function Shop() {
     setShowConfirm(true);
   };
 
-  const [payWithWallet, setPayWithWallet] = useState(false);
+  
 
   const handleConfirmPurchase = (useWallet: boolean) => {
     if (!selectedPkg) return;

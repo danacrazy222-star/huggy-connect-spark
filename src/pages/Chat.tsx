@@ -146,15 +146,41 @@ export default function Chat() {
       prevMsgCountRef.current = totalCount;
       return;
     }
+    const newCount = totalCount - prevMsgCountRef.current;
     prevMsgCountRef.current = totalCount;
 
     if (userSentRef.current || isNearBottom()) {
       userSentRef.current = false;
+      newMsgCountRef.current = 0;
+      setShowScrollBtn(false);
       requestAnimationFrame(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
       });
+    } else {
+      newMsgCountRef.current += newCount;
+      setShowScrollBtn(true);
     }
   }, [realtimeMessages.length, botMessages.length, isNearBottom]);
+
+  // Hide scroll button when user scrolls to bottom
+  useEffect(() => {
+    const el = chatContainerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      if (el.scrollHeight - el.scrollTop - el.clientHeight < 80) {
+        setShowScrollBtn(false);
+        newMsgCountRef.current = 0;
+      }
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const scrollToBottom = useCallback(() => {
+    newMsgCountRef.current = 0;
+    setShowScrollBtn(false);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
 
   // Clear unread when entering
   useEffect(() => { clearUnread(); }, [clearUnread]);

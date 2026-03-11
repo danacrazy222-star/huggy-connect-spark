@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Lock } from "lucide-react";
+import { Send, Lock, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGameStore } from "@/store/useGameStore";
 import { useChatStore } from "@/store/useChatStore";
@@ -110,6 +110,8 @@ export default function Chat() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const userSentRef = useRef(false);
   const prevMsgCountRef = useRef(0);
+  const [showScrollBtn, setShowScrollBtn] = useState(false);
+  const newMsgCountRef = useRef(0);
   const [botMessages, setBotMessages] = useState<ChatMsg[]>([]);
   const [announcements, setAnnouncements] = useState<(ChatMsg & { roomId: number })[]>([]);
   const botIndexRef = useRef(0);
@@ -144,15 +146,41 @@ export default function Chat() {
       prevMsgCountRef.current = totalCount;
       return;
     }
+    const newCount = totalCount - prevMsgCountRef.current;
     prevMsgCountRef.current = totalCount;
 
     if (userSentRef.current || isNearBottom()) {
       userSentRef.current = false;
+      newMsgCountRef.current = 0;
+      setShowScrollBtn(false);
       requestAnimationFrame(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
       });
+    } else {
+      newMsgCountRef.current += newCount;
+      setShowScrollBtn(true);
     }
   }, [realtimeMessages.length, botMessages.length, isNearBottom]);
+
+  // Hide scroll button when user scrolls to bottom
+  useEffect(() => {
+    const el = chatContainerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      if (el.scrollHeight - el.scrollTop - el.clientHeight < 80) {
+        setShowScrollBtn(false);
+        newMsgCountRef.current = 0;
+      }
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const scrollToBottom = useCallback(() => {
+    newMsgCountRef.current = 0;
+    setShowScrollBtn(false);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
 
   // Clear unread when entering
   useEffect(() => { clearUnread(); }, [clearUnread]);
@@ -445,6 +473,26 @@ export default function Chat() {
                   ))}
                   <div ref={messagesEndRef} />
                 </div>
+
+                {/* Scroll to bottom button */}
+                <AnimatePresence>
+                  {showScrollBtn && (
+                    <motion.button
+                      initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.8 }}
+                      onClick={scrollToBottom}
+                      className="absolute bottom-24 right-6 z-20 flex items-center gap-1.5 bg-primary text-primary-foreground rounded-full px-3 py-2 shadow-lg border border-primary/40 text-xs font-bold"
+                    >
+                      <ArrowDown className="w-4 h-4" />
+                      {newMsgCountRef.current > 0 && (
+                        <span className="bg-primary-foreground text-primary text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                          {newMsgCountRef.current}
+                        </span>
+                      )}
+                    </motion.button>
+                  )}
+                </AnimatePresence>
 
                 {user ? (
                   <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>

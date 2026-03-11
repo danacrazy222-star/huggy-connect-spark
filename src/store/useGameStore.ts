@@ -12,6 +12,7 @@ interface GameState {
   lastSpinTime: number | null;
   canSpin: boolean;
   worldChallengeUnlocked: boolean;
+  duelActive: boolean;
   lastChestTime: number | null;
   lastChestReward: number | null;
   

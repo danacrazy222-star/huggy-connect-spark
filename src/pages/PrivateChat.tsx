@@ -189,14 +189,14 @@ export default function PrivateChat() {
                 key={msg.id}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={cn("flex", isOwn ? "justify-end" : "justify-start")}
+                className={cn("flex", isOwn ? "justify-start" : "justify-end")}
               >
                 <div
                   className={cn(
                     "max-w-[75%] rounded-2xl px-3.5 py-2 border",
                     isOwn
-                      ? "bg-primary/20 border-primary/30 rounded-br-sm"
-                      : "bg-card/80 border-border rounded-bl-sm"
+                      ? "bg-primary/20 border-primary/30 rounded-bl-sm"
+                      : "bg-card/80 border-border rounded-br-sm"
                   )}
                 >
                   <p className="text-sm text-foreground">{msg.message}</p>

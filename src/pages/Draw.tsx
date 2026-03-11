@@ -194,7 +194,32 @@ export default function Draw() {
           </div>
         </div>
 
-        {/* Progress Section - Only % */}
+        {/* 🏆 Last Winner - Always visible */}
+        {lastWinner && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative overflow-hidden bg-gradient-to-r from-primary/15 via-primary/10 to-primary/15 border-2 border-primary/40 rounded-2xl p-4"
+            style={{ boxShadow: "0 0 30px rgba(255,215,0,0.1)" }}
+          >
+            <div className="absolute top-0 left-0 w-full h-full opacity-5">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)),transparent_70%)]" />
+            </div>
+            <div className="relative flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-primary/20 border-2 border-primary/50 flex items-center justify-center flex-shrink-0">
+                <Trophy className="w-6 h-6 text-primary" style={{ filter: "drop-shadow(0 0 8px rgba(255,215,0,0.5))" }} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] text-primary font-bold uppercase tracking-wider mb-0.5">🏆 {isRTL ? "آخر رابح" : "Last Winner"}</p>
+                <p className="text-lg font-display font-bold text-foreground truncate">{lastWinner.winner_name}</p>
+                <p className="text-xs text-muted-foreground">
+                  {isRTL ? `ربح ${lastWinner.prize_type} بقيمة $${lastWinner.prize_amount}` : `Won the $${lastWinner.prize_amount} ${lastWinner.prize_type}`}
+                </p>
+              </div>
+              <Crown className="w-8 h-8 text-primary/40 flex-shrink-0" />
+            </div>
+          </motion.div>
+        )}
         <div className="bg-card/80 border border-border rounded-2xl p-5 space-y-4">
           <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
             <h3 className="font-display text-sm font-bold text-foreground">{t("drawProgress")}</h3>

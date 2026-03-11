@@ -35,6 +35,7 @@ interface Props {
   isRTL: boolean;
   onTranslated?: (translated: string) => void;
   currentUserId?: string;
+  onUserClick?: (userId: string, displayName: string, avatarUrl?: string | null, gender?: "male" | "female" | null, level?: number) => void;
 }
 
 export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUserId }: Props) {

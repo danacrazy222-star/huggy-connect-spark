@@ -104,9 +104,11 @@ export default function Tarot() {
   const streamResponse = async (allMessages: ChatMessage[]) => {
     setIsStreaming(true);
     try {
-      const accessToken = session?.access_token;
+      // Force refresh to get a valid token
+      const { data: { session: freshSession } } = await supabase.auth.getSession();
+      const accessToken = freshSession?.access_token;
       if (!accessToken) {
-        toast({ title: t("tryAgain"), description: "Please log in first.", variant: "destructive" });
+        toast({ title: t("tryAgain"), description: t("tryAgain"), variant: "destructive" });
         setIsStreaming(false);
         return;
       }

@@ -107,6 +107,9 @@ export default function Chat() {
   const { t, isRTL } = useTranslation();
   const { clearUnread } = useChatStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const userSentRef = useRef(false);
+  const prevMsgCountRef = useRef(0);
   const [botMessages, setBotMessages] = useState<ChatMsg[]>([]);
   const [announcements, setAnnouncements] = useState<(ChatMsg & { roomId: number })[]>([]);
   const botIndexRef = useRef(0);
@@ -128,10 +131,28 @@ export default function Chat() {
       .then(({ data }) => { if (data) setUserProfile(data as any); });
   }, [user]);
 
-  // Auto-scroll to bottom
+  // Smart auto-scroll: only if user is near bottom or just sent a message
+  const isNearBottom = useCallback(() => {
+    const el = chatContainerRef.current;
+    if (!el) return true;
+    return el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  }, []);
+
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [realtimeMessages, botMessages, announcements]);
+    const totalCount = realtimeMessages.length + botMessages.length;
+    if (totalCount <= prevMsgCountRef.current && !userSentRef.current) {
+      prevMsgCountRef.current = totalCount;
+      return;
+    }
+    prevMsgCountRef.current = totalCount;
+
+    if (userSentRef.current || isNearBottom()) {
+      userSentRef.current = false;
+      requestAnimationFrame(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      });
+    }
+  }, [realtimeMessages.length, botMessages.length, isNearBottom]);
 
   // Clear unread when entering
   useEffect(() => { clearUnread(); }, [clearUnread]);
@@ -252,6 +273,7 @@ export default function Chat() {
     if (!trimmed || !user) return;
     const filtered = containsProfanity(trimmed) ? censorMessage(trimmed) : trimmed;
     const displayName = userProfile?.display_name || user.email?.split("@")[0] || "Player";
+    userSentRef.current = true;
     sendRealtimeMessage(filtered, {
       display_name: displayName,
       avatar_url: userProfile?.avatar_url,
@@ -406,20 +428,20 @@ export default function Chat() {
                 )}
 
                 <div className="flex-1 min-h-0" />
-                <div className="space-y-3 mb-3 overflow-y-auto max-h-[50vh]">
+                <div ref={chatContainerRef} className="space-y-3 mb-3 overflow-y-auto max-h-[50vh]">
                   {!user && (
                     <div className="text-center py-4">
                       <p className="text-sm text-muted-foreground">{t("loginToChat") || "Login to chat with others"}</p>
                     </div>
                   )}
                   {botMessages.map((msg, i) => (
-                    <ChatMessageBubble key={`bot-${i}`} msg={msg} index={i} isRTL={isRTL} onUserClick={handleUserClick} />
+                    <ChatMessageBubble key={`bot-${activeRoom}-${i}`} msg={msg} index={i < 2 ? i : -1} isRTL={isRTL} onUserClick={handleUserClick} />
                   ))}
                   {realtimeMessages.map((msg, i) => (
-                    <ChatMessageBubble key={(msg as any)._id || i} msg={msg} index={i} isRTL={isRTL} currentUserId={user?.id} onUserClick={handleUserClick} />
+                    <ChatMessageBubble key={(msg as any)._id || `rt-${i}`} msg={msg} index={-1} isRTL={isRTL} currentUserId={user?.id} onUserClick={handleUserClick} />
                   ))}
                   {announcements.filter(a => a.roomId === activeRoom).map((msg, i) => (
-                    <ChatMessageBubble key={`announce-${i}`} msg={msg} index={0} isRTL={isRTL} />
+                    <ChatMessageBubble key={`announce-${activeRoom}-${i}`} msg={msg} index={0} isRTL={isRTL} />
                   ))}
                   <div ref={messagesEndRef} />
                 </div>

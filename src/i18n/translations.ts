@@ -312,11 +312,19 @@ export type TranslationKeys = {
   termsDisclaimer: string;
   termsDisclaimerDesc: string;
   termsLastUpdated: string;
-  // Private messages
+  // Private messages & user actions
   privateChat?: string;
   privateMessages?: string;
   noMessages?: string;
   sendMessage?: string;
+  chatRooms?: string;
+  viewProfile?: string;
+  blockUser?: string;
+  reportUser?: string;
+  userBlocked?: string;
+  userReported?: string;
+  levelRequired?: string;
+  reachLevel5ToChat?: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

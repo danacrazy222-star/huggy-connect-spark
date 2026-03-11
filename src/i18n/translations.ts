@@ -312,11 +312,19 @@ export type TranslationKeys = {
   termsDisclaimer: string;
   termsDisclaimerDesc: string;
   termsLastUpdated: string;
-  // Private messages
+  // Private messages & user actions
   privateChat?: string;
   privateMessages?: string;
   noMessages?: string;
   sendMessage?: string;
+  chatRooms?: string;
+  viewProfile?: string;
+  blockUser?: string;
+  reportUser?: string;
+  userBlocked?: string;
+  userReported?: string;
+  levelRequired?: string;
+  reachLevel5ToChat?: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -388,7 +396,7 @@ export const translations: Record<Language, TranslationKeys> = {
     promotionRules: "Promotion Rules", termsAndConditions: "Terms & Conditions", promotionalGiveaway: "PROMOTIONAL GIVEAWAY", drawGiveawayNote: "This is a promotional giveaway. Purchasing does not guarantee winning.", shopPackDisclaimer: "Purchases provide access to digital books. XP, tickets, and draw entries are promotional bonus rewards.",
     promoRulesHowDrawWorks: "How the Draw Works", promoRulesHowDrawWorksDesc: "Users purchase digital book packages which include promotional bonus rewards such as XP, game tickets, and draw entries. Each qualifying purchase grants entry into the promotional giveaway draw.", promoRulesWinnerSelection: "Winner Selection", promoRulesWinnerSelectionDesc: "The winner is selected randomly from all eligible entries using a secure random number generator. Every entry has an equal chance of being selected. The selection process is fully automated and fair.", promoRulesDateConditions: "Draw Date & Conditions", promoRulesDateConditionsDesc: "The draw concludes when the qualifying batch is complete or when the campaign period ends, whichever comes first. All entries remain valid until the draw is completed. The draw may be extended if the qualifying threshold is not met.", promoRulesRewardsNote: "Rewards Are Promotional", promoRulesRewardsNoteDesc: "All rewards including XP, points, game tickets, tarot tickets, and draw entries are promotional bonuses provided as part of the digital book purchase. They have no cash value and cannot be exchanged for money.", promoRulesDisclaimer: "This promotion is a giveaway. Users purchase digital books and receive promotional bonuses such as XP, tickets, or draw entries. Purchasing does not guarantee winning.",
     termsPromotionRules: "Promotion Rules", termsPromotionRulesDesc: "This app features a promotional giveaway system. Users purchase digital books and receive promotional bonus rewards including XP, game tickets, tarot tickets, and draw entries. The draw is a promotional giveaway, not a lottery or gambling activity.", termsRewardExplanation: "Reward Explanation", termsRewardExplanationDesc: "XP (Experience Points): Track your progress and unlock VIP levels.\nPoints: In-app promotional currency for game participation.\nGame Tickets: Grant access to play promotional games.\nTarot Tickets: Grant access to AI tarot reading sessions.\nDraw Entries: Provide entry into the promotional gift card giveaway.\n\nAll rewards are promotional bonuses with no cash value.", termsRefundPolicy: "Refund Policy", termsRefundPolicyDesc: "All purchases are for digital books delivered instantly upon purchase. Refunds are handled through Google Play's refund policy. Promotional bonus rewards (XP, tickets, entries) are non-refundable and non-transferable. If a refund is issued for a book purchase, associated promotional rewards will be revoked.", termsDisclaimer: "Disclaimer", termsDisclaimerDesc: "All rewards, bonuses, and draw entries are promotional in nature and are provided as complimentary additions to digital book purchases. They have no monetary value and cannot be sold, traded, or exchanged for cash. This app does not involve gambling. The promotional giveaway draw is not a lottery.", termsLastUpdated: "Last updated: March 2026. Terms are subject to change.",
-    privateChat: "Private Chat", privateMessages: "Messages", noMessages: "No messages yet", sendMessage: "Send"
+    privateChat: "Private Chat", privateMessages: "Private", noMessages: "No messages yet", sendMessage: "Send Message", chatRooms: "Rooms", viewProfile: "View Profile", blockUser: "Block", reportUser: "Report", userBlocked: "User Blocked", userReported: "User Reported", levelRequired: "Level Required", reachLevel5ToChat: "Reach Level 5 to send private messages"
   },
   ar: {
     home: "الرئيسية", shop: "المتجر", games: "الألعاب", chat: "الدردشة", crown: "التاج", cards: "البطاقات",
@@ -458,7 +466,7 @@ export const translations: Record<Language, TranslationKeys> = {
     promotionRules: "قواعد العرض الترويجي", termsAndConditions: "الشروط والأحكام", promotionalGiveaway: "هدية ترويجية", drawGiveawayNote: "هذا عرض ترويجي. الشراء لا يضمن الفوز.", shopPackDisclaimer: "المشتريات توفر وصولاً للكتب الرقمية. نقاط XP والتذاكر وقسائم السحب هي مكافآت ترويجية إضافية.",
     promoRulesHowDrawWorks: "كيف يعمل السحب", promoRulesHowDrawWorksDesc: "يشتري المستخدمون حزم كتب رقمية تتضمن مكافآت ترويجية مثل XP وتذاكر ألعاب وقسائم سحب. كل عملية شراء مؤهلة تمنح دخولاً في سحب الهدية الترويجية.", promoRulesWinnerSelection: "اختيار الفائز", promoRulesWinnerSelectionDesc: "يتم اختيار الفائز عشوائياً من جميع القسائم المؤهلة باستخدام مولّد أرقام عشوائي آمن. كل قسيمة لها فرصة متساوية.", promoRulesDateConditions: "تاريخ وشروط السحب", promoRulesDateConditionsDesc: "يُختتم السحب عند اكتمال الدفعة المؤهلة أو عند انتهاء فترة الحملة. جميع القسائم تبقى صالحة حتى اكتمال السحب.", promoRulesRewardsNote: "المكافآت ترويجية", promoRulesRewardsNoteDesc: "جميع المكافآت بما فيها XP والنقاط وتذاكر الألعاب وتذاكر التاروت وقسائم السحب هي مكافآت ترويجية. ليس لها قيمة نقدية.", promoRulesDisclaimer: "هذا العرض هو هدية ترويجية. يشتري المستخدمون كتباً رقمية ويحصلون على مكافآت ترويجية. الشراء لا يضمن الفوز.",
     termsPromotionRules: "قواعد العرض", termsPromotionRulesDesc: "يتضمن هذا التطبيق نظام هدايا ترويجية. يشتري المستخدمون كتباً رقمية ويحصلون على مكافآت ترويجية. السحب هو هدية ترويجية وليس يانصيب أو قمار.", termsRewardExplanation: "شرح المكافآت", termsRewardExplanationDesc: "XP: تتبع تقدمك وافتح مستويات VIP.\nالنقاط: عملة ترويجية داخل التطبيق.\nتذاكر الألعاب: توفر الوصول للألعاب الترويجية.\nتذاكر التاروت: توفر الوصول لجلسات قراءة التاروت.\nقسائم السحب: توفر الدخول في سحب بطاقة الهدية.\n\nجميع المكافآت ترويجية وليس لها قيمة نقدية.", termsRefundPolicy: "سياسة الاسترداد", termsRefundPolicyDesc: "جميع المشتريات هي كتب رقمية تُسلّم فوراً. يتم التعامل مع المبالغ المستردة عبر سياسة Google Play. المكافآت الترويجية غير قابلة للاسترداد.", termsDisclaimer: "إخلاء المسؤولية", termsDisclaimerDesc: "جميع المكافآت والمكافآت الإضافية وقسائم السحب ترويجية بطبيعتها. ليس لها قيمة نقدية. هذا التطبيق لا يتضمن قماراً. السحب الترويجي ليس يانصيب.", termsLastUpdated: "آخر تحديث: مارس 2026. الشروط قابلة للتغيير.",
-    privateChat: "دردشة خاصة", privateMessages: "الرسائل", noMessages: "لا يوجد رسائل بعد", sendMessage: "إرسال"
+    privateChat: "دردشة خاصة", privateMessages: "خاص", noMessages: "لا يوجد رسائل بعد", sendMessage: "إرسال رسالة", chatRooms: "الغرف", viewProfile: "عرض الملف", blockUser: "حظر", reportUser: "إبلاغ", userBlocked: "تم حظر المستخدم", userReported: "تم الإبلاغ عن المستخدم", levelRequired: "مستوى مطلوب", reachLevel5ToChat: "وصول للمستوى 5 لإرسال رسائل خاصة"
   },
   fr: {
     home: "Accueil", shop: "Boutique", games: "Jeux", chat: "Discussion", crown: "Couronne", cards: "Cartes",

@@ -35,9 +35,10 @@ interface Props {
   isRTL: boolean;
   onTranslated?: (translated: string) => void;
   currentUserId?: string;
+  onUserClick?: (userId: string, displayName: string, avatarUrl?: string | null, gender?: "male" | "female" | null, level?: number) => void;
 }
 
-export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUserId }: Props) {
+export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUserId, onUserClick }: Props) {
   const [loading, setLoading] = useState(false);
   const [localTranslated, setLocalTranslated] = useState<string | null>(null);
   const { language } = useTranslation();
@@ -159,8 +160,14 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
       transition={{ delay: Math.min(index * 0.1, 0.5) }}
       className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}
     >
-      {/* Avatar with tier frame based on level */}
-      <div className="relative shrink-0">
+      <div
+        className="relative shrink-0 cursor-pointer"
+        onClick={() => {
+          if (msg._userId && !isOwn && onUserClick) {
+            onUserClick(msg._userId, msg.user, msg.avatarUrl, msg.gender, msg.level);
+          }
+        }}
+      >
         <DiamondFrame size="sm" active={!!msg.level && msg.level >= 1} level={msg.level || 1}>
           <Avatar className={cn("w-9 h-9 border-2", msg.level && msg.level >= 1 ? "border-transparent" : genderColor)}>
             {msg.avatarUrl ? (
@@ -181,7 +188,9 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
           <span
             className="text-xs font-medium text-foreground cursor-pointer hover:text-primary transition-colors"
             onClick={() => {
-              if (msg._userId && !isOwn) navigate(`/user/${msg._userId}`);
+              if (msg._userId && !isOwn && onUserClick) {
+                onUserClick(msg._userId, msg.user, msg.avatarUrl, msg.gender, msg.level);
+              }
             }}
           >{msg.user}</span>
           {msg.crown && <Crown className="w-3 h-3 text-primary" />}

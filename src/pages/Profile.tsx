@@ -17,6 +17,7 @@ import {
   LogIn, LogOut, Star, TrendingUp, Camera,
   Globe, Trash2, ChevronRight, Edit3, Check, X,
   Settings, RefreshCw, Shield, FileText, MessageCircle,
+  Wallet,
 } from "lucide-react";
 import { DiamondFrame } from "@/components/DiamondFrame";
 

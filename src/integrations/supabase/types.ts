@@ -242,6 +242,54 @@ export type Database = {
         }
         Relationships: []
       }
+      user_game_data: {
+        Row: {
+          created_at: string
+          draw_entries: number
+          game_tickets: number
+          id: string
+          last_chest_reward: number | null
+          last_chest_time: number | null
+          last_spin_time: number | null
+          level: number
+          points: number
+          tarot_tickets: number
+          updated_at: string
+          user_id: string
+          xp: number
+        }
+        Insert: {
+          created_at?: string
+          draw_entries?: number
+          game_tickets?: number
+          id?: string
+          last_chest_reward?: number | null
+          last_chest_time?: number | null
+          last_spin_time?: number | null
+          level?: number
+          points?: number
+          tarot_tickets?: number
+          updated_at?: string
+          user_id: string
+          xp?: number
+        }
+        Update: {
+          created_at?: string
+          draw_entries?: number
+          game_tickets?: number
+          id?: string
+          last_chest_reward?: number | null
+          last_chest_time?: number | null
+          last_spin_time?: number | null
+          level?: number
+          points?: number
+          tarot_tickets?: number
+          updated_at?: string
+          user_id?: string
+          xp?: number
+        }
+        Relationships: []
+      }
       user_stats: {
         Row: {
           books_purchased: number

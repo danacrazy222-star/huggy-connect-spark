@@ -101,7 +101,7 @@ export default function Shop() {
         { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: `2 ${t("drawEntry")}`, type: "drawEntry", amount: 2 },
       ],
       tag: null,
-      includes: [`1 ${t("digitalBook")}`, `6,000 ${t("vipXP")}`, `20 ${t("xpPoints")}`, `1 ${t("gameTicket")}`, `1 ${t("tarotTicket")}`, `2 ${t("drawEntry")}`],
+      includes: [`1 ${t("digitalBook")}`, `1,100 ${t("vipXP")}`, `20 ${t("xpPoints")}`, `1 ${t("gameTicket")}`, `1 ${t("tarotTicket")}`, `2 ${t("drawEntry")}`],
     },
     {
       nameKey: "elitePack",

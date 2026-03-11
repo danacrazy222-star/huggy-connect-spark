@@ -273,6 +273,7 @@ export default function Chat() {
     if (!trimmed || !user) return;
     const filtered = containsProfanity(trimmed) ? censorMessage(trimmed) : trimmed;
     const displayName = userProfile?.display_name || user.email?.split("@")[0] || "Player";
+    userSentRef.current = true;
     sendRealtimeMessage(filtered, {
       display_name: displayName,
       avatar_url: userProfile?.avatar_url,

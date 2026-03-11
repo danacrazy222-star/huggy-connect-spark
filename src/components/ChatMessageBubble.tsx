@@ -155,9 +155,9 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={index === -1 ? false : { opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: Math.min(index * 0.1, 0.5) }}
+      transition={index === -1 ? { duration: 0 } : { delay: Math.min(index * 0.1, 0.5) }}
       className={cn(
         "flex items-start gap-2",
         isOwn ? (isRTL ? "flex-row" : "flex-row-reverse") : (isRTL ? "flex-row-reverse" : "flex-row")

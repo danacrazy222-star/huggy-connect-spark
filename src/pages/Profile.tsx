@@ -223,6 +223,63 @@ export default function Profile() {
           </Card>
         </motion.div>
 
+        {/* Wallet Section */}
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
+          <h3 className="text-sm font-bold text-foreground mb-2 flex items-center gap-1.5">
+            <Wallet className="w-4 h-4 text-primary" /> {t("wallet")}
+          </h3>
+          <Card className="bg-card/80 border-border overflow-hidden">
+            <CardContent className="p-0">
+              {/* Balance header */}
+              <div className="p-4 border-b border-border"
+                style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--accent) / 0.1))" }}>
+                <div className={cn("flex items-center justify-between", isRTL && "flex-row-reverse")}>
+                  <span className="text-xs text-muted-foreground">{t("walletBalance")}</span>
+                  <div className={cn("flex items-center gap-1", isRTL && "flex-row-reverse")}>
+                    <Coins className="w-4 h-4 text-primary" />
+                    <span className="text-lg font-display font-bold text-foreground">{points.toLocaleString()}</span>
+                    <span className="text-xs text-muted-foreground ml-1">{t("xpPoints")}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Credit conversion */}
+              <div className="p-4">
+                <div className={cn("flex items-center justify-between mb-3", isRTL && "flex-row-reverse")}>
+                  <span className="text-xs text-muted-foreground">{t("walletCredit")}</span>
+                  <span className="text-2xl font-display font-black text-primary">
+                    ${(Math.floor(points / 1000)).toLocaleString()}
+                  </span>
+                </div>
+
+                {/* Progress to next dollar */}
+                <div className="mb-2">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] text-muted-foreground">
+                      {points % 1000} / 1,000
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      ${Math.floor(points / 1000) + 1}
+                    </span>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(points % 1000) / 10}%` }}
+                      transition={{ duration: 1 }}
+                      className="h-full bg-gradient-to-r from-primary via-primary to-gold-light rounded-full"
+                    />
+                  </div>
+                </div>
+
+                <p className="text-[10px] text-muted-foreground text-center italic">
+                  🔒 {t("walletNote")}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
           <h3 className="text-sm font-bold text-foreground mb-2 flex items-center gap-1.5">
             <Settings className="w-4 h-4" /> {t("settings")}

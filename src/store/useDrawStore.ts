@@ -158,6 +158,7 @@ export const useDrawStore = create<DrawState>()(
           ],
         });
 
+        saveWinnerToDB(winnerEntry.username, state.prizeAmount);
         broadcastDrawWinner(winnerEntry.username, winnerEntry.entryId, state.prizeAmount);
       },
 

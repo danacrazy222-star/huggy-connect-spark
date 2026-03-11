@@ -150,7 +150,7 @@ export function SpinWheel() {
         case "tarotTicket": addTarotTicket(1); break;
         case "ticketCombo": addGameTicket(1); addTarotTicket(1); break;
         case "pointsXp": addPoints(15); addXP(50); break;
-        case "surprise": addXP(50); addTarotTicket(1); break;
+        case "surprise": addXP(200); addGameTicket(1); addTarotTicket(1); break;
       }
       // Play result sound
       if (rewardType === "none") {

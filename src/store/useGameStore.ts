@@ -25,6 +25,7 @@ interface GameState {
   checkSpinAvailability: () => boolean;
   unlockWorldChallenge: () => void;
   lockWorldChallenge: () => void;
+  setDuelActive: (active: boolean) => void;
   canOpenChest: () => boolean;
   openDailyChest: () => number;
 }

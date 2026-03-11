@@ -773,6 +773,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Ogni giorno ti avvicina", closerToFew: "a dove pochi arrivano.",
     mysteryReward: "PREMIO MISTERIOSO", bronzeChest: "Forziere Bronzo",
     silverChest: "Forziere Argento", goldChest: "Forziere Oro",
+    eliteChest: "Forziere Élite", legendChest: "Forziere Leggenda",
+    dailyChest: "Forziere Giornaliero", openChest: "Apri", chestOpened: "Aperto!", chestLocked: "Bloccato", xpRange: "XP",
     level: "Livello", elite: "Élite", legend: "Leggenda",
     aiTarotReading: "Lettura Tarocchi IA", selectCardReveal: "Scegli una carta per rivelare il tuo destino",
     ticketsRemaining: "biglietti rimasti", readAgain: "Leggi di nuovo",

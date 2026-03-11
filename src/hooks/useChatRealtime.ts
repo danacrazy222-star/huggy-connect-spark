@@ -18,13 +18,12 @@ export function useChatRealtime(roomId: number) {
       .from("chat_messages")
       .select("*")
       .eq("room_id", roomId)
-      .order("created_at", { ascending: true })
+      .order("created_at", { ascending: false })
       .limit(PAGE_SIZE)
       .then(({ data }) => {
         if (data) {
-          setMessages(
-            data.map((row: any) => dbToMsg(row))
-          );
+          // Reverse to show oldest first, but we fetched latest 50
+          setMessages(data.reverse().map((row: any) => dbToMsg(row)));
         }
         setLoading(false);
       });

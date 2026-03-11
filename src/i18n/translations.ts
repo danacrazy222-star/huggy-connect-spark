@@ -357,6 +357,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Each day you join brings you", closerToFew: "closer to where few can reach.",
     mysteryReward: "MYSTERY REWARD", bronzeChest: "Bronze Chest",
     silverChest: "Silver Chest", goldChest: "Gold Chest",
+    eliteChest: "Elite Chest", legendChest: "Legend Chest",
+    dailyChest: "Daily Chest", openChest: "Open", chestOpened: "Opened!", chestLocked: "Locked", xpRange: "XP",
     level: "Level", elite: "Elite", legend: "Legend",
     aiTarotReading: "AI Tarot Reading", selectCardReveal: "Select a card to reveal your destiny",
     ticketsRemaining: "tickets remaining", readAgain: "Read Again",

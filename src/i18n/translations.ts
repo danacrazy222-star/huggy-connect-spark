@@ -603,7 +603,7 @@ export const translations: Record<Language, TranslationKeys> = {
     giftCard: "$500 Hediye Kartı", promotionalDraw: "PROMOSYON ÇEKİLİŞİ", dailySpin: "GÜNLÜK DÖNDÜRME",
     oneFreeAttempt: "Bugün BİR ÜCRETSİZ HAKKINIZ var!", nextSpinIn: "Sonraki ücretsiz dönüşünüz:",
     hours: "SAAT", minutes: "DAKİKA", seconds: "SANİYE",
-    xpPoints: "XP Puanları", gameTickets: "Oyun Biletleri", extraEntries: "Ekstra Giriş", surpriseRewards: "Sürprizler",
+    xpPoints: "Puanlar", gameTickets: "Oyun Biletleri", extraEntries: "Ekstra Giriş", surpriseRewards: "Sürprizler",
     allRewardsPromotional: "Tüm ödüller promosyondur", noCashValue: "Nakit değeri yoktur",
     spinNow: "DÖNDÜR", spinning: "DÖNÜYOR...", comeBackTomorrow: "YARIN GELİN",
     youWon: "Kazandınız!", maybeLater: "BELKI SONRA",

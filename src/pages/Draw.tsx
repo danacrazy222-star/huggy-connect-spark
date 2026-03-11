@@ -3,9 +3,10 @@ import { TopBar } from "@/components/TopBar";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useDrawStore } from "@/store/useDrawStore";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trophy, Gift, ChevronRight, PartyPopper, X, Activity, ShoppingBag, Shield, Info, ChevronDown } from "lucide-react";
+import { Trophy, Gift, ChevronRight, PartyPopper, X, Activity, ShoppingBag, Shield, Info, ChevronDown, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 // Simulated live activity messages
 const ACTIVITY_MESSAGES = [

@@ -200,12 +200,19 @@ export default function PrivateChat() {
                   )}
                 >
                   <p className="text-sm text-foreground">{msg.message}</p>
-                  <span className="text-[10px] text-muted-foreground block mt-0.5">
-                    {new Date(msg.created_at).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
+                  <div className="flex items-center gap-1 mt-0.5">
+                    <span className="text-[10px] text-muted-foreground">
+                      {new Date(msg.created_at).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                    {isOwn && (
+                      msg.is_read
+                        ? <CheckCheck className="w-3 h-3 text-primary" />
+                        : <Check className="w-3 h-3 text-muted-foreground" />
+                    )}
+                  </div>
                 </div>
               </motion.div>
             );

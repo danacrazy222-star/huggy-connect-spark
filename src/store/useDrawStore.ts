@@ -1,5 +1,22 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useChatStore } from './useChatStore';
+
+function broadcastDrawWinner(winnerName: string, entryId: number, prizeAmount: number) {
+  const chatStore = useChatStore.getState();
+  const allRoomIds = [0, 1, 2, 3, 4, 5];
+  const msg = {
+    user: "System",
+    avatar: "🏆",
+    message: `🎉🏆 DRAW WINNER! ${winnerName} (Entry #${entryId}) won a $${prizeAmount} Gift Card! 🎁💰`,
+    crown: false,
+    isSystem: true,
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+  };
+  allRoomIds.forEach(roomId => {
+    chatStore.addMessage(roomId, msg);
+  });
+}
 
 interface DrawEntry {
   entryId: number;
@@ -93,6 +110,9 @@ export const useDrawStore = create<DrawState>()(
               ...state.drawHistory,
             ],
           });
+
+          // Broadcast winner to all chat rooms
+          broadcastDrawWinner(winnerEntry.username, winnerEntry.entryId, state.prizeAmount);
         } else {
           set({
             entries: allEntries,
@@ -124,6 +144,8 @@ export const useDrawStore = create<DrawState>()(
             ...state.drawHistory,
           ],
         });
+
+        broadcastDrawWinner(winnerEntry.username, winnerEntry.entryId, state.prizeAmount);
       },
 
       resetDraw: () => set({

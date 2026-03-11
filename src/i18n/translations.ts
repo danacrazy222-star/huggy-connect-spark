@@ -191,6 +191,10 @@ export type TranslationKeys = {
   // Profile
   loginToViewProfile: string;
   inventory: string;
+  wallet: string;
+  walletBalance: string;
+  walletCredit: string;
+  walletNote: string;
   settings: string;
   clearData: string;
   photoUpdated: string;

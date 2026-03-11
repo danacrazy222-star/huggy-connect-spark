@@ -16,6 +16,7 @@ export function WorldChallengePromo() {
     unlockWorldChallenge();
     useGameStore.getState().addDrawEntry(1);
     useGameStore.getState().addGameTicket(1);
+    useGameStore.getState().addTarotTicket(1);
     setTimeout(() => {
       setPurchased(false);
       setOpen(false);

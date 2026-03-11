@@ -228,6 +228,7 @@ export default function Chat() {
 
   const handleDuelEnd = useCallback((won: boolean, winnerName: string, loserName: string) => {
     setDuelActive(false);
+    useGameStore.getState().setDuelActive(false);
     addXP(won ? 300 : 80);
     const now = new Date();
     const timeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;

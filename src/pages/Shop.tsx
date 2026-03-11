@@ -132,11 +132,23 @@ export default function Shop() {
 
   const handleConfirmPurchase = () => {
     if (!selectedPkg) return;
+    const qty = purchaseQty;
+    const totalPointsCost = selectedPkg.priceNum * 1000 * qty;
+    const { points } = useGameStore.getState();
+
+    if (points < totalPointsCost) {
+      toast.error(t("notEnoughPoints") || `Not enough points! You need ${totalPointsCost.toLocaleString()} points.`);
+      setShowConfirm(false);
+      return;
+    }
+
     setShowConfirm(false);
     setPurchasing(true);
-    const qty = purchaseQty;
 
     setTimeout(() => {
+      // Deduct points from wallet
+      useGameStore.getState().addPoints(-totalPointsCost);
+
       selectedPkg.rewards.forEach((r) => {
         const totalAmount = r.amount * qty;
         if (r.type === "xp") addXP(totalAmount);

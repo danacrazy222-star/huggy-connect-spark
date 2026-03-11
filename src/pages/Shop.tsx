@@ -277,7 +277,7 @@ export default function Shop() {
                         background: "linear-gradient(180deg, hsl(45 100% 50%), hsl(40 100% 40%))",
                         boxShadow: "0 0 20px rgba(255,200,0,0.2)",
                       }}>
-                      {qty > 1 ? `${qty}x — $${totalPrice}` : `${t("buyForPrice")} ${pkg.price}`}
+                      {qty > 1 ? `${qty}x — ${(totalPrice * 1000).toLocaleString()} pts` : `${t("buyForPrice")} ${(pkg.priceNum * 1000).toLocaleString()} pts`}
                     </button>
                   </div>
                 </div>

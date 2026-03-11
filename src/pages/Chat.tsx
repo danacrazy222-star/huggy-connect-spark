@@ -110,6 +110,8 @@ export default function Chat() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const userSentRef = useRef(false);
   const prevMsgCountRef = useRef(0);
+  const [showScrollBtn, setShowScrollBtn] = useState(false);
+  const newMsgCountRef = useRef(0);
   const [botMessages, setBotMessages] = useState<ChatMsg[]>([]);
   const [announcements, setAnnouncements] = useState<(ChatMsg & { roomId: number })[]>([]);
   const botIndexRef = useRef(0);

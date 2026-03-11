@@ -99,7 +99,7 @@ export function ChatUserPopup({ open, onClose, userId, displayName, avatarUrl, g
               <button onClick={onClose} className="absolute top-3 right-3 text-muted-foreground hover:text-foreground">
                 <X className="w-4 h-4" />
               </button>
-              <DiamondFrame size="md" active={level >= 1} level={level}>
+              <DiamondFrame size="sm" active={level >= 1} level={level}>
                 <Avatar className={cn("w-16 h-16 border-2", level >= 1 ? "border-transparent" : genderColor)}>
                   {avatarUrl && <AvatarImage src={avatarUrl} />}
                   <AvatarFallback className="bg-muted text-foreground font-bold">{initials}</AvatarFallback>

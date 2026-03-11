@@ -160,8 +160,14 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
       transition={{ delay: Math.min(index * 0.1, 0.5) }}
       className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}
     >
-      {/* Avatar with tier frame based on level */}
-      <div className="relative shrink-0">
+      <div
+        className="relative shrink-0 cursor-pointer"
+        onClick={() => {
+          if (msg._userId && !isOwn && onUserClick) {
+            onUserClick(msg._userId, msg.user, msg.avatarUrl, msg.gender, msg.level);
+          }
+        }}
+      >
         <DiamondFrame size="sm" active={!!msg.level && msg.level >= 1} level={msg.level || 1}>
           <Avatar className={cn("w-9 h-9 border-2", msg.level && msg.level >= 1 ? "border-transparent" : genderColor)}>
             {msg.avatarUrl ? (

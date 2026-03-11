@@ -911,6 +911,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Каждый день приближает вас", closerToFew: "туда, куда доходят немногие.",
     mysteryReward: "ТАЙНАЯ НАГРАДА", bronzeChest: "Бронзовый сундук",
     silverChest: "Серебряный сундук", goldChest: "Золотой сундук",
+    eliteChest: "Элитный сундук", legendChest: "Легендарный сундук",
+    dailyChest: "Ежедневный сундук", openChest: "Открыть", chestOpened: "Открыто!", chestLocked: "Заблокировано", xpRange: "XP",
     level: "Уровень", elite: "Элита", legend: "Легенда",
     aiTarotReading: "ИИ Таро", selectCardReveal: "Выберите карту, чтобы узнать судьбу",
     ticketsRemaining: "билетов осталось", readAgain: "Читать снова",

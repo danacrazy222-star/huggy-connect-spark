@@ -195,7 +195,6 @@ export type TranslationKeys = {
   walletBalance: string;
   walletCredit: string;
   walletNote: string;
-  notEnoughPoints: string;
   settings: string;
   clearData: string;
   photoUpdated: string;

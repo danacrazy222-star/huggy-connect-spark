@@ -25,26 +25,23 @@ export function WorldChallengePromo() {
   return (
     <>
       {/* Inline banner button */}
-      <motion.button
+      <button
         onClick={() => setOpen(true)}
-        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-primary/30 backdrop-blur-md"
+        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-primary/30 backdrop-blur-md active:scale-[0.97] transition-transform"
         style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--accent) / 0.15))" }}
-        whileTap={{ scale: 0.97 }}
       >
-        <motion.div
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border border-primary/50 shadow-[0_0_12px_hsl(var(--primary)/0.4)]"
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border border-primary/50 shadow-[0_0_12px_hsl(var(--primary)/0.4)] animate-pulse"
           style={{ background: "linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)))" }}
         >
           <Swords className="w-5 h-5 text-primary-foreground" />
-        </motion.div>
+        </div>
         <div className="flex-1 text-start">
           <p className="text-sm font-bold text-foreground">{t("worldChallengeTitle")}</p>
           <p className="text-[11px] text-muted-foreground">{t("worldChallengeDesc")}</p>
         </div>
         <span className="text-lg font-black text-primary font-display">$5</span>
-      </motion.button>
+      </button>
 
       {/* Fullscreen overlay */}
       <AnimatePresence>

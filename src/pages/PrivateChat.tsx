@@ -26,6 +26,7 @@ export default function PrivateChat() {
   const navigate = useNavigate();
   const { t, isRTL } = useTranslation();
   const { user } = useAuth();
+  const level = useGameStore((s) => s.level);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [recipientProfile, setRecipientProfile] = useState<{

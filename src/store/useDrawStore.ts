@@ -123,7 +123,8 @@ export const useDrawStore = create<DrawState>()(
             ],
           });
 
-          // Broadcast winner to all chat rooms
+          // Save winner to DB and broadcast to all chat rooms
+          saveWinnerToDB(winnerEntry.username, state.prizeAmount);
           broadcastDrawWinner(winnerEntry.username, winnerEntry.entryId, state.prizeAmount);
         } else {
           set({

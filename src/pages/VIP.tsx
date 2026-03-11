@@ -84,7 +84,7 @@ export default function VIP() {
 
           <div className={cn("flex justify-between text-xs", isRTL && "flex-row-reverse")}>
             <span className="text-muted-foreground">
-              {xp.toLocaleString()} / {xpNeededForNext.toLocaleString()} XP
+              {xpInLevel.toLocaleString()} / {xpNeededForLevel.toLocaleString()} XP
             </span>
             {level < 40 && (
               <span className="text-primary font-semibold">

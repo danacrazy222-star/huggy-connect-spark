@@ -61,11 +61,11 @@ export default function Shop() {
       borderColor: "border-green-500/40",
       glowColor: "shadow-[0_0_15px_rgba(34,197,94,0.15)]",
       rewards: [
-        { icon: <Star className="w-4 h-4 text-primary" />, label: `1,500 ${t("vipXP")}`, type: "xp", amount: 1500 },
+        { icon: <Star className="w-4 h-4 text-primary" />, label: `300 ${t("vipXP")}`, type: "xp", amount: 300 },
         { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: `1 ${t("drawEntry")}`, type: "drawEntry", amount: 1 },
       ],
       tag: null,
-      includes: [`1 ${t("digitalBook")}`, `1,500 ${t("vipXP")}`, `1 ${t("drawEntry")}`],
+      includes: [`1 ${t("digitalBook")}`, `300 ${t("vipXP")}`, `1 ${t("drawEntry")}`],
     },
     {
       nameKey: "plusPack",
@@ -77,12 +77,12 @@ export default function Shop() {
       borderColor: "border-blue-500/40",
       glowColor: "shadow-[0_0_15px_rgba(59,130,246,0.15)]",
       rewards: [
-        { icon: <Star className="w-4 h-4 text-primary" />, label: `3,500 ${t("vipXP")}`, type: "xp", amount: 3500 },
+        { icon: <Star className="w-4 h-4 text-primary" />, label: `700 ${t("vipXP")}`, type: "xp", amount: 700 },
         { icon: <Ticket className="w-4 h-4 text-red-accent" />, label: `1 ${t("gameTicket")}`, type: "gameTicket", amount: 1 },
         { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: `1 ${t("drawEntry")}`, type: "drawEntry", amount: 1 },
       ],
       tag: null,
-      includes: [`1 ${t("digitalBook")}`, `3,500 ${t("vipXP")}`, `1 ${t("gameTicket")}`, `1 ${t("drawEntry")}`],
+      includes: [`1 ${t("digitalBook")}`, `700 ${t("vipXP")}`, `1 ${t("gameTicket")}`, `1 ${t("drawEntry")}`],
     },
     {
       nameKey: "premiumPack",
@@ -94,14 +94,14 @@ export default function Shop() {
       borderColor: "border-primary/40",
       glowColor: "shadow-[0_0_20px_rgba(168,85,247,0.2)]",
       rewards: [
-        { icon: <Star className="w-4 h-4 text-primary" />, label: `6,000 ${t("vipXP")}`, type: "xp", amount: 6000 },
+        { icon: <Star className="w-4 h-4 text-primary" />, label: `1,100 ${t("vipXP")}`, type: "xp", amount: 1100 },
         { icon: <Sparkles className="w-4 h-4 text-primary" />, label: `20 ${t("xpPoints")}`, type: "points", amount: 20 },
         { icon: <Ticket className="w-4 h-4 text-red-accent" />, label: `1 ${t("gameTicket")}`, type: "gameTicket", amount: 1 },
         { icon: <Sparkles className="w-4 h-4 text-accent" />, label: `1 ${t("tarotTicket")}`, type: "tarotTicket", amount: 1 },
         { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: `2 ${t("drawEntry")}`, type: "drawEntry", amount: 2 },
       ],
       tag: null,
-      includes: [`1 ${t("digitalBook")}`, `6,000 ${t("vipXP")}`, `20 ${t("xpPoints")}`, `1 ${t("gameTicket")}`, `1 ${t("tarotTicket")}`, `2 ${t("drawEntry")}`],
+      includes: [`1 ${t("digitalBook")}`, `1,100 ${t("vipXP")}`, `20 ${t("xpPoints")}`, `1 ${t("gameTicket")}`, `1 ${t("tarotTicket")}`, `2 ${t("drawEntry")}`],
     },
     {
       nameKey: "elitePack",
@@ -113,14 +113,14 @@ export default function Shop() {
       borderColor: "border-yellow-500/40",
       glowColor: "shadow-[0_0_25px_rgba(234,179,8,0.25)]",
       rewards: [
-        { icon: <Star className="w-4 h-4 text-primary" />, label: `12,000 ${t("vipXP")}`, type: "xp", amount: 12000 },
+        { icon: <Star className="w-4 h-4 text-primary" />, label: `1,800 ${t("vipXP")}`, type: "xp", amount: 1800 },
         { icon: <Sparkles className="w-4 h-4 text-primary" />, label: `50 ${t("xpPoints")}`, type: "points", amount: 50 },
         { icon: <Ticket className="w-4 h-4 text-red-accent" />, label: `2 ${t("gameTicket")}`, type: "gameTicket", amount: 2 },
         { icon: <Sparkles className="w-4 h-4 text-accent" />, label: `2 ${t("tarotTicket")}`, type: "tarotTicket", amount: 2 },
         { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: `3 ${t("drawEntry")}`, type: "drawEntry", amount: 3 },
       ],
       tag: t("mostPopular"),
-      includes: [`1 ${t("digitalBook")}`, `12,000 ${t("vipXP")}`, `50 ${t("xpPoints")}`, `2 ${t("gameTicket")}`, `2 ${t("tarotTicket")}`, `3 ${t("drawEntry")}`],
+      includes: [`1 ${t("digitalBook")}`, `1,800 ${t("vipXP")}`, `50 ${t("xpPoints")}`, `2 ${t("gameTicket")}`, `2 ${t("tarotTicket")}`, `3 ${t("drawEntry")}`],
     },
   ];
 

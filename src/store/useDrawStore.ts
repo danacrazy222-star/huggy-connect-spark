@@ -6,11 +6,12 @@ function broadcastDrawWinner(winnerName: string, entryId: number, prizeAmount: n
   const chatStore = useChatStore.getState();
   const allRoomIds = [0, 1, 2, 3, 4, 5];
   const msg = {
-    id: `draw-winner-${Date.now()}`,
-    text: `🎉🏆 DRAW WINNER! ${winnerName} (Entry #${entryId}) won a $${prizeAmount} Gift Card! 🎁💰`,
-    sender: "System",
+    user: "System",
+    avatar: "🏆",
+    message: `🎉🏆 DRAW WINNER! ${winnerName} (Entry #${entryId}) won a $${prizeAmount} Gift Card! 🎁💰`,
+    crown: false,
     isSystem: true,
-    timestamp: new Date(),
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
   };
   allRoomIds.forEach(roomId => {
     chatStore.addMessage(roomId, msg);

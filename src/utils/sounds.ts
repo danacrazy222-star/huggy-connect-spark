@@ -17,202 +17,98 @@ function getCtx() {
   return audioCtx;
 }
 
-// ─── SPIN WHEEL (Professional Casino Style) ───
+// ─── SPIN WHEEL ───
 
 export function playTick() {
   try {
     const ctx = getCtx();
-    if (!ctx) return;
     const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.value = 2200 + Math.random() * 600;
+    gain.gain.setValueAtTime(0.18, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.04);
 
-    // Mechanical click - like a real wheel peg
-    const click = ctx.createOscillator();
-    const clickGain = ctx.createGain();
-    const clickFilter = ctx.createBiquadFilter();
-    click.type = "square";
-    click.frequency.value = 3500 + Math.random() * 500;
-    clickFilter.type = "bandpass";
-    clickFilter.frequency.value = 3000;
-    clickFilter.Q.value = 5;
-    clickGain.gain.setValueAtTime(0.12, t);
-    clickGain.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
-    click.connect(clickFilter).connect(clickGain).connect(ctx.destination);
-    click.start(t);
-    click.stop(t + 0.03);
-
-    // Subtle wooden knock undertone
-    const knock = ctx.createOscillator();
-    const knockGain = ctx.createGain();
-    knock.type = "sine";
-    knock.frequency.setValueAtTime(800 + Math.random() * 200, t);
-    knock.frequency.exponentialRampToValueAtTime(200, t + 0.03);
-    knockGain.gain.setValueAtTime(0.06, t);
-    knockGain.gain.exponentialRampToValueAtTime(0.001, t + 0.035);
-    knock.connect(knockGain).connect(ctx.destination);
-    knock.start(t);
-    knock.stop(t + 0.04);
+    const n = ctx.createOscillator();
+    const ng = ctx.createGain();
+    n.type = "square";
+    n.frequency.value = 800;
+    ng.gain.setValueAtTime(0.06, t);
+    ng.gain.exponentialRampToValueAtTime(0.001, t + 0.02);
+    n.connect(ng).connect(ctx.destination);
+    n.start(t);
+    n.stop(t + 0.02);
   } catch {}
 }
 
 export function playSpinStart() {
   try {
     const ctx = getCtx();
-    if (!ctx) return;
     const t = ctx.currentTime;
-
-    // Casino lever pull - metallic swoosh rising
-    const swoosh = ctx.createOscillator();
-    const swooshGain = ctx.createGain();
-    const swooshFilter = ctx.createBiquadFilter();
-    swoosh.type = "sawtooth";
-    swoosh.frequency.setValueAtTime(100, t);
-    swoosh.frequency.exponentialRampToValueAtTime(2000, t + 0.35);
-    swooshFilter.type = "lowpass";
-    swooshFilter.frequency.setValueAtTime(500, t);
-    swooshFilter.frequency.exponentialRampToValueAtTime(4000, t + 0.35);
-    swooshGain.gain.setValueAtTime(0.08, t);
-    swooshGain.gain.linearRampToValueAtTime(0.14, t + 0.12);
-    swooshGain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
-    swoosh.connect(swooshFilter).connect(swooshGain).connect(ctx.destination);
-    swoosh.start(t);
-    swoosh.stop(t + 0.5);
-
-    // Deep bass impact - wheel engaging
-    const bass = ctx.createOscillator();
-    const bassGain = ctx.createGain();
-    bass.type = "sine";
-    bass.frequency.setValueAtTime(100, t);
-    bass.frequency.exponentialRampToValueAtTime(35, t + 0.4);
-    bassGain.gain.setValueAtTime(0.2, t);
-    bassGain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
-    bass.connect(bassGain).connect(ctx.destination);
-    bass.start(t);
-    bass.stop(t + 0.5);
-
-    // Sparkle accent
-    [1800, 2400, 3200].forEach((freq, i) => {
-      const s = t + 0.05 + i * 0.04;
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      o.type = "sine";
-      o.frequency.value = freq;
-      g.gain.setValueAtTime(0.04, s);
-      g.gain.exponentialRampToValueAtTime(0.001, s + 0.08);
-      o.connect(g).connect(ctx.destination);
-      o.start(s);
-      o.stop(s + 0.1);
-    });
-  } catch {}
-}
-
-// Spin stop - decelerating final clicks with satisfying stop
-export function playSpinStop() {
-  try {
-    const ctx = getCtx();
-    if (!ctx) return;
-    const t = ctx.currentTime;
-
-    // Final landing click - heavier than normal tick
-    const land = ctx.createOscillator();
-    const landGain = ctx.createGain();
-    land.type = "square";
-    land.frequency.value = 2800;
-    landGain.gain.setValueAtTime(0.18, t);
-    landGain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
-    land.connect(landGain).connect(ctx.destination);
-    land.start(t);
-    land.stop(t + 0.07);
-
-    // Resonant stop thud
-    const thud = ctx.createOscillator();
-    const thudGain = ctx.createGain();
-    thud.type = "sine";
-    thud.frequency.setValueAtTime(300, t);
-    thud.frequency.exponentialRampToValueAtTime(80, t + 0.15);
-    thudGain.gain.setValueAtTime(0.15, t);
-    thudGain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-    thud.connect(thudGain).connect(ctx.destination);
-    thud.start(t);
-    thud.stop(t + 0.25);
-
-    // Subtle bell ring to signal stop
-    const bell = ctx.createOscillator();
-    const bellGain = ctx.createGain();
-    bell.type = "sine";
-    bell.frequency.value = 1200;
-    bellGain.gain.setValueAtTime(0.06, t + 0.03);
-    bellGain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-    bell.connect(bellGain).connect(ctx.destination);
-    bell.start(t + 0.03);
-    bell.stop(t + 0.35);
+    // Rising whoosh
+    const o1 = ctx.createOscillator();
+    const g1 = ctx.createGain();
+    o1.type = "sawtooth";
+    o1.frequency.setValueAtTime(150, t);
+    o1.frequency.exponentialRampToValueAtTime(1200, t + 0.5);
+    g1.gain.setValueAtTime(0.15, t);
+    g1.gain.linearRampToValueAtTime(0.2, t + 0.15);
+    g1.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+    o1.connect(g1).connect(ctx.destination);
+    o1.start(t); o1.stop(t + 0.6);
+    // Bass thump
+    const o2 = ctx.createOscillator();
+    const g2 = ctx.createGain();
+    o2.type = "sine";
+    o2.frequency.setValueAtTime(80, t);
+    o2.frequency.exponentialRampToValueAtTime(40, t + 0.3);
+    g2.gain.setValueAtTime(0.25, t);
+    g2.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    o2.connect(g2).connect(ctx.destination);
+    o2.start(t); o2.stop(t + 0.35);
   } catch {}
 }
 
 export function playWinSound() {
   try {
     const ctx = getCtx();
-    if (!ctx) return;
     const t = ctx.currentTime;
-
-    // Casino win fanfare - bright ascending with shimmer
-    const notes = [523, 659, 784, 1047, 1319];
-    notes.forEach((freq, i) => {
-      const s = t + i * 0.09;
-      // Main tone
+    [523, 659, 784, 1047, 1319].forEach((freq, i) => {
+      const s = t + i * 0.1;
       const o = ctx.createOscillator();
       const g = ctx.createGain();
-      o.type = "sine";
-      o.frequency.value = freq;
+      o.type = "sine"; o.frequency.value = freq;
       g.gain.setValueAtTime(0, s);
-      g.gain.linearRampToValueAtTime(0.2, s + 0.02);
-      g.gain.setValueAtTime(0.2, s + 0.15);
-      g.gain.exponentialRampToValueAtTime(0.001, s + 0.7);
+      g.gain.linearRampToValueAtTime(0.22, s + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, s + 0.8);
       o.connect(g).connect(ctx.destination);
-      o.start(s);
-      o.stop(s + 0.75);
-
-      // Shimmer overtone
+      o.start(s); o.stop(s + 0.8);
+      // Overtone
       const o2 = ctx.createOscillator();
       const g2 = ctx.createGain();
-      o2.type = "sine";
-      o2.frequency.value = freq * 2;
+      o2.type = "sine"; o2.frequency.value = freq * 2;
       g2.gain.setValueAtTime(0, s);
-      g2.gain.linearRampToValueAtTime(0.05, s + 0.02);
-      g2.gain.exponentialRampToValueAtTime(0.001, s + 0.35);
+      g2.gain.linearRampToValueAtTime(0.06, s + 0.02);
+      g2.gain.exponentialRampToValueAtTime(0.001, s + 0.4);
       o2.connect(g2).connect(ctx.destination);
-      o2.start(s);
-      o2.stop(s + 0.4);
+      o2.start(s); o2.stop(s + 0.4);
     });
-
-    // Grand final chord with fade
-    const cs = t + 0.55;
+    // Final chord
+    const cs = t + 0.6;
     [1047, 1319, 1568].forEach((freq) => {
       const o = ctx.createOscillator();
       const g = ctx.createGain();
-      o.type = "sine";
-      o.frequency.value = freq;
+      o.type = "sine"; o.frequency.value = freq;
       g.gain.setValueAtTime(0, cs);
-      g.gain.linearRampToValueAtTime(0.12, cs + 0.04);
-      g.gain.linearRampToValueAtTime(0.1, cs + 0.5);
+      g.gain.linearRampToValueAtTime(0.12, cs + 0.05);
       g.gain.exponentialRampToValueAtTime(0.001, cs + 1.2);
       o.connect(g).connect(ctx.destination);
-      o.start(cs);
-      o.stop(cs + 1.3);
+      o.start(cs); o.stop(cs + 1.2);
     });
-
-    // Coin rain effect - tiny sparkles
-    for (let i = 0; i < 8; i++) {
-      const s = t + 0.3 + i * 0.06;
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      o.type = "sine";
-      o.frequency.value = 3000 + Math.random() * 2000;
-      g.gain.setValueAtTime(0.03, s);
-      g.gain.exponentialRampToValueAtTime(0.001, s + 0.05);
-      o.connect(g).connect(ctx.destination);
-      o.start(s);
-      o.stop(s + 0.06);
-    }
   } catch {}
 }
 

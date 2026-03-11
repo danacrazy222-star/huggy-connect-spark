@@ -23,6 +23,8 @@ import PrivateChat from "./pages/PrivateChat";
 import Messages from "./pages/Messages";
 import PromotionRules from "./pages/PromotionRules";
 import Terms from "./pages/Terms";
+import HelpCenter from "./pages/HelpCenter";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

@@ -432,12 +432,127 @@ export default function Profile() {
           </Card>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
+        {/* Support Section */}
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}>
+          <h3 className="text-sm font-bold text-foreground mb-2 flex items-center gap-1.5">
+            <Headphones className="w-4 h-4 text-primary" /> Support
+          </h3>
+          <Card className="bg-card/80 border-border">
+            <CardContent className="p-0 divide-y divide-border">
+              <button onClick={() => setShowContactForm(true)}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <MessageCircle className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">Contact Support</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+              <button onClick={() => setShowReportForm(true)}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <AlertCircle className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">Report a Problem</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+              <button onClick={() => navigate("/help-center")}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <HelpCircle className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">Help Center</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+              <button onClick={() => navigate("/terms")}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <FileText className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">Terms & Conditions</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+              <button onClick={() => navigate("/privacy-policy")}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <Lock className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">Privacy Policy</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 }}>
           <Button onClick={handleLogout} variant="outline" className="w-full border-destructive/50 text-destructive hover:bg-destructive/10 gap-2">
             <LogOut className="w-4 h-4" /> {t("logout")}
           </Button>
         </motion.div>
       </div>
+
+      {/* Contact Support Dialog */}
+      <Dialog open={showContactForm} onOpenChange={setShowContactForm}>
+        <DialogContent className="bg-card border-border max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-foreground">
+              <MessageCircle className="w-5 h-5 text-primary" />
+              Contact Support
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 pt-2">
+            <input
+              value={contactSubject}
+              onChange={(e) => setContactSubject(e.target.value)}
+              placeholder="Subject"
+              className="w-full bg-muted/30 border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors"
+            />
+            <textarea
+              value={contactMessage}
+              onChange={(e) => setContactMessage(e.target.value)}
+              placeholder="Describe your issue or question..."
+              rows={4}
+              className="w-full bg-muted/30 border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors resize-none"
+            />
+            <Button
+              onClick={handleContactSubmit}
+              disabled={sendingContact || !contactSubject.trim() || !contactMessage.trim()}
+              className="w-full bg-primary text-primary-foreground font-bold gap-2"
+            >
+              {sendingContact ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              Send Message
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Report Problem Dialog */}
+      <Dialog open={showReportForm} onOpenChange={setShowReportForm}>
+        <DialogContent className="bg-card border-border max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-foreground">
+              <AlertCircle className="w-5 h-5 text-primary" />
+              Report a Problem
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 pt-2">
+            <textarea
+              value={reportMessage}
+              onChange={(e) => setReportMessage(e.target.value)}
+              placeholder="Describe the problem you encountered..."
+              rows={4}
+              className="w-full bg-muted/30 border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors resize-none"
+            />
+            <Button
+              onClick={handleReportSubmit}
+              disabled={sendingReport || !reportMessage.trim()}
+              className="w-full bg-primary text-primary-foreground font-bold gap-2"
+            >
+              {sendingReport ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              Submit Report
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

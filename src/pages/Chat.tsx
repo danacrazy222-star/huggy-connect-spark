@@ -261,45 +261,81 @@ export default function Chat() {
     }
   }, [addXP, activeRoom, t]);
 
+  const handleUserClick = useCallback((userId: string, displayName: string, avatarUrl?: string | null, gender?: "male" | "female" | null, userLevel?: number) => {
+    setPopupUser({ userId, displayName, avatarUrl, gender, level: userLevel });
+  }, []);
+
   return (
     <div className="min-h-screen pb-20 flex flex-col relative" dir={isRTL ? "rtl" : "ltr"}>
-      {/* Room background image */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={activeRoom}
-            src={currentRoom.image}
-            alt={currentRoom.name}
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            className="w-full h-full object-cover"
-          />
-        </AnimatePresence>
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-      </div>
+      {/* Room background image - only for rooms tab */}
+      {chatTab === "rooms" && (
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={activeRoom}
+              src={currentRoom.image}
+              alt={currentRoom.name}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              className="w-full h-full object-cover"
+            />
+          </AnimatePresence>
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        </div>
+      )}
 
       <div className="relative z-10 flex flex-col flex-1">
         <TopBar title={t("chat")} />
 
-        {/* Room tabs */}
-        <div className={cn("flex gap-2 px-4 mb-2 overflow-x-auto pb-1", isRTL && "flex-row-reverse")}>
-          {rooms.map((room, i) => {
-            const locked = level < room.level;
-            return (
-              <button key={room.name} onClick={() => !locked && setActiveRoom(i)}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium whitespace-nowrap transition-all backdrop-blur-md",
-                  activeRoom === i ? `bg-white/20 ${room.border} text-foreground shadow-lg` : "bg-black/30 border-white/10 text-white/70",
-                  locked && "opacity-40 cursor-not-allowed"
-                )}>
-                {locked ? <Lock className="w-3 h-3" /> : <span className="w-2 h-2 rounded-full bg-green-400" />}
-                <span>{room.name}</span>
-              </button>
-            );
-          })}
+        {/* Rooms | Private main tabs */}
+        <div className={cn("flex gap-1 px-4 mb-2", isRTL && "flex-row-reverse")}>
+          <button
+            onClick={() => setChatTab("rooms")}
+            className={cn(
+              "flex-1 py-2 rounded-xl text-sm font-bold transition-all border",
+              chatTab === "rooms"
+                ? "bg-primary/20 border-primary/40 text-primary"
+                : "bg-card/40 border-border/40 text-muted-foreground"
+            )}
+          >
+            {t("chatRooms")}
+          </button>
+          <button
+            onClick={() => setChatTab("private")}
+            className={cn(
+              "flex-1 py-2 rounded-xl text-sm font-bold transition-all border",
+              chatTab === "private"
+                ? "bg-primary/20 border-primary/40 text-primary"
+                : "bg-card/40 border-border/40 text-muted-foreground"
+            )}
+          >
+            {t("privateMessages")}
+          </button>
         </div>
+
+        {chatTab === "private" ? (
+          <PrivateMessagesList />
+        ) : (
+          <>
+            {/* Room tabs */}
+            <div className={cn("flex gap-2 px-4 mb-2 overflow-x-auto pb-1", isRTL && "flex-row-reverse")}>
+              {rooms.map((room, i) => {
+                const locked = level < room.level;
+                return (
+                  <button key={room.name} onClick={() => !locked && setActiveRoom(i)}
+                    className={cn(
+                      "flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium whitespace-nowrap transition-all backdrop-blur-md",
+                      activeRoom === i ? `bg-white/20 ${room.border} text-foreground shadow-lg` : "bg-black/30 border-white/10 text-white/70",
+                      locked && "opacity-40 cursor-not-allowed"
+                    )}>
+                    {locked ? <Lock className="w-3 h-3" /> : <span className="w-2 h-2 rounded-full bg-green-400" />}
+                    <span>{room.name}</span>
+                  </button>
+                );
+              })}
+            </div>
 
         {!canAccess ? (
           <div className="flex-1 flex flex-col items-center justify-center gap-3 px-4">

@@ -92,6 +92,7 @@ const rooms = [
 ];
 
 export default function Chat() {
+  const [chatTab, setChatTab] = useState<"rooms" | "private">("rooms");
   const [activeRoom, setActiveRoom] = useState(0);
   const [message, setMessage] = useState("");
   const [worldChallengeSessionActive, setWorldChallengeSessionActive] = useState(false);
@@ -109,6 +110,7 @@ export default function Chat() {
   const [botMessages, setBotMessages] = useState<ChatMsg[]>([]);
   const [announcements, setAnnouncements] = useState<(ChatMsg & { roomId: number })[]>([]);
   const botIndexRef = useRef(0);
+  const [popupUser, setPopupUser] = useState<{ userId: string; displayName: string; avatarUrl?: string | null; gender?: "male" | "female" | null; level?: number } | null>(null);
 
   const { messages: realtimeMessages, sendMessage: sendRealtimeMessage } = useChatRealtime(activeRoom);
 

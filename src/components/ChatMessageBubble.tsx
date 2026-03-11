@@ -159,10 +159,10 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
       transition={{ delay: Math.min(index * 0.1, 0.5) }}
       className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}
     >
-      {/* Avatar with gender ring + diamond frame for lv15+ */}
+      {/* Avatar with tier frame based on level */}
       <div className="relative shrink-0">
-        <DiamondFrame size="sm" active={!!msg.level && msg.level >= 15} level={msg.level || 1}>
-          <Avatar className={cn("w-9 h-9 border-2", msg.level && msg.level >= 15 ? "border-transparent" : genderColor)}>
+        <DiamondFrame size="sm" active={!!msg.level && msg.level >= 1} level={msg.level || 1}>
+          <Avatar className={cn("w-9 h-9 border-2", msg.level && msg.level >= 1 ? "border-transparent" : genderColor)}>
             {msg.avatarUrl ? (
               <AvatarImage src={msg.avatarUrl} alt={msg.user} />
             ) : null}

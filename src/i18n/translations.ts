@@ -980,6 +980,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "हर दिन आपको करीब लाता है", closerToFew: "जहां कुछ ही पहुंचते हैं।",
     mysteryReward: "रहस्य पुरस्कार", bronzeChest: "कांस्य संदूक",
     silverChest: "रजत संदूक", goldChest: "स्वर्ण संदूक",
+    eliteChest: "एलीट संदूक", legendChest: "लीजेंड संदूक",
+    dailyChest: "दैनिक संदूक", openChest: "खोलें", chestOpened: "खुला!", chestLocked: "बंद", xpRange: "XP",
     level: "स्तर", elite: "एलीट", legend: "लीजेंड",
     aiTarotReading: "AI टैरो रीडिंग", selectCardReveal: "अपना भाग्य जानने के लिए कार्ड चुनें",
     ticketsRemaining: "टिकट शेष", readAgain: "फिर से पढ़ें",

@@ -59,6 +59,7 @@ const App = () => (
             <DmNotificationBubble />
           </div>
         </BrowserRouter>
+        </GameSyncProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>

@@ -428,20 +428,20 @@ export default function Chat() {
                 )}
 
                 <div className="flex-1 min-h-0" />
-                <div className="space-y-3 mb-3 overflow-y-auto max-h-[50vh]">
+                <div ref={chatContainerRef} className="space-y-3 mb-3 overflow-y-auto max-h-[50vh]">
                   {!user && (
                     <div className="text-center py-4">
                       <p className="text-sm text-muted-foreground">{t("loginToChat") || "Login to chat with others"}</p>
                     </div>
                   )}
                   {botMessages.map((msg, i) => (
-                    <ChatMessageBubble key={`bot-${i}`} msg={msg} index={i} isRTL={isRTL} onUserClick={handleUserClick} />
+                    <ChatMessageBubble key={`bot-${activeRoom}-${i}`} msg={msg} index={i < 2 ? i : -1} isRTL={isRTL} onUserClick={handleUserClick} />
                   ))}
                   {realtimeMessages.map((msg, i) => (
-                    <ChatMessageBubble key={(msg as any)._id || i} msg={msg} index={i} isRTL={isRTL} currentUserId={user?.id} onUserClick={handleUserClick} />
+                    <ChatMessageBubble key={(msg as any)._id || `rt-${i}`} msg={msg} index={-1} isRTL={isRTL} currentUserId={user?.id} onUserClick={handleUserClick} />
                   ))}
                   {announcements.filter(a => a.roomId === activeRoom).map((msg, i) => (
-                    <ChatMessageBubble key={`announce-${i}`} msg={msg} index={0} isRTL={isRTL} />
+                    <ChatMessageBubble key={`announce-${activeRoom}-${i}`} msg={msg} index={0} isRTL={isRTL} />
                   ))}
                   <div ref={messagesEndRef} />
                 </div>

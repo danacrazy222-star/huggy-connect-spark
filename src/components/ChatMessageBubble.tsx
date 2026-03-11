@@ -188,7 +188,9 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
           <span
             className="text-xs font-medium text-foreground cursor-pointer hover:text-primary transition-colors"
             onClick={() => {
-              if (msg._userId && !isOwn) navigate(`/user/${msg._userId}`);
+              if (msg._userId && !isOwn && onUserClick) {
+                onUserClick(msg._userId, msg.user, msg.avatarUrl, msg.gender, msg.level);
+              }
             }}
           >{msg.user}</span>
           {msg.crown && <Crown className="w-3 h-3 text-primary" />}

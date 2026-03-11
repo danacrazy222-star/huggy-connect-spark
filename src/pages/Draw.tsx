@@ -68,6 +68,18 @@ export default function Draw() {
   // User's entries (demo)
   const userEntries = entries.filter(e => e.username === "You").length;
 
+  // Last winner from DB
+  const [lastWinner, setLastWinner] = useState<{ winner_name: string; prize_type: string; prize_amount: number; created_at: string } | null>(null);
+  useEffect(() => {
+    supabase
+      .from("draw_winners")
+      .select("winner_name, prize_type, prize_amount, created_at")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => { if (data) setLastWinner(data as any); });
+  }, []);
+
   // Live activity feed
   const [activityIndex, setActivityIndex] = useState(0);
   useEffect(() => {

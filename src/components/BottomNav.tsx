@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { playNavTap } from "@/utils/sounds";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useChatStore } from "@/store/useChatStore";
+import { useGameStore } from "@/store/useGameStore";
+import { toast } from "@/hooks/use-toast";
 
 const tabs = [
   { path: "/", icon: Home, key: "home" as const },

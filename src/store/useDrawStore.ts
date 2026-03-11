@@ -144,6 +144,9 @@ export const useDrawStore = create<DrawState>()(
             ...state.drawHistory,
           ],
         });
+
+        broadcastDrawWinner(winnerEntry.username, winnerEntry.entryId, state.prizeAmount);
+        });
       },
 
       resetDraw: () => set({

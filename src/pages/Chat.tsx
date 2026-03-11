@@ -131,10 +131,28 @@ export default function Chat() {
       .then(({ data }) => { if (data) setUserProfile(data as any); });
   }, [user]);
 
-  // Auto-scroll to bottom
+  // Smart auto-scroll: only if user is near bottom or just sent a message
+  const isNearBottom = useCallback(() => {
+    const el = chatContainerRef.current;
+    if (!el) return true;
+    return el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  }, []);
+
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [realtimeMessages, botMessages, announcements]);
+    const totalCount = realtimeMessages.length + botMessages.length;
+    if (totalCount <= prevMsgCountRef.current && !userSentRef.current) {
+      prevMsgCountRef.current = totalCount;
+      return;
+    }
+    prevMsgCountRef.current = totalCount;
+
+    if (userSentRef.current || isNearBottom()) {
+      userSentRef.current = false;
+      requestAnimationFrame(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      });
+    }
+  }, [realtimeMessages.length, botMessages.length, isNearBottom]);
 
   // Clear unread when entering
   useEffect(() => { clearUnread(); }, [clearUnread]);

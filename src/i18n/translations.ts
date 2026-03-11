@@ -566,6 +566,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Cada día que te unes te acerca", closerToFew: "a donde pocos llegan.",
     mysteryReward: "RECOMPENSA MISTERIOSA", bronzeChest: "Cofre Bronce",
     silverChest: "Cofre Plata", goldChest: "Cofre Oro",
+    eliteChest: "Cofre Élite", legendChest: "Cofre Leyenda",
+    dailyChest: "Cofre Diario", openChest: "Abrir", chestOpened: "¡Abierto!", chestLocked: "Bloqueado", xpRange: "XP",
     level: "Nivel", elite: "Élite", legend: "Leyenda",
     aiTarotReading: "Lectura Tarot IA", selectCardReveal: "Elige una carta para revelar tu destino",
     ticketsRemaining: "boletos restantes", readAgain: "Leer de nuevo",

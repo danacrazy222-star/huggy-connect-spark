@@ -325,6 +325,7 @@ export type TranslationKeys = {
   userReported?: string;
   levelRequired?: string;
   reachLevel5ToChat?: string;
+  duelInProgress?: string;
 };
 
 export const translations: Record<Language, TranslationKeys> = {

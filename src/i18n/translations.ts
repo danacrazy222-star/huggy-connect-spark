@@ -465,7 +465,7 @@ export const translations: Record<Language, TranslationKeys> = {
     giftCard: "Carte cadeau $500", promotionalDraw: "TIRAGE PROMOTIONNEL", dailySpin: "ROTATION QUOTIDIENNE",
     oneFreeAttempt: "Vous avez UN ESSAI GRATUIT aujourd'hui !", nextSpinIn: "Votre prochain tour gratuit dans :",
     hours: "HEURES", minutes: "MINUTES", seconds: "SECONDES",
-    xpPoints: "Points XP", gameTickets: "Tickets de jeu", extraEntries: "Entrées bonus", surpriseRewards: "Surprises",
+    xpPoints: "Points", gameTickets: "Tickets de jeu", extraEntries: "Entrées bonus", surpriseRewards: "Surprises",
     allRewardsPromotional: "Toutes les récompenses sont promotionnelles", noCashValue: "Pas de valeur monétaire",
     spinNow: "TOURNER", spinning: "EN COURS...", comeBackTomorrow: "REVENEZ DEMAIN",
     youWon: "Vous avez gagné !", maybeLater: "PLUS TARD",

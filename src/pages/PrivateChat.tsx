@@ -222,23 +222,30 @@ export default function PrivateChat() {
 
       {/* Input */}
       <div className="sticky bottom-16 bg-card/95 backdrop-blur-md border-t border-border px-4 py-3">
-        <div className="flex items-center gap-2">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder={t("typeMessage")}
-            className="flex-1 bg-muted/30 border border-border rounded-full px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors"
-          />
-          <Button
-            size="icon"
-            onClick={handleSend}
-            disabled={!input.trim() || sending}
-            className="rounded-full bg-primary text-primary-foreground w-9 h-9"
-          >
-            <Send className="w-4 h-4" />
-          </Button>
-        </div>
+        {level < 5 ? (
+          <div className="flex items-center justify-center gap-2 py-2 text-muted-foreground text-sm">
+            <Lock className="w-4 h-4" />
+            <span>{t("reachLevel5ToChat")}</span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              placeholder={t("typeMessage")}
+              className="flex-1 bg-muted/30 border border-border rounded-full px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors"
+            />
+            <Button
+              size="icon"
+              onClick={handleSend}
+              disabled={!input.trim() || sending}
+              className="rounded-full bg-primary text-primary-foreground w-9 h-9"
+            >
+              <Send className="w-4 h-4" />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

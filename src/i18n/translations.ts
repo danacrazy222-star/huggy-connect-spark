@@ -395,7 +395,7 @@ export const translations: Record<Language, TranslationKeys> = {
     giftCard: "بطاقة هدية $500", promotionalDraw: "سحب ترويجي", dailySpin: "الدوران اليومي",
     oneFreeAttempt: "لديك محاولة مجانية واحدة اليوم!", nextSpinIn: "دورانك المجاني القادم متاح خلال:",
     hours: "ساعات", minutes: "دقائق", seconds: "ثواني",
-    xpPoints: "نقاط XP", gameTickets: "تذاكر اللعب", extraEntries: "فرص إضافية", surpriseRewards: "مفاجآت",
+    xpPoints: "نقاط", gameTickets: "تذاكر اللعب", extraEntries: "فرص إضافية", surpriseRewards: "مفاجآت",
     allRewardsPromotional: "جميع المكافآت ترويجية", noCashValue: "لا قيمة نقدية",
     spinNow: "لف الآن", spinning: "جاري الدوران...", comeBackTomorrow: "عد غداً",
     youWon: "لقد ربحت!", maybeLater: "لاحقاً",

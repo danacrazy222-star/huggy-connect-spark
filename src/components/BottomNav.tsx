@@ -56,7 +56,7 @@ export function BottomNav() {
             return (
               <button
                 key={tab.path}
-                onClick={() => { playNavTap(); navigate(tab.path); }}
+                onClick={() => handleNav(tab.path)}
                 className={cn(
                   "relative flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-xl transition-all min-w-[40px]",
                   isActive ? "text-primary" : "text-muted-foreground hover:text-foreground/70"

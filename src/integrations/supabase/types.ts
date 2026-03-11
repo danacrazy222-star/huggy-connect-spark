@@ -53,6 +53,33 @@ export type Database = {
         }
         Relationships: []
       }
+      draw_winners: {
+        Row: {
+          created_at: string
+          draw_round_id: string
+          id: string
+          prize_amount: number
+          prize_type: string
+          winner_name: string
+        }
+        Insert: {
+          created_at?: string
+          draw_round_id: string
+          id?: string
+          prize_amount?: number
+          prize_type?: string
+          winner_name: string
+        }
+        Update: {
+          created_at?: string
+          draw_round_id?: string
+          id?: string
+          prize_amount?: number
+          prize_type?: string
+          winner_name?: string
+        }
+        Relationships: []
+      }
       game_matches: {
         Row: {
           bet_amount: number

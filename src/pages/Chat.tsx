@@ -494,6 +494,7 @@ export default function Chat() {
                   )}
                 </AnimatePresence>
 
+                {user ? (
                   <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
                     <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
                       <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}

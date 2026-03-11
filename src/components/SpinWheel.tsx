@@ -4,7 +4,7 @@ import { useGameStore } from "@/store/useGameStore";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Gift, Zap, Ticket, Trophy, Sparkles, X, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { playTick, playSpinStart, playWinSound, playLoseSound } from "@/utils/sounds";
+import { playTick, playSpinStart, playSpinStop, playWinSound, playLoseSound } from "@/utils/sounds";
 
 const SEGMENT_COLORS = [
   { color: "#1a8a4a", colorEnd: "#2ecc71" },
@@ -140,6 +140,7 @@ export function SpinWheel() {
 
     setTimeout(() => {
       if (tickIntervalRef.current) clearInterval(tickIntervalRef.current);
+      playSpinStop();
       const rewardType = SEGMENT_REWARDS[segmentIndex].type;
       setSpinning(false);
       setLastSpinTime(Date.now());

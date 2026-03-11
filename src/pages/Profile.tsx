@@ -90,7 +90,9 @@ export default function Profile() {
   const handleClearData = () => {
     localStorage.clear();
     toast.success(t("dataCleared"));
-    setTimeout(() => window.location.reload(), 500);
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 500);
   };
 
   if (authLoading) {

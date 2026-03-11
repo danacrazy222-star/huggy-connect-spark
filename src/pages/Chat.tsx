@@ -474,7 +474,26 @@ export default function Chat() {
                   <div ref={messagesEndRef} />
                 </div>
 
-                {user ? (
+                {/* Scroll to bottom button */}
+                <AnimatePresence>
+                  {showScrollBtn && (
+                    <motion.button
+                      initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.8 }}
+                      onClick={scrollToBottom}
+                      className="absolute bottom-24 right-6 z-20 flex items-center gap-1.5 bg-primary text-primary-foreground rounded-full px-3 py-2 shadow-lg border border-primary/40 text-xs font-bold"
+                    >
+                      <ArrowDown className="w-4 h-4" />
+                      {newMsgCountRef.current > 0 && (
+                        <span className="bg-primary-foreground text-primary text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                          {newMsgCountRef.current}
+                        </span>
+                      )}
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+
                   <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
                     <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
                       <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}

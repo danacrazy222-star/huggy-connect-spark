@@ -104,8 +104,8 @@ export default function Tarot() {
   const streamResponse = async (allMessages: ChatMessage[]) => {
     setIsStreaming(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.access_token) {
+      const accessToken = session?.access_token;
+      if (!accessToken) {
         toast({ title: t("tryAgain"), description: "Please log in first.", variant: "destructive" });
         setIsStreaming(false);
         return;
@@ -114,7 +114,7 @@ export default function Tarot() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ messages: allMessages, selectedCards, language, gender: userGender }),
       });

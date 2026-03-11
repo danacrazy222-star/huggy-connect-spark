@@ -82,7 +82,7 @@ export default function Shop() {
         { icon: <Ticket className="w-4 h-4 text-blue-accent" />, label: `1 ${t("drawEntry")}`, type: "drawEntry", amount: 1 },
       ],
       tag: null,
-      includes: [`1 ${t("digitalBook")}`, `3,500 ${t("vipXP")}`, `1 ${t("gameTicket")}`, `1 ${t("drawEntry")}`],
+      includes: [`1 ${t("digitalBook")}`, `700 ${t("vipXP")}`, `1 ${t("gameTicket")}`, `1 ${t("drawEntry")}`],
     },
     {
       nameKey: "premiumPack",

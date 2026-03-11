@@ -33,6 +33,13 @@ export default function Profile() {
   const [nameInput, setNameInput] = useState("");
   const [uploading, setUploading] = useState(false);
   const [showLangPicker, setShowLangPicker] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [showReportForm, setShowReportForm] = useState(false);
+  const [contactSubject, setContactSubject] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+  const [reportMessage, setReportMessage] = useState("");
+  const [sendingContact, setSendingContact] = useState(false);
+  const [sendingReport, setSendingReport] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { language, setLanguage } = useLanguageStore();
 

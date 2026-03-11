@@ -12,6 +12,8 @@ interface GameState {
   lastSpinTime: number | null;
   canSpin: boolean;
   worldChallengeUnlocked: boolean;
+  lastChestTime: number | null;
+  lastChestReward: number | null;
   
   addPoints: (amount: number) => void;
   addXP: (amount: number) => void;
@@ -22,6 +24,8 @@ interface GameState {
   checkSpinAvailability: () => boolean;
   unlockWorldChallenge: () => void;
   lockWorldChallenge: () => void;
+  canOpenChest: () => boolean;
+  openDailyChest: () => number;
 }
 
 // Cumulative XP thresholds to REACH each level

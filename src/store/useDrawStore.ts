@@ -110,6 +110,9 @@ export const useDrawStore = create<DrawState>()(
               ...state.drawHistory,
             ],
           });
+
+          // Broadcast winner to all chat rooms
+          broadcastDrawWinner(winnerEntry.username, winnerEntry.entryId, state.prizeAmount);
         } else {
           set({
             entries: allEntries,

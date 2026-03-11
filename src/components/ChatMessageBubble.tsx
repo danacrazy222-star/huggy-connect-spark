@@ -38,7 +38,7 @@ interface Props {
   onUserClick?: (userId: string, displayName: string, avatarUrl?: string | null, gender?: "male" | "female" | null, level?: number) => void;
 }
 
-export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUserId }: Props) {
+export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUserId, onUserClick }: Props) {
   const [loading, setLoading] = useState(false);
   const [localTranslated, setLocalTranslated] = useState<string | null>(null);
   const { language } = useTranslation();

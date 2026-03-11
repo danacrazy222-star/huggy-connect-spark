@@ -140,6 +140,7 @@ export function SpinWheel() {
 
     setTimeout(() => {
       if (tickIntervalRef.current) clearInterval(tickIntervalRef.current);
+      playSpinStop();
       const rewardType = SEGMENT_REWARDS[segmentIndex].type;
       setSpinning(false);
       setLastSpinTime(Date.now());

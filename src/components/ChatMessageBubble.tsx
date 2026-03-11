@@ -158,7 +158,10 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: Math.min(index * 0.1, 0.5) }}
-      className={cn("flex items-start gap-2", isRTL && "flex-row-reverse")}
+      className={cn(
+        "flex items-start gap-2",
+        isOwn ? (isRTL ? "flex-row" : "flex-row-reverse") : (isRTL ? "flex-row-reverse" : "flex-row")
+      )}
     >
       <div
         className="relative shrink-0 cursor-pointer"
@@ -182,9 +185,9 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
         <div className={cn("absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background", genderDot || "bg-green-400")} />
       </div>
 
-      <div className={cn("max-w-[75%]", isRTL ? "text-right" : "")}>
+      <div className={cn("max-w-[75%]", isOwn ? (isRTL ? "text-left" : "text-right") : (isRTL ? "text-right" : "text-left"))}>
         {/* Username + Level badge */}
-        <div className={cn("flex items-center gap-1.5 mb-0.5", isRTL && "flex-row-reverse")}>
+        <div className={cn("flex items-center gap-1.5 mb-0.5", isOwn ? (isRTL ? "flex-row" : "flex-row-reverse") : (isRTL ? "flex-row-reverse" : "flex-row"))}>
           <span
             className="text-xs font-medium text-foreground cursor-pointer hover:text-primary transition-colors"
             onClick={() => {
@@ -205,7 +208,10 @@ export function ChatMessageBubble({ msg, index, isRTL, onTranslated, currentUser
         <div
           onClick={translate}
           className={cn(
-            "bg-black/40 backdrop-blur-md rounded-2xl rounded-tl-sm px-3 py-2 border border-white/10",
+            "bg-black/40 backdrop-blur-md rounded-2xl px-3 py-2 border",
+            isOwn
+              ? "bg-primary/20 border-primary/30 rounded-tr-sm"
+              : "border-white/10 rounded-tl-sm",
             !isOwn && !msg.translated && "cursor-pointer active:scale-[0.98] transition-transform"
           )}
         >

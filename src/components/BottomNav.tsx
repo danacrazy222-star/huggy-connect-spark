@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { playNavTap } from "@/utils/sounds";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useChatStore } from "@/store/useChatStore";
+import { useGameStore } from "@/store/useGameStore";
+import { toast } from "@/hooks/use-toast";
 
 const tabs = [
   { path: "/", icon: Home, key: "home" as const },
@@ -22,6 +24,17 @@ export function BottomNav() {
   const navigate = useNavigate();
   const { t, isRTL } = useTranslation();
   const unreadCount = useChatStore((s) => s.unreadCount);
+  const duelActive = useGameStore((s) => s.duelActive);
+
+  const handleNav = (path: string) => {
+    if (duelActive && path !== "/chat") {
+      toast({ title: "⚔️ Duel in progress!", description: t("duelInProgress"), variant: "destructive" });
+      navigate("/chat");
+      return;
+    }
+    playNavTap();
+    navigate(path);
+  };
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">
@@ -43,7 +56,7 @@ export function BottomNav() {
             return (
               <button
                 key={tab.path}
-                onClick={() => { playNavTap(); navigate(tab.path); }}
+                onClick={() => handleNav(tab.path)}
                 className={cn(
                   "relative flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-xl transition-all min-w-[40px]",
                   isActive ? "text-primary" : "text-muted-foreground hover:text-foreground/70"

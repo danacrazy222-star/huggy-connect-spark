@@ -12,6 +12,7 @@ interface GameState {
   lastSpinTime: number | null;
   canSpin: boolean;
   worldChallengeUnlocked: boolean;
+  duelActive: boolean;
   lastChestTime: number | null;
   lastChestReward: number | null;
   
@@ -24,6 +25,7 @@ interface GameState {
   checkSpinAvailability: () => boolean;
   unlockWorldChallenge: () => void;
   lockWorldChallenge: () => void;
+  setDuelActive: (active: boolean) => void;
   canOpenChest: () => boolean;
   openDailyChest: () => number;
 }
@@ -52,6 +54,7 @@ export const useGameStore = create<GameState>()(
       lastSpinTime: null,
       canSpin: true,
       worldChallengeUnlocked: false,
+      duelActive: false,
       lastChestTime: null,
       lastChestReward: null,
       addPoints: (amount) => set((s) => ({ points: s.points + amount })),
@@ -77,6 +80,7 @@ export const useGameStore = create<GameState>()(
       setLastSpinTime: (time) => set({ lastSpinTime: time, canSpin: false }),
       unlockWorldChallenge: () => set({ worldChallengeUnlocked: true }),
       lockWorldChallenge: () => set({ worldChallengeUnlocked: false }),
+      setDuelActive: (active) => set({ duelActive: active }),
       
       canOpenChest: () => {
         const { lastChestTime } = get();

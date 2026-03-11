@@ -347,7 +347,7 @@ export default function Chat() {
                 </p>
               </div>
             ) : (
-              <div className="flex-1 flex flex-col min-h-0">
+              <div className="flex-1 flex flex-col px-4">
                 {activeRoom === 0 && <WorldChallengePromo />}
                 {(activeRoom !== 0 || worldChallengeUnlocked) && (
                   <ChatDuelChallenge
@@ -360,7 +360,8 @@ export default function Chat() {
                   />
                 )}
 
-                <div className="flex-1 overflow-y-auto space-y-3 py-3">
+                <div className="flex-1 min-h-0" />
+                <div className="space-y-3 mb-3 overflow-y-auto max-h-[50vh]">
                   {!user && (
                     <div className="text-center py-4">
                       <p className="text-sm text-muted-foreground">{t("loginToChat") || "Login to chat with others"}</p>
@@ -379,7 +380,7 @@ export default function Chat() {
                 </div>
 
                 {user ? (
-                  <div className={cn("flex items-center gap-2 py-2 shrink-0", isRTL && "flex-row-reverse")}>
+                  <div className={cn("flex items-center gap-2 mb-2", isRTL && "flex-row-reverse")}>
                     <div className={cn("flex-1 flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full px-3 py-2 border border-white/15", isRTL && "flex-row-reverse")}>
                       <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("typeMessage")}
                         onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
@@ -388,7 +389,7 @@ export default function Chat() {
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-2 shrink-0">
+                  <div className="text-center mb-2 py-2">
                     <button onClick={() => window.location.href = "/auth"} className="text-sm text-primary underline">
                       {t("loginToChat") || "Login to chat"}
                     </button>

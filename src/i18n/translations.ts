@@ -427,6 +427,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "كل يوم تنضم يقربك", closerToFew: "إلى حيث لا يصل إلا القليل.",
     mysteryReward: "مكافأة غامضة", bronzeChest: "صندوق برونزي",
     silverChest: "صندوق فضي", goldChest: "صندوق ذهبي",
+    eliteChest: "صندوق النخبة", legendChest: "صندوق الأسطوري",
+    dailyChest: "صندوق يومي", openChest: "افتح", chestOpened: "تم الفتح!", chestLocked: "مقفل", xpRange: "XP",
     level: "المستوى", elite: "النخبة", legend: "الأسطوري",
     aiTarotReading: "قراءة تاروت بالذكاء الاصطناعي", selectCardReveal: "اختر بطاقة لكشف مصيرك",
     ticketsRemaining: "تذاكر متبقية", readAgain: "اقرأ مجدداً",

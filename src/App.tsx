@@ -23,6 +23,8 @@ import PrivateChat from "./pages/PrivateChat";
 import Messages from "./pages/Messages";
 import PromotionRules from "./pages/PromotionRules";
 import Terms from "./pages/Terms";
+import HelpCenter from "./pages/HelpCenter";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +54,8 @@ const App = () => (
               <Route path="/messages" element={<Messages />} />
               <Route path="/promotion-rules" element={<PromotionRules />} />
               <Route path="/terms" element={<Terms />} />
+              <Route path="/help-center" element={<HelpCenter />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />

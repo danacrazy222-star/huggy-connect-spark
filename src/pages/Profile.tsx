@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState, useRef } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useLanguageStore, LANGUAGES } from "@/store/useLanguageStore";
 import { toast } from "sonner";
 import {
@@ -17,7 +18,8 @@ import {
   LogIn, LogOut, Star, TrendingUp, Camera,
   Globe, Trash2, ChevronRight, Edit3, Check, X,
   Settings, RefreshCw, Shield, FileText, MessageCircle,
-  Wallet,
+  Wallet, Headphones, AlertCircle, HelpCircle, Lock,
+  Send,
 } from "lucide-react";
 import { DiamondFrame } from "@/components/DiamondFrame";
 
@@ -31,6 +33,13 @@ export default function Profile() {
   const [nameInput, setNameInput] = useState("");
   const [uploading, setUploading] = useState(false);
   const [showLangPicker, setShowLangPicker] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [showReportForm, setShowReportForm] = useState(false);
+  const [contactSubject, setContactSubject] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+  const [reportMessage, setReportMessage] = useState("");
+  const [sendingContact, setSendingContact] = useState(false);
+  const [sendingReport, setSendingReport] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { language, setLanguage } = useLanguageStore();
 
@@ -85,6 +94,57 @@ export default function Profile() {
     if (error) toast.error(error.message);
     else { setProfile((prev) => prev ? { ...prev, display_name: nameInput.trim() } : prev); toast.success(t("nameUpdated")); }
     setEditingName(false);
+  };
+
+  const handleContactSubmit = async () => {
+    if (!contactSubject.trim() || !contactMessage.trim()) {
+      toast.error("Please fill all fields");
+      return;
+    }
+    setSendingContact(true);
+    try {
+      await supabase.from("chat_messages").insert({
+        room_id: 99,
+        user_id: user?.id || "anonymous",
+        display_name: displayName || "User",
+        message: `[SUPPORT] Subject: ${contactSubject.trim()}\n${contactMessage.trim()}`,
+        level: 0,
+        is_system: true,
+      });
+      toast.success("Message sent! We'll get back to you soon.");
+      setContactSubject("");
+      setContactMessage("");
+      setShowContactForm(false);
+    } catch {
+      toast.error("Failed to send. Please try again.");
+    } finally {
+      setSendingContact(false);
+    }
+  };
+
+  const handleReportSubmit = async () => {
+    if (!reportMessage.trim()) {
+      toast.error("Please describe the problem");
+      return;
+    }
+    setSendingReport(true);
+    try {
+      await supabase.from("chat_messages").insert({
+        room_id: 99,
+        user_id: user?.id || "anonymous",
+        display_name: displayName || "User",
+        message: `[BUG REPORT] ${reportMessage.trim()}`,
+        level: 0,
+        is_system: true,
+      });
+      toast.success("Report submitted! Thank you.");
+      setReportMessage("");
+      setShowReportForm(false);
+    } catch {
+      toast.error("Failed to send. Please try again.");
+    } finally {
+      setSendingReport(false);
+    }
   };
 
   const handleClearData = () => {
@@ -372,12 +432,127 @@ export default function Profile() {
           </Card>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
+        {/* Support Section */}
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}>
+          <h3 className="text-sm font-bold text-foreground mb-2 flex items-center gap-1.5">
+            <Headphones className="w-4 h-4 text-primary" /> Support
+          </h3>
+          <Card className="bg-card/80 border-border">
+            <CardContent className="p-0 divide-y divide-border">
+              <button onClick={() => setShowContactForm(true)}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <MessageCircle className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">Contact Support</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+              <button onClick={() => setShowReportForm(true)}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <AlertCircle className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">Report a Problem</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+              <button onClick={() => navigate("/help-center")}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <HelpCircle className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">Help Center</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+              <button onClick={() => navigate("/terms")}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <FileText className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">Terms & Conditions</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+              <button onClick={() => navigate("/privacy-policy")}
+                className={cn("w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors", isRTL && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-2.5", isRTL && "flex-row-reverse")}>
+                  <Lock className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">Privacy Policy</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 }}>
           <Button onClick={handleLogout} variant="outline" className="w-full border-destructive/50 text-destructive hover:bg-destructive/10 gap-2">
             <LogOut className="w-4 h-4" /> {t("logout")}
           </Button>
         </motion.div>
       </div>
+
+      {/* Contact Support Dialog */}
+      <Dialog open={showContactForm} onOpenChange={setShowContactForm}>
+        <DialogContent className="bg-card border-border max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-foreground">
+              <MessageCircle className="w-5 h-5 text-primary" />
+              Contact Support
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 pt-2">
+            <input
+              value={contactSubject}
+              onChange={(e) => setContactSubject(e.target.value)}
+              placeholder="Subject"
+              className="w-full bg-muted/30 border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors"
+            />
+            <textarea
+              value={contactMessage}
+              onChange={(e) => setContactMessage(e.target.value)}
+              placeholder="Describe your issue or question..."
+              rows={4}
+              className="w-full bg-muted/30 border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors resize-none"
+            />
+            <Button
+              onClick={handleContactSubmit}
+              disabled={sendingContact || !contactSubject.trim() || !contactMessage.trim()}
+              className="w-full bg-primary text-primary-foreground font-bold gap-2"
+            >
+              {sendingContact ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              Send Message
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Report Problem Dialog */}
+      <Dialog open={showReportForm} onOpenChange={setShowReportForm}>
+        <DialogContent className="bg-card border-border max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-foreground">
+              <AlertCircle className="w-5 h-5 text-primary" />
+              Report a Problem
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 pt-2">
+            <textarea
+              value={reportMessage}
+              onChange={(e) => setReportMessage(e.target.value)}
+              placeholder="Describe the problem you encountered..."
+              rows={4}
+              className="w-full bg-muted/30 border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors resize-none"
+            />
+            <Button
+              onClick={handleReportSubmit}
+              disabled={sendingReport || !reportMessage.trim()}
+              className="w-full bg-primary text-primary-foreground font-bold gap-2"
+            >
+              {sendingReport ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              Submit Report
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

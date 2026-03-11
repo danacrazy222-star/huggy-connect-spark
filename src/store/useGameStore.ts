@@ -52,6 +52,8 @@ export const useGameStore = create<GameState>()(
       lastSpinTime: null,
       canSpin: true,
       worldChallengeUnlocked: false,
+      lastChestTime: null,
+      lastChestReward: null,
       addPoints: (amount) => set((s) => ({ points: s.points + amount })),
       
       addXP: (amount) => set((s) => {

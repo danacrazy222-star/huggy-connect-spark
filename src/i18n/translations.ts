@@ -704,6 +704,8 @@ export const translations: Record<Language, TranslationKeys> = {
     eachDayJoin: "Jeder Tag bringt Sie näher", closerToFew: "dorthin, wo nur wenige gelangen.",
     mysteryReward: "MYSTERY-BELOHNUNG", bronzeChest: "Bronze-Truhe",
     silverChest: "Silber-Truhe", goldChest: "Gold-Truhe",
+    eliteChest: "Elite-Truhe", legendChest: "Legenden-Truhe",
+    dailyChest: "Tägliche Truhe", openChest: "Öffnen", chestOpened: "Geöffnet!", chestLocked: "Gesperrt", xpRange: "XP",
     level: "Level", elite: "Elite", legend: "Legende",
     aiTarotReading: "KI-Tarot-Lesung", selectCardReveal: "Wählen Sie eine Karte",
     ticketsRemaining: "Tickets übrig", readAgain: "Nochmal lesen",

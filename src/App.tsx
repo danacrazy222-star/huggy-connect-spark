@@ -7,6 +7,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { WelcomePopup } from "@/components/WelcomePopup";
 import { DmNotificationBubble } from "@/components/DmNotificationBubble";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { GameSyncProvider } from "@/components/GameSyncProvider";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import Chat from "./pages/Chat";

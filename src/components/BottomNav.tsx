@@ -24,6 +24,17 @@ export function BottomNav() {
   const navigate = useNavigate();
   const { t, isRTL } = useTranslation();
   const unreadCount = useChatStore((s) => s.unreadCount);
+  const duelActive = useGameStore((s) => s.duelActive);
+
+  const handleNav = (path: string) => {
+    if (duelActive && path !== "/chat") {
+      toast({ title: "⚔️ Duel in progress!", description: t("duelInProgress"), variant: "destructive" });
+      navigate("/chat");
+      return;
+    }
+    playNavTap();
+    navigate(path);
+  };
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">
